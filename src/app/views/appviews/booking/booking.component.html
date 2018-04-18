@@ -1,0 +1,311 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>จองรถ</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li>
+                <a>งานขาย</a>
+            </li>
+            <li class="active">
+                <strong>จองรถ</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>ข้อมูลลูกค้า</h5>
+                    <iboxtools></iboxtools>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">ผู้จอง</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" placeholder="" class="form-control">
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <button type="button" class="btn btn-info">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="custCode">
+                                    <input type="hidden" name="custPreName">
+                                    <input type="hidden" name="custFirstName">
+                                    <input type="hidden" name="custLastName">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">เบอร์โทร</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" placeholder="" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">ประเภท</label>
+                                    <div class="col-lg-7">
+                                        <select name="saleType" id="" class="form-control">
+                                            <option value="" selected disabled></option>
+                                            <option value="">ขายปลีก</option>
+                                            <option value="">ขายส่ง</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>รายละเอียดการจอง</h5>
+
+                    <iboxtools></iboxtools>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <label class="col-sm-2 control-label">วันที่จอง</label>
+                            <div class="form-group col-sm-4">
+                                <input type="date" name="reserveDate" id="reserveDate" class="form-control">
+                            </div>
+
+                            <label class="col-sm-2 control-label">เลขที่ใบจอง</label>
+                            <div class="form-group col-sm-4">
+                                <input type="text" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 control-label">เงินมัดจำ</label>
+                            <div class="form-group col-sm-4">
+                                <input type="text" placeholder="" class="form-control">
+                            </div>
+
+                            <label class="col-sm-2 control-label">สถานะ</label>
+                            <div class="form-group col-sm-4">
+                                <input type="text" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 control-label">วันที่รับรถ</label>
+                            <div class="form-group col-sm-4">
+                                <input type="date" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="row">
+                            <label class="col-sm-2 control-label">พนักงานขาย</label>
+                            <div class="form-group col-sm-4">
+                                <input type="hidden" name="empCode">
+                                <input type="text" name="empName" id="empName" class="form-control" disabled>
+                            </div>
+                            <label class="col-sm-2 control-label">สาขา</label>
+                            <div class="form-group col-sm-4">
+                                <input type="hidden" name="branchCode">
+                                <input type="text" name="branchName" id="branchName" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="row">
+                            <label class="col-md-2 control-label">หมายเหตุ</label>
+                            <div class="form-group col-md-10">
+                                <textarea name="remark" id="remark" rows="2" class="form-control form-control-sm"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>รถและของแถม</h5>
+
+            <iboxtools></iboxtools>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <form class="form-horizontal col-lg-6 border-right">
+                    <h3 class="m-t-none m-b">รายละเอียดรถ</h3>
+
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">ประเภท</label>
+                        <div class="form-group col-sm-7">
+                            <select name="" id="" class="form-control">
+                                <option value="" selected disabled></option>
+                                <option value="">รถเก่า</option>
+                                <option value="">รถใหม่</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">ยี่ห้อ</label>
+                        <div class="form-group col-sm-7">
+                            <select name="" id="" class="form-control">
+                                <option value=""></option>
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">รุ่น</label>
+                        <div class="form-group col-sm-7">
+                            <select name="" id="" class="form-control">
+                                <option value=""></option>
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">สี</label>
+                        <div class="form-group col-sm-7">
+                            <select name="" id="" class="form-control">
+                                <option value=""></option>
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">เลขเครื่อง</label>
+                        <div class="form-group col-sm-7">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">เลขตัวถัง</label>
+                        <div class="form-group col-sm-7">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">ราคาขาย</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+
+                        <label for="" class="control-label col-sm-3">ราคาขายจริง</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">ส่วนลด/บาท</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+
+                        <label for="" class="control-label col-sm-3">ส่วนลด/%</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">ภาษีมูลค่าเพิ่ม/บาท</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+
+                        <label for="" class="control-label col-sm-3">ภาษีมูลค่าเพิ่ม/%</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="control-label col-sm-3">ราคารวม</label>
+                        <div class="form-group col-sm-3">
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="row">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="form-group col-sm-10">
+                            <label class="checkbox-inline">
+                                <input appIcheck type="checkbox" /> ฟรี พ.ร.บ. </label>
+                            <label class="checkbox-inline">
+                                <input appIcheck type="checkbox" /> ฟรี ทะเบียน </label>
+                            <label class="checkbox-inline">
+                                <input appIcheck type="checkbox" /> ฟรี ประกันภัย
+                            </label>
+                        </div>
+                    </div>
+
+                </form>
+
+                <form class="form-horizontal col-lg-6">
+                    <h3 class="m-t-none m-b">ของแถมและอุปกรณ์เสริม</h3>
+
+                    <div class="hr-line-dashed"></div>
+
+                    <table appFootable class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
+                        <thead>
+                            <tr>
+
+                                <th data-toggle="true">Project</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th data-hide="all">Company</th>
+                                <th data-hide="all">Completed</th>
+                                <th data-hide="all">Task</th>
+                                <th data-hide="all">Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <h3 class="m-t-none m-b">ของแถมและอุปกรณ์เสริม</h3>
+
+                    <div class="hr-line-dashed"></div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
