@@ -20,19 +20,19 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
     <!-- รายละเอียดการจอง -->
-    <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>รายละเอียดการจอง</h5>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>รายละเอียดการจอง</h5>
 
-            <iboxtools></iboxtools>
-        </div>
-        <div class="ibox-content">
-            <form class="form-horizontal">
-                <div class="row">
-                    <div class="col-lg-5 col-md-12">
+                    <iboxtools></iboxtools>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal">
                         <div class="row">
-                            <label class="col-lg-3 col-md-2 col-sm-3 control-label">ผู้จอง :</label>
-                            <div class="form-group col-lg-7 col-md-3 col-sm-8">
+                            <label class="col-lg-2 col-md-2 col-sm-3 control-label">ผู้จอง :</label>
+                            <div class="form-group col-lg-4 col-md-3 col-sm-8">
                                 <input type="text" placeholder="" class="form-control" disabled>
                             </div>
                             <div class="col-md-1 col-sm-1">
@@ -45,16 +45,14 @@
                             <input type="hidden" name="custFirstName">
                             <input type="hidden" name="custLastName">
 
-                            <label class="col-lg-3 col-md-2 col-sm-3 control-label">เบอร์โทร :</label>
-                            <div class="form-group col-lg-7 col-md-3 col-sm-8">
+                            <label class="col-lg-2 col-md-2 col-sm-3 control-label">เบอร์โทร :</label>
+                            <div class="form-group col-lg-3 col-md-3 col-sm-8">
                                 <input type="text" placeholder="" class="form-control" disabled>
                             </div>
                         </div>
 
-                        <div class="hr-line-dashed"></div>
-                    </div>
+                        <div class="hr-line-dashed m-t-none"></div>
 
-                    <div class="col-lg-7 col-md-12 border-left">
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">วันที่จอง :</label>
                             <div class="form-group col-lg-4 col-md-3 col-sm-8">
@@ -86,7 +84,7 @@
                             </div>
                         </div>
 
-                        <div class="hr-line-dashed"></div>
+                        <div class="hr-line-dashed m-t-none"></div>
 
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">พนักงานขาย :</label>
@@ -101,7 +99,7 @@
                             </div>
                         </div>
 
-                        <div class="hr-line-dashed"></div>
+                        <div class="hr-line-dashed m-t-none"></div>
 
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">หมายเหตุ :</label>
@@ -110,11 +108,66 @@
                             </div>
                         </div>
 
-                    </div>
+                    </form>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row m-t-xs">
+                <div class="col-xs-6">
+                    <h5 class="m-b-xs">จำนวนรถ</h5>
+                    <h1 class="no-margins">1</h1>
+                    <!-- <div class="font-bold text-navy">98%
+                        <i class="fa fa-bolt"></i>
+                    </div> -->
+                </div>
+                <div class="col-xs-6">
+                    <h5 class="m-b-xs">จำนวนของแถมและอุปกรณ์เสริม</h5>
+                    <h1 class="no-margins">4</h1>
+                    <!-- <div class="font-bold text-navy">98%
+                        <i class="fa fa-bolt"></i>
+                    </div> -->
+                </div>
+            </div>
 
-
-            </form>
+            <ul class="list-group clear-list m-t">
+                <li class="list-group-item fist-item">
+                    <span class="pull-right">
+                        {{deposit}} บาท
+                    </span>
+                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    &nbsp;เงินมัดจำ
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">
+                        บาท
+                    </span>
+                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    &nbsp;
+                    ราคาขายจริง
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">
+                        บาท
+                    </span>
+                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    &nbsp;ส่วนลด
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">
+                        บาท
+                    </span>
+                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    &nbsp;ภาษีมูลค่าเพิ่ม
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">
+                        บาท
+                    </span>
+                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    &nbsp;ราคารวม
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -260,7 +313,7 @@
                     <!-- <p>อุปกรณ์เสริม</p> -->
 
                     <div class="row">
-                        <label for="" class="col-sm-4 control-label">อุปกรณ์เสริม :</label>
+                        <label for="" class="col-lg-2 col-sm-4 control-label">อุปกรณ์เสริม :</label>
                         <div class="form-group col-sm-7">
                             <select name="" id="" class="form-control"></select>
                         </div>
@@ -297,7 +350,7 @@
                     <!-- <p>ของแถม</p> -->
 
                     <div class="row">
-                        <label for="" class="col-sm-4 control-label">ของแถม :</label>
+                        <label for="" class="col-lg-2 col-sm-4 control-label">ของแถม :</label>
                         <div class="form-group col-sm-7">
                             <select name="" id="" class="form-control"></select>
                         </div>
@@ -344,19 +397,11 @@
         </div>
 
         <div class="ibox-content">
-<<<<<<< HEAD
             <form form class="form-horizontal">
                 <div class="row">
                     <label for="" class="col-lg-2 col-md-2 control-label">สถาบันการเงิน :</label>
                     <div class="col-md-3 form-group">
                         <select name="" id="" class="form-control" placeholder="เลือกสถานบันการเงิน"></select>
-=======
-            <form class="form-horizontal">
-                <div class="row">
-                    <label for="" class="col-md-2 control-label">สถาบันการเงิน :</label>
-                    <div class="col-md-3">
-                        <select name="sale_activity_id" id="sale_activity_id" class="form-control financial" placeholder="เลือกสถานบันการเงิน"></select>
->>>>>>> 8463263dbd8dac8e8aa1b75f414c12dca43b2270
                     </div>
                 </div>
 
@@ -369,11 +414,7 @@
                     <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
                     <div class="form-group col-md-2">
                         <div class="input-group">
-<<<<<<< HEAD
                             <input type="text" name="" id="" class="form-control number" placeholder="0.00">
-=======
-                            <input type="text" name="deposit_rate" id="deposit_rate" class="form-control number" placeholder="0.00">
->>>>>>> 8463263dbd8dac8e8aa1b75f414c12dca43b2270
                             <span class="input-group-addon">%</span>
                         </div>
                     </div>
@@ -416,17 +457,10 @@
 
                     <label for="" class="col-md-2 control-label">ชำระทุกวันที่ :</label>
                     <div class="form-group col-md-2">
-<<<<<<< HEAD
                         <input type="text" name="" id="" class="form-control">
                     </div>
 
                     <label for="" class="col-md-2 control-label">Vat ณ วันที่ทำสัญญา :</label>
-=======
-                        <input type="number" name="" id="" class="form-control">
-                    </div>
-
-                    <label for="" class="col-md-2 control-label text-right">Vat ณ วันที่ทำสัญญา :</label>
->>>>>>> 8463263dbd8dac8e8aa1b75f414c12dca43b2270
                     <div class="form-group col-md-2">
                         <div class="input-group">
                             <input type="text" name="" id="" class="form-control number" placeholder="0.00">
