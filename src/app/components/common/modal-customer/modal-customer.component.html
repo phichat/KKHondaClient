@@ -1,54 +1,105 @@
-<form class="form-horizontal">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="row">
-                <label for="" class="control-label col-lg-3">ค้นหา</label>
-                <div class="group col-lg-9">
-                    <select name="" id="" class="control search-customer" placeholder="ค้นหา ชื่อ-นามสกุล/เลขที่บัตร ปชช."></select>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h6 class="modal-title">{{title}}</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">ค้นหา</label>
+                            <div class="form-group col-lg-9">
+                                <select name="" id="" class="form-control" placeholder="ค้นหา ชื่อ-นามสกุล/เลขที่บัตร ปชช."></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">รหัสบัตร ปชช.</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" name="" id="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">ชื่อลูกค้า</label>
+                            <div class="form-group col-md-4">
+                                <input type="text" name="" id="" class="form-control" placeholder="รหัสลูกค้า">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input type="text" name="" id="" class="form-control" placeholder="คำนำหน้า">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="form-group col-md-4">
+                                <input type="text" name="" id="" class="form-control" placeholder="ชื่อ">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input type="text" name="" id="" class="form-control" placeholder="นามสกุล">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">เบอร์โทร</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" name="" id="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">อีเมล์</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" name="" id="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">ที่อยู่ปัจจุบัน</label>
+                            <div class="form-group col-md-9">
+                                <textarea name="" id="" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <label for="" class="control-label col-lg-3">รหัสบัตร ปชช.</label>
-                <div class="group col-md-9">
-                    <input type="text" name="card_id" id="customer_idcard" class="control control-sm">
-                </div>
-            </div>
-            <div class="row">
-                <label for="" class="control-label col-lg-3">ชื่อลูกค้า</label>
-                <div class="group col-md-4">
-                    <input type="text" name="customer_code" id="customer_code" class="control control-sm" placeholder="รหัสลูกค้า">
-                </div>
-                <div class="group col-md-5">
-                    <input type="text" name="customer_prename" id="customer_prename" class="control control-sm" placeholder="คำนำหน้า">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="group col-md-4">
-                    <input type="text" name="customer_name" id="customer_name" class="control control-sm" placeholder="ชื่อ">
-                </div>
-                <div class="group col-md-5">
-                    <input type="text" name="customer_surname" id="customer_surname" class="control control-sm" placeholder="นามสกุล">
-                </div>
-            </div>
-            <div class="row">
-                <label for="" class="control-label col-lg-3">เบอร์โทร</label>
-                <div class="group col-md-9">
-                    <input type="text" name="customer_phone" id="customer_phone" class="control control-sm">
-                </div>
-            </div>
-            <div class="row">
-                <label for="" class="control-label col-lg-3">อีเมล์</label>
-                <div class="group col-md-9">
-                    <input type="text" name="customer_email" id="customer_email" class="control control-sm">
-                </div>
-            </div>
-            <div class="row">
-                <label for="" class="control-label col-lg-3">ที่อยู่ปัจจุบัน</label>
-                <div class="group col-md-9">
-                    <textarea name="address" id="address" rows="3" class="control control-sm"></textarea>
-                </div>
-            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="customer" class="btn btn-info">
+                <i class="fa fa-plus"></i>&nbsp;เพิ่มข้อมูล
+            </a>
+            <button type="button" class="btn btn-success">
+                <i class="fa fa-check"></i>&nbsp;ยืนยัน</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <i class="fa fa-remove"></i>&nbsp;ยกเลิก</button>
         </div>
     </div>
-</form>
+</div>
+
+<!-- <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Modal title</h4>
+            <small class="font-bold">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+        </div>
+        <div class="modal-body">
+            <p>
+                <strong>Lorem Ipsum is simply dummy</strong> text of the printing and typesetting industry. Lorem Ipsum has been
+                the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+                electronic typesetting, remaining essentially unchanged.</p>
+            <p>
+                <strong>Lorem Ipsum is simply dummy</strong> text of the printing and typesetting industry. Lorem Ipsum has been
+                the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+                electronic typesetting, remaining essentially unchanged.</p>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+</div> -->

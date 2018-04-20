@@ -19,6 +19,7 @@ import { BookingComponent } from './booking/booking.component';
 // Directives
 import { IcheckDirective } from "../../directives/icheck.directive";
 import { FootableDirective } from "../../directives/footable.directive";
+import { ModalCustomerComponent } from "../../components/common/modal-customer/modal-customer.component";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { FootableDirective } from "../../directives/footable.directive";
     StarterComponent,
     SalesComponent,
     BookingComponent,
+    ModalCustomerComponent,
 
     // Directives
     IcheckDirective,

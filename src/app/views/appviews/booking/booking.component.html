@@ -36,9 +36,14 @@
                                 <input type="text" placeholder="" class="form-control" disabled>
                             </div>
                             <div class="col-md-1 col-sm-1">
-                                <button type="button" class="btn btn-info">
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal5">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
+
+                                <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
+                                    <!--  data-backdrop="static" data-keyboard="false" -->
+                                    <app-modal-customer></app-modal-customer>
+                                </div>
                             </div>
                             <input type="hidden" name="custCode">
                             <input type="hidden" name="custPreName">
@@ -50,6 +55,8 @@
                                 <input type="text" placeholder="" class="form-control" disabled>
                             </div>
                         </div>
+
+                        
 
                         <div class="hr-line-dashed m-t-none"></div>
 
@@ -135,36 +142,45 @@
                     <span class="pull-right">
                         {{deposit}} บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;เงินมัดจำ
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
                         บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
-                    &nbsp;
-                    ราคาขายจริง
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
+                    &nbsp; ราคาขายจริง
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
                         บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;ส่วนลด
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
                         บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;ภาษีมูลค่าเพิ่ม
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
                         บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;ราคารวม
                 </li>
             </ul>
