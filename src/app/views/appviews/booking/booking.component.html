@@ -36,9 +36,14 @@
                                 <input type="text" placeholder="" class="form-control" disabled>
                             </div>
                             <div class="col-md-1 col-sm-1">
-                                <button type="button" class="btn btn-info">
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalRegisterDetail">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
+
+                                <div class="modal fade" id="modalRegisterDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;" aria-hidden="true"
+                                    data-backdrop="static" data-keyboard="false">
+                                    <app-modal-customer></app-modal-customer>
+                                </div>
                             </div>
                             <input type="hidden" name="custCode">
                             <input type="hidden" name="custPreName">
@@ -116,14 +121,14 @@
             <div class="row m-t-xs">
                 <div class="col-xs-6">
                     <h5 class="m-b-xs">จำนวนรถ</h5>
-                    <h1 class="no-margins">1</h1>
+                    <h1 class="no-margins">{{mcAmount}}</h1>
                     <!-- <div class="font-bold text-navy">98%
                         <i class="fa fa-bolt"></i>
                     </div> -->
                 </div>
                 <div class="col-xs-6">
                     <h5 class="m-b-xs">จำนวนของแถมและอุปกรณ์เสริม</h5>
-                    <h1 class="no-margins">4</h1>
+                    <h1 class="no-margins">{{accAmount}}</h1>
                     <!-- <div class="font-bold text-navy">98%
                         <i class="fa fa-bolt"></i>
                     </div> -->
@@ -133,38 +138,47 @@
             <ul class="list-group clear-list m-t">
                 <li class="list-group-item fist-item">
                     <span class="pull-right">
-                        {{deposit}} บาท
+                        {{deposit | number}} บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;เงินมัดจำ
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        บาท
+                        {{price | number}} บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
-                    &nbsp;
-                    ราคาขายจริง
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
+                    &nbsp; ราคาสินค้า
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        บาท
+                        {{discount | number}} บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;ส่วนลด
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        บาท
+                        {{vat | number}} บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;ภาษีมูลค่าเพิ่ม
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        บาท
+                        {{totalPrice | number}} บาท
                     </span>
-                    <span class="label label-primary"><i class="fa fa-arrow-right"></i></span>
+                    <span class="label label-primary">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
                     &nbsp;ราคารวม
                 </li>
             </ul>
@@ -188,10 +202,10 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ประเภท :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control">
+                            <select name="" id="" class="form-control" appSelectizeProductType>
                                 <option value="" selected disabled></option>
-                                <option value="">รถเก่า</option>
-                                <option value="">รถใหม่</option>
+                                <option value="รถเก่า">รถเก่า</option>
+                                <option value="รถใหม่">รถใหม่</option>
                             </select>
                         </div>
                     </div>
@@ -199,10 +213,11 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ยี่ห้อ :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control">
-                                <option value=""></option>
-                                <option value=""></option>
-                                <option value=""></option>
+                            <select name="" id="" class="form-control" appSelectizeProductBrand>
+                                <option value="" selected disabled></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                         </div>
                     </div>
@@ -210,10 +225,11 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">รุ่น :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control">
-                                <option value=""></option>
-                                <option value=""></option>
-                                <option value=""></option>
+                            <select name="" id="" class="form-control" appSelectizeProductModel>
+                                <option value="" selected disabled></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                         </div>
                     </div>
@@ -221,10 +237,11 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">สี :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control">
-                                <option value=""></option>
-                                <option value=""></option>
-                                <option value=""></option>
+                            <select name="" id="" class="form-control" appSelectizeProductColor>
+                                <option value="" selected disabled></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                         </div>
                     </div>
@@ -313,9 +330,11 @@
                     <!-- <p>อุปกรณ์เสริม</p> -->
 
                     <div class="row">
-                        <label for="" class="col-lg-2 col-sm-4 control-label">อุปกรณ์เสริม :</label>
+                        <label for="" class="col-md-3 col-sm-4 control-label">อุปกรณ์เสริม :</label>
                         <div class="form-group col-sm-7">
-                            <select name="" id="" class="form-control"></select>
+                            <select name="" id="" class="form-control" appSelectizeProductAccessory>
+                                <option value="" selected disabled></option>
+                            </select>
                         </div>
                     </div>
 
@@ -350,9 +369,11 @@
                     <!-- <p>ของแถม</p> -->
 
                     <div class="row">
-                        <label for="" class="col-lg-2 col-sm-4 control-label">ของแถม :</label>
+                        <label for="" class="col-md-3 col-sm-4 control-label">ของแถม :</label>
                         <div class="form-group col-sm-7">
-                            <select name="" id="" class="form-control"></select>
+                            <select name="" id="" class="form-control" appSelectizeProductPremium>
+                                <option value="" selected disabled></option>
+                            </select>
                         </div>
                     </div>
 
@@ -360,7 +381,6 @@
                         <table appFootable class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
                             <thead>
                                 <tr>
-
                                     <th data-toggle="true">Project</th>
                                     <th>Name</th>
                                     <th>Phone</th>
@@ -401,7 +421,9 @@
                 <div class="row">
                     <label for="" class="col-lg-2 col-md-2 control-label">สถาบันการเงิน :</label>
                     <div class="col-md-3 form-group">
-                        <select name="" id="" class="form-control" placeholder="เลือกสถานบันการเงิน"></select>
+                        <select name="" id="" class="form-control" placeholder="เลือกสถานบันการเงิน" appSelectizeFinancial>
+                            <option value="" selected disabled></option>
+                        </select>
                     </div>
                 </div>
 
@@ -478,6 +500,7 @@
                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 บันทึก
             </button>
+            &nbsp; &nbsp;
             <button type="button" class="btn btn-default">
                 <i class="fa fa-times" aria-hidden="true"></i>
                 ยกเลิก

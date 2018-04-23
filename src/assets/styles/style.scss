@@ -46,6 +46,8 @@
 // Your custom style to override base style
 @import "imports/custom";
 
+@import "imports/selectize";
+
 // Clear layout on print mode
 @media print {
   nav.navbar-static-side {

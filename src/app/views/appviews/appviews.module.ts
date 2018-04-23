@@ -19,9 +19,32 @@ import { BookingComponent } from './booking/booking.component';
 // Directives
 import { IcheckDirective } from "../../directives/icheck.directive";
 import { FootableDirective } from "../../directives/footable.directive";
+import { SelectizeFinancialDirective } from "../../directives/selectize-financial.directive";
+import { SelectizeProductAccessoryDirective } from "../../directives/selectize-product-accessory.directive";
+import { SelectizeProductBrandDirective } from "../../directives/selectize-product-brand.directive";
+import { SelectizeProductColorDirective } from "../../directives/selectize-product-color.directive";
+import { SelectizeProductModelDirective } from "../../directives/selectize-product-model.directive";
+import { SelectizeProductPremiumDirective } from "../../directives/selectize-product-premium.directive";
+import { SelectizeProductTypeDirective } from "../../directives/selectize-product-type.directive";
+
+
+import { ModalCustomerComponent } from "../../components/common/modal-customer/modal-customer.component";
+import { SelectizeSearchCustomerDirective } from "../../directives/selectize-search-customer.directive";
 
 @NgModule({
   declarations: [
+    // Directives
+    IcheckDirective,
+    FootableDirective,
+    SelectizeFinancialDirective,
+    SelectizeProductAccessoryDirective,
+    SelectizeProductBrandDirective,
+    SelectizeProductColorDirective,
+    SelectizeProductModelDirective,
+    SelectizeProductPremiumDirective,
+    SelectizeProductTypeDirective,
+    SelectizeSearchCustomerDirective,
+
     // Components
     StarterViewComponent,
     LoginComponent,
@@ -29,10 +52,8 @@ import { FootableDirective } from "../../directives/footable.directive";
     StarterComponent,
     SalesComponent,
     BookingComponent,
+    ModalCustomerComponent
 
-    // Directives
-    IcheckDirective,
-    FootableDirective
   ],
   imports: [
     BrowserModule,
