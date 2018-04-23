@@ -14,10 +14,21 @@ import { AppviewsModule } from "./views/appviews/appviews.module";
 
 // App modules/components
 import { LayoutsModule } from "./components/common/layouts/layouts.module";
+<<<<<<< HEAD
 
 @NgModule({
   declarations: [
     AppComponent
+=======
+// import { ModalCustomerComponent } from './components/common/modal-customer/modal-customer.component';
+import { SelectizeDirective } from './directives/selectize.directive';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    // ModalCustomerComponent,
+    SelectizeDirective
+>>>>>>> cc9d90cf1580cca6974953dff5cd40635b2f08dd
   ],
   imports: [
     BrowserModule,

@@ -19,6 +19,7 @@ import { BookingComponent } from './booking/booking.component';
 // Directives
 import { IcheckDirective } from "../../directives/icheck.directive";
 import { FootableDirective } from "../../directives/footable.directive";
+<<<<<<< HEAD
 import { SelectizeFinancialDirective } from "../../directives/selectize-financial.directive";
 import { SelectizeProductAccessoryDirective } from "../../directives/selectize-product-accessory.directive";
 import { SelectizeProductBrandDirective } from "../../directives/selectize-product-brand.directive";
@@ -30,6 +31,9 @@ import { SelectizeProductTypeDirective } from "../../directives/selectize-produc
 
 import { ModalCustomerComponent } from "../../components/common/modal-customer/modal-customer.component";
 import { SelectizeSearchCustomerDirective } from "../../directives/selectize-search-customer.directive";
+=======
+import { ModalCustomerComponent } from "../../components/common/modal-customer/modal-customer.component";
+>>>>>>> cc9d90cf1580cca6974953dff5cd40635b2f08dd
 
 @NgModule({
   declarations: [
@@ -52,7 +56,11 @@ import { SelectizeSearchCustomerDirective } from "../../directives/selectize-sea
     StarterComponent,
     SalesComponent,
     BookingComponent,
+<<<<<<< HEAD
     ModalCustomerComponent
+=======
+    ModalCustomerComponent,
+>>>>>>> cc9d90cf1580cca6974953dff5cd40635b2f08dd
 
   ],
   imports: [
