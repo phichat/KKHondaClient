@@ -29,11 +29,7 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
-<<<<<<< HEAD
         "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-=======
-        "../node_modules/bootstrap/dist/js/bootstrap.js",
->>>>>>> cc9d90cf1580cca6974953dff5cd40635b2f08dd
         "../node_modules/metismenu/dist/metisMenu.js",
         "../node_modules/jquery-sparkline/jquery.sparkline.js",
         "../node_modules/icheck/icheck.js",
