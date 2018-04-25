@@ -32,12 +32,15 @@ import { ModalCustomerComponent } from "../../components/common/modal-customer/m
 import { SelectizeSearchCustomerDirective } from "../../directives/selectize-search-customer.directive";
 import { FormsModule } from "@angular/forms";
 import { ModelCustomer } from "../../models/model-customer";
+import { SelectizeDirective } from "../../directives/selectize.directive";
+import { InputmaskDirective } from "../../directives/inputmask.directive";
 
 @NgModule({
   declarations: [
     // Directives
     IcheckDirective,
     FootableDirective,
+    SelectizeDirective,
     SelectizeFinancialDirective,
     SelectizeProductAccessoryDirective,
     SelectizeProductBrandDirective,
@@ -46,6 +49,7 @@ import { ModelCustomer } from "../../models/model-customer";
     SelectizeProductPremiumDirective,
     SelectizeProductTypeDirective,
     SelectizeSearchCustomerDirective,
+    InputmaskDirective,
 
     // Components
     StarterViewComponent,

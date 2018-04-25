@@ -1,9 +1,12 @@
+$fontSize: '13px';
 .selectize-input{
     border-radius: unset; 
+    font-size: $fontSize;
 }
 
 .selectize-dropdown, .selectize-dropdown.form-control{
     border-radius: unset; 
+    font-size: $fontSize;
 }
 
 .selectize-input.focus{
