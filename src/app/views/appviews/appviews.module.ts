@@ -30,6 +30,8 @@ import { SelectizeProductTypeDirective } from "../../directives/selectize-produc
 
 import { ModalCustomerComponent } from "../../components/common/modal-customer/modal-customer.component";
 import { SelectizeSearchCustomerDirective } from "../../directives/selectize-search-customer.directive";
+import { FormsModule } from "@angular/forms";
+import { ModelCustomer } from "../../models/model-customer";
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { SelectizeSearchCustomerDirective } from "../../directives/selectize-sea
   imports: [
     BrowserModule,
     RouterModule,
+    FormsModule,
     PeityModule,
     SparklineModule,
     IboxtoolsModule
@@ -66,6 +69,9 @@ import { SelectizeSearchCustomerDirective } from "../../directives/selectize-sea
     StarterViewComponent,
     LoginComponent
   ],
+  // providers: [
+  //   ModelCustomer
+  // ]
 })
 
 export class AppviewsModule {

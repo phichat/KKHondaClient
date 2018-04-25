@@ -35,7 +35,8 @@
         "../node_modules/icheck/icheck.js",
         "../node_modules/footable/dist/footable.all.js",
         "../node_modules/selectize/dist/js/standalone/selectize.min.js",
-        "../vendor/pace/pace.min.js"
+        "../vendor/pace/pace.min.js",
+        "../src/assets/plugins/jquery-inputmask/jquery.inputmask.bundle.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModelCustomer } from '../../../models/model-customer';
 
 @Component({
   selector: 'app-modal-customer',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModalCustomerComponent implements OnInit {
 
-  constructor() { }
+  public model = new ModelCustomer('', '', '', '', '', '', '', '');
+
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+
+  onSubmit() {
+    // console.log(this.model);
   }
 
 }

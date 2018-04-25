@@ -10,7 +10,7 @@ export class BookingComponent implements OnInit {
   private mcAmount: number = 1;
   private accAmount: number = 5;
   private deposit: number = 5000;
-  private price: number = 48000;
+  private price: number = 48000.89;
   private discount: number = 1000;
   private vat: number = 2000;
   private totalPrice: number = 49000;
