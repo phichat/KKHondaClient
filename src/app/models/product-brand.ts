@@ -1,7 +1,6 @@
 export class ProductBrand {
-    constructor(
-        public brandId: string,
-        public brandCode: string,
-        public brandName: string
-    ) { }
+
+    public brandId: string;
+    public brandCode: string;
+    public brandName: string;
 }

@@ -1,10 +1,11 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h6 class="modal-title">{{title}}</h6>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
             </button>
+            <i class="fa fa-address-book modal-icon"></i>
+            <h6 class="modal-title">{{title}}</h6>
         </div>
         <div class="modal-body">
             <form class="form-horizontal">
@@ -24,20 +25,8 @@
                         </div>
                         <div class="row">
                             <label for="" class="control-label col-lg-3">ชื่อลูกค้า :</label>
-                            <div class="form-group col-md-4">
-                                <input type="text" [(ngModel)]="model.custCode" name="custCode" #custCode="ngModel" class="form-control" placeholder="รหัสลูกค้า">
-                            </div>
-                            <div class="form-group col-md-5">
-                                <input type="text" [(ngModel)]="model.preName" name="preName" #preName="ngModel" class="form-control" placeholder="คำนำหน้า">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="form-group col-md-4">
-                                <input type="text" [(ngModel)]="model.firstName" name="firstName" #firstName="ngModel" class="form-control" placeholder="ชื่อ">
-                            </div>
-                            <div class="form-group col-md-5">
-                                <input type="text" [(ngModel)]="model.surName" name="surName" #surName="ngModel" class="form-control" placeholder="นามสกุล">
+                            <div class="form-group col-md-9">
+                                <input type="text" [(ngModel)]="model.custCode" name="custCode" #custCode="ngModel" class="form-control">
                             </div>
                         </div>
                         <div class="row">
@@ -63,13 +52,17 @@
             </form>
         </div>
         <div class="modal-footer">
-            <a href="javaScript:void(0);" class="btn btn-info">
-                <i class="fa fa-plus"></i>&nbsp;เพิ่มข้อมูล
-            </a>
-            <button type="button" class="btn btn-success" (click)="onSubmit()">
-                <i class="fa fa-check"></i>&nbsp;ยืนยัน</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">
-                <i class="fa fa-remove"></i>&nbsp;ยกเลิก</button>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-w-m btn-outline btn-info" style="margin-bottom: unset;">
+                        <i class="fa fa-user-plus"></i>&nbsp;เพิ่มข้อมูล
+                    </button>
+                    <button type="button" class="btn btn-w-m  btn-primary" (click)="onSubmit()">
+                        <i class="fa fa-check"></i>&nbsp;ยืนยัน</button>
+                    <button type="button" class="btn btn-w-m btn-danger" data-dismiss="modal">
+                        <i class="fa fa-remove"></i>&nbsp;ยกเลิก</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
