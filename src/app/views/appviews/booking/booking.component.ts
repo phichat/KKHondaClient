@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModelBookingDetail } from '../../../models/model-booking-detail';
+import ModelMotobike from '../../../models/model-motobike';
 
 @Component({
   selector: 'app-booking',
@@ -7,13 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookingComponent implements OnInit {
 
-  private mcAmount: number = 1;
-  private accAmount: number = 5;
-  private deposit: number = 5000;
-  private price: number = 48000.89;
-  private discount: number = 1000;
-  private vat: number = 2000;
-  private totalPrice: number = 49000;
+  modelBooking: ModelBookingDetail;
+  modelMotobike: ModelMotobike;
 
   constructor() { }
 

@@ -70,8 +70,8 @@ import { InputmaskDirective } from "../../directives/inputmask.directive";
     IboxtoolsModule
   ],
   exports: [
-    StarterViewComponent,
-    LoginComponent
+    // StarterViewComponent,
+    // LoginComponent
   ],
   // providers: [
   //   ModelCustomer

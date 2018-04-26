@@ -45,14 +45,13 @@
                                     <app-modal-customer></app-modal-customer>
                                 </div>
                             </div>
-                            <input type="hidden" name="custCode">
-                            <input type="hidden" name="custPreName">
-                            <input type="hidden" name="custFirstName">
-                            <input type="hidden" name="custLastName">
+                            <input type="hidden" name="" [(ngModel)]="modelBooking.custCode">
+                            <input type="hidden" name="" [(ngModel)]="modelBooking.custTitleName">
+                            <input type="hidden" name="" [(ngModel)]="modelBooking.custFullName">
 
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">เบอร์โทร :</label>
                             <div class="form-group col-lg-3 col-md-3 col-sm-8">
-                                <input type="text" placeholder="" class="form-control" disabled>
+                                <input type="text" placeholder="" class="form-control" disabled [(ngModel)]="modelBooking.custTel">
                             </div>
                         </div>
 
@@ -63,31 +62,26 @@
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">วันที่จอง :</label>
                             <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="date" name="reserveDate" id="reserveDate" class="form-control">
+                                <input type="date" name="reserveDate" id="reserveDate" class="form-control" [(ngModel)]="modelBooking.bookingDate">
                             </div>
 
-                            <label class="col-lg-2 col-md-2 col-sm-3 control-label">เลขที่ใบจอง :</label>
-                            <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="text" placeholder="" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">เงินมัดจำ :</label>
                             <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="text" placeholder="" class="form-control" pattern="[0-9]+([\.,][0-9]+)*">
-                            </div>
-
-                            <label class="col-lg-2 col-md-2 col-sm-3 control-label">สถานะ :</label>
-                            <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" placeholder="" class="form-control" appInputmask [(ngModel)]="modelBooking.bookingPrice">
                             </div>
                         </div>
 
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">วันที่รับรถ :</label>
                             <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="date" placeholder="" class="form-control">
+                                <input type="date" placeholder="" class="form-control" [(ngModel)]="modelBooking.bookingDate">
+                            </div>
+                            <label class="col-lg-2 col-md-2 col-sm-3 control-label">สถานะ :</label>
+                            <div class="form-group col-lg-4 col-md-3 col-sm-8">
+                                <select name="" id="" class="form-control" appSelectize [(ngModel)]="modelBooking.bookingStatus">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
                             </div>
                         </div>
 
@@ -96,13 +90,13 @@
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">พนักงานขาย :</label>
                             <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="hidden" name="empCode">
-                                <input type="text" name="empName" id="empName" class="form-control" disabled>
+                                <input type="hidden" name="" [(ngModel)]="modelBooking.empCode">
+                                <input type="text" name="" id="" class="form-control" disabled [(ngModel)]="modelBooking.empFullName">
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">สาขา :</label>
                             <div class="form-group col-lg-4 col-md-3 col-sm-8">
-                                <input type="hidden" name="branchCode">
-                                <input type="text" name="branchName" id="branchName" class="form-control" disabled>
+                                <input type="hidden" name="" [(ngModel)]="modelBooking.branchCode">
+                                <input type="text" name="branchName" id="branchName" class="form-control" disabled [(ngModel)]="modelBooking.branchName">
                             </div>
                         </div>
 
@@ -111,7 +105,7 @@
                         <div class="row">
                             <label class="col-lg-2 col-md-2 col-sm-3 control-label">หมายเหตุ :</label>
                             <div class="form-group col-lg-10 col-sm-8">
-                                <textarea name="remark" id="remark" rows="2" class="form-control"></textarea>
+                                <textarea name="remark" id="remark" rows="2" class="form-control" [(ngModel)]="modelBooking.remark"></textarea>
                             </div>
                         </div>
 
@@ -120,36 +114,32 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="row m-t-xs">
+            <div class="row m-t-xs text-right">
+                <div class="col-xs-6">
+                    <h5 class="m-b-xs">เลขที่ใบจอง</h5>
+                    <h2 class="no-margins">{{modelBooking.bookingCode}}</h2>
+                </div>
+                <div class="col-xs-6">
+                    <h5 class="m-b-xs">สถานะ</h5>
+                    <h2 class="no-margins">{{modelBooking.bookingStatus}}</h2>
+                </div>
+            </div>
+            <hr class="m-t-sm m-b-sm" style="border-top:1px solid #e7eaec;">
+            <div class="row m-t-xs text-right">
                 <div class="col-xs-6">
                     <h5 class="m-b-xs">จำนวนรถ</h5>
-                    <h1 class="no-margins">{{mcAmount}}</h1>
-                    <!-- <div class="font-bold text-navy">98%
-                        <i class="fa fa-bolt"></i>
-                    </div> -->
+                    <h3 class="no-margins">{{modelBooking.mbAmnt}}</h3>
                 </div>
                 <div class="col-xs-6">
                     <h5 class="m-b-xs">จำนวนของแถมและอุปกรณ์เสริม</h5>
-                    <h1 class="no-margins">{{accAmount}}</h1>
-                    <!-- <div class="font-bold text-navy">98%
-                        <i class="fa fa-bolt"></i>
-                    </div> -->
+                    <h3 class="no-margins">{{modelBooking.itemAmnt}}</h3>
                 </div>
             </div>
 
             <ul class="list-group clear-list m-t">
-                <li class="list-group-item fist-item">
-                    <span class="pull-right">
-                        {{deposit | number}} บาท
-                    </span>
-                    <span class="label label-primary">
-                        <i class="fa fa-arrow-right"></i>
-                    </span>
-                    &nbsp;เงินมัดจำ
-                </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        {{price | number}} บาท
+                        {{modelBooking.totalSell | number}} บาท
                     </span>
                     <span class="label label-primary">
                         <i class="fa fa-arrow-right"></i>
@@ -158,7 +148,7 @@
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        {{discount | number}} บาท
+                        {{modelBooking.totalDiscount | number}} บาท
                     </span>
                     <span class="label label-primary">
                         <i class="fa fa-arrow-right"></i>
@@ -167,7 +157,7 @@
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        {{vat | number}} บาท
+                        {{modelBooking.totalVat | number}} บาท
                     </span>
                     <span class="label label-primary">
                         <i class="fa fa-arrow-right"></i>
@@ -176,7 +166,7 @@
                 </li>
                 <li class="list-group-item">
                     <span class="pull-right">
-                        {{totalPrice | number}} บาท
+                        {{modelBooking.totalSellNet | number}} บาท
                     </span>
                     <span class="label label-primary">
                         <i class="fa fa-arrow-right"></i>
@@ -204,7 +194,7 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ประเภท :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control" appSelectizeProductType>
+                            <select name="" id="" class="form-control" appSelectizeProductType [(ngModel)]="modelMotobike.typeId">
                                 <option value="" selected disabled></option>
                                 <option value="รถเก่า">รถเก่า</option>
                                 <option value="รถใหม่">รถใหม่</option>
@@ -215,7 +205,7 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ยี่ห้อ :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control" appSelectizeProductBrand>
+                            <select name="" id="" class="form-control" appSelectizeProductBrand [(ngModel)]="modelMotobike.brandId">
                                 <option value="" selected disabled></option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -227,7 +217,7 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">รุ่น :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control" appSelectizeProductModel>
+                            <select name="" id="" class="form-control" appSelectizeProductModel [(ngModel)]="modelMotobike.modelId">
                                 <option value="" selected disabled></option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -239,7 +229,7 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">สี :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <select name="" id="" class="form-control" appSelectizeProductColor>
+                            <select name="" id="" class="form-control" appSelectizeProductColor [(ngModel)]="modelMotobike.colorId">
                                 <option value="" selected disabled></option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -251,7 +241,7 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">เลขเครื่อง :</label>
                         <div class="form-group col-lg-6 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <select name="" id="" class="form-control" appSelectize></select>
                         </div>
                     </div>
 
@@ -265,24 +255,24 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ราคาขาย :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
 
                         <label for="" class="control-label col-lg-3 col-sm-4">ราคาขายจริง :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
                     </div>
 
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/บาท :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
 
                         <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/% :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
                     </div>
 
@@ -290,19 +280,19 @@
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/บาท :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
 
                         <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/% :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
                     </div>
 
                     <div class="row">
                         <label for="" class="control-label col-lg-3 col-sm-4">ราคารวม :</label>
                         <div class="form-group col-lg-3 col-sm-7">
-                            <input type="text" name="" id="" class="form-control">
+                            <input type="text" name="" id="" class="form-control" appInputmask>
                         </div>
                     </div>
 
