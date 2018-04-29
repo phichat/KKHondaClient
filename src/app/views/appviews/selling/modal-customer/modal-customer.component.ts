@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelCustomer } from '../../../models/model-customer';
+import { ModelCustomer } from '../../../../models/selling';
 
 @Component({
   selector: 'app-modal-customer',
   templateUrl: './modal-customer.component.html',
-  styleUrls: ['./modal-customer.component.css']
+  styleUrls: ['./modal-customer.component.scss']
 })
 export class ModalCustomerComponent implements OnInit {
 
-  public model = new ModelCustomer('', '', '', '', '', '', '', '');
+  model = new ModelCustomer('', '', '', '', '', '', '', '');
   title: string;
 
   constructor() {

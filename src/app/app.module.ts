@@ -35,9 +35,7 @@ import { CategoriesService } from './services/products/categories.service';
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    ProductService,
-    TypesService,
-    CategoriesService
+
   ],
   bootstrap: [AppComponent]
 })

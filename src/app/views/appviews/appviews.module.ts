@@ -13,8 +13,6 @@ import { PeityModule } from '../../components/charts/peity';
 import { SparklineModule } from '../../components/charts/sparkline';
 import { HomeComponent } from './home/home.component';
 import { StarterComponent } from './starter/starter.component';
-import { SalesComponent } from './sales/sales.component';
-import { BookingComponent } from './booking/booking.component';
 
 // Directives
 import { IcheckDirective } from "../../directives/icheck.directive";
@@ -27,46 +25,36 @@ import { SelectizeProductModelDirective } from "../../directives/selectize-produ
 import { SelectizeProductPremiumDirective } from "../../directives/selectize-product-premium.directive";
 import { SelectizeProductTypeDirective } from "../../directives/selectize-product-type.directive";
 
-
-import { ModalCustomerComponent } from "../../components/common/modal-customer/modal-customer.component";
 import { SelectizeSearchCustomerDirective } from "../../directives/selectize-search-customer.directive";
 import { FormsModule } from "@angular/forms";
-import { ModelCustomer } from "../../models/model-customer";
 import { SelectizeDirective } from "../../directives/selectize.directive";
 import { InputmaskDirective } from "../../directives/inputmask.directive";
 import { SelectizeProductCategoriesDirective } from "../../directives/selectize-product-categories.directive";
-import { MotoBikeComponent } from './booking/moto-bike/moto-bike.component';
-import { AccessoryComponent } from './booking/accessory/accessory.component';
 import { SellingModule } from "./selling/selling.module";
 // import { ProductService } from "../../services";
 
 @NgModule({
   declarations: [
     // Directives
-    IcheckDirective,
-    FootableDirective,
-    SelectizeDirective,
-    SelectizeFinancialDirective,
-    SelectizeProductAccessoryDirective,
-    SelectizeProductBrandDirective,
-    SelectizeProductColorDirective,
-    SelectizeProductModelDirective,
-    SelectizeProductPremiumDirective,
-    SelectizeProductTypeDirective,
-    SelectizeSearchCustomerDirective,
-    SelectizeProductCategoriesDirective,
-    InputmaskDirective,
+    // IcheckDirective,
+    // FootableDirective,
+    // SelectizeDirective,
+    // SelectizeFinancialDirective,
+    // SelectizeProductAccessoryDirective,
+    // SelectizeProductBrandDirective,
+    // SelectizeProductColorDirective,
+    // SelectizeProductModelDirective,
+    // SelectizeProductPremiumDirective,
+    // SelectizeProductTypeDirective,
+    // SelectizeSearchCustomerDirective,
+    // SelectizeProductCategoriesDirective,
+    // InputmaskDirective,
 
     // Components
     StarterViewComponent,
     LoginComponent,
     HomeComponent,
     StarterComponent,
-    SalesComponent,
-    BookingComponent,
-    // ModalCustomerComponent,
-    MotoBikeComponent,
-    AccessoryComponent
 
   ],
   imports: [
@@ -79,7 +67,7 @@ import { SellingModule } from "./selling/selling.module";
     SellingModule
   ],
   exports: [
-    IcheckDirective
+    // IcheckDirective
   ],
   providers: [
     // ProductService

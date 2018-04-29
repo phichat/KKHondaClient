@@ -9,9 +9,17 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { IboxtoolsModule } from '../../../components/common/iboxtools/iboxtools.module';
-import { ModalCustomerComponent } from '../../../components/common/modal-customer/modal-customer.component';
-import { ModelCustomerComponent } from './model-customer/model-customer.component';
 import { SellingComponent } from './selling.component';
+import { ModalCustomerComponent } from './modal-customer/modal-customer.component';
+import { SelectizeDirective } from '../../../directives/selectize.directive';
+import { TypesService } from '../../../services/products/types.service';
+import { CategoriesService } from '../../../services/products/categories.service';
+import { ProductService } from '../../../services';
+import { BrandsService } from '../../../services/products/brands.service';
+import { ClassesService } from '../../../services/products/classes.service';
+import { ColorsService } from '../../../services/products/colors.service';
+import { ModelsService } from '../../../services/products/models.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -19,17 +27,28 @@ import { SellingComponent } from './selling.component';
     BrowserModule,
     RouterModule,
     FormsModule,
-    IboxtoolsModule,
+    IboxtoolsModule, 
+    NgSelectModule
   ],
   declarations: [
-    ModalCustomerComponent,
+    SelectizeDirective,
+
     BookingDetailComponent,
     SummaryComponent,
     MotobikeComponent,
     AccessoryComponent,
     CreditComponent,
-    ModelCustomerComponent,
+    ModalCustomerComponent,
     SellingComponent
+  ],
+  providers: [
+    BrandsService,
+    CategoriesService,
+    ClassesService,
+    ColorsService,
+    ModelsService,
+    ProductService,
+    TypesService,
   ]
 })
 export class SellingModule { }

@@ -1,6 +1,6 @@
 export class ProductCategory {
 
-    public cateId: string;
+    public cateId: number;
     public cateCode: string;
     public cateName: string;
 }

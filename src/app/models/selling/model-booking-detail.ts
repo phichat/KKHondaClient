@@ -14,11 +14,6 @@ export class ModelBookingDetail {
     public branchCode: string;
     public branchName: string;
     public remark: string;
-    public mbAmnt: number;
-    public itemAmnt: number;
-    public totalSell: number;
-    public totalDiscount: number;
-    public totalVat: number;
-    public totalSellNet: number;
+
 
 }

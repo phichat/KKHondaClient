@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { appConfig } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
-import { ProductType } from '../../models';
+import { ProductType } from '../../models/products';
 
 @Injectable()
 export class TypesService {

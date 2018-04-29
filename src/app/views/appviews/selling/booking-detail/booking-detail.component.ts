@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelBookingDetail } from '../../../../models';
+import { ModelBookingDetail } from '../../../../models/selling';
 
 @Component({
   selector: 'app-booking-detail',

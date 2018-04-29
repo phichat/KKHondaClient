@@ -1,136 +1,133 @@
 <form class="form-horizontal row">
-  <div class="col-sm-5">
+    <div class="col-sm-5">
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ประเภทสินค้า :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select #types class="form-control">
-                  <option value="" selected disabled></option>
-                  <!-- <option *ngFor="let item of productTypes" value="item.typeId">{{item.typeName}}</option> -->
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">ประเภทสินค้า :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productTypes" 
+                    bindLabel="typeName" 
+                    placeholder="Select city" 
+                    [(ngModel)]="selectedCity"
+                    name="selectedCity">
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">หมวดหมู่ :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="categories" #categories class="form-control">
-                  <option value="" selected disabled></option>
-                  <!-- <option *ngFor="let item of productCategories" value="item.catId">{{item.catName}}</option> -->
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">หมวดหมู่ :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <select name="categories" #categories class="form-control">
+                    <option value="" selected disabled></option>
+                    <option *ngFor="let item of productCategories" value="item.catId">{{item.catName}}</option>
+                </select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ยี่ห้อ :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="brandId" #brandId class="form-control" appSelectizeProductBrand>
-                  <option value="" selected disabled></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">ยี่ห้อ :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <select name="brandId" #brandId class="form-control" appSelectizeProductBrand>
+                    <option value="" selected disabled></option>
+                    <option *ngFor="let item of productBrand" value="item.brandId">{{item.brandName}}</option>
+                </select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">รุ่น :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="modelId" #modelId class="form-control" appSelectizeProductModel>
-                  <option value="" selected disabled></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">รุ่น :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <select name="modelId" #modelId class="form-control" appSelectizeProductModel>
+                    <option value="" selected disabled></option>
+                    <option *ngFor="let item of productModel" value="item.modelId">{{item.modelName}}</option>
+                </select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">สี :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="colorId" #colorId class="form-control" appSelectizeProductColor>
-                  <option value="" selected disabled></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">สี :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <select name="colorId" #colorId class="form-control" appSelectizeProductColor>
+                    <option value="" selected disabled></option>
+                    <option *ngFor="let item of productColor" value="item.colorId">{{item.colorName}}</option>
+                </select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">เลขเครื่อง :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="" id="" class="form-control" appSelectize></select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">เลขเครื่อง :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <select name="" id="" class="form-control" appSelectize></select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">เลขตัวถัง :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <input type="text" name="" id="" class="form-control">
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">เลขตัวถัง :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <input type="text" name="" id="" class="form-control">
+            </div>
+        </div>
 
-  </div>
+    </div>
 
-  <div class="col-sm-7">
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ราคาขาย :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
+    <div class="col-sm-7">
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">ราคาขาย :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
 
-          <label for="" class="control-label col-lg-3 col-sm-4">ราคาขายจริง :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+            <label for="" class="control-label col-lg-3 col-sm-4">ราคาขายจริง :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/บาท :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/บาท :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
 
-          <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/% :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+            <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/% :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
+        </div>
 
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/บาท :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/บาท :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
 
-          <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/% :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+            <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/% :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ราคารวม :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">ราคารวม :</label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="text" name="" id="" class="form-control" appInputmask>
+            </div>
+        </div>
 
-      <div class="hr-line-dashed"></div>
+        <div class="hr-line-dashed"></div>
 
-      <div class="row">
-          <label class="control-label col-lg-2 col-md-12 col-sm-2"></label>
-          <div class="form-group col-lg-10 col-md-12 col-sm-10">
-              <label class="checkbox-inline">
-                  <input appIcheck type="checkbox" /> ฟรี พ.ร.บ. </label>
-              <label class="checkbox-inline">
-                  <input appIcheck type="checkbox" /> ฟรี ทะเบียน </label>
-              <label class="checkbox-inline">
-                  <input appIcheck type="checkbox" /> ฟรี ประกันภัย
-              </label>
-          </div>
-      </div>
-  </div>
+        <div class="row">
+            <label class="control-label col-lg-2 col-md-12 col-sm-2"></label>
+            <div class="form-group col-lg-10 col-md-12 col-sm-10">
+                <label class="checkbox-inline">
+                    <input appIcheck type="checkbox" /> ฟรี พ.ร.บ. </label>
+                <label class="checkbox-inline">
+                    <input appIcheck type="checkbox" /> ฟรี ทะเบียน </label>
+                <label class="checkbox-inline">
+                    <input appIcheck type="checkbox" /> ฟรี ประกันภัย
+                </label>
+            </div>
+        </div>
+    </div>
 </form>
