@@ -34,6 +34,11 @@ import { FormsModule } from "@angular/forms";
 import { ModelCustomer } from "../../models/model-customer";
 import { SelectizeDirective } from "../../directives/selectize.directive";
 import { InputmaskDirective } from "../../directives/inputmask.directive";
+import { SelectizeProductCategoriesDirective } from "../../directives/selectize-product-categories.directive";
+import { MotoBikeComponent } from './booking/moto-bike/moto-bike.component';
+import { AccessoryComponent } from './booking/accessory/accessory.component';
+import { SellingModule } from "./selling/selling.module";
+// import { ProductService } from "../../services";
 
 @NgModule({
   declarations: [
@@ -49,6 +54,7 @@ import { InputmaskDirective } from "../../directives/inputmask.directive";
     SelectizeProductPremiumDirective,
     SelectizeProductTypeDirective,
     SelectizeSearchCustomerDirective,
+    SelectizeProductCategoriesDirective,
     InputmaskDirective,
 
     // Components
@@ -58,7 +64,9 @@ import { InputmaskDirective } from "../../directives/inputmask.directive";
     StarterComponent,
     SalesComponent,
     BookingComponent,
-    ModalCustomerComponent
+    // ModalCustomerComponent,
+    MotoBikeComponent,
+    AccessoryComponent
 
   ],
   imports: [
@@ -67,15 +75,15 @@ import { InputmaskDirective } from "../../directives/inputmask.directive";
     FormsModule,
     PeityModule,
     SparklineModule,
-    IboxtoolsModule
+    IboxtoolsModule,
+    SellingModule
   ],
   exports: [
-    // StarterViewComponent,
-    // LoginComponent
+    IcheckDirective
   ],
-  // providers: [
-  //   ModelCustomer
-  // ]
+  providers: [
+    // ProductService
+  ]
 })
 
 export class AppviewsModule {

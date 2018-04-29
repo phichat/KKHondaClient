@@ -17,6 +17,7 @@
 
     </div>
 </div>
+
 <div class="wrapper wrapper-content animated fadeInRight">
 
 
@@ -40,9 +41,9 @@
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
 
-                                <div class="modal inmodal fade" id="modalRegisterDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;" aria-hidden="true"
-                                    data-backdrop="static" data-keyboard="false">
-                                    <app-modal-customer></app-modal-customer>
+                                <div class="modal inmodal fade" id="modalRegisterDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;"
+                                    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                                    <!-- <app-modal-customer></app-modal-customer> -->
                                 </div>
                             </div>
                             <input type="hidden" name="" [(ngModel)]="modelBooking.custCode" name="custCode" #custCode>
@@ -176,8 +177,8 @@
                 </li>
             </ul>
 
-            <div class="row m-t-xs">
-                <div class="col-xs-12 pull-right">
+            <div class="row m-t-xs" *ngIf="isSubmit">
+                <div class="col-xs-12 text-center">
                     <button class="btn btn-w-m btn-outline btn-info">พิมพ์ใบจอง</button>
                     <button class="btn btn-w-m btn-outline btn-info">พิมพ์ใบเสนอราคา</button>
                 </div>
@@ -210,12 +211,21 @@
                                 <div class="col-sm-5">
 
                                     <div class="row">
-                                        <label for="" class="control-label col-lg-3 col-sm-4">ประเภท :</label>
+                                        <label for="" class="control-label col-lg-3 col-sm-4">ประเภทสินค้า :</label>
                                         <div class="form-group col-lg-6 col-sm-7">
-                                            <select [(ngModel)]="modelMotobike.typeId" name="typeId" id="typeId" class="form-control" appSelectizeProductType>
+                                            <select #types class="form-control">
                                                 <option value="" selected disabled></option>
-                                                <option value="รถเก่า">รถเก่า</option>
-                                                <option value="รถใหม่">รถใหม่</option>
+                                                <option *ngFor="let item of productTypes" value="item.typeId">{{item.typeName}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="" class="control-label col-lg-3 col-sm-4">หมวดหมู่ :</label>
+                                        <div class="form-group col-lg-6 col-sm-7">
+                                            <select name="categories" #categories class="form-control">
+                                                <option value="" selected disabled></option>
+                                                <option *ngFor="let item of productCategories" value="item.catId">{{item.catName}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -496,108 +506,11 @@
 
     </div>
 
-    <!-- สินเชื่อ -->
-    <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>สินเชื่อ</h5>
 
-            <iboxtools></iboxtools>
-        </div>
-
-        <div class="ibox-content">
-            <form form class="form-horizontal">
-
-                <h4>ค่างวด/ผ่อนชำระ</h4>
-                <div class="row">
-                    <label for="" class="col-lg-2 col-md-2 control-label">สถาบันการเงิน :</label>
-                    <div class="col-md-3 form-group m-b-sm">
-                        <select name="" id="" class="form-control" placeholder="เลือกสถานบันการเงิน" appSelectizeFinancial>
-                            <option value="" selected disabled></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- <label class="text-muted text-uppercase font-weight-bold mb-0">ค่างวด/ผ่อนชำระ</label> -->
-
-                <div class="hr-line-dashed m-t-xs"></div>
-
-                <div class="row">
-
-                    <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
-                    <div class="form-group col-md-2">
-                        <div class="input-group">
-                            <input type="text" name="" id="" class="form-control number" appInputmask>
-                            <span class="input-group-addon">%</span>
-                        </div>
-                    </div>
-
-                    <label for="" class="col-md-2 control-label">จำนวนงวด :</label>
-                    <div class="form-group col-md-2">
-                        <select name="" id="" class="form-control" placeholder="เลือกจำนวนงวด" appSelectize>
-                            <option value="" selected disabled></option>
-                            <option value="3">3 เดือน</option>
-                            <option value="6">6 เดือน</option>
-                            <option value="9">9 เดือน</option>
-                            <option value="12">12 เดือน(1 ปี)</option>
-                            <option value="24">24 เดือน(2 ปี)</option>
-                            <option value="36">36 เดือน(3 ปี)</option>
-                            <option value="48">48 เดือน(4 ปี)</option>
-                            <option value="60">60 เดือน(5 ปี)</option>
-                            <option value="72">72 เดือน(6 ปี)</option>
-                        </select>
-                    </div>
-                    <label for="" class="col-md-2 control-label">ดอกเบี้ย/ปี :</label>
-                    <div class="form-group col-md-2">
-                        <div class="input-group">
-                            <input type="text" name="" id="" class="form-control number" appInputmask>
-                            <span class="input-group-addon">%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
-                    <div class="form-group col-md-2">
-                        <input type="text" name="" id="" class="form-control number" appInputmask>
-                    </div>
-
-                    <label for="" class="col-md-2 control-label">ยอดจัด :</label>
-                    <div class="form-group col-md-2">
-                        <input type="text" name="" id="" class="form-control number" appInputmask>
-                    </div>
-
-                    <label for="" class="col-md-2 control-label">ค่างวด :</label>
-                    <div class="form-group col-md-2">
-                        <input type="text" name="" id="" class="form-control number" appInputmask>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <label for="" class="col-md-2 control-label">ชำระงวดแรก :</label>
-                    <div class="form-group col-md-2">
-                        <input type="date" name="" id="" class="form-control">
-                    </div>
-
-                    <label for="" class="col-md-2 control-label">ชำระทุกวันที่ :</label>
-                    <div class="form-group col-md-2">
-                        <input type="text" name="" id="" class="form-control">
-                    </div>
-
-                    <label for="" class="col-md-2 control-label">Vat ณ วันที่ทำสัญญา :</label>
-                    <div class="form-group col-md-2">
-                        <div class="input-group">
-                            <input type="text" name="" id="" class="form-control number" appInputmask>
-                            <span class="input-group-addon">%</span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <div class="row">
         <div class="form-group col-md-12 text-right">
-            <button type="button" class="btn btn-w-m btn-primary">
+            <button type="button" class="btn btn-w-m btn-primary" (click)="onSubmit()">
                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 บันทึก
             </button>

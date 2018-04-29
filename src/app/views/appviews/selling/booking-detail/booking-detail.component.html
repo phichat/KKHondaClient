@@ -1,0 +1,82 @@
+<form class="form-horizontal">
+  <div class="row">
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">ผู้จอง :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <input type="text" placeholder="" class="form-control" disabled>
+    </div>
+    <div class="col-md-1 col-sm-1">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalRegisterDetail">
+        <i class="fa fa-ellipsis-h"></i>
+      </button>
+
+      <div class="modal inmodal fade" id="modalRegisterDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;"
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <app-modal-customer></app-modal-customer>
+      </div>
+    </div>
+    <input type="hidden" name="" [(ngModel)]="modelBooking.custCode" name="custCode" #custCode>
+    <input type="hidden" name="" [(ngModel)]="modelBooking.custTitleName" name="custTitleName" #custTitleName>
+    <input type="hidden" name="" [(ngModel)]="modelBooking.custFullName" name="custFullName" #custFullName>
+
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">เบอร์โทร :</label>
+    <div class="form-group col-lg-3 col-md-3 col-sm-8">
+      <input type="text" [(ngModel)]="modelBooking.custTel" name="custTel" #custTel placeholder="" class="form-control" disabled>
+    </div>
+  </div>
+
+
+
+  <div class="hr-line-dashed m-t-none"></div>
+
+  <div class="row">
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">วันที่จอง :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <input type="date" [(ngModel)]="modelBooking.bookingDate" name="bookingDate" #bookingDate class="form-control">
+    </div>
+
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">เงินมัดจำ :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <input type="text" [(ngModel)]="modelBooking.bookingPrice" name="bookingPrice" #bookingPrice placeholder="" class="form-control"
+        appInputmask>
+    </div>
+  </div>
+
+  <div class="row">
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">วันที่รับรถ :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <input type="date" [(ngModel)]="modelBooking.bookingDate" name="bookingDate" #bookingDate placeholder="" class="form-control">
+    </div>
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">สถานะ :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <select [(ngModel)]="modelBooking.bookingStatus" name="bookingStatus" class="form-control" appSelectize>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="hr-line-dashed m-t-none"></div>
+
+  <div class="row">
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">พนักงานขาย :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <input type="hidden" [(ngModel)]="modelBooking.empCode" name="empCode" #empCode>
+      <input type="text" [(ngModel)]="modelBooking.empFullName" name="empFullName" id="empFullName" class="form-control" disabled>
+    </div>
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">สาขา :</label>
+    <div class="form-group col-lg-4 col-md-3 col-sm-8">
+      <input type="hidden" [(ngModel)]="modelBooking.branchCode" name="branchCode" #branchCode>
+      <input type="text" [(ngModel)]="modelBooking.branchName" name="branchName" #branchName class="form-control" disabled>
+    </div>
+  </div>
+
+  <div class="hr-line-dashed m-t-none"></div>
+
+  <div class="row">
+    <label class="col-lg-2 col-md-2 col-sm-3 control-label">หมายเหตุ :</label>
+    <div class="form-group col-lg-10 col-sm-8">
+      <textarea [(ngModel)]="modelBooking.remark" name="remark" #remark rows="2" class="form-control"></textarea>
+    </div>
+  </div>
+
+</form>
