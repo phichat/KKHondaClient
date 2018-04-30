@@ -26,6 +26,7 @@
         "../node_modules/footable/css/footable.core.min.css",
         "../node_modules/selectize/dist/css/selectize.css",
         "../node_modules/selectize/dist/css/selectize.bootstrap3.css",
+        "../src/assets/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css",
         "styles.scss"
       ],
       "scripts": [

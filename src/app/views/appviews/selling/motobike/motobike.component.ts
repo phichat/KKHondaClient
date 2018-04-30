@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { ProductType, ProductCategory, ProductModel, ProductBrand, ProductColor } from '../../../../models/products';
+import { ProductType, ProductCategory, ProductModel, ProductBrand, ProductColor, ProductQuantity } from '../../../../models/products';
 import { TypesService } from '../../../../services/products/types.service';
 import { CategoriesService } from '../../../../services/products/categories.service';
 import { ModelsService } from '../../../../services/products/models.service';
@@ -7,6 +7,8 @@ import { BrandsService } from '../../../../services/products/brands.service';
 import { ColorsService } from '../../../../services/products/colors.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { ModelProduct } from '../../../../models/selling';
+import { ProductService } from '../../../../services';
 
 declare var jQuery: any;
 declare var selectize: any;
@@ -23,49 +25,115 @@ export class MotobikeComponent implements OnInit {
   productModel = new Array<ProductModel>();
   productBrand = new Array<ProductBrand>();
   productColor = new Array<ProductColor>();
+  productQty = new Array<ProductQuantity>();
 
-  selectedCity: any;
-
-  cities = [
-    {id: 1, name: 'Vilnius'},
-    {id: 2, name: 'Kaunas'},
-    {id: 3, name: 'Pavilnys', disabled: true},
-    {id: 4, name: 'Pabradė'},
-    {id: 5, name: 'Klaipėda'}
-];
-
+  model = new ModelProduct;
 
   constructor(
     private _typeService: TypesService,
     private _categoriesService: CategoriesService,
     private _modelsService: ModelsService,
     private _brandsService: BrandsService,
-    private _productColor: ColorsService
+    private _colorsService: ColorsService,
+    private _productsService: ProductService
   ) {
-    this._typeService.getTypes().subscribe(p => {
-      this.productTypes = p;
-      console.log(this.productTypes.map(v => v.typeName))
-    });
+    this.model.typeId = 2;   // รถครอบครัว
+    this.model.catId = 4;    // รถจักรยานยนต์
+    this.model.brandId = 9;   // Honda
 
-    this._categoriesService.getCategories().subscribe(p => {
-      this.productCategories = p;
-    });
-
-    this._modelsService.getModels().subscribe(p => {
-      this.productModel = p;
-    });
-
-    this._brandsService.getBrands().subscribe(p => {
-      this.productBrand = p;
-    });
-
-    this._productColor.getColors().subscribe(p => {
-      this.productColor = p;
-    });
+    this.onLoadTypes();
+    this.onLoadCategories();
+    this.onLoadBrands();
+    this.onLoadModel();
   }
 
   ngOnInit() {
 
   }
+
+  // ------ On Load ------ \\
+  onLoadTypes() {
+    this._typeService
+      .getTypes()
+      .subscribe(p => this.productTypes = p);
+  }
+
+  onLoadCategories() {
+    this._categoriesService
+      .getCategories()
+      .subscribe(p => this.productCategories = p);
+  }
+
+  onLoadBrands() {
+    this._brandsService
+      .getBrands()
+      .subscribe(p => this.productBrand = p);
+  }
+
+  onLoadModel() {
+    this.model.modelId = null;
+    this._modelsService
+      .FilterByKey(
+        this.model.typeId.toString(),
+        this.model.catId.toString(),
+        this.model.brandId.toString())
+      .subscribe(p => this.productModel = p);
+  }
+
+  onLoadColor() {
+    this.model.colorId = null;
+    this._colorsService
+      .FilterByKey(this.model.modelId.toString())
+      .subscribe(p => this.productColor = p);
+  }
+
+  onLoadProduct() {
+    console.log(this.model.typeId.toString(), this.model.catId.toString(), this.model.brandId.toString())
+    this._productsService
+      .FilterByKey(
+        this.model.typeId.toString(),
+        this.model.catId.toString(),
+        this.model.brandId.toString(),
+        this.model.modelId.toString(),
+        this.model.colorId.toString())
+      .subscribe(p => {
+        p.map(pp => {
+          this.productQty = pp.quantity;
+
+          this.model.sellPrice = pp.sellPrice;
+          this.model.sellPrice2 = pp.sellPrice2;
+          this.model.sellVat = pp.sellVat;
+          this.model.sellVatPrice = pp.sellVatPrice;
+          this.model.discountPrice = pp.discountPrice;
+          this.model.discountVat = pp.discountVat;
+          this.model.sellNet = pp.sellNet;
+          this.model.freePrb = true;
+          this.model.freeRegister = true;
+          this.model.freeInsure = true;
+        })
+      });
+  }
+  // ------ End On Load ------ \\
+
+
+  // ------ On Change ------ \\
+  onChangeBrand() {
+    this.onLoadModel();
+  }
+
+  onChangeModel() {
+    this.onLoadColor();
+  }
+
+  onChangeColor() {
+    this.onLoadProduct();
+  }
+
+  onChangeEngine() {
+    this.productQty
+      .filter(p => p.engineNo == this.model.engineNo)
+      .map(p => this.model.frameNo = p.frameNo);
+  }
+  // ------ End On Change ------ \\
 
 }

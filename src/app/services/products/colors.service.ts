@@ -13,4 +13,10 @@ export class ColorsService {
     return this.http.get<ProductColor[]>(apiURL);
   }
 
+  FilterByKey(modelId: string) {
+    const apiURL = `${appConfig.apiUrl}/Products/Colors/FilterByKey`;
+    const params = { modelId }
+    return this.http.get<ProductColor[]>(apiURL, { params });
+  }
+
 }

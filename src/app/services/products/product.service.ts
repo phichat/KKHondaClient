@@ -3,22 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { appConfig } from '../../app.config';
 import { Observer } from 'rxjs/Observer';
+import { ModelProduct } from '../../models/selling';
 
 @Injectable()
 export class ProductService {
 
-  private dataSource = new BehaviorSubject<any[]>([]);
-  currentData= this.dataSource.asObservable();
-
   constructor(private http: HttpClient) { }
 
-  changeData(data: any[]) {
-    this.dataSource.next(data);
-  }
-
-  getProductInit() {
-    const apiURL = `${appConfig.apiUrl}/products`;
-    return this.http.get<any[]>(apiURL);
+  FilterByKey(typeId: string, catId: string, brandId: string, modelId: string, colorId: string) {
+    const apiURL = `${appConfig.apiUrl}/products/Products/FilterByKey`;
+    const params = { typeId, catId, brandId, modelId, colorId };
+    return this.http.get<ModelProduct[]>(apiURL, { params });
   }
 
 }

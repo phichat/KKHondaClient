@@ -1,6 +1,6 @@
 export class ProductBrand {
 
-    public brandId: string;
+    public brandId: number;
     public brandCode: string;
     public brandName: string;
 }

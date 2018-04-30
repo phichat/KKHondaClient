@@ -13,4 +13,10 @@ export class ModelsService {
     return this.http.get<ProductModel[]>(apiURL);
   }
 
+  FilterByKey(typeId: string, catId: string, brandId: string) {
+    const apiURL = `${appConfig.apiUrl}/Products/Models/FilterByKey`;
+    const params = {typeId, catId, brandId}
+    return this.http.get<ProductModel[]>(apiURL, { params });
+  }
+
 }
