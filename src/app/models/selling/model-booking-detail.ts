@@ -4,7 +4,7 @@ export class ModelBookingDetail {
     public custFullName: string;
     public custTel: string;
     public bookingCode: string;
-    public bookingStatus: string;
+    public payStatus: string;
     public bookingDate: Date;
     public bookingPrice: number;
     public deliverDate: Date;

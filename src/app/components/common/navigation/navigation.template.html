@@ -68,21 +68,21 @@
           <span class="nav-label">Login example</span>
         </a>
       </li> -->
-      <li [ngClass]="{active: activeRoute('salling')}">
+      <li [ngClass]="{active: activeRoute('sell')}">
         <a href="#">
           <i class="fa fa-th-large"></i>
           <span class="nav-label">งานขาย</span>
           <span class="fa arrow"></span>
         </a>
-        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('salling')}">
+        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('sell')}">
           <li [ngClass]="{active: activeRoute('booking')}">
-            <a [routerLink]="['/salling/booking']">
+            <a [routerLink]="['/sell/booking']">
               <i class="fa fa-th-large"></i>
               <span class="nav-label">จองรถ</span>
             </a>
           </li>
-          <li [ngClass]="{active: activeRoute('sales')}">
-            <a [routerLink]="['/salling/sales']">
+          <li [ngClass]="{active: activeRoute('sell')}">
+            <a [routerLink]="['/sell/selling']">
               <i class="fa fa-th-large"></i>
               <span class="nav-label">ขายรถ</span>
             </a>

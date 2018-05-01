@@ -45,7 +45,7 @@ export const ROUTES: Routes = [
     ]
   },
   {
-    path: 'salling', component: BasicLayoutComponent,
+    path: 'sell', component: BasicLayoutComponent,
     children: [
       { path: 'booking', component: SellingComponent },
       { path: 'selling', component: SellingComponent }

@@ -1,6 +1,6 @@
 export class ModelSummary {
     public bookingCode: string;
-    public bookingStatus: string;
+    public status: string;
     public totalMotobike: number;
     public totalAccessory: number;
     public totalSell: number;

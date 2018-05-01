@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ElementRef } from '@angular/core';
 import { ProductType, ProductCategory, ProductModel, ProductBrand, ProductColor, ProductQuantity } from '../../../../models/products';
 import { TypesService } from '../../../../services/products/types.service';
 import { CategoriesService } from '../../../../services/products/categories.service';
@@ -10,8 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { ModelProduct } from '../../../../models/selling';
 import { ProductService } from '../../../../services';
 
-declare var jQuery: any;
-declare var selectize: any;
 
 @Component({
   selector: 'app-motobike',
@@ -88,7 +86,6 @@ export class MotobikeComponent implements OnInit {
   }
 
   onLoadProduct() {
-    console.log(this.model.typeId.toString(), this.model.catId.toString(), this.model.brandId.toString())
     this._productsService
       .FilterByKey(
         this.model.typeId.toString(),

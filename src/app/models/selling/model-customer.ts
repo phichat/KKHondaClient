@@ -1,12 +1,9 @@
 export class ModelCustomer {
-    constructor(
-        public idCard: string,
-        public custCode: string,
-        public preName: string,
-        public firstName: string,
-        public surName: string,
-        public tel: string,
-        public email: string,
-        public address: string
-    ) { }
+    public idCard: string;
+    public custCode: string;
+    public custFullName: string;
+    public custTel: string;
+    public custEmail: string;
+    public custAddress: string;
+    
 }

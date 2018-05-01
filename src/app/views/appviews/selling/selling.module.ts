@@ -8,18 +8,23 @@ import { CreditComponent } from './credit/credit.component';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { IboxtoolsModule } from '../../../components/common/iboxtools/iboxtools.module';
+import { InputmaskDirective } from '../../../directives/inputmask.directive';
 import { SellingComponent } from './selling.component';
 import { ModalCustomerComponent } from './modal-customer/modal-customer.component';
-import { SelectizeDirective } from '../../../directives/selectize.directive';
-import { TypesService } from '../../../services/products/types.service';
-import { CategoriesService } from '../../../services/products/categories.service';
-import { ProductService } from '../../../services';
-import { BrandsService } from '../../../services/products/brands.service';
-import { ClassesService } from '../../../services/products/classes.service';
-import { ColorsService } from '../../../services/products/colors.service';
-import { ModelsService } from '../../../services/products/models.service';
-import { NgSelectModule } from '@ng-select/ng-select';
+
+import { SellActivityService } from '../../../services/selling';
+import {
+  BrandsService,
+  CategoriesService,
+  ClassesService,
+  ColorsService,
+  ModelsService,
+  ProductService,
+  TypesService
+} from '../../../services/products';
+import { PersonService } from '../../../services/customers';
 
 @NgModule({
   imports: [
@@ -27,11 +32,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
     BrowserModule,
     RouterModule,
     FormsModule,
-    IboxtoolsModule, 
+    IboxtoolsModule,
     NgSelectModule
   ],
   declarations: [
-    SelectizeDirective,
+    InputmaskDirective,
 
     BookingDetailComponent,
     SummaryComponent,
@@ -49,6 +54,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ModelsService,
     ProductService,
     TypesService,
+    PersonService,
+    SellActivityService
   ]
 })
 export class SellingModule { }

@@ -21,5 +21,4 @@ export class InputmaskDirective implements OnInit {
     });
   }
 
-
 }

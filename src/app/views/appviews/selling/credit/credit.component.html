@@ -1,85 +1,205 @@
-<form form class="form-horizontal">
+<div *ngIf="path === 'selling'; else elseBlock">
+    <form form class="form-horizontal">
 
-  <h4>ค่างวด/ผ่อนชำระ</h4>
-  <div class="row">
-    <label for="" class="col-lg-2 col-md-2 control-label">สถาบันการเงิน :</label>
-    <div class="col-md-3 form-group m-b-sm">
-      <select name="" id="" class="form-control" placeholder="เลือกสถานบันการเงิน" appSelectizeFinancial>
-        <option value="" selected disabled></option>
-      </select>
-    </div>
-  </div>
+        <h4>ค่างวด/ผ่อนชำระ</h4>
+        <div class="row">
+          <label for="" class="col-lg-2 col-md-2 control-label">
+            สถาบันการเงิน :
+            <span class="required">*</span>
+          </label>
+          <div class="col-md-3 form-group m-b-sm">
+            <ng-select 
+              [items]="modelSellActivity" 
+              groupBy="sellTypeName" 
+              [(ngModel)]="model.sellAcitvityId" 
+              bindLabel="activityName" 
+              bindValue="activityId"
+              name="sellActivity">
+                <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                    <strong>{{item.sellTypeName}}</strong>
+                </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      
+        <div class="hr-line-dashed m-t-xs"></div>
+      
+        <div class="row">
+      
+          <label for="" class="col-md-2 control-label">
+            เงินดาวน์ :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+      
+          <label for="" class="col-md-2 control-label">
+            จำนวนงวด :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <ng-select [items]="instalment" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd"
+              name="payStatus">
+            </ng-select>
+          </div>
+          <label for="" class="col-md-2 control-label">
+            ดอกเบี้ย/ปี :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+        </div>
+      
+        <div class="row">
+          <label for="" class="col-md-2 control-label">
+            เงินดาวน์ :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control number" appInputmask>
+          </div>
+      
+          <label for="" class="col-md-2 control-label">
+            ยอดจัด :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control number" appInputmask>
+          </div>
+      
+          <label for="" class="col-md-2 control-label">
+            ค่างวด :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control number" appInputmask>
+          </div>
+        </div>
+      
+        <div class="row">
+          <label for="" class="col-md-2 control-label">
+            ชำระงวดแรก :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <input type="date" name="" id="" class="form-control">
+          </div>
+      
+          <label for="" class="col-md-2 control-label">
+            ชำระทุกวันที่ :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control">
+          </div>
+      
+          <label for="" class="col-md-2 control-label">
+            Vat ณ วันที่ทำสัญญา :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+        </div>
+      </form>
+</div>
+<ng-template #elseBlock>
+    <form form class="form-horizontal">
 
-  <div class="hr-line-dashed m-t-xs"></div>
-
-  <div class="row">
-
-    <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
-    <div class="form-group col-md-2">
-      <div class="input-group">
-        <input type="text" name="" id="" class="form-control number" appInputmask>
-        <span class="input-group-addon">%</span>
-      </div>
-    </div>
-
-    <label for="" class="col-md-2 control-label">จำนวนงวด :</label>
-    <div class="form-group col-md-2">
-      <select name="" id="" class="form-control" placeholder="เลือกจำนวนงวด" appSelectize>
-        <option value="" selected disabled></option>
-        <option value="3">3 เดือน</option>
-        <option value="6">6 เดือน</option>
-        <option value="9">9 เดือน</option>
-        <option value="12">12 เดือน(1 ปี)</option>
-        <option value="24">24 เดือน(2 ปี)</option>
-        <option value="36">36 เดือน(3 ปี)</option>
-        <option value="48">48 เดือน(4 ปี)</option>
-        <option value="60">60 เดือน(5 ปี)</option>
-        <option value="72">72 เดือน(6 ปี)</option>
-      </select>
-    </div>
-    <label for="" class="col-md-2 control-label">ดอกเบี้ย/ปี :</label>
-    <div class="form-group col-md-2">
-      <div class="input-group">
-        <input type="text" name="" id="" class="form-control number" appInputmask>
-        <span class="input-group-addon">%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
-    <div class="form-group col-md-2">
-      <input type="text" name="" id="" class="form-control number" appInputmask>
-    </div>
-
-    <label for="" class="col-md-2 control-label">ยอดจัด :</label>
-    <div class="form-group col-md-2">
-      <input type="text" name="" id="" class="form-control number" appInputmask>
-    </div>
-
-    <label for="" class="col-md-2 control-label">ค่างวด :</label>
-    <div class="form-group col-md-2">
-      <input type="text" name="" id="" class="form-control number" appInputmask>
-    </div>
-  </div>
-
-  <div class="row">
-    <label for="" class="col-md-2 control-label">ชำระงวดแรก :</label>
-    <div class="form-group col-md-2">
-      <input type="date" name="" id="" class="form-control">
-    </div>
-
-    <label for="" class="col-md-2 control-label">ชำระทุกวันที่ :</label>
-    <div class="form-group col-md-2">
-      <input type="text" name="" id="" class="form-control">
-    </div>
-
-    <label for="" class="col-md-2 control-label">Vat ณ วันที่ทำสัญญา :</label>
-    <div class="form-group col-md-2">
-      <div class="input-group">
-        <input type="text" name="" id="" class="form-control number" appInputmask>
-        <span class="input-group-addon">%</span>
-      </div>
-    </div>
-  </div>
-</form>
+        <h4>ค่างวด/ผ่อนชำระ</h4>
+        <div class="row">
+          <label for="" class="col-lg-2 col-md-2 control-label">
+            สถาบันการเงิน :
+            <span class="required">*</span>
+          </label>
+          <div class="col-md-3 form-group m-b-sm">
+            <ng-select 
+              [items]="modelSellActivity" 
+              groupBy="sellTypeName" 
+              [(ngModel)]="model.sellAcitvityId" 
+              bindLabel="activityName" 
+              bindValue="activityId"
+              name="sellActivity">
+                <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                    <strong>{{item.sellTypeName}}</strong>
+                </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      
+        <div class="hr-line-dashed m-t-xs"></div>
+      
+        <div class="row">
+      
+          <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+      
+          <label for="" class="col-md-2 control-label">จำนวนงวด :</label>
+          <div class="form-group col-md-2">
+            <ng-select [items]="instalment" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd"
+              name="payStatus">
+            </ng-select>
+          </div>
+          <label for="" class="col-md-2 control-label">ดอกเบี้ย/ปี :</label>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+        </div>
+      
+        <div class="row">
+          <label for="" class="col-md-2 control-label">เงินดาวน์ :</label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control number" appInputmask>
+          </div>
+      
+          <label for="" class="col-md-2 control-label">ยอดจัด :</label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control number" appInputmask>
+          </div>
+      
+          <label for="" class="col-md-2 control-label">ค่างวด :</label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control number" appInputmask>
+          </div>
+        </div>
+      
+        <div class="row">
+          <label for="" class="col-md-2 control-label">ชำระงวดแรก :</label>
+          <div class="form-group col-md-2">
+            <input type="date" name="" id="" class="form-control">
+          </div>
+      
+          <label for="" class="col-md-2 control-label">ชำระทุกวันที่ :</label>
+          <div class="form-group col-md-2">
+            <input type="text" name="" id="" class="form-control">
+          </div>
+      
+          <label for="" class="col-md-2 control-label">Vat ณ วันที่ทำสัญญา :</label>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+        </div>
+      </form>
+</ng-template>
