@@ -1,40 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { ModelCustomer, ModelProduct } from '../../../models/selling';
-import ModelCredit from '../../../models/selling/model-credit';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ModelCustomer, ModelProduct, ModelCredit } from '../../../models/selling';
 import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
+import { MotobikeComponent } from './motobike/motobike.component';
+import { SummaryComponent } from './summary/summary.component';
+import { BookingDetailComponent } from './booking-detail/booking-detail.component';
+import { AccessoryComponent } from './accessory/accessory.component';
+import { CreditComponent } from './credit/credit.component';
 
 @Component({
   selector: 'app-selling',
   templateUrl: './selling.component.html',
   styleUrls: ['./selling.component.scss']
 })
-export class SellingComponent implements OnInit {
+export class SellingComponent implements OnInit, AfterViewInit {
 
   modelCustomer: ModelCustomer;
   modelMotobike: ModelProduct;
   modelAccessory: ModelProduct;
   modelFinancial: ModelCredit;
 
-  constructor(private _activatedRoute: ActivatedRoute) { }
+  @ViewChild(BookingDetailComponent) bookingDetailCom;
+  @ViewChild(SummaryComponent) summaryCom;
+  @ViewChild(MotobikeComponent) motobikeCom;
+  @ViewChild(AccessoryComponent) accessoryCom;
+  @ViewChild(CreditComponent) creditCom;
+
+  constructor(
+    private _activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
   }
 
-  receiveCustomer($event){
-    this.modelCustomer = $event;
-    console.log($event);
+  ngAfterViewInit() {
+
   }
 
-  receiveMotobike($event){
-    this.modelMotobike = $event;
-  }
-
-  receiveAccessory($event){
-    this.modelAccessory = $event;
-  }
-
-  receiveFinancial($event){
-    this.modelFinancial = $event;
+  submit() {
+    console.log(this.motobikeCom.model);
   }
 
 }

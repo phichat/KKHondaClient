@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ProductType, ProductCategory, ProductModel, ProductBrand, ProductColor, ProductQuantity } from '../../../../models/products';
 import { TypesService } from '../../../../services/products/types.service';
 import { CategoriesService } from '../../../../services/products/categories.service';
@@ -16,14 +16,14 @@ import { ProductService } from '../../../../services';
   templateUrl: './motobike.component.html',
   styleUrls: ['./motobike.component.scss']
 })
-export class MotobikeComponent implements OnInit {
+export class MotobikeComponent implements OnInit, OnChanges {
 
-  productTypes = new Array<ProductType>();
-  productCategories = new Array<ProductCategory>();
-  productModel = new Array<ProductModel>();
-  productBrand = new Array<ProductBrand>();
-  productColor = new Array<ProductColor>();
-  productQty = new Array<ProductQuantity>();
+  private productTypes = new Array<ProductType>();
+  private productCategories = new Array<ProductCategory>();
+  private productModel = new Array<ProductModel>();
+  private productBrand = new Array<ProductBrand>();
+  private productColor = new Array<ProductColor>();
+  private productQty = new Array<ProductQuantity>();
 
   model = new ModelProduct;
 
@@ -46,29 +46,31 @@ export class MotobikeComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
 
+  ngOnChanges() {
   }
 
   // ------ On Load ------ \\
-  onLoadTypes() {
+  private onLoadTypes() {
     this._typeService
       .getTypes()
       .subscribe(p => this.productTypes = p);
   }
 
-  onLoadCategories() {
+  private onLoadCategories() {
     this._categoriesService
       .getCategories()
       .subscribe(p => this.productCategories = p);
   }
 
-  onLoadBrands() {
+  private onLoadBrands() {
     this._brandsService
       .getBrands()
       .subscribe(p => this.productBrand = p);
   }
 
-  onLoadModel() {
+  private onLoadModel() {
     this.model.modelId = null;
     this._modelsService
       .FilterByKey(
@@ -78,14 +80,14 @@ export class MotobikeComponent implements OnInit {
       .subscribe(p => this.productModel = p);
   }
 
-  onLoadColor() {
+  private onLoadColor() {
     this.model.colorId = null;
     this._colorsService
       .FilterByKey(this.model.modelId.toString())
       .subscribe(p => this.productColor = p);
   }
 
-  onLoadProduct() {
+  private onLoadProduct() {
     this._productsService
       .FilterByKey(
         this.model.typeId.toString(),
@@ -94,6 +96,10 @@ export class MotobikeComponent implements OnInit {
         this.model.modelId.toString(),
         this.model.colorId.toString())
       .subscribe(p => {
+        if (!p) {
+          return false;
+        }
+
         p.map(pp => {
           this.productQty = pp.quantity;
 
@@ -114,21 +120,21 @@ export class MotobikeComponent implements OnInit {
 
 
   // ------ On Change ------ \\
-  onChangeBrand() {
+  private onChangeBrand() {
     this.onLoadModel();
   }
 
-  onChangeModel() {
+  private onChangeModel() {
     this.onLoadColor();
   }
 
-  onChangeColor() {
+  private onChangeColor() {
     this.onLoadProduct();
   }
 
-  onChangeEngine() {
+  private onChangeEngine() {
     this.productQty
-      .filter(p => p.engineNo == this.model.engineNo)
+      .filter(p => p.engineNo === this.model.engineNo)
       .map(p => this.model.frameNo = p.frameNo);
   }
   // ------ End On Change ------ \\

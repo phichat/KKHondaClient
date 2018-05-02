@@ -1,4 +1,4 @@
-import { ProductQuantity } from "../products/product-quantity";
+import { ProductQuantity } from '../products/product-quantity';
 
 export class ModelProduct {
 

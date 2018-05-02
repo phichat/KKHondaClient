@@ -13,5 +13,9 @@ export class SellActivityService {
     return this.http.get<SellActivity[]>(apiURL);
   }
 
-
+  filterByKey(sellTypeId: string) {
+    const apiURL = `${appConfig.apiUrl}/Selling/SellActivity/FilterByKey`;
+    const params = { sellTypeId }
+    return this.http.get<SellActivity[]>(apiURL, { params });
+  }
 }

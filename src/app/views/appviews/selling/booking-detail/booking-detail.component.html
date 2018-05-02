@@ -3,30 +3,50 @@
         <div class="row">
           <label class="col-lg-2 col-md-2 col-sm-3 control-label">ผู้จอง :</label>
           <div class="form-group col-lg-4 col-md-3 col-sm-8">
-            <input type="hidden" [(ngModel)]="modelBooking.custCode" [value]="modelCustomer.custCode" name="custCode" #custCode>
-            <input type="text" [(ngModel)]="modelBooking.custFullName" name="custFullName" #custFullName [value]="modelCustomer.custFullName"
-              placeholder="" class="form-control" disabled>
+            <input type="hidden" [(ngModel)]="modelBooking.regiId" [value]="modelRegister.regiId" name="regiId" #regiId>
+            <input type="text" [(ngModel)]="modelBooking.regiFullName" name="regiFullName" #regiFullName [value]="modelRegister.regiFullName"
+              placeholder="" class="form-control">
           </div>
+          <div class="col-sm-1"></div>
+          <label class="col-lg-2 col-md-2 col-sm-3 control-label">เบอร์โทร :</label>
+          <div class="form-group col-lg-3 col-md-3 col-sm-8">
+            <input type="text" [(ngModel)]="modelBooking.custTel" name="regiTel" #custTel [value]="modelRegister.regiTel" placeholder=""
+              class="form-control" >
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="col-lg-2 col-md-2 col-sm-3 control-label">
+            ผู้ซื้อ :
+            <span class="required">*</span>
+          </label>
+          <div class="form-group col-lg-4 col-md-3 col-sm-8">
+            <input type="hidden" [(ngModel)]="modelBooking.custId" [value]="modelCustomer.custId" name="custId" #custId>
+            <input type="text" [(ngModel)]="modelBooking.custFullName" name="custFullName" #regiFullName [value]="modelCustomer.custFullName"
+              placeholder="" class="form-control">
+          </div>
+
           <div class="col-md-1 col-sm-1">
-            <button type="button" class="btn btn-info btn-circle" data-toggle="modal" data-target="#modalRegisterDetail">
+            <button type="button" class="btn btn-info btn-circle" data-toggle="modal" data-target="#modalCustomerDetail">
               <i class="fa fa-ellipsis-h"></i>
             </button>
       
-            <div class="modal inmodal fade" id="modalRegisterDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;"
+            <div class="modal inmodal fade" id="modalCustomerDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;"
               aria-hidden="true" data-backdrop="static" data-keyboard="false">
-              <app-modal-customer (customerEvent)="receiveCustomer($event)"></app-modal-customer>
+              <app-modal-customer (registerEvent)="receiveCustomer($event)"></app-modal-customer>
             </div>
           </div>
       
-          <label class="col-lg-2 col-md-2 col-sm-3 control-label">เบอร์โทร :</label>
+          <label class="col-lg-2 col-md-2 col-sm-3 control-label">
+            เบอร์โทร :
+            <span class="required">*</span>
+          </label>
           <div class="form-group col-lg-3 col-md-3 col-sm-8">
             <input type="text" [(ngModel)]="modelBooking.custTel" name="custTel" #custTel [value]="modelCustomer.custTel" placeholder=""
-              class="form-control" disabled>
+              class="form-control">
           </div>
         </div>
-      
-      
-      
+        
         <div class="hr-line-dashed m-t-none"></div>
       
         <div class="row">
@@ -60,12 +80,12 @@
         <div class="row">
           <label class="col-lg-2 col-md-2 col-sm-3 control-label">พนักงานขาย :</label>
           <div class="form-group col-lg-4 col-md-3 col-sm-8">
-            <input type="hidden" [(ngModel)]="modelBooking.empCode" name="empCode" #empCode>
+            <input type="hidden" [(ngModel)]="modelBooking.empId" name="empId" #empId>
             <input type="text" [(ngModel)]="modelBooking.empFullName" name="empFullName" id="empFullName" class="form-control" disabled>
           </div>
           <label class="col-lg-2 col-md-2 col-sm-3 control-label">สาขา :</label>
           <div class="form-group col-lg-4 col-md-3 col-sm-8">
-            <input type="hidden" [(ngModel)]="modelBooking.branchCode" name="branchCode" #branchCode>
+            <input type="hidden" [(ngModel)]="modelBooking.branchId" name="branchId" #branchId>
             <input type="text" [(ngModel)]="modelBooking.branchName" name="branchName" #branchName class="form-control" disabled>
           </div>
         </div>
@@ -81,6 +101,7 @@
       
     </form>
 </div>
+
 <ng-template #elseBlock>
     <form class="form-horizontal">
         <div class="row">
@@ -89,9 +110,9 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-lg-4 col-md-3 col-sm-8">
-            <input type="hidden" [(ngModel)]="modelBooking.custCode" [value]="modelCustomer.custCode" name="custCode" #custCode>
-            <input type="text" [(ngModel)]="modelBooking.custFullName" name="custFullName" #custFullName [value]="modelCustomer.custFullName"
-              placeholder="" class="form-control" disabled>
+            <input type="hidden" [(ngModel)]="modelBooking.regiId" [value]="modelRegister.regiId" name="regiId" #regiId>
+            <input type="text" [(ngModel)]="modelBooking.regiFullName" name="regiFullName" #regiFullName [value]="modelRegister.regiFullName"
+              placeholder="" class="form-control" >
           </div>
           <div class="col-md-1 col-sm-1">
             <button type="button" class="btn btn-info btn-circle" data-toggle="modal" data-target="#modalRegisterDetail">
@@ -100,7 +121,7 @@
       
             <div class="modal inmodal fade" id="modalRegisterDetail" tabindex="-1" role="dialog" aria-labelledby="" style="display: none;"
               aria-hidden="true" data-backdrop="static" data-keyboard="false">
-              <app-modal-customer (customerEvent)="receiveCustomer($event)"></app-modal-customer>
+              <app-modal-customer (registerEvent)="receiveRegister($event)"></app-modal-customer>
             </div>
           </div>
       
@@ -110,7 +131,7 @@
           </label>
           <div class="form-group col-lg-3 col-md-3 col-sm-8">
             <input type="text" [(ngModel)]="modelBooking.custTel" name="custTel" #custTel [value]="modelCustomer.custTel" placeholder=""
-              class="form-control" disabled>
+              class="form-control" >
           </div>
         </div>
    
@@ -161,14 +182,14 @@
             พนักงานขาย :
           </label>
           <div class="form-group col-lg-4 col-md-3 col-sm-8">
-            <input type="hidden" [(ngModel)]="modelBooking.empCode" name="empCode" #empCode>
+            <input type="hidden" [(ngModel)]="modelBooking.empId" name="empId" #empId>
             <input type="text" [(ngModel)]="modelBooking.empFullName" name="empFullName" id="empFullName" class="form-control" disabled>
           </div>
           <label class="col-lg-2 col-md-2 col-sm-3 control-label">
             สาขา :
           </label>
           <div class="form-group col-lg-4 col-md-3 col-sm-8">
-            <input type="hidden" [(ngModel)]="modelBooking.branchCode" name="branchCode" #branchCode>
+            <input type="hidden" [(ngModel)]="modelBooking.branchId" name="branchId" #branchId>
             <input type="text" [(ngModel)]="modelBooking.branchName" name="branchName" #branchName class="form-control" disabled>
           </div>
         </div>

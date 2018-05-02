@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, ChangeDetectorRef, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, ChangeDetectorRef, Output, Input } from '@angular/core';
 import { ModelCustomer } from '../../../../models/selling';
 import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators'
 import { PersonService } from '../../../../services/customers/person.service';
@@ -46,7 +46,7 @@ export class ModalCustomerComponent implements OnInit {
 
   onChangePersonal() {
     this.personal
-      .filter(p => p.custCode == this.selectedPersonCode)
+      .filter(p => p.custCode === this.selectedPersonCode)
       .map(p => {
         this.model.idCard = p.idCard;
         this.model.custCode = p.custCode;

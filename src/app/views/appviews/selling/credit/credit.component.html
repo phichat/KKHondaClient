@@ -1,7 +1,19 @@
 <div *ngIf="path === 'selling'; else elseBlock">
     <form form class="form-horizontal">
 
-        <h4>ค่างวด/ผ่อนชำระ</h4>
+        <div class="row">
+            <label for="" class="col-lg-2 col-md-2 control-label">
+                ประเภท :
+                <span class="required">*</span>
+              </label>
+            <div class="col-md-3 form-group m-b-sm">
+                <div *ngFor="let item of sellType; let i=index;" class="radio radio-info radio-inline">
+                    <input type="radio" [id]="item.value" [(ngModel)]="model.sellType" [value]="item.value" name="sellType" checked=""
+                    (change)="onChangeSellActivity()">
+                    <label [for]="item.value">{{item.text}}</label>
+                </div>
+            </div>
+        </div>
         <div class="row">
           <label for="" class="col-lg-2 col-md-2 control-label">
             สถาบันการเงิน :
@@ -32,7 +44,7 @@
           </label>
           <div class="form-group col-md-2">
             <div class="input-group">
-              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <input type="text" name="" id="" class="form-control number" appInputmask (keyup)="calculateInstalment()">
               <span class="input-group-addon">%</span>
             </div>
           </div>
@@ -64,7 +76,7 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" name="" id="" class="form-control number" appInputmask>
+            <input type="text" name="" id="" class="form-control" appInputmask>
           </div>
       
           <label for="" class="col-md-2 control-label">
@@ -72,7 +84,7 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" name="" id="" class="form-control number" appInputmask>
+            <input type="text" [(ngModel)]="model.remain" name="remain" #remain [value]="model.remain" class="form-control" appInputmask>
           </div>
       
           <label for="" class="col-md-2 control-label">
@@ -80,7 +92,7 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" name="" id="" class="form-control number" appInputmask>
+            <input type="text" name="" id="" class="form-control" appInputmask>
           </div>
         </div>
       
@@ -117,7 +129,19 @@
 <ng-template #elseBlock>
     <form form class="form-horizontal">
 
-        <h4>ค่างวด/ผ่อนชำระ</h4>
+        <div class="row">
+            <label for="" class="col-lg-2 col-md-2 control-label">
+                ประเภท :
+                <span class="required">*</span>
+              </label>
+            <div class="col-md-3 form-group m-b-sm">
+                <div *ngFor="let item of sellType; let i=index;" class="radio radio-info radio-inline">
+                    <input type="radio" [id]="item.value" [(ngModel)]="model.sellType" [value]="item.value" name="sellType" checked=""
+                    (change)="onChangeSellActivity()">
+                    <label [for]="item.value">{{item.text}}</label>
+                </div>
+            </div>
+        </div>
         <div class="row">
           <label for="" class="col-lg-2 col-md-2 control-label">
             สถาบันการเงิน :
@@ -125,15 +149,12 @@
           </label>
           <div class="col-md-3 form-group m-b-sm">
             <ng-select 
-              [items]="modelSellActivity" 
-              groupBy="sellTypeName" 
-              [(ngModel)]="model.sellAcitvityId" 
-              bindLabel="activityName" 
-              bindValue="activityId"
-              name="sellActivity">
-                <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                    <strong>{{item.sellTypeName}}</strong>
-                </ng-template>
+                [items]="modelSellActivity" 
+                bindLabel="activityName" 
+                bindValue="activityId"
+                placeholder="" 
+                [(ngModel)]="model.sellAcitvityId"
+                name="sellActivity">
             </ng-select>
           </div>
         </div>

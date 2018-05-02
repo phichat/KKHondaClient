@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelBookingDetail, ModelCustomer } from '../../../../models/selling';
+import { ModelBookingDetail, ModelCustomer, ModelRegister } from '../../../../models/selling';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,6 +11,7 @@ export class BookingDetailComponent implements OnInit {
 
   path: string;
   modelCustomer = new ModelCustomer();
+  modelRegister = new ModelRegister();
   modelBooking = new ModelBookingDetail();
   payStatus = [
     { value: 'Y', text: 'ชำระเรียบร้อย' },
@@ -19,10 +20,15 @@ export class BookingDetailComponent implements OnInit {
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this._activatedRoute.snapshot.url.map(p => this.path = p.path);
   }
 
   receiveCustomer($event) {
-    this.modelCustomer = $event;
+    this.modelRegister = $event;
+  }
+
+  receiveRegister($event) {
+
   }
 
 }

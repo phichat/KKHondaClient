@@ -1,17 +1,18 @@
 export class ModelBookingDetail {
-    public custCode: string;
-    public custTitleName: string;
+    public custId: number;
     public custFullName: string;
     public custTel: string;
+    public regiId: number;
+    public regiFullName: string;
+    public regiTel: string;
     public bookingCode: string;
     public payStatus: string;
     public bookingDate: Date;
     public bookingPrice: number;
     public deliverDate: Date;
-    public empCode: string;
-    public empTitleName: string;
+    public empId: string;
     public empFullName: string;
-    public branchCode: string;
+    public branchId: string;
     public branchName: string;
     public remark: string;
 

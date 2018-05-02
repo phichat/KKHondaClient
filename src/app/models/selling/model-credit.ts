@@ -1,5 +1,6 @@
-export default class ModelCredit {
-    public sellAcitvityId: number;  // ประเภทการขาย
+export class ModelCredit {
+    public sellType: number;        // ประเภทงานขาย
+    public sellAcitvityId: number;  // กิจกรรมการขาย
     public deposit: number;         // เงินดาวน์ %
     public depositPrice: number;    // เงินดาวน์
     public instalmentEnd: number;   // จำนวนงวด

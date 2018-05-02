@@ -14,7 +14,7 @@ import { InputmaskDirective } from '../../../directives/inputmask.directive';
 import { SellingComponent } from './selling.component';
 import { ModalCustomerComponent } from './modal-customer/modal-customer.component';
 
-import { SellActivityService } from '../../../services/selling';
+import { SellActivityService, SellingService } from '../../../services/selling';
 import {
   BrandsService,
   CategoriesService,
@@ -55,7 +55,8 @@ import { PersonService } from '../../../services/customers';
     ProductService,
     TypesService,
     PersonService,
-    SellActivityService
+    SellActivityService,
+    SellingService
   ]
 })
 export class SellingModule { }
