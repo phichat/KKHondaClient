@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { ProductType, ProductCategory, ProductModel, ProductBrand, ProductColor, ProductQuantity } from '../../../../models/products';
+import { ProductType, ProductCategory, ProductModel, ProductBrand, ProductColor, ProductBranch } from '../../../../models/products';
 import { TypesService } from '../../../../services/products/types.service';
 import { CategoriesService } from '../../../../services/products/categories.service';
 import { ModelsService } from '../../../../services/products/models.service';
@@ -7,8 +7,10 @@ import { BrandsService } from '../../../../services/products/brands.service';
 import { ColorsService } from '../../../../services/products/colors.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
-import { ModelProduct } from '../../../../models/selling';
+import { ModelProduct, ModelSummary } from '../../../../models/selling';
 import { ProductService } from '../../../../services';
+import { UserService } from '../../../../services/users';
+import { SellingService } from '../../../../services/selling';
 
 
 @Component({
@@ -16,16 +18,21 @@ import { ProductService } from '../../../../services';
   templateUrl: './motobike.component.html',
   styleUrls: ['./motobike.component.scss']
 })
-export class MotobikeComponent implements OnInit, OnChanges {
+export class MotobikeComponent implements OnInit {
 
-  private productTypes = new Array<ProductType>();
-  private productCategories = new Array<ProductCategory>();
-  private productModel = new Array<ProductModel>();
-  private productBrand = new Array<ProductBrand>();
-  private productColor = new Array<ProductColor>();
-  private productQty = new Array<ProductQuantity>();
+  productTypes = new Array<ProductType>();
+  productCategories = new Array<ProductCategory>();
+  productModel = new Array<ProductModel>();
+  productBrand = new Array<ProductBrand>();
+  productColor = new Array<ProductColor>();
+  productBranch = new Array<ProductBranch>();
+
+  modelSummary: ModelSummary;
 
   model = new ModelProduct;
+
+  branchId: string;
+  userId: number;
 
   constructor(
     private _typeService: TypesService,
@@ -33,11 +40,24 @@ export class MotobikeComponent implements OnInit, OnChanges {
     private _modelsService: ModelsService,
     private _brandsService: BrandsService,
     private _colorsService: ColorsService,
-    private _productsService: ProductService
+    private _productsService: ProductService,
+    private _usersSerivce: UserService,
+    private _sellingService: SellingService
   ) {
     this.model.typeId = 2;   // รถครอบครัว
     this.model.catId = 4;    // รถจักรยานยนต์
     this.model.brandId = 9;   // Honda
+
+    this.model.sellPrice = 0.00;
+    this.model.sellPrice2 = 0.00;
+    this.model.sellVat = 0.00;
+    this.model.sellVatPrice = 0.00;
+    this.model.discountPrice = 0.00;
+    this.model.discountVat = 0.00;
+    this.model.sellNet = 0.00;
+    this.model.freePrb = true;
+    this.model.freeRegister = true;
+    this.model.freeInsure = true;
 
     this.onLoadTypes();
     this.onLoadCategories();
@@ -46,9 +66,14 @@ export class MotobikeComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-  }
+    this._usersSerivce.currentData.subscribe(p => {
+      this.userId = p.userId;
+      this.branchId = p.branchId.toString();
+    });
 
-  ngOnChanges() {
+    this._sellingService.currentData.subscribe(p => {
+
+    })
   }
 
   // ------ On Load ------ \\
@@ -90,19 +115,22 @@ export class MotobikeComponent implements OnInit, OnChanges {
   private onLoadProduct() {
     this._productsService
       .FilterByKey(
+        this.branchId,
         this.model.typeId.toString(),
         this.model.catId.toString(),
         this.model.brandId.toString(),
         this.model.modelId.toString(),
         this.model.colorId.toString())
       .subscribe(p => {
+
         if (!p) {
           return false;
         }
 
         p.map(pp => {
-          this.productQty = pp.quantity;
+          this.productBranch = pp.branch;
 
+          this.model.itemId = pp.itemId;
           this.model.sellPrice = pp.sellPrice;
           this.model.sellPrice2 = pp.sellPrice2;
           this.model.sellVat = pp.sellVat;
@@ -110,10 +138,20 @@ export class MotobikeComponent implements OnInit, OnChanges {
           this.model.discountPrice = pp.discountPrice;
           this.model.discountVat = pp.discountVat;
           this.model.sellNet = pp.sellNet;
-          this.model.freePrb = true;
-          this.model.freeRegister = true;
-          this.model.freeInsure = true;
-        })
+
+          // this._sellingService.changeData({
+          //   bookingCode: 'New',
+          //   status: '',
+          //   totalMotobike: 0,
+          //   totalAccessory: 0,
+          //   totalSell: 0,
+          //   totalDiscount: 0,
+          //   totalVatPrice: 0,
+          //   totalSellNet: 0
+          // });
+
+        });
+
       });
   }
   // ------ End On Load ------ \\
@@ -133,7 +171,7 @@ export class MotobikeComponent implements OnInit, OnChanges {
   }
 
   private onChangeEngine() {
-    this.productQty
+    this.productBranch
       .filter(p => p.engineNo === this.model.engineNo)
       .map(p => this.model.frameNo = p.frameNo);
   }

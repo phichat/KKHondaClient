@@ -1,4 +1,4 @@
-<div *ngIf="path === 'selling'; else elseBlock">
+<!-- <div *ngIf="path === 'selling'; else elseBlock"> -->
     <form form class="form-horizontal">
 
         <div class="row">
@@ -44,7 +44,8 @@
           </label>
           <div class="form-group col-md-2">
             <div class="input-group">
-              <input type="text" name="" id="" class="form-control number" appInputmask (keyup)="calculateInstalment()">
+              <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" 
+              (keyup)="instalmentCalculate()" min="0.00">
               <span class="input-group-addon">%</span>
             </div>
           </div>
@@ -54,8 +55,8 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <ng-select [items]="instalment" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd"
-              name="payStatus">
+            <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd"
+              name="instalmentEnd" #instalmentend (change)="instalmentCalculate()">
             </ng-select>
           </div>
           <label for="" class="col-md-2 control-label">
@@ -64,7 +65,8 @@
           </label>
           <div class="form-group col-md-2">
             <div class="input-group">
-              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <input type="number" [(ngModel)]="model.interest" name="interest" #interest class="form-control number"
+              min="0.00" (keyup)="instalmentCalculate()">
               <span class="input-group-addon">%</span>
             </div>
           </div>
@@ -76,7 +78,8 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" name="" id="" class="form-control" appInputmask>
+            <input type="number" [(ngModel)]="model.depositPrice" name="depositPrice" #dipositprice class="form-control" 
+            min="0.00" (keyup)="instalmentCalculate()">
           </div>
       
           <label for="" class="col-md-2 control-label">
@@ -84,7 +87,7 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" [(ngModel)]="model.remain" name="remain" #remain [value]="model.remain" class="form-control" appInputmask>
+            <input type="number" min="0.00" [(ngModel)]="model.remain" name="remain" #remain [value]="model.remain" class="form-control" readonly>
           </div>
       
           <label for="" class="col-md-2 control-label">
@@ -92,7 +95,8 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" name="" id="" class="form-control" appInputmask>
+            <input type="number" [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" #instalmentprice 
+            class="form-control" readonly>
           </div>
         </div>
       
@@ -102,7 +106,7 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="date" name="" id="" class="form-control">
+            <input type="date" [(ngModel)]="model.firstPayment" name="firstPayment" #firstpayment class="form-control">
           </div>
       
           <label for="" class="col-md-2 control-label">
@@ -110,7 +114,7 @@
             <span class="required">*</span>
           </label>
           <div class="form-group col-md-2">
-            <input type="text" name="" id="" class="form-control">
+            <input type="text" [(ngModel)]="model.dueDate" name="dueDate" #duedate class="form-control">
           </div>
       
           <label for="" class="col-md-2 control-label">
@@ -119,15 +123,15 @@
           </label>
           <div class="form-group col-md-2">
             <div class="input-group">
-              <input type="text" name="" id="" class="form-control number" appInputmask>
+              <input type="number" min="0.00" [(ngModel)]="model.nowVat" name="nowVat" #nowvat class="form-control">
               <span class="input-group-addon">%</span>
             </div>
           </div>
         </div>
       </form>
-</div>
-<ng-template #elseBlock>
-    <form form class="form-horizontal">
+<!-- </div> -->
+<!-- <ng-template #elseBlock> -->
+    <!-- <form form class="form-horizontal">
 
         <div class="row">
             <label for="" class="col-lg-2 col-md-2 control-label">
@@ -173,8 +177,8 @@
       
           <label for="" class="col-md-2 control-label">จำนวนงวด :</label>
           <div class="form-group col-md-2">
-            <ng-select [items]="instalment" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd"
-              name="payStatus">
+            <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd"
+              name="instalmentEnd" #instalmentend>
             </ng-select>
           </div>
           <label for="" class="col-md-2 control-label">ดอกเบี้ย/ปี :</label>
@@ -222,5 +226,5 @@
             </div>
           </div>
         </div>
-      </form>
-</ng-template>
+      </form> -->
+<!-- </ng-template> -->

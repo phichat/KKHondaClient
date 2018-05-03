@@ -18,6 +18,8 @@ export class SellingComponent implements OnInit, AfterViewInit {
   modelMotobike: ModelProduct;
   modelAccessory: ModelProduct;
   modelFinancial: ModelCredit;
+  title: string;
+  path: string;
 
   @ViewChild(BookingDetailComponent) bookingDetailCom;
   @ViewChild(SummaryComponent) summaryCom;
@@ -30,6 +32,8 @@ export class SellingComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    this._activatedRoute.snapshot.url.map(p => this.path = p.path);
+    this.title = this.path === 'selling' ? 'ขายรถ' : 'จองรถ';
   }
 
   ngAfterViewInit() {

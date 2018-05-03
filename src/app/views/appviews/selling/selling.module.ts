@@ -25,6 +25,7 @@ import {
   TypesService
 } from '../../../services/products';
 import { PersonService } from '../../../services/customers';
+import { UserService } from '../../../services/users';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { PersonService } from '../../../services/customers';
     TypesService,
     PersonService,
     SellActivityService,
-    SellingService
+    SellingService,
+    UserService
   ]
 })
 export class SellingModule { }

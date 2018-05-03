@@ -10,9 +10,9 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  FilterByKey(typeId: string, catId: string, brandId: string, modelId: string, colorId: string) {
+  FilterByKey(branchId: string, typeId: string, catId: string, brandId: string, modelId: string, colorId: string) {
     const apiURL = `${appConfig.apiUrl}/products/Products/FilterByKey`;
-    const params = { typeId, catId, brandId, modelId, colorId };
+    const params = { branchId, typeId, catId, brandId, modelId, colorId };
     return this.http.get<ModelProduct[]>(apiURL, { params });
   }
 

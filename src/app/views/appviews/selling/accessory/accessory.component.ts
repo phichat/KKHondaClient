@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { ModelAccessory } from '../../../../models/selling';
 
 @Component({
   selector: 'app-accessory',
@@ -7,9 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccessoryComponent implements OnInit {
 
+  accessoryTypeahead = new EventEmitter<string>();
+  premiumTypehead = new EventEmitter<string>();
+
+  accessory = new Array<ModelAccessory>();
+  premium = new Array<ModelAccessory>();
+
+  selectedAccessory: string;
+  selectedPremium: string;
+
+  tableAccessory = [];
+  tablePremium = [];
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onChangeAccessory(){
+
+  }
+
+  onChangePremium(){
+
   }
 
 }

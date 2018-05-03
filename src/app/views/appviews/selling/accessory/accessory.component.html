@@ -3,9 +3,20 @@
   <div class="row">
     <label for="" class="col-md-3 col-sm-4 control-label">อุปกรณ์เสริม :</label>
     <div class="form-group col-sm-7">
-      <select name="" id="" class="form-control" appSelectizeProductAccessory>
-        <option value="" selected disabled></option>
-      </select>
+      <ng-select [items]="premium"
+          [(ngModel)]="selectedPremium"
+          name="searchPersonal"
+          placeholder="ค้นหา อุปกรณ์เสริม"
+          bindLabel="partName"
+          bindValue="itemId"
+          [typeahead]="accessoryTypeahead"
+          (ngModelChange)="onChangeAccessory()">
+          <!-- <ng-template ng-option-tmp let-item="item">
+              <strong>{{item.custFullName}}</strong>  
+              <br />
+              <small>รหัส: {{item.custCode}} | รหัสบัตร ปชช.: {{item.idCard}}</small>
+          </ng-template> -->
+      </ng-select>
     </div>
   </div>
 
@@ -28,7 +39,7 @@
           <th data-hide="all">ภาษีมูลค่าเพิ่ม/%</th>
         </tr>
       </thead>
-      <tbody>
+      <!-- <tbody>
         <tr>
           <td>1</td>
           <td>หมวกกันน๊อกเต็มใบ</td>
@@ -66,7 +77,7 @@
             <ul class="pagination pull-right"></ul>
           </td>
         </tr>
-      </tfoot>
+      </tfoot> -->
     </table>
   </div>
 
@@ -75,12 +86,37 @@
   <div class="row">
     <label for="" class="col-md-3 col-sm-4 control-label">ของแถม :</label>
     <div class="form-group col-sm-7">
-      <select name="" id="" class="form-control" appSelectizeProductPremium>
-        <option value="" selected disabled></option>
-      </select>
+      <ng-select [items]="premium"
+          [(ngModel)]="selectedPremium"
+          name="searchPersonal"
+          placeholder="ค้นหา ของแถม"
+          bindLabel="partName"
+          bindValue="itemId"
+          [typeahead]="accessoryTypeahead"
+          (ngModelChange)="onChangeAccessory()">
+          <!-- <ng-template ng-option-tmp let-item="item">
+              <strong>{{item.custFullName}}</strong>  
+              <br />
+              <small>รหัส: {{item.custCode}} | รหัสบัตร ปชช.: {{item.idCard}}</small>
+          </ng-template> -->
+      </ng-select>
     </div>
   </div>
-
+   <!-- itemId: number;
+   catId: number;
+   partCode: string;
+   partName: string;
+   partClass: string;
+   partSource: string;
+   receiveQty: number;
+   balanceQty: number;
+   sellPrice: number;
+   sellPrice2: number;
+   sellVatPrice: number;
+   sellVat: number;
+   discountPrice: number;
+   discountVat: number;
+   sellNet: number; -->
   <div class="table-responsive">
     <table appFootable class="footable table table-stripped toggle-arrow-tiny" data-page-size="5">
       <thead>
@@ -100,7 +136,7 @@
           <th data-hide="all">ภาษีมูลค่าเพิ่ม/%</th>
         </tr>
       </thead>
-      <tbody>
+      <!-- <tbody>
         <tr>
           <td>1</td>
           <td>หมวกกันน๊อกเต็มใบ</td>
@@ -138,7 +174,7 @@
             <ul class="pagination pull-right"></ul>
           </td>
         </tr>
-      </tfoot>
+      </tfoot> -->
     </table>
   </div>
 

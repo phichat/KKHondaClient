@@ -1,13 +1,14 @@
-import { ProductQuantity } from '../products/product-quantity';
+import { ProductBranch } from "../products";
 
 export class ModelProduct {
 
+    public itemId: number;
     public typeId: number;
     public catId: number;
     public brandId: number;
     public modelId: number;
     public colorId: number;
-    public quantity: Array<ProductQuantity>;
+    public branch: Array<ProductBranch>;
     public engineNo: string;
     public frameNo: string;
     public sellPrice: number;

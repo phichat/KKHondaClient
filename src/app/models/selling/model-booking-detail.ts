@@ -1,8 +1,8 @@
 export class ModelBookingDetail {
-    public custId: number;
+    public custCode: string;
     public custFullName: string;
     public custTel: string;
-    public regiId: number;
+    public regiCode: string;
     public regiFullName: string;
     public regiTel: string;
     public bookingCode: string;

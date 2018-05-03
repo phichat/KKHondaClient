@@ -21,7 +21,6 @@ import { FootableDirective } from "../../directives/footable.directive";
 import { FormsModule } from "@angular/forms";
 import { InputmaskDirective } from "../../directives/inputmask.directive";
 import { SellingModule } from "./selling/selling.module";
-// import { ProductService } from "../../services";
 
 @NgModule({
   declarations: [

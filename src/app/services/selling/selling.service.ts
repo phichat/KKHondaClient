@@ -13,7 +13,7 @@ export class SellingService {
       totalSell: 0,
       totalDiscount: 0,
       totalVatPrice: 0,
-      totalSellNet: 25000
+      totalSellNet: 0
     }
   );
   currentData = this.dataSource.asObservable();

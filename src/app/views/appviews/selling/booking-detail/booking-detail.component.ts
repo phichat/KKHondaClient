@@ -24,11 +24,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   receiveCustomer($event) {
-    this.modelRegister = $event;
-  }
-
-  receiveRegister($event) {
-
+    this.modelCustomer = $event;
   }
 
 }

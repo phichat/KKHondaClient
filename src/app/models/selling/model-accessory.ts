@@ -1,16 +1,17 @@
 export class ModelAccessory {
-    public typeId: number;
-    public typeName: string;
-    public brandId: number;
-    public brandName: string;
-    public modelId: number;
-    public modelName: string;
-    public itemAmnt: number;
-    public costNet: number;
+    public itemId: number;
+    public catId: number;
+    public partCode: string;
+    public partName: string;
+    public partClass: string;
+    public partSource: string;
+    public receiveQty: number;
+    public balanceQty: number;
     public sellPrice: number;
-    public discountPrice: number;
-    public discount: number;
+    public sellPrice2: number;
     public sellVatPrice: number;
     public sellVat: number;
+    public discountPrice: number;
+    public discountVat: number;
     public sellNet: number;
 }

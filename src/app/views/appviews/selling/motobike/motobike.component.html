@@ -1,6 +1,6 @@
 <form class="form-horizontal row">
     <div class="col-sm-5">
-
+        <input type="hidden" [(ngModel)]="model.itemId" name="itemId" #itemId>
         <div class="row">
             <label for="" class="control-label col-lg-3 col-sm-4">
                 ประเภท :
@@ -98,7 +98,7 @@
             <label for="" class="control-label col-lg-3 col-sm-4">เลขเครื่อง :</label>
             <div class="form-group col-lg-6 col-sm-7">
                 <ng-select 
-                    [items]="productQty" 
+                    [items]="productBranch" 
                     bindValue="engineNo"
                     bindLabel="engineNo" 
                     placeholder="" 
@@ -125,7 +125,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.sellPrice" name="sellPrice" #sellPrice class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.sellPrice" name="sellPrice" #sellPrice class="form-control" >
             </div>
 
             <label for="" class="control-label col-lg-3 col-sm-4">
@@ -133,7 +133,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.sellPrice2" name="sellPrice2" #sellPrice2 class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.sellPrice2" name="sellPrice2" #sellPrice2 class="form-control" >
             </div>
         </div>
 
@@ -143,7 +143,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.discountPrice" name="discountPrice" #discountPrice class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.discountPrice" name="discountPrice" #discountPrice class="form-control" >
             </div>
 
             <label for="" class="control-label col-lg-3 col-sm-4">
@@ -151,7 +151,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.discountVat" name="discountVat" #discountVat class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.discountVat" name="discountVat" #discountVat class="form-control" >
             </div>
         </div>
 
@@ -162,7 +162,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.sellVatPrice" name="sellVatPrice" #sellVatPrice class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.sellVatPrice" name="sellVatPrice" #sellVatPrice class="form-control" >
             </div>
 
             <label for="" class="control-label col-lg-3 col-sm-4">
@@ -170,7 +170,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.sellVat" name="sellVat" #sellVat class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.sellVat" name="sellVat" #sellVat class="form-control" >
             </div>
         </div>
 
@@ -180,7 +180,7 @@
                 <span class="required">*</span>
             </label>
             <div class="form-group col-lg-3 col-sm-7">
-                <input type="text" [(ngModel)]="model.sellNet" name="sellNet" #sellNet class="form-control" appInputmask>
+                <input type="number" min="0.00" [(ngModel)]="model.sellNet" name="sellNet" #sellNet class="form-control" >
             </div>
         </div>
 <!-- 
