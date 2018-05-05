@@ -85,6 +85,11 @@
               <span class="nav-label">ขายรถ</span>
             </a>
           </li>
+          <li [ngClass]="{active: activeRoute('selling')}">
+            <a [routerLink]="['/sell/credit']">
+              <span class="nav-label">สินเชื่อ</span>
+            </a>
+          </li>
         </ul>
       </li>
     </ul>

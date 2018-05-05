@@ -7,3 +7,5 @@ export * from './model-product';
 export * from './model-summary';
 export * from './sell-activity';
 export * from './model-selling';
+export * from './booking';
+export * from './booking-item';

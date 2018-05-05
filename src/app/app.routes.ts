@@ -15,6 +15,7 @@ import { BasicLayoutComponent } from "./components/common/layouts/basicLayout.co
 import { TopNavigationLayoutComponent } from "./components/common/layouts/topNavigationlayout.component";
 
 import { SellingComponent } from "./views/appviews/selling/selling.component";
+import { CreditComponent } from "./views/appviews/credit/credit.component";
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -48,7 +49,8 @@ export const ROUTES: Routes = [
     path: 'sell', component: BasicLayoutComponent,
     children: [
       { path: 'booking', component: SellingComponent },
-      { path: 'selling', component: SellingComponent }
+      { path: 'selling', component: SellingComponent },
+      { path: 'credit', component: CreditComponent }
     ]
   },
 

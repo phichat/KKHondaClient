@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
-import { SellActivityService, SellingService } from '../../../../services/selling';
-import { SellActivity, ModelCredit } from '../../../../models/selling';
-import { ActivatedRoute } from '@angular/router';
-import { MotobikeComponent } from '../motobike/motobike.component';
+import { SellActivityService, SellingService, BookingService } from '../../../services/selling';
+import { SellActivity, ModelCredit, Booking } from '../../../models/selling';
 import * as moment from 'moment';
-// import 'moment/locale/pt-br';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-credit',
@@ -14,6 +12,7 @@ import * as moment from 'moment';
 export class CreditComponent implements OnInit {
 
   model = new ModelCredit();
+  modelBooking = new Booking();
   path: string;
   modelSellActivity = new Array<SellActivity>();
   sellType = [
@@ -26,16 +25,22 @@ export class CreditComponent implements OnInit {
     { value: 9, text: '9 เดือน' }
   ];
 
-  // @ViewChild(MotobikeComponent) motobikeCom;
   constructor(
-    private _sellActivityService: SellActivityService,
     private _activatedRoute: ActivatedRoute,
-    private _sellingService: SellingService
+    private _sellActivityService: SellActivityService,
+    private _sellingService: SellingService,
+    private _bookingService: BookingService,
   ) {
 
   }
 
   ngOnInit() {
+    this._activatedRoute.queryParams.subscribe(p => {
+      if (p.bookingId) {
+        this.onLoadBooking(p.bookingId);
+      }
+    });
+
     for (let i = 1; i < 7; i++) {
       const month = i * 12;
       this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
@@ -50,11 +55,17 @@ export class CreditComponent implements OnInit {
     this.model.nowVat = 7;
     this.model.remain = 0;
     this.model.sellType = 4;
-    this._activatedRoute.snapshot.url.map(p => this.path = p.path);
 
     this.onChangeSellActivity();
 
-    this.instalmentCalculate();
+  }
+
+  onLoadBooking(bookingId: number) {
+    this._bookingService.getById(bookingId.toString())
+      .subscribe(p => {
+        p.map(pp => this.modelBooking = pp);
+      });
+
   }
 
   onChangeSellActivity() {
@@ -72,21 +83,25 @@ export class CreditComponent implements OnInit {
   }
 
   instalmentCalculate() {
-    this._sellingService.currentData.subscribe(p => {
+    // this._sellingService.currentData.subscribe(p => {
 
-      // เงินดาวน์ (บาท)
-      // มูลค่าสินค้า * เงินดาวน์(%)
-      this.model.depositPrice = p.totalSellNet * (this.model.deposit / 100);
+    if (!this.modelBooking) {
+      return false;
+    }
+    // เงินดาวน์ (บาท)
+    // มูลค่าสินค้า * เงินดาวน์(%)
+    this.model.depositPrice = this.modelBooking.netPrice * (this.model.deposit / 100);
 
-      // คงเหลือ/ยอดจัด
-      // มูลค่าสินค้า - เงินดาวน์(บาท)
-      this.model.remain = p.totalSellNet - this.model.depositPrice;
+    // คงเหลือ/ยอดจัด
+    // มูลค่าสินค้า - เงินดาวน์(บาท)
+    this.model.remain = this.modelBooking.netPrice - this.model.depositPrice;
 
-      // ค่างวด
-      // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
-      this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
+    // ค่างวด
+    // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
+    this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
 
 
-    })
+    // })
   }
+
 }

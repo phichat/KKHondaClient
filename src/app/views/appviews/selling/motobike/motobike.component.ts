@@ -71,9 +71,16 @@ export class MotobikeComponent implements OnInit {
       this.branchId = p.branchId.toString();
     });
 
-    this._sellingService.currentData.subscribe(p => {
-
-    })
+    // this._sellingService.currentData.subscribe(p => {
+    //   this.modelSummary.bookingCode = p.bookingCode;
+    //   this.modelSummary.status = p.status;
+    //   this.modelSummary.totalMotobike = p.totalMotobike;
+    //   this.modelSummary.totalAccessory = p.totalAccessory;
+    //   this.modelSummary.totalSell = p.totalSell;
+    //   this.modelSummary.totalDiscount = p.totalDiscount;
+    //   this.modelSummary.totalVatPrice = p.totalVatPrice;
+    //   this.modelSummary.totalSellNet = p.totalSellNet;
+    // })
   }
 
   // ------ On Load ------ \\
@@ -140,11 +147,11 @@ export class MotobikeComponent implements OnInit {
           this.model.sellNet = pp.sellNet;
 
           // this._sellingService.changeData({
-          //   bookingCode: 'New',
-          //   status: '',
-          //   totalMotobike: 0,
-          //   totalAccessory: 0,
-          //   totalSell: 0,
+          //   bookingCode: this.modelSummary.bookingCode,
+          //   status: this.modelSummary.status,
+          //   totalMotobike: 1,
+          //   totalAccessory: this.modelSummary.totalAccessory,
+          //   totalSell: pp.,
           //   totalDiscount: 0,
           //   totalVatPrice: 0,
           //   totalSellNet: 0
