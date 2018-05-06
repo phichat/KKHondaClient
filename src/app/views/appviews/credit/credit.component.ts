@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
-import { SellActivityService, SellingService, BookingService } from '../../../services/selling';
+import { SellActivityService, SellingService, BookingService, CreditService } from '../../../services/selling';
 import { SellActivity, ModelCredit, Booking } from '../../../models/selling';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
@@ -30,6 +30,7 @@ export class CreditComponent implements OnInit {
     private _sellActivityService: SellActivityService,
     private _sellingService: SellingService,
     private _bookingService: BookingService,
+    private _creditService: CreditService
   ) {
 
   }
@@ -82,16 +83,22 @@ export class CreditComponent implements OnInit {
 
   }
 
-  instalmentCalculate() {
-    // this._sellingService.currentData.subscribe(p => {
-
-    if (!this.modelBooking) {
-      return false;
-    }
+  onChangeDeposit() {
     // เงินดาวน์ (บาท)
     // มูลค่าสินค้า * เงินดาวน์(%)
     this.model.depositPrice = this.modelBooking.netPrice * (this.model.deposit / 100);
+  }
 
+  onChangeDepositPrice() {
+    // เงินดาวน์ (%)
+    // เงินดาวน์ * 100 / มูลค่าสินค้า
+    this.model.deposit = (this.model.depositPrice * 100) / this.modelBooking.netPrice;
+  }
+
+  instalmentCalculate() {
+    if (!this.modelBooking) {
+      return false;
+    }
     // คงเหลือ/ยอดจัด
     // มูลค่าสินค้า - เงินดาวน์(บาท)
     this.model.remain = this.modelBooking.netPrice - this.model.depositPrice;
@@ -99,9 +106,11 @@ export class CreditComponent implements OnInit {
     // ค่างวด
     // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
     this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
+  }
 
-
-    // })
+  onSubmit() {
+    console.log(this.model)
+    this._creditService.insert(this.model);
   }
 
 }

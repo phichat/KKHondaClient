@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreditComponent } from './credit.component';
-import { SellActivityService, BookingService } from '../../../services/selling';
+import { SellActivityService, BookingService, CreditService } from '../../../services/selling';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -22,7 +22,8 @@ import { FootableDirective } from '../../../directives/footable.directive';
   ],
   providers: [
     SellActivityService,
-    BookingService
+    BookingService,
+    CreditService
   ]
 })
 export class CreditModule { }

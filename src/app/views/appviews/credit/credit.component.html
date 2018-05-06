@@ -70,7 +70,8 @@
             </label>
             <div class="form-group col-md-4">
               <div class="input-group">
-                <input type="number" [(ngModel)]="model.depositPrice" name="depositPrice" #dipositprice class="form-control" min="0.00" (keyup)="instalmentCalculate()">
+                <input type="number" [(ngModel)]="model.depositPrice" name="depositPrice" #dipositprice class="form-control" min="0.00" 
+                (keyup)="onChangeDepositPrice(); instalmentCalculate();">
 
                 <span class="input-group-addon">บาท</span>
               </div>
@@ -81,7 +82,8 @@
             </label>
             <div class="form-group col-md-3">
               <div class="input-group">
-                <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" (keyup)="instalmentCalculate()"
+                <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" 
+                (keyup)="onChangeDeposit(); instalmentCalculate();"
                   min="0.00">
                 <span class="input-group-addon">%</span>
               </div>
@@ -157,11 +159,15 @@
 
           <div class="row">
             <div class="col-md-8"></div>
-            <div class="col-md-4">
-              <input type="button" class="btn btn-primary pull-right" value="บันทึก">
+            <div class="col-md-4" 
+            *ngIf="model.sellType && model.sellAcitvityId && model.deposit && model.depositPrice && 
+            model.instalmentEnd && model.interest &&  model.dueDate && model.firstPayment">
+              <input type="button" (click)="onSubmit();" class="btn btn-primary pull-right" value="บันทึก">
             </div>
           </div>
-
+          <!-- && model.netPrice && model.deposit && 
+          model.depositPrice && model.dueDate && model.firstPayment && model.instalmentEnd &&
+          model.instalmentPrice && model.interest && model.remain -->
         </form>
       </div>
     </div>
