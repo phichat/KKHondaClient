@@ -1,4 +1,5 @@
 export class ModelCredit {
+    public creditId: number;
     public netPrice: number; // ราคาสินค้าหลังหักส่วนลด
     public sellType: number;        // ประเภทงานขาย
     public sellAcitvityId: number;  // กิจกรรมการขาย
@@ -11,4 +12,8 @@ export class ModelCredit {
     public firstPayment: string;    // ชำระงวดแรก
     public dueDate: number;         // ชำระทุกวันที่
     public nowVat: number;          // vat ณ วันที่ทำสัญญา
+    public createBy: number;
+    public createDate: Date;
+    public updateBy: number;
+    public updateDate: string;
 };
