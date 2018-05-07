@@ -1,5 +1,6 @@
 export class ModelCredit {
     public creditId: number;
+    public bookingId: number;
     public netPrice: number; // ราคาสินค้าหลังหักส่วนลด
     public sellType: number;        // ประเภทงานขาย
     public sellAcitvityId: number;  // กิจกรรมการขาย

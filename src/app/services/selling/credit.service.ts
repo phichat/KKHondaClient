@@ -9,12 +9,7 @@ import { RequestOptions } from '@angular/http';
 
 const httpOptions = {
   headers: new HttpHeaders({
-<<<<<<< HEAD
-    'Content-Type': 'application/json; charset=UTF-8',
-    'Authorization': 'my-auth-token'
-=======
     'Content-Type': 'application/json'
->>>>>>> f15e5778d24486981b13bccf8ba53ae822837b4b
   })
 }
 
@@ -25,14 +20,10 @@ export class CreditService {
 
   insert(credit: ModelCredit) {
     const apiURL = `${appConfig.apiUrl}/Selling/Credit`;
-<<<<<<< HEAD
     return this.http.post(apiURL, credit);
-=======
-    return this.http.post<any>(apiURL, credit, httpOptions);
     // res.subscribe(p => {
     //   console.log(p)
     // })
->>>>>>> f15e5778d24486981b13bccf8ba53ae822837b4b
   }
 
   extractData(res: Response) {
@@ -57,12 +48,8 @@ export class CreditService {
         `body was: ${error.error}`);
     }
     // return an observable with a user-facing error message
-<<<<<<< HEAD
-    return 'Something bad happened; please try again later.';
-=======
     // return throwError(
     //   'Something bad happened; please try again later.');
->>>>>>> f15e5778d24486981b13bccf8ba53ae822837b4b
   };
 
 }

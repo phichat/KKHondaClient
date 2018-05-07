@@ -4,6 +4,7 @@ import { SellActivity, ModelCredit, Booking } from '../../../models/selling';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/users';
+import { error } from 'util';
 
 @Component({
   selector: 'app-credit',
@@ -40,6 +41,7 @@ export class CreditComponent implements OnInit {
   ngOnInit() {
     this._activatedRoute.queryParams.subscribe(p => {
       if (p.bookingId) {
+        this.model.bookingId = p.bookingId;
         this.onLoadBooking(p.bookingId);
       }
     });
@@ -70,7 +72,10 @@ export class CreditComponent implements OnInit {
   onLoadBooking(bookingId: number) {
     this._bookingService.getById(bookingId.toString())
       .subscribe(p => {
-        p.map(pp => this.modelBooking = pp);
+        p.map(pp => {
+          this.modelBooking = pp;
+          this.model.netPrice = pp.netPrice;
+        });
       });
 
   }
@@ -115,7 +120,10 @@ export class CreditComponent implements OnInit {
   }
 
   onSubmit() {
-    this._creditService.insert(this.model).subscribe(p => console.log(p));
+    this._creditService.insert(this.model).subscribe(
+      p => {console.log(p)},
+      er => {console.error(er)}
+    );
   }
 
 }
