@@ -3,6 +3,7 @@ import { SellActivityService, SellingService, BookingService, CreditService } fr
 import { SellActivity, ModelCredit, Booking } from '../../../models/selling';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../../services/users';
 
 @Component({
   selector: 'app-credit',
@@ -30,7 +31,8 @@ export class CreditComponent implements OnInit {
     private _sellActivityService: SellActivityService,
     private _sellingService: SellingService,
     private _bookingService: BookingService,
-    private _creditService: CreditService
+    private _creditService: CreditService,
+    private _userService: UserService
   ) {
 
   }
@@ -41,6 +43,10 @@ export class CreditComponent implements OnInit {
         this.onLoadBooking(p.bookingId);
       }
     });
+
+    this._userService.currentData.subscribe(p => {
+      this.model.createBy = p.userId;
+    })
 
     for (let i = 1; i < 7; i++) {
       const month = i * 12;
