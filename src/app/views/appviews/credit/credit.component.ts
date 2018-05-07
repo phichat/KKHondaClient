@@ -109,8 +109,7 @@ export class CreditComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.model)
-    this._creditService.insert(this.model);
+    this._creditService.insert(this.model).subscribe(p => console.log(p));
   }
 
 }

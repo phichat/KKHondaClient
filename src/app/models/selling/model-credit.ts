@@ -10,5 +10,6 @@ export class ModelCredit {
     public remain: number;          // คงเหลือ/ยอดจัด
     public firstPayment: string;    // ชำระงวดแรก
     public dueDate: number;         // ชำระทุกวันที่
+    public promotionalPrice: number; // ค่าส่งเสริมการขาย
     public nowVat: number;          // vat ณ วันที่ทำสัญญา
 };
