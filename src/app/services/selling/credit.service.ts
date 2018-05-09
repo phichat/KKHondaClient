@@ -20,7 +20,7 @@ export class CreditService {
 
   insert(credit: ModelCredit) {
     const apiURL = `${appConfig.apiUrl}/Selling/Credit`;
-    return this.http.post<any>(apiURL, credit, httpOptions);
+    return this.http.post(apiURL, credit);
     // res.subscribe(p => {
     //   console.log(p)
     // })
