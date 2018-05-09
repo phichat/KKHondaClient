@@ -1,243 +1,239 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-10">
-    <h2>คำนวณสินเชื่อ</h2>
-    <ol class="breadcrumb">
-      <li>
-        <a href="/">หน้าแรก</a>
-      </li>
-      <li>
-        <a>งานขาย</a>
-      </li>
-      <li class="active">
-        <strong>สินเชื่อ</strong>
-      </li>
-    </ol>
-  </div>
-  <div class="col-lg-2 text-right pull-right">
+    <div class="col-lg-10">
+        <h2>คำนวณสินเชื่อ</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li>
+                <a>งานขาย</a>
+            </li>
+            <li class="active">
+                <strong>สินเชื่อ</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2 text-right pull-right">
 
-  </div>
+    </div>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-  <div class="row">
-    <div class="ibox float-e-margins col-md-6">
-      <div class="ibox-content">
-        <form form class="form-horizontal">
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ประเภทสินเชื่อ :
-              <span class="required">*</span>
-            </label>
-            <div class="col-md-8 form-group">
-              <div *ngFor="let item of sellType; let i=index;" class="radio radio-info radio-inline">
-                <input type="radio" [id]="item.value" [(ngModel)]="model.sellType" [value]="item.value" name="sellType" checked="" (change)="onChangeSellActivity()">
-                <label [for]="item.value">{{item.text}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              สถาบันการเงิน :
-              <span class="required">*</span>
-            </label>
-            <div class="col-md-8 form-group m-b-sm">
-              <ng-select [items]="modelSellActivity" groupBy="sellTypeName" [(ngModel)]="model.sellAcitvityId" bindLabel="activityName"
-                bindValue="activityId" name="sellActivity">
-                <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                  <strong>{{item.sellTypeName}}</strong>
-                </ng-template>
-              </ng-select>
-            </div>
-          </div>
+    <div class="row">
+        <div class="ibox float-e-margins col-md-6">
+            <div class="ibox-content">
+                <form form class="form-horizontal">
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ประเภทสินเชื่อ :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="col-md-8 form-group">
+                            <div *ngFor="let item of sellType; let i=index;" class="radio radio-info radio-inline">
+                                <input type="radio" [id]="item.value" [(ngModel)]="model.sellType" [value]="item.value" name="sellType" checked="" (change)="onChangeSellActivity()">
+                                <label [for]="item.value">{{item.text}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            สถาบันการเงิน :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="col-md-8 form-group m-b-sm">
+                            <ng-select [items]="modelSellActivity" groupBy="sellTypeName" [(ngModel)]="model.sellAcitvityId" bindLabel="activityName"
+                                bindValue="activityId" name="sellActivity">
+                                <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                    <strong>{{item.sellTypeName}}</strong>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
 
-          <div class="hr-line-dashed m-t-xs"></div>
+                    <div class="hr-line-dashed m-t-xs"></div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ราคาสินค้า (รวม VAT) :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <input type="number" min="0.00" [(ngModel)]="model.netPrice" name="netPrice" #netPrice class=form-control
-                readonly [value]="modelBooking.netPrice">
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ราคาสินค้า (รวม VAT) :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <input type="number" min="0.00" [(ngModel)]="model.netPrice" name="netPrice" #netPrice class=form-control readonly>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              เงินดาวน์ :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <div class="input-group">
-                <input type="number" [(ngModel)]="model.depositPrice" name="depositPrice" #dipositprice class="form-control" min="0.00" 
-                (keyup)="onChangeDepositPrice(); instalmentCalculate();">
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            เงินดาวน์ :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <div class="input-group">
+                                <input type="number" [(ngModel)]="model.depositPrice" name="depositPrice" #dipositprice class="form-control" min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
 
-                <span class="input-group-addon">บาท</span>
-              </div>
-            </div>
+                                <span class="input-group-addon">บาท</span>
+                            </div>
+                        </div>
 
-            <label for="" class="col-md-1 control-label">
-              หรือ
-            </label>
-            <div class="form-group col-md-3">
-              <div class="input-group">
-                <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" 
-                (keyup)="onChangeDeposit(); instalmentCalculate();"
-                  min="0.00">
-                <span class="input-group-addon">%</span>
-              </div>
-            </div>
-          </div>
+                        <label for="" class="col-md-1 control-label">
+                            หรือ
+                        </label>
+                        <div class="form-group col-md-3">
+                            <div class="input-group">
+                                <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
+                                    min="0.00">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ระยะเวลาผ่อนชำระ :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
-                #instalmentend (change)="instalmentCalculate()">
-              </ng-select>
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ระยะเวลาผ่อนชำระ :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" placeholder="" [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
+                                #instalmentend (change)="instalmentCalculate()">
+                            </ng-select>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              อัตราดอกเบี้ยต่อปี :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <div class="input-group">
-                <input type="number" [(ngModel)]="model.interest" name="interest" #interest class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
-                <span class="input-group-addon">%</span>
-              </div>
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            อัตราดอกเบี้ยต่อปี :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <div class="input-group">
+                                <input type="number" [(ngModel)]="model.interest" name="interest" #interest class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ยอดจัด (รวม VAT) :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <input type="number" min="0.00" [(ngModel)]="model.remain" name="remain" #remain [value]="model.remain" class="form-control"
-                readonly [value]="modelBooking.netPrice">
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ยอดจัด (รวม VAT) :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <input type="number" min="0.00" [(ngModel)]="model.remain" name="remain" #remain [value]="model.remain" class="form-control"
+                                readonly [value]="modelBooking.netPrice">
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ค่างวด (รวม VAT) :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <input type="number" [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" #instalmentprice class="form-control"
-                readonly>
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ค่างวด (รวม VAT) :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <input type="number" [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" #instalmentprice class="form-control"
+                                readonly>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ชำระงวดแรก :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <input type="date" [(ngModel)]="model.firstPayment" name="firstPayment" #firstpayment class="form-control">
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ชำระงวดแรก :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <input type="date" [(ngModel)]="model.firstPayment" name="firstPayment" #firstpayment class="form-control">
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label for="" class="col-md-4 control-label">
-              ชำระทุกวันที่ :
-              <span class="required">*</span>
-            </label>
-            <div class="form-group col-md-4">
-              <input type="number" min="1" max="31" [(ngModel)]="model.dueDate" name="dueDate" #duedate class="form-control">
-            </div>
-          </div>
+                    <div class="row">
+                        <label for="" class="col-md-4 control-label">
+                            ชำระทุกวันที่ :
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-group col-md-4">
+                            <input type="number" min="1" max="31" [(ngModel)]="model.dueDate" name="dueDate" #duedate class="form-control">
+                        </div>
+                    </div>
 
-          <div class="row">
-            <div class="col-md-8"></div>
-            <div class="col-md-4" 
-            *ngIf="model.sellType && model.sellAcitvityId && model.deposit && model.depositPrice && 
+                    <div class="row">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-4" *ngIf="model.sellType && model.sellAcitvityId && model.deposit && model.depositPrice && 
             model.instalmentEnd && model.interest &&  model.dueDate && model.firstPayment">
-              <input type="button" (click)="onSubmit();" class="btn btn-primary pull-right" value="บันทึก">
-            </div>
-          </div>
-          <!-- && model.netPrice && model.deposit && 
+                            <input type="button" (click)="onSubmit();" class="btn btn-primary pull-right" value="บันทึก">
+                        </div>
+                    </div>
+                    <!-- && model.netPrice && model.deposit && 
           model.depositPrice && model.dueDate && model.firstPayment && model.instalmentEnd &&
           model.instalmentPrice && model.interest && model.remain -->
-        </form>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div>
-        <div class="row">
-          <div class="col-sm-6 pull-right text-right">
-            <h4 #thenBlock class="m-b-xs">เลขที่ใบจอง</h4>
-            <h2 class="no-margins text-navy" style="font-weight: normal">{{modelBooking.bookingNo}}</h2>
-          </div>
+                </form>
+            </div>
         </div>
+        <div class="col-md-6">
+            <div>
+                <div class="row">
+                    <div class="col-sm-6 pull-right text-right">
+                        <h4 #thenBlock class="m-b-xs">เลขที่ใบจอง</h4>
+                        <h2 class="no-margins text-navy" style="font-weight: normal">{{modelBooking.bookingNo}}</h2>
+                    </div>
+                </div>
 
-        <div class="row">
-          <div class="col-sm-6">
-            <ul class="list-group clear-list m-t m-b-sm">
-              <li class="list-group-item fist-item">
-                <span class="pull-right">
-                  {{modelBooking.deposit | number:'1.2-2'}}
-                </span>
-                <strong>เงินมัดจำ</strong>
-              </li>
-              <li class="list-group-item">
-                <span class="pull-right">
-                  {{modelBooking.outStandingPrice | number:'1.2-2'}}
-                </span>
-                <strong>ยอดคงค้าง</strong>
-              </li>
-            </ul>
-          </div>
-          <div class="col-sm-6">
-            <ul class="list-group clear-list m-t m-b-sm">
-              <li class="list-group-item fist-item">
-                <span class="pull-right">
-                  {{modelBooking.sellPrice | number:'1.2-2'}}
-                </span>
-                <strong>ราคาขายก่อนภาษี</strong>
-              </li>
-              <li class="list-group-item">
-                <span class="pull-right">
-                  {{modelBooking.distcountPPrice | number:'1.2-2'}} ({{modelBooking.distcountP | number}}%)
-                </span>
-                <strong>ส่วนลด</strong>
-              </li>
-              <li class="list-group-item">
-                <span class="pull-right">
-                  {{modelBooking.distcountB | number:'1.2-2'}}
-                </span>
-                <strong>รวมส่วนลด</strong>
-              </li>
-              <li class="list-group-item">
-                <span class="pull-right">
-                  {{modelBooking.vatPrice | number:'1.2-2'}} ({{modelBooking.vat | number}}%)
-                </span>
-                <strong>รวมภาษี</strong>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul class="list-group clear-list m-t m-b-sm">
+                            <li class="list-group-item fist-item">
+                                <span class="pull-right">
+                                    {{modelBooking.deposit | number:'1.2-2'}}
+                                </span>
+                                <strong>เงินมัดจำ</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    {{modelBooking.outStandingPrice | number:'1.2-2'}}
+                                </span>
+                                <strong>ยอดคงค้าง</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <ul class="list-group clear-list m-t m-b-sm">
+                            <li class="list-group-item fist-item">
+                                <span class="pull-right">
+                                    {{modelBooking.sellPrice | number:'1.2-2'}}
+                                </span>
+                                <strong>ราคาขายก่อนภาษี</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    {{modelBooking.distcountPPrice | number:'1.2-2'}} ({{modelBooking.distcountP | number}}%)
+                                </span>
+                                <strong>ส่วนลด</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    {{modelBooking.distcountB | number:'1.2-2'}}
+                                </span>
+                                <strong>รวมส่วนลด</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    {{modelBooking.vatPrice | number:'1.2-2'}} ({{modelBooking.vat | number}}%)
+                                </span>
+                                <strong>รวมภาษี</strong>
 
-              </li>
-              <li class="list-group-item">
-                <span class="pull-right">
-                  {{modelBooking.netPrice | number:'1.2-2'}}
-                </span>
-                <strong>รวมราคาขาย</strong>
-              </li>
-            </ul>
-          </div>
-        </div>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    {{modelBooking.netPrice | number:'1.2-2'}}
+                                </span>
+                                <strong>รวมราคาขาย</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-        <div class="m-t-md">
-          <h4>ข้อมูลลูกค้า</h4>
-          <hr class="m-t-xs m-b-sm" style="border-top:dashed 1px #ddd">
-          <!-- <div class="row">
+                <div class="m-t-md">
+                    <h4>ข้อมูลลูกค้า</h4>
+                    <hr class="m-t-xs m-b-sm" style="border-top:dashed 1px #ddd">
+                    <!-- <div class="row">
             <div class="col-sm-6 form-group">
               <strong>วันที่ทำรายการ :</strong>
               วว/ดด/ปปปป
@@ -247,51 +243,51 @@
               นายนายนาย ดีดีดี
             </div>
           </div> -->
-          <div class="row">
-            <div class="col-sm-6 form-group">
-              <strong>วันที่จอง :</strong>
-              {{modelBooking.bookingDate | date:'dd-MM-yyyy'}}
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <strong>วันที่จอง :</strong>
+                            {{modelBooking.bookingDate | date:'dd-MM-yyyy'}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>วันที่รับรถ :</strong>
+                            {{modelBooking.receiveDate | date:'dd-MM-yyyy'}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>รหัสลูกค้า :</strong>
+                            {{modelBooking.custCode}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>บัตรประชาชน :</strong>
+                            {{modelBooking.idCard}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>ชื่อ-นามสกุล :</strong>
+                            {{modelBooking.custFullName}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>เพศ :</strong>
+                            {{modelBooking.genderName}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>เบอร์ติดต่อ :</strong>
+                            {{modelBooking.contractNo}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <strong>อีเมล์ :</strong>
+                            {{modelBooking.email}}
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <strong>ที่อยู่ :</strong>
+                            {{modelBooking.address}}
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="col-sm-6 form-group">
-              <strong>วันที่รับรถ :</strong>
-              {{modelBooking.receiveDate | date:'dd-MM-yyyy'}}
-            </div>
-            <div class="col-sm-6 form-group">
-              <strong>รหัสลูกค้า :</strong>
-              {{modelBooking.custCode}}
-            </div>
-            <div class="col-sm-6 form-group">
-              <strong>บัตรประชาชน :</strong>
-              {{modelBooking.idCard}}
-            </div>
-            <div class="col-sm-6 form-group">
-              <strong>ชื่อ-นามสกุล :</strong>
-              {{modelBooking.custFullName}}
-            </div>
-            <div class="col-sm-6 form-group">
-              <strong>เพศ :</strong>
-              {{modelBooking.genderName}}
-            </div>
-            <div class="col-sm-6 form-group">
-              <strong>เบอร์ติดต่อ :</strong>
-              {{modelBooking.contractNo}}
-            </div>
-            <div class="col-sm-6 form-group">
-              <strong>อีเมล์ :</strong>
-              {{modelBooking.email}}
-            </div>
-            <div class="col-sm-12 form-group">
-              <strong>ที่อยู่ :</strong>
-              {{modelBooking.address}}
-            </div>
-          </div>
         </div>
-
-      </div>
     </div>
-  </div>
 
-  <!-- <div class="row">
+    <!-- <div class="row">
     <div class="col-md-6">
       <div class="m-t-md">
         <h4>รายละเอียดรถ</h4>
