@@ -21,35 +21,13 @@ export class CreditService {
   insert(credit: ModelCredit) {
     const apiURL = `${appConfig.apiUrl}/Selling/Credit`;
     return this.http.post(apiURL, credit);
-    // res.subscribe(p => {
-    //   console.log(p)
-    // })
   }
 
-  extractData(res: Response) {
-    const body = res.body;
-    return body || {};
-  }
-  handleErrorObservable(error: Response | any) {
-    console.error(error.message || error);
-    return Observable.throw(error.message || error);
-  }
-
-
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a user-facing error message
-    // return throwError(
-    //   'Something bad happened; please try again later.');
-  };
+  // insert(hero: ModelCredit): Observable<Hero> {
+  //   return this.http.post<Hero>(this.heroesUrl, hero, httpOptions)
+  //     .pipe(
+  //       catchError(this.handleError('addHero', hero))
+  //     );
+  // }
 
 }
