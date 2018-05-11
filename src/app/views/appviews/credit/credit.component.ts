@@ -119,6 +119,7 @@ export class CreditComponent implements OnInit {
    }
 
    onSubmit() {
+<<<<<<< HEAD
       this._creditService.insert(this.model).subscribe(
         res => {
           console.log(res);
@@ -127,6 +128,10 @@ export class CreditComponent implements OnInit {
           console.log('Error occured');
         }
       );
+=======
+      console.log(this.model);
+      this._creditService.insert(this.model).subscribe(result => { }, error => { console.log(error) });
+>>>>>>> a31ef1bad35c1e5f33552c11571cdff482ef2d4a
    }
 
 }
