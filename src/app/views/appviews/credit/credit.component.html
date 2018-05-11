@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>คำนวณสินเชื่อ</h2>
+        <h2>สินเชื่อ</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="/">หน้าแรก</a>
@@ -75,11 +75,10 @@
                             </div>
                         </div>
 
-<<<<<<< HEAD
                         <label for="" class="col-md-1 control-label">
                             หรือ
                         </label>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <div class="input-group">
                                 <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
                                     min="0.00">
@@ -87,20 +86,6 @@
                             </div>
                         </div>
                     </div>
-=======
-            <label for="" class="col-md-1 control-label">
-              หรือ
-            </label>
-            <div class="form-group col-md-4">
-              <div class="input-group">
-                <input type="number" [(ngModel)]="model.deposit" name="deposit" #deposit class="form-control number" 
-                (keyup)="onChangeDeposit(); instalmentCalculate();"
-                  min="0.00">
-                <span class="input-group-addon">%</span>
-              </div>
-            </div>
-          </div>
->>>>>>> 1cfe311cba8259b0d6e977288b9ccaad117a06cb
 
                     <div class="row">
                         <label for="" class="col-md-4 control-label">
@@ -172,7 +157,7 @@
                     <div class="row">
                         <div class="col-md-8"></div>
                         <div class="col-md-4" *ngIf="model.sellType && model.sellAcitvityId && model.deposit && model.depositPrice && 
-            model.instalmentEnd && model.interest &&  model.dueDate && model.firstPayment">
+            model.instalmentEnd &&  model.dueDate && model.firstPayment">
                             <input type="button" (click)="onSubmit();" class="btn btn-primary pull-right" value="บันทึก">
                         </div>
                     </div>
