@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/users';
 import { error } from 'util';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
    selector: 'app-credit',
@@ -119,19 +120,14 @@ export class CreditComponent implements OnInit {
    }
 
    onSubmit() {
-<<<<<<< HEAD
       this._creditService.insert(this.model).subscribe(
         res => {
           console.log(res);
         },
-        err => {
+        (error: HttpErrorResponse) => {
           console.log('Error occured');
         }
       );
-=======
-      console.log(this.model);
-      this._creditService.insert(this.model).subscribe(result => { }, error => { console.log(error) });
->>>>>>> a31ef1bad35c1e5f33552c11571cdff482ef2d4a
    }
 
 }

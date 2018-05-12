@@ -40,6 +40,7 @@
     "peity": "^3.2.1",
     "rxjs": "^5.1.0",
     "selectize": "^0.12.4",
+    "toastr": "^2.1.4",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
