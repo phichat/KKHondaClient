@@ -7,4 +7,14 @@
 // @import "../node_modules/icheck/skins/square/green";
 span.required {
     color:red !important;
-  }
+}
+.form-control.ng-invalid.ng-touched:not(:focus) {
+   border-color: red !important;
+}
+
+// .ng-invalid.ng-touched:not(.ng-select-focused) {
+//    .ng-select .ng-select-container {
+//       border-color: red !important;
+//    }
+// }
+  

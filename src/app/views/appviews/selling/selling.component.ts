@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { ModelCustomer, ModelProduct, ModelCredit } from '../../../models/selling';
+// import { ModelCustomer, ModelProduct, ModelCredit } from '../../../models/selling';
 import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { MotobikeComponent } from './motobike/motobike.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -14,10 +14,10 @@ import { CreditComponent } from './credit/credit.component';
 })
 export class SellingComponent implements OnInit, AfterViewInit {
 
-  modelCustomer: ModelCustomer;
-  modelMotobike: ModelProduct;
-  modelAccessory: ModelProduct;
-  modelFinancial: ModelCredit;
+  // modelCustomer: ModelCustomer;
+  // modelMotobike: ModelProduct;
+  // modelAccessory: ModelProduct;
+  // modelFinancial: ModelCredit;
   title: string;
   path: string;
 

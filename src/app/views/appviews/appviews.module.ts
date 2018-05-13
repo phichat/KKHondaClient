@@ -24,9 +24,6 @@ import { CreditModule } from './credit/credit.module';
 
 @NgModule({
   declarations: [
-    // Directives
-
-    // Components
     StarterViewComponent,
     LoginComponent,
     HomeComponent,
@@ -40,7 +37,6 @@ import { CreditModule } from './credit/credit.module';
     PeityModule,
     SparklineModule,
     IboxtoolsModule,
-    SellingModule,
     CreditModule
   ],
   exports: [

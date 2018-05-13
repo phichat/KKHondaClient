@@ -32,26 +32,65 @@
           IN+
         </div>
       </li>
-      <li [ngClass]="{active: activeRoute('sell')}">
+      <li [ngClass]="{active: activeRoute('credit')}">
         <a href="#">
           <i class="fa fa-th-large"></i>
-          <span class="nav-label">งานขาย</span>
+          <span class="nav-label">สินเชื่อ</span>
           <span class="fa arrow"></span>
         </a>
-        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('sell')}">
-          <!-- <li [ngClass]="{active: activeRoute('booking')}">
-            <a [routerLink]="['/sell/booking']">
-              <span class="nav-label">จองรถ</span>
+        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('credit')}">
+          <li [ngClass]="{active: activeRoute('credit')}">
+            <a [routerLink]="['/credit/calculate']">
+              <span class="nav-label">คำนวนณค่างวด</span>
             </a>
           </li>
-          <li [ngClass]="{active: activeRoute('selling')}">
-            <a [routerLink]="['/sell/selling']">
-              <span class="nav-label">ขายรถ</span>
+          <li [ngClass]="{active: activeRoute('credit')}">
+            <a [routerLink]="['/credit/contract']">
+              <span class="nav-label">ทำสัญญาเช่าซื้อ</span>
             </a>
-          </li> -->
-          <li [ngClass]="{active: activeRoute('selling')}">
-            <a [routerLink]="['/sell/credit']">
-              <span class="nav-label">สินเชื่อ</span>
+          </li>
+          <li [ngClass]="{active: activeRoute('credit')}">
+            <a [routerLink]="['/credit/keeper']">
+              <span class="nav-label">เปลี่ยนผู้ดูแล</span>
+            </a>
+          </li>
+          <li [ngClass]="{active: activeRoute('credit')}">
+            <a [routerLink]="['/credit/contract-status']">
+              <span class="nav-label">สอบถามข้อมูลสัญญา</span>
+            </a>
+          </li>
+          <li [ngClass]="{active: activeRoute('credit')}">
+            <a [routerLink]="['/credit/contract-field']">
+              <span class="nav-label">เปลี่ยนเขตสัญญา</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li [ngClass]="{active: activeRoute('accounting-finance')}">
+        <a href="#">
+          <i class="fa fa-th-large"></i>
+          <span class="nav-label">บัญชีและการเงิน</span>
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('accounting-finance')}">
+          <li [ngClass]="{active: activeRoute('accounting-finance')}">
+            <a [routerLink]="['/accounting-finance/']">
+              <span class="nav-label">รับชำระเงินงวดเดียว/ดาวน์</span>
+            </a>
+          </li>
+          <li [ngClass]="{active: activeRoute('accounting-finance')}">
+            <a [routerLink]="['/accounting-finance/']">
+              <span class="nav-label">รับชำระเงินหลายงวด/ปิดสัญญา</span>
+            </a>
+          </li>
+          <li [ngClass]="{active: activeRoute('accounting-finance')}">
+            <a [routerLink]="['/accounting-finance/']">
+              <span class="nav-label">รับชำระเงินประกันสัญญา</span>
+            </a>
+          </li>
+          <li [ngClass]="{active: activeRoute('accounting-finance')}">
+            <a [routerLink]="['/accounting-finance/']">
+              <span class="nav-label">บันทึกรายละเอียดเช็ค</span>
             </a>
           </li>
         </ul>

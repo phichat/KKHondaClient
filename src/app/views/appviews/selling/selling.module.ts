@@ -11,10 +11,10 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { IboxtoolsModule } from '../../../components/common/iboxtools/iboxtools.module';
 import { InputmaskDirective } from '../../../directives/inputmask.directive';
-import { SellingComponent } from './selling.component';
-import { ModalCustomerComponent } from './modal-customer/modal-customer.component';
+// import { SellingComponent } from './selling.component';
+// import { ModalCustomerComponent } from './modal-customer/modal-customer.component';
 
-import { SellActivityService, SellingService } from '../../../services/selling';
+// import { SellActivityService, SellingService } from '../../../services/selling';
 import {
   BrandsService,
   CategoriesService,
@@ -37,28 +37,28 @@ import { UserService } from '../../../services/users';
     NgSelectModule
   ],
   declarations: [
-    InputmaskDirective,
+    // InputmaskDirective,
 
-    BookingDetailComponent,
-    SummaryComponent,
-    MotobikeComponent,
-    AccessoryComponent,
-    CreditComponent,
-    ModalCustomerComponent,
-    SellingComponent
+    // BookingDetailComponent,
+    // SummaryComponent,
+    // MotobikeComponent,
+    // AccessoryComponent,
+    // CreditComponent,
+    // ModalCustomerComponent,
+    // SellingComponent
   ],
   providers: [
-    BrandsService,
-    CategoriesService,
-    ClassesService,
-    ColorsService,
-    ModelsService,
-    ProductService,
-    TypesService,
-    PersonService,
-    SellActivityService,
-    SellingService,
-    UserService
+    // BrandsService,
+    // CategoriesService,
+    // ClassesService,
+    // ColorsService,
+    // ModelsService,
+    // ProductService,
+    // TypesService,
+    // PersonService,
+    // SellActivityService,
+    // SellingService,
+    // UserService
   ]
 })
 export class SellingModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelBookingDetail, ModelCustomer, ModelRegister } from '../../../../models/selling';
+// import { ModelBookingDetail, ModelCustomer, ModelRegister } from '../../../../models/selling';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -7,24 +7,24 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './booking-detail.component.html',
   styleUrls: ['./booking-detail.component.scss']
 })
-export class BookingDetailComponent implements OnInit {
+export class BookingDetailComponent {
 
-  path: string;
-  modelCustomer = new ModelCustomer();
-  modelRegister = new ModelRegister();
-  modelBooking = new ModelBookingDetail();
-  payStatus = [
-    { value: 'Y', text: 'ชำระเรียบร้อย' },
-    { value: 'N', text: 'ยังไม่ชำระ' }
-  ]
-  constructor(private _activatedRoute: ActivatedRoute) { }
+  // path: string;
+  // modelCustomer = new ModelCustomer();
+  // modelRegister = new ModelRegister();
+  // modelBooking = new ModelBookingDetail();
+  // payStatus = [
+  //   { value: 'Y', text: 'ชำระเรียบร้อย' },
+  //   { value: 'N', text: 'ยังไม่ชำระ' }
+  // ]
+  // constructor(private _activatedRoute: ActivatedRoute) { }
 
-  ngOnInit() {
-    this._activatedRoute.snapshot.url.map(p => this.path = p.path);
-  }
+  // ngOnInit() {
+  //   this._activatedRoute.snapshot.url.map(p => this.path = p.path);
+  // }
 
-  receiveCustomer($event) {
-    this.modelCustomer = $event;
-  }
+  // receiveCustomer($event) {
+  //   this.modelCustomer = $event;
+  // }
 
 }
