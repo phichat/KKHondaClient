@@ -11,7 +11,8 @@ import {
   CalculateComponent,
   KeeperComponent,
   ContractFieldComponent,
-  ContractStatusComponent
+  ContractStatusComponent,
+  CalculateListComponent
 } from './views/appviews/credit';
 
 export const ROUTES: Routes = [
@@ -31,6 +32,7 @@ export const ROUTES: Routes = [
     children: [
       { path: 'contract', component: ContractComponent },
       { path: 'calculate', component: CalculateComponent },
+      { path: 'calculate-list', component: CalculateListComponent },
       { path: 'contract-field', component: ContractFieldComponent },
       { path: 'contract-status', component: ContractStatusComponent },
       { path: 'keeper', component: KeeperComponent },

@@ -26,6 +26,7 @@
     "bootstrap": "^3.3.7",
     "chart.js": "^2.5.0",
     "core-js": "^2.4.1",
+    "datatables.net-bs": "^1.10.16",
     "font-awesome": "^4.7.0",
     "footable": "^2.0.6",
     "icheck": "^1.0.2",
