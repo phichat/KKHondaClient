@@ -1,0 +1,105 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>{{title}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li>
+                <a>งานขาย</a>
+            </li>
+            <li class="active">
+                <strong>{{title}}</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>รายละเอียดการจอง</h5>
+                    <iboxtools></iboxtools>
+                </div>
+                <div class="ibox-content">
+                    <app-booking-detail></app-booking-detail>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <app-summary></app-summary>
+        </div>
+    </div>
+
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>รถและของแถม</h5>
+
+            <iboxtools></iboxtools>
+        </div>
+        <div class="ibox-content">
+
+
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab-1">รายละเอียดรถ</a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#tab-2">ของแถมและอุปกรณ์เสริม</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <app-motobike></app-motobike>
+                        </div>
+                    </div>
+
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="row">
+                                <!-- Accessory -->
+                                <app-accessory></app-accessory>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>สินเชื่อ</h5>
+            <iboxtools></iboxtools>
+        </div>
+
+        <div class="ibox-content">
+            <!-- Credit -->
+            <app-credit></app-credit>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="form-group col-md-12 text-right">
+            <button type="button" class="btn btn-w-m btn-primary" (click)="submit()">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                บันทึก
+            </button>
+            &nbsp; &nbsp;
+            <button type="button" class="btn btn-w-m btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+                ยกเลิก
+            </button>
+        </div>
+    </div>
+
+</div>

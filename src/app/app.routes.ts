@@ -9,12 +9,13 @@ import { Dashboard5Component } from "./views/dashboards/dashboard5.component";
 
 import { StarterViewComponent } from "./views/appviews/starterview.component";
 import { LoginComponent } from "./views/appviews/login.component";
-import { BookingComponent } from "./views/appviews/booking/booking.component";
 import { SalesComponent } from "./views/appviews/sales/sales.component";
 
 import { BlankLayoutComponent } from "./components/common/layouts/blankLayout.component";
 import { BasicLayoutComponent } from "./components/common/layouts/basicLayout.component";
 import { TopNavigationLayoutComponent } from "./components/common/layouts/topNavigationlayout.component";
+
+import { SellingComponent } from "./views/appviews/selling/selling.component";
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -47,7 +48,7 @@ export const ROUTES: Routes = [
   {
     path: 'salling', component: BasicLayoutComponent,
     children: [
-      { path: 'booking', component: BookingComponent },
+      { path: 'booking', component: SellingComponent },
       { path: 'sales', component: SalesComponent }
     ]
   },

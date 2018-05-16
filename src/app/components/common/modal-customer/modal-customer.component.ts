@@ -9,8 +9,10 @@ import { ModelCustomer } from '../../../models/model-customer';
 export class ModalCustomerComponent implements OnInit {
 
   public model = new ModelCustomer('', '', '', '', '', '', '', '');
+  title: string;
 
   constructor() {
+    this.title = 'ค้นหาข้อลูกค้า';
   }
 
   ngOnInit() {

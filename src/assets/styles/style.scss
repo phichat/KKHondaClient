@@ -46,7 +46,7 @@
 // Your custom style to override base style
 @import "imports/custom";
 
-@import "imports/selectize";
+@import "imports/ng-select";
 
 // Clear layout on print mode
 @media print {
@@ -54,6 +54,8 @@
     display: none;
   }
   body { overflow: visible !important; }
+
+
 
   #page-wrapper {
     margin: 0;
