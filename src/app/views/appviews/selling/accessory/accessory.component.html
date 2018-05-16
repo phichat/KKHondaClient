@@ -1,11 +1,17 @@
-<form class="form-horizontal col-md-12">
+<!-- <form class="form-horizontal col-md-12">
 
   <div class="row">
     <label for="" class="col-md-3 col-sm-4 control-label">อุปกรณ์เสริม :</label>
     <div class="form-group col-sm-7">
-      <select name="" id="" class="form-control" appSelectizeProductAccessory>
-        <option value="" selected disabled></option>
-      </select>
+      <ng-select [items]="premium"
+          [(ngModel)]="selectedPremium"
+          name="searchPersonal"
+          placeholder="ค้นหา อุปกรณ์เสริม"
+          bindLabel="partName"
+          bindValue="itemId"
+          [typeahead]="accessoryTypeahead"
+          (ngModelChange)="onChangeAccessory()">
+      </ng-select>
     </div>
   </div>
 
@@ -75,12 +81,17 @@
   <div class="row">
     <label for="" class="col-md-3 col-sm-4 control-label">ของแถม :</label>
     <div class="form-group col-sm-7">
-      <select name="" id="" class="form-control" appSelectizeProductPremium>
-        <option value="" selected disabled></option>
-      </select>
+      <ng-select [items]="premium"
+          [(ngModel)]="selectedPremium"
+          name="searchPersonal"
+          placeholder="ค้นหา ของแถม"
+          bindLabel="partName"
+          bindValue="itemId"
+          [typeahead]="accessoryTypeahead"
+          (ngModelChange)="onChangeAccessory()">
+      </ng-select>
     </div>
   </div>
-
   <div class="table-responsive">
     <table appFootable class="footable table table-stripped toggle-arrow-tiny" data-page-size="5">
       <thead>
@@ -142,4 +153,4 @@
     </table>
   </div>
 
-</form>
+</form> -->

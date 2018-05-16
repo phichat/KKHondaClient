@@ -1,136 +1,205 @@
-<form class="form-horizontal row">
-  <div class="col-sm-5">
+<!-- <form class="form-horizontal row">
+    <div class="col-sm-5">
+        <input type="hidden" [(ngModel)]="model.itemId" name="itemId" #itemId>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ประเภท :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productTypes" 
+                    bindLabel="typeName" 
+                    bindValue="typeId"
+                    placeholder="" 
+                    [(ngModel)]="model.typeId"
+                    name="typeId">
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ประเภทสินค้า :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select #types class="form-control">
-                  <option value="" selected disabled></option>
-                  <!-- <option *ngFor="let item of productTypes" value="item.typeId">{{item.typeName}}</option> -->
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                หมวดหมู่ :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productCategories" 
+                    bindValue="catId"
+                    bindLabel="catName" 
+                    placeholder="" 
+                    [(ngModel)]="model.catId"
+                    name="catId">
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">หมวดหมู่ :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="categories" #categories class="form-control">
-                  <option value="" selected disabled></option>
-                  <!-- <option *ngFor="let item of productCategories" value="item.catId">{{item.catName}}</option> -->
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ยี่ห้อ :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productBrand" 
+                    bindValue="brandId"
+                    bindLabel="brandName" 
+                    placeholder="" 
+                    [(ngModel)]="model.brandId"
+                    name="brandId"
+                    (ngModelChange)="onChangeBrand()">
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ยี่ห้อ :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="brandId" #brandId class="form-control" appSelectizeProductBrand>
-                  <option value="" selected disabled></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                รุ่น :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productModel" 
+                    bindValue="modelId"
+                    bindLabel="modelCode" 
+                    placeholder="" 
+                    [(ngModel)]="model.modelId"
+                    name="modelId"
+                    (ngModelChange)="onChangeModel()">                    
+                    <ng-template ng-option-tmp let-item="item">
+                       <strong>รหัส: {{item.modelCode}}</strong> <br />
+                        <small>ชื่อรุ่น: {{item.modelName}}</small> <br />
+                        <small>ประเภท: {{item.modelType}}</small>
+                    </ng-template>
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">รุ่น :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="modelId" #modelId class="form-control" appSelectizeProductModel>
-                  <option value="" selected disabled></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                สี :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productColor" 
+                    bindValue="colorId"
+                    bindLabel="colorName" 
+                    placeholder="" 
+                    [(ngModel)]="model.colorId"
+                    name="colorId"
+                    (ngModelChange)="onChangeColor()">
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">สี :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="colorId" #colorId class="form-control" appSelectizeProductColor>
-                  <option value="" selected disabled></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">เลขเครื่อง :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <ng-select 
+                    [items]="productBranch" 
+                    bindValue="engineNo"
+                    bindLabel="engineNo" 
+                    placeholder="" 
+                    [(ngModel)]="model.engineNo"
+                    name="engineNo"
+                    (ngModelChange)="onChangeEngine()">
+                </ng-select>
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">เลขเครื่อง :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <select name="" id="" class="form-control" appSelectize></select>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">เลขตัวถัง :</label>
+            <div class="form-group col-lg-6 col-sm-7">
+                <input type="text" [(ngModel)]="model.frameNo" name="frameNo" #frameNo class="form-control">
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">เลขตัวถัง :</label>
-          <div class="form-group col-lg-6 col-sm-7">
-              <input type="text" name="" id="" class="form-control">
-          </div>
-      </div>
+    </div>
 
-  </div>
+    <div class="col-sm-7">
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ราคาขาย :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.sellPrice" name="sellPrice" #sellPrice class="form-control" >
+            </div>
 
-  <div class="col-sm-7">
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ราคาขาย :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ราคาขายจริง :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.sellPrice2" name="sellPrice2" #sellPrice2 class="form-control" >
+            </div>
+        </div>
 
-          <label for="" class="control-label col-lg-3 col-sm-4">ราคาขายจริง :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ส่วนลด/บาท :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.discountPrice" name="discountPrice" #discountPrice class="form-control" >
+            </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/บาท :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-
-          <label for="" class="control-label col-lg-3 col-sm-4">ส่วนลด/% :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ส่วนลด/% :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.discountVat" name="discountVat" #discountVat class="form-control" >
+            </div>
+        </div>
 
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/บาท :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ภาษีมูลค่าเพิ่ม/บาท :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.sellVatPrice" name="sellVatPrice" #sellVatPrice class="form-control" >
+            </div>
 
-          <label for="" class="control-label col-lg-3 col-sm-4">ภาษีมูลค่าเพิ่ม/% :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ภาษีมูลค่าเพิ่ม/% :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.sellVat" name="sellVat" #sellVat class="form-control" >
+            </div>
+        </div>
 
-      <div class="row">
-          <label for="" class="control-label col-lg-3 col-sm-4">ราคารวม :</label>
-          <div class="form-group col-lg-3 col-sm-7">
-              <input type="text" name="" id="" class="form-control" appInputmask>
-          </div>
-      </div>
+        <div class="row">
+            <label for="" class="control-label col-lg-3 col-sm-4">
+                ราคารวม :
+                <span class="required">*</span>
+            </label>
+            <div class="form-group col-lg-3 col-sm-7">
+                <input type="number" min="0.00" [(ngModel)]="model.sellNet" name="sellNet" #sellNet class="form-control" >
+            </div>
+        </div>
 
-      <div class="hr-line-dashed"></div>
-
-      <div class="row">
-          <label class="control-label col-lg-2 col-md-12 col-sm-2"></label>
-          <div class="form-group col-lg-10 col-md-12 col-sm-10">
-              <label class="checkbox-inline">
-                  <input appIcheck type="checkbox" /> ฟรี พ.ร.บ. </label>
-              <label class="checkbox-inline">
-                  <input appIcheck type="checkbox" /> ฟรี ทะเบียน </label>
-              <label class="checkbox-inline">
-                  <input appIcheck type="checkbox" /> ฟรี ประกันภัย
-              </label>
-          </div>
-      </div>
-  </div>
-</form>
+        <div class="row">
+            <label class="control-label col-lg-3 col-sm-12"></label>
+            <div class="form-group col-lg-9 col-sm-12">
+                <div class="checkbox checkbox-info checkbox-inline">
+                    <input [(ngModel)]="model.freePrb" name="freePrb" id="freePrb" type="checkbox" />
+                    <label for="freePrb"> ฟรี พ.ร.บ. </label>
+                </div>
+                <div class="checkbox checkbox-info checkbox-inline">
+                    <input [(ngModel)]="model.freeRegister" name="freeRegister" id="freeRegister" type="checkbox" />
+                    <label for="freeRegister"> ฟรี ทะเบียน </label>
+                </div>
+                <div class="checkbox checkbox-info checkbox-inline">
+                    <input [(ngModel)]="model.freeInsure" name="freeInsure" id="freeInsure" type="checkbox" />
+                    <label for="freeInsure"> ฟรี ประกันภัย </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form> -->

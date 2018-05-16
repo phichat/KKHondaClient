@@ -1,29 +1,29 @@
-<div class="row m-t-xs text-right">
-  <div class="col-xs-6">
-    <h5 class="m-b-xs">เลขที่ใบจอง</h5>
-    <h2 class="no-margins">{{modelBooking.bookingCode}}</h2>
+<!-- <div class="row m-t-xs text-right">
+  <div class="col-xs-6 pull-right">
+    <h5 #thenBlock class="m-b-xs">{{bookingCodeLabel}}</h5>
+    <h2 class="no-margins" style="font-weight: normal">{{modelSummary.bookingCode}}</h2>
   </div>
   <div class="col-xs-6">
     <h5 class="m-b-xs">สถานะ</h5>
-    <h2 class="no-margins">{{modelBooking.bookingStatus}}</h2>
+    <h2 class="no-margins" style="font-weight: normal">{{modelSummary.status}}</h2>
   </div>
 </div>
 <hr class="m-t-sm m-b-sm" style="border-top:1px solid #e7eaec;">
 <div class="row m-t-xs text-right">
   <div class="col-xs-6">
     <h5 class="m-b-xs">จำนวนรถ</h5>
-    <h2 class="no-margins">{{modelBooking.mbAmnt}}</h2>
+    <h2 class="no-margins">{{modelSummary.totalMotobike}}</h2>
   </div>
   <div class="col-xs-6">
     <h5 class="m-b-xs">จำนวนของแถมและอุปกรณ์เสริม</h5>
-    <h2 class="no-margins">{{modelBooking.itemAmnt}}</h2>
+    <h2 class="no-margins">{{modelSummary.totalAccessory}}</h2>
   </div>
 </div>
 
 <ul class="list-group clear-list m-t">
   <li class="list-group-item">
     <span class="pull-right">
-      {{modelBooking.totalSell | number:'1.2-2'}} บาท
+      {{modelSummary.totalSell | number:'1.2-2'}} บาท
     </span>
     <span class="label label-primary">
       <i class="fa fa-arrow-right"></i>
@@ -32,7 +32,7 @@
   </li>
   <li class="list-group-item">
     <span class="pull-right">
-      {{modelBooking.totalDiscount | number:'1.2-2'}} บาท
+      {{modelSummary.totalDiscount | number:'1.2-2'}} บาท
     </span>
     <span class="label label-primary">
       <i class="fa fa-arrow-right"></i>
@@ -41,7 +41,7 @@
   </li>
   <li class="list-group-item">
     <span class="pull-right">
-      {{modelBooking.totalVat | number:'1.2-2'}} บาท
+      {{modelSummary.totalVatPrice | number:'1.2-2'}} บาท
     </span>
     <span class="label label-primary">
       <i class="fa fa-arrow-right"></i>
@@ -50,7 +50,7 @@
   </li>
   <li class="list-group-item">
     <span class="pull-right">
-      {{modelBooking.totalSellNet | number:'1.2-2'}} บาท
+      {{modelSummary.totalSellNet | number:'1.2-2'}} บาท
     </span>
     <span class="label label-primary">
       <i class="fa fa-arrow-right"></i>
@@ -59,9 +59,9 @@
   </li>
 </ul>
 
-<!-- <div class="row m-t-xs" *ngIf="isSubmit"> -->
+<div class="row m-t-xs" *ngIf="isSubmit">
   <div class="col-xs-12 text-center">
     <button class="btn btn-w-m btn-outline btn-info">พิมพ์ใบจอง</button>
     <button class="btn btn-w-m btn-outline btn-info">พิมพ์ใบเสนอราคา</button>
   </div>
-<!-- </div> -->
+</div> -->

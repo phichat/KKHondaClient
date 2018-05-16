@@ -1,5 +1,21 @@
 /* Import main Inspinia style */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~datatables.net-bs/css/dataTables.bootstrap.css";
+
 @import "assets/styles/style";
 
 // ICheck
 // @import "../node_modules/icheck/skins/square/green";
+span.required {
+    color:red !important;
+}
+.form-control.ng-invalid.ng-touched:not(:focus) {
+   border-color: red !important;
+}
+
+// .ng-invalid.ng-touched:not(.ng-select-focused) {
+//    .ng-select .ng-select-container {
+//       border-color: red !important;
+//    }
+// }
+  
