@@ -1,0 +1,79 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+   <div class="col-lg-10">
+      <h2>คำนวณค่างวด</h2>
+      <ol class="breadcrumb">
+         <li>
+            <a href="/">หน้าแรก</a>
+         </li>
+         <li>
+            <a>สินเชื่อ</a>
+         </li>
+         <li class="active">
+            <strong>คำนวณค่างวด</strong>
+         </li>
+      </ol>
+   </div>
+   <div class="col-lg-2 text-right pull-right">
+
+   </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+   <div class="ibox float-e-margins">
+      <div class="ibox-content">
+         <table class="table table-hover" style="width: 2800px" cellspacing="0">
+            <thead>
+               <tr>
+                  <th></th>
+                  <th>เลขที่ใบจอง</th>
+                  <th>สถานะ</th>
+                  <th>ประเภทการซื้อ</th>
+                  <th>ประเภทการชำระมัดจำ</th>
+                  <th>วันที่จอง</th>
+                  <th>กำหนดรับสินค้า</th>
+                  <th>ผู้จอง</th>
+                  <th>บัตรประชาชน</th>
+                  <th>เบอร์ติดต่อ</th>
+                  <th>อีเมล์</th>
+                  <th>ที่อยู่</th>
+                  <th>โมเดล</th>
+                  <th>รายละเอียดโมเดล</th>
+                  <th>สี</th>
+                  <th>มูลค่าสินค้า</th>
+                  <th>จำนวนเงินมัดจำ</th>
+                  <th>ยอดคงค้าง</th>
+                  <th>วันที่ทำรายการ</th>
+                  <th>ผู้ที่ทำรายการ</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let book of BookingList">
+                  <td>
+                     <a (click)="nextClculate(book.bookingId)"
+                        class="btn btn-info btn-sm">คำนวณค่างวด</a>                    
+                  </td>
+                  <td>{{book.bookingNo}}</td>
+                  <td class="text-warning">{{book.status}}</td>
+                  <td class="text-info">{{book.paymentType}}</td>
+                  <td class="text-info">{{book.depositType}}</td>
+                  <td>{{book.bookingDate}}</td>
+                  <td>{{book.receiveDate}}</td>
+                  <td>{{book.custFullName}}</td>
+                  <td>{{book.idCard}}</td>
+                  <td>{{book.contractNo}}</td>
+                  <td>{{book.email}}</td>
+                  <td>{{book.address}}</td>
+                  <td>{{book.modelCode}}</td>
+                  <td>{{book.modelName}}</td>
+                  <td>{{book.colorName}}</td>
+                  <td>{{book.netPrice | number:'1.2-2'}}</td>
+                  <td>{{book.deposit | number:'1.2-2'}}</td>
+                  <td>{{book.outStandingPrice | number:'1.2-2'}}</td>
+                  <td>{{book.createDate | date:'dd-MM-yyyy'}}</td>
+                  <td>{{book.createBy}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
