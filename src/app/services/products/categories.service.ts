@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from '../../app.config';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ProductCategory } from '../../models/products';
+import { ProductCategory } from '../../models';
 
 @Injectable()
 export class CategoriesService {
