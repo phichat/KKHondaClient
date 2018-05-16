@@ -14,6 +14,7 @@ import {
   ContractStatusComponent,
   CalculateListComponent
 } from './views/appviews/credit';
+import { ContractListComponent } from './views/appviews/credit/contract-list/contract-list.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -31,6 +32,7 @@ export const ROUTES: Routes = [
     path: 'credit', component: BasicLayoutComponent,
     children: [
       { path: 'contract', component: ContractComponent },
+      { path: 'contract-list', component: ContractListComponent },
       { path: 'calculate', component: CalculateComponent },
       { path: 'calculate-list', component: CalculateListComponent },
       { path: 'contract-field', component: ContractFieldComponent },

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SellActivityModel } from 'app/models/sell-activity';
 import { CalculateInterface } from 'app/interfaces/credit';
@@ -43,7 +43,8 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       private _sellActivityService: SellActivityService,
       private _bookingService: BookingService,
       private _userService: UserService,
-      private _builder: FormBuilder
+      private _builder: FormBuilder,
+      private router: Router
    ) {
       toastr.options = {
          'closeButton': true,
@@ -165,7 +166,8 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
 
    onSubmit() {
       if (this.Form.valid) {
-         toastr.success('success');
+         //    toastr.success('success');
+         this.router.navigate(['credit/contract'])
       } else {
          toastr.error('กรุณาระบุข้อมูลให้ครบถ่วน!');
       }
