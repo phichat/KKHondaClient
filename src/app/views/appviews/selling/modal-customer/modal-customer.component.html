@@ -1,0 +1,87 @@
+<!-- <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <i class="fa fa-address-book modal-icon"></i>
+            <h6 class="modal-title">ค้นหาข้อมูลลูกค้า</h6>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">ค้นหา :</label>
+                            <div class="form-group col-lg-9">
+                                <ng-select [items]="personal"
+                                        [(ngModel)]="selectedPersonCode"
+                                        name="searchPersonal"
+                                        placeholder="ค้นหา ชื่อ-นามสกุล, รหัสบัตร ปชช., รหัสลูกค้า"
+                                        bindLabel="custFullName"
+                                        bindValue="custCode"
+                                        [typeahead]="personalTypeahead"
+                                        (ngModelChange)="onChangePersonal()">
+                                        <ng-template ng-option-tmp let-item="item">
+                                           <strong>{{item.custFullName}}</strong>  
+                                            <br />
+                                            <small>รหัส: {{item.custCode}} | รหัสบัตร ปชช.: {{item.idCard}}</small>
+                                        </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">รหัสบัตร ปชช. :</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" [(ngModel)]="model.idCard" name="idCard" #idCard="ngModel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">รหัสบัตรลูกค้า :</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" [(ngModel)]="model.custCode" name="custCode" #idCard="ngModel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">ชื่อลูกค้า :</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" [(ngModel)]="model.custFullName" name="custFullName" #custCode="ngModel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">เบอร์โทร :</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" [(ngModel)]="model.custTel" name="custTel" #tel="ngModel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">อีเมล์ :</label>
+                            <div class="form-group col-md-9">
+                                <input type="text" [(ngModel)]="model.custEmail" name="custEmail" #email="ngModel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="" class="control-label col-lg-3">ที่อยู่ปัจจุบัน :</label>
+                            <div class="form-group col-md-9">
+                                <textarea [(ngModel)]="model.custAddress" name="custAddress" #address="ngModel" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-w-m btn-outline btn-info" style="margin-bottom: unset;">
+                        <i class="fa fa-user-plus"></i>&nbsp;เพิ่มข้อมูล
+                    </button>
+                    <button type="button" class="btn btn-w-m  btn-primary" (click)="onSubmit()" data-dismiss="modal">
+                        <i class="fa fa-check"></i>&nbsp;ยืนยัน</button>
+                    <button type="button" class="btn btn-w-m btn-danger" data-dismiss="modal">
+                        <i class="fa fa-remove"></i>&nbsp;ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
