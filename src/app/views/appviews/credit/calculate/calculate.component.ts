@@ -10,6 +10,7 @@ import { SellActivityService } from '../../../../services/sell-activity';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
+import { CalculateService } from '../../../../services/credit';
 
 declare var toastr: any;
 declare var jQuery: any;
@@ -17,7 +18,10 @@ declare var jQuery: any;
 @Component({
    selector: 'app-calculate',
    templateUrl: './calculate.component.html',
-   styleUrls: ['./calculate.component.scss']
+   styleUrls: ['./calculate.component.scss'],
+   providers: [
+      CalculateService
+   ]
 })
 export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
 
@@ -42,6 +46,7 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       private _activatedRoute: ActivatedRoute,
       private _sellActivityService: SellActivityService,
       private _bookingService: BookingService,
+      private _calcService: CalculateService,
       private _userService: UserService,
       private _builder: FormBuilder,
       private router: Router
@@ -100,6 +105,11 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       this.model.nowVat = 7;
       this.model.remain = 0;
       this.model.sellTypeId = 4;
+
+      this.model.bookingId = 1;
+      this.model.netPrice = 49000;
+      this.modelBooking.outStandingPrice = 49000;
+
 
       this.onChangeSellActivity();
    }
@@ -167,7 +177,15 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
    onSubmit() {
       if (this.Form.valid) {
          //    toastr.success('success');
-         this.router.navigate(['credit/contract'])
+         this.router.navigate(['credit/contract']);
+         // this._calcService.Add(this.model).subscribe(
+         //    res => {
+         //       this.router.navigate(['credit/contract']);
+         //    },
+         //    (err: HttpErrorResponse) => {
+         //       toastr.error(err.statusText);
+         //    }
+         // );
       } else {
          toastr.error('กรุณาระบุข้อมูลให้ครบถ่วน!');
       }
