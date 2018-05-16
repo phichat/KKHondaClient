@@ -1,14 +1,18 @@
-import { Directive, ElementRef, AfterViewInit } from '@angular/core';
+import { Directive, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 declare var jQuery: any;
 
 @Directive({
   selector: '[appFootable]'
 })
-export class FootableDirective implements AfterViewInit {
+export class FootableDirective implements OnInit {
 
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef) {
 
-  ngAfterViewInit() {
-    jQuery(this.el.nativeElement).footable();
+  }
+
+  ngOnInit() {
+    jQuery(this.el.nativeElement).footable({
+      'expandFirst': true
+    });
   }
 }
