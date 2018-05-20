@@ -7,11 +7,13 @@ import { BookingModel, BookingListModel } from '../../models/selling';
 export class BookingService {
 
   private api = `${appConfig.apiUrl}/Selling/Booking`;
+  private book: BookingListModel;
+  private booklist: Array<BookingListModel>;
 
   constructor(private http: HttpClient) { }
 
   get() {
-    return this.http.get<BookingListModel[]>(this.api);
+   return this.http.get<BookingListModel[]>(this.api);
   }
 
   getById(bookingId: string) {

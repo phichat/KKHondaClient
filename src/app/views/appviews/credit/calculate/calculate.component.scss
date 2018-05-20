@@ -1,0 +1,22 @@
+.none-ibox {
+    margin-bottom: unset;
+    .ibox-title {
+        border-style: unset;
+        min-height: unset;
+        padding-left: 0px;
+        padding-right:  0px; 
+        background-color: transparent;        
+    }
+
+    .ibox-tools a{
+        color: teal !important;
+    }
+
+    .ibox-content {
+        border-style: dashed dashed none;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        border-color: #ddd;
+        background-color: transparent; 
+    }
+}

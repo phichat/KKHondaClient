@@ -21,6 +21,9 @@ import { ContractListComponent } from './contract-list/contract-list.component';
 import { ContractFieldListComponent } from './contract-field-list/contract-field-list.component';
 import { ContractStatusListComponent } from './contract-status-list/contract-status-list.component';
 import { KeeperListComponent } from './keeper-list/keeper-list.component';
+import { IboxtoolsComponent } from '../../../components/common/iboxtools/iboxtools.component';
+import { IboxtoolsModule } from '../../../components/common/iboxtools/iboxtools.module';
+import { ContractItemComponent } from './contract-item/contract-item.component';
 
 @NgModule({
   imports: [
@@ -30,9 +33,9 @@ import { KeeperListComponent } from './keeper-list/keeper-list.component';
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
+    IboxtoolsModule
   ],
   declarations: [
-    FootableDirective,
     CreditComponent,
     CalculateComponent,
     ContractComponent,
@@ -43,7 +46,8 @@ import { KeeperListComponent } from './keeper-list/keeper-list.component';
     ContractListComponent,
     ContractFieldListComponent,
     ContractStatusListComponent,
-    KeeperListComponent
+    KeeperListComponent,
+    ContractItemComponent
   ],
   providers: [
     SellActivityService,

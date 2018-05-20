@@ -9,38 +9,38 @@ import 'datatables.net-bs';
 import { Router } from '@angular/router';
 
 @Component({
-   selector: 'app-calculate-list',
-   templateUrl: './calculate-list.component.html',
-   styleUrls: ['./calculate-list.component.scss']
+    selector: 'app-calculate-list',
+    templateUrl: './calculate-list.component.html',
+    styleUrls: ['./calculate-list.component.scss']
 })
 
 export class CalculateListComponent implements BookingListInterface, OnInit {
 
-   BookingList: BookingListModel[];
+    BookingList = new Array<BookingListModel>();
+    book = new BookingListModel;
+    // Our future instance of DataTable
+    dataTable: any;
 
-   // Our future instance of DataTable
-   dataTable: any;
+    constructor(
+        private bookService: BookingService,
+        private chRef: ChangeDetectorRef,
+        private router: Router
+    ) { };
 
-   constructor(
-      private bookService: BookingService,
-      private chRef: ChangeDetectorRef,
-      private router: Router
-   ) { };
+    ngOnInit(): void {
+        this.bookService.get().subscribe(p => {
+            this.BookingList = p;
 
-   ngOnInit(): void {
-      this.bookService.get().subscribe(p => {
-         this.BookingList = p;
+            this.chRef.detectChanges();
 
-         this.chRef.detectChanges();
+            const table: any = $('table');
+            this.dataTable = table.DataTable({
+                'scrollX': true
+            });
+        })
+    }
 
-         const table: any = $('table');
-         this.dataTable = table.DataTable({
-            'scrollX': true
-         });
-      })
-   }
-
-   nextClculate(bookId: number) {
-      this.router.navigate(['credit/calculate'], { queryParams: { bookingId: bookId } })
-   }
+    nextClculate(bookId: number) {
+        this.router.navigate(['credit/calculate'], { queryParams: { bookingId: bookId } })
+    }
 }

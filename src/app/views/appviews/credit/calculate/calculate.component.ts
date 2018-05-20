@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -14,6 +14,7 @@ import { CalculateService } from '../../../../services/credit';
 
 declare var toastr: any;
 declare var jQuery: any;
+declare var footable: any;
 
 @Component({
    selector: 'app-calculate',
@@ -23,12 +24,14 @@ declare var jQuery: any;
       CalculateService
    ]
 })
-export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
+export class CalculateComponent implements CalculateInterface, OnInit {
 
    model = new CalculateModel();
    modelBooking = new BookingModel();
    modelAccessory = new Array<BookingItemModel>();
    modelMotobike = new BookingItemModel();
+
+   @Output() outputCalModel: EventEmitter<CalculateModel> = new EventEmitter<CalculateModel>();
 
    path: string;
    modelSellActivity = new Array<SellActivityModel>();
@@ -42,6 +45,14 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       { value: 9, text: '9 เดือน' }
    ];
 
+   dueDate = [
+      { value: 5, text: '5 ของเดือน' },
+      { value: 10, text: '10 ของเดือน' },
+      { value: 15, text: '15 ของเดือน' },
+      { value: 20, text: '20 ของเดือน' },
+      { value: 25, text: '25 ของเดือน' },
+   ]
+
    constructor(
       private _activatedRoute: ActivatedRoute,
       private _sellActivityService: SellActivityService,
@@ -49,7 +60,8 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       private _calcService: CalculateService,
       private _userService: UserService,
       private _builder: FormBuilder,
-      private router: Router
+      private router: Router,
+      private chRef: ChangeDetectorRef,
    ) {
       toastr.options = {
          'closeButton': true,
@@ -97,27 +109,16 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       this.model.promotionalPrice = 0;
       this.model.deposit = 0;
       this.model.depositPrice = 0;
-      this.model.dueDate = (new Date).getDate();
+      this.model.instalmentEnd = 3;
+      this.model.dueDate = 5;
       this.model.firstPayment = moment().format('YYYY-MM-DD');
-      this.model.instalmentEnd = null;
       this.model.instalmentPrice = 0;
       this.model.interest = 0;
       this.model.nowVat = 7;
       this.model.remain = 0;
       this.model.sellTypeId = 4;
 
-      this.model.bookingId = 1;
-      this.model.netPrice = 49000;
-      this.modelBooking.outStandingPrice = 49000;
-
-
       this.onChangeSellActivity();
-   }
-
-   ngDoCheck() {
-      if (jQuery('table.footable tbody tr').length > 0 && jQuery('table.footable-loaded').length === 0) {
-         jQuery('table').footable();
-      }
    }
 
    onLoadBooking(bookingId: number) {
@@ -131,6 +132,11 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
                   .filter(i => i.catId === 2 || i.catId === 4 || i.catId === 7)
                   .map(i => this.modelMotobike = i);
             });
+
+            this.chRef.detectChanges();
+
+            const accessory = jQuery('table.footable');
+            accessory.footable();
          });
 
    }
@@ -146,7 +152,6 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
                this.model.sellAcitvityId = null;
             }
          });
-
    }
 
    onChangeDeposit() {
@@ -172,6 +177,8 @@ export class CalculateComponent implements CalculateInterface, OnInit, DoCheck {
       // ค่างวด
       // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
       this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
+
+      this.instalment.emit(this.model)
    }
 
    onSubmit() {
