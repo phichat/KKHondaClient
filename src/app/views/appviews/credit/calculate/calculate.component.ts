@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -10,10 +10,12 @@ import { SellActivityService } from '../../../../services/sell-activity';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
-import { CalculateService } from '../../../../services/credit';
+import { CalculateService, ContractItemService } from '../../../../services/credit';
+import { ContractItemComponent } from '../contract-item/contract-item.component';
 
+// import * as $ from 'jquery';
+declare var $: any;
 declare var toastr: any;
-declare var jQuery: any;
 declare var footable: any;
 
 @Component({
@@ -21,17 +23,18 @@ declare var footable: any;
    templateUrl: './calculate.component.html',
    styleUrls: ['./calculate.component.scss'],
    providers: [
-      CalculateService
+      CalculateService,
+      ContractItemService
    ]
 })
 export class CalculateComponent implements CalculateInterface, OnInit {
+
+   @ViewChild(ContractItemComponent) contractItem;
 
    model = new CalculateModel();
    modelBooking = new BookingModel();
    modelAccessory = new Array<BookingItemModel>();
    modelMotobike = new BookingItemModel();
-
-   @Output() outputCalModel: EventEmitter<CalculateModel> = new EventEmitter<CalculateModel>();
 
    path: string;
    modelSellActivity = new Array<SellActivityModel>();
@@ -76,8 +79,6 @@ export class CalculateComponent implements CalculateInterface, OnInit {
       creditId: [null],
       bookingId: [null, Validators.required],
       netPrice: [null, Validators.required],
-      sellTypeId: [null, Validators.required],
-      sellAcitvityId: [null, Validators.required],
       deposit: [null, Validators.required],
       depositPrice: [null, Validators.required],
       instalmentEnd: [null, Validators.required],
@@ -113,12 +114,13 @@ export class CalculateComponent implements CalculateInterface, OnInit {
       this.model.dueDate = 5;
       this.model.firstPayment = moment().format('YYYY-MM-DD');
       this.model.instalmentPrice = 0;
-      this.model.interest = 0;
+      this.model.interest = 2;
       this.model.nowVat = 7;
       this.model.remain = 0;
       this.model.sellTypeId = 4;
+      this.model.sellAcitvityId = 25;
 
-      this.onChangeSellActivity();
+      // this.onChangeSellActivity();
    }
 
    onLoadBooking(bookingId: number) {
@@ -135,24 +137,26 @@ export class CalculateComponent implements CalculateInterface, OnInit {
 
             this.chRef.detectChanges();
 
-            const accessory = jQuery('table.footable');
+            this.instalmentCalculate();
+
+            const accessory = $('table#accessory');
             accessory.footable();
          });
 
    }
 
-   onChangeSellActivity() {
-      this._sellActivityService
-         .filterByKey(this.model.sellTypeId.toString())
-         .subscribe(p => {
-            this.modelSellActivity = p;
-            if (this.model.sellTypeId === 4) {
-               this.model.sellAcitvityId = 25;
-            } else {
-               this.model.sellAcitvityId = null;
-            }
-         });
-   }
+   // onChangeSellActivity() {
+   //    this._sellActivityService
+   //       .filterByKey(this.model.sellTypeId.toString())
+   //       .subscribe(p => {
+   //          this.modelSellActivity = p;
+   //          if (this.model.sellTypeId === 4) {
+   //             this.model.sellAcitvityId = 25;
+   //          } else {
+   //             this.model.sellAcitvityId = null;
+   //          }
+   //       });
+   // }
 
    onChangeDeposit() {
       // เงินดาวน์ (บาท)
@@ -178,13 +182,26 @@ export class CalculateComponent implements CalculateInterface, OnInit {
       // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
       this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
 
-      this.instalment.emit(this.model)
+      this._calcService.changeMessage(this.model);
+
    }
 
    onSubmit() {
       if (this.Form.valid) {
+         this._calcService
+            .Add(this.model, this.contractItem.contractItemModel)
+            .subscribe(
+               res => {
+                  this.router.navigate(['credit/contract']);
+               },
+               (err: HttpErrorResponse) => {
+                  toastr.error(err.statusText);
+               }
+            )
          //    toastr.success('success');
-         this.router.navigate(['credit/contract']);
+         // console.log(JSON.stringify(this.model));
+         // console.log(JSON.stringify(this.contractItem.contractItemModel));
+         // this.router.navigate(['credit/contract']);
          // this._calcService.Add(this.model).subscribe(
          //    res => {
          //       this.router.navigate(['credit/contract']);

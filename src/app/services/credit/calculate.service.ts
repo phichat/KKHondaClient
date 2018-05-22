@@ -1,16 +1,33 @@
 import { Injectable } from '@angular/core';
-import { CalculateModel } from '../../models/credit';
+import { CalculateModel, ContractItemModel } from '../../models/credit';
 import { appConfig } from '../../app.config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class CalculateService {
+    private model = new CalculateModel();
+    private dataSource = new BehaviorSubject<CalculateModel>(this.model);
+    private url = `${appConfig.apiUrl}/Credit`;
+    private httpOptions = {
+        headers: new HttpHeaders(
+            {
+                'Content-Type': 'application/json'
+            })
+    };
 
-   constructor(private http: HttpClient) { }
+    currentData = this.dataSource.asObservable();
 
-   Add(calculate: CalculateModel) {
-      const apiURL = `${appConfig.apiUrl}/CreditCalculates`;
-      return this.http.post(apiURL, calculate);
-   }
+    constructor(private http: HttpClient) { }
+
+    changeMessage(data: CalculateModel) {
+        this.dataSource.next(data)
+    }
+
+    Add(calculate: CalculateModel, creditContactItem: ContractItemModel) {
+        const apiURL = `${this.url}/Calculates`;
+        const params = { credits: { calculate, creditContactItem }};
+        return this.http.post<any>(apiURL, params);
+    }
 
 }
