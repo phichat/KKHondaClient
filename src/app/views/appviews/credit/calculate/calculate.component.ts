@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SellActivityModel } from 'app/models/sell-activity';
 import { CalculateInterface } from 'app/interfaces/credit';
-import { CalculateModel } from 'app/models/credit';
+import { CalculateModel, ContractItemModel } from 'app/models/credit';
 import { BookingModel, BookingItemModel } from 'app/models/selling';
 import { SellActivityService } from '../../../../services/sell-activity';
 import { BookingService } from '../../../../services/selling';
@@ -12,6 +12,10 @@ import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
 import { CalculateService, ContractItemService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
+import { ExDetailCustomerComponent } from '../ex-detail-customer/ex-detail-customer.component';
+import { ExDetailMotobikeComponent } from '../ex-detail-motobike/ex-detail-motobike.component';
+import { ExDetailAccessoryComponent } from '../ex-detail-accessory/ex-detail-accessory.component';
+
 
 // import * as $ from 'jquery';
 declare var $: any;
@@ -30,6 +34,12 @@ declare var footable: any;
 export class CalculateComponent implements CalculateInterface, OnInit {
 
     @ViewChild(ContractItemComponent) contractItem;
+<<<<<<< HEAD
+=======
+    // @ViewChild(ExDetailCustomerComponent) exCustomer;
+    // @ViewChild(ExDetailMotobikeComponent) exMotobike;
+    // @ViewChild(ExDetailAccessoryComponent) exAccessory;
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 
     model = new CalculateModel();
     modelBooking = new BookingModel();
@@ -119,13 +129,17 @@ export class CalculateComponent implements CalculateInterface, OnInit {
         this.model.remain = 0;
         this.model.sellTypeId = 4;
         this.model.sellAcitvityId = 25;
+<<<<<<< HEAD
 
         // this.onChangeSellActivity();
+=======
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
     }
 
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
+<<<<<<< HEAD
                 p.map(pp => {
                     this.modelBooking = pp
                     this.model.netPrice = pp.outStandingPrice;
@@ -157,6 +171,35 @@ export class CalculateComponent implements CalculateInterface, OnInit {
     //          }
     //       });
     // }
+=======
+                this.model.netPrice = p.outStandingPrice;
+                this._bookingService.changeData(p);
+                
+                // this.modelBooking = pp                
+                // this.modelAccessory = pp.bookingItem.filter(i => i.catId !== 2 && i.catId !== 4 && i.catId !== 7);
+                // pp.bookingItem
+                //     .filter(i => i.catId === 2 || i.catId === 4 || i.catId === 7)
+                //     .map(i => this.modelMotobike = i);
+            });
+        // {
+        // this.modelBooking = pp
+        // this.model.netPrice = pp.outStandingPrice;
+        // this.modelAccessory = pp.bookingItem.filter(i => i.catId !== 2 && i.catId !== 4 && i.catId !== 7);
+        // pp.bookingItem
+        //     .filter(i => i.catId === 2 || i.catId === 4 || i.catId === 7)
+        //     .map(i => this.modelMotobike = i);
+        // });
+
+        //     this.chRef.detectChanges();
+
+        //     this.instalmentCalculate();
+
+        //     const accessory = $('table#accessory');
+        //     accessory.footable();
+        // });
+
+    }
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
@@ -182,23 +225,52 @@ export class CalculateComponent implements CalculateInterface, OnInit {
         // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
         this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
 
+<<<<<<< HEAD
         this._calcService.changeData(this.model);
+=======
+        this._calcService.changeMessage(this.model);
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 
     }
 
     onSubmit() {
         if (this.Form.valid) {
+<<<<<<< HEAD
+=======
+            console.log(JSON.stringify(this.model));
+            console.log(JSON.stringify(this.contractItem.contractItemModel));
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
             //    this._calcService
             //       .Add(this.model, this.contractItem.contractItemModel)
             //       .subscribe(
             //          res => {
             this.router.navigate(['credit/contract']);
+<<<<<<< HEAD
+=======
+            //          },
+            //          (err: HttpErrorResponse) => {
+            //             toastr.error(err.statusText);
+            //          }
+            //       )
+
+            //    toastr.success('success');
+            // console.log(JSON.stringify(this.model));
+            // console.log(JSON.stringify(this.contractItem.contractItemModel));
+            // this.router.navigate(['credit/contract']);
+            // this._calcService.Add(this.model).subscribe(
+            //    res => {
+            //       this.router.navigate(['credit/contract']);
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
             //    },
             //    (err: HttpErrorResponse) => {
             //       toastr.error(err.statusText);
             //    }
+<<<<<<< HEAD
             // )
 
+=======
+            // );
+>>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
         } else {
             toastr.error('กรุณาระบุข้อมูลให้ครบถ่วน!');
         }
@@ -214,3 +286,5 @@ export class CalculateComponent implements CalculateInterface, OnInit {
     }
 
 }
+
+

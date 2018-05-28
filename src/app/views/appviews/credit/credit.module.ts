@@ -24,6 +24,9 @@ import { KeeperListComponent } from './keeper-list/keeper-list.component';
 import { IboxtoolsComponent } from '../../../components/common/iboxtools/iboxtools.component';
 import { IboxtoolsModule } from '../../../components/common/iboxtools/iboxtools.module';
 import { ContractItemComponent } from './contract-item/contract-item.component';
+import { ExDetailCustomerComponent } from './ex-detail-customer/ex-detail-customer.component';
+import { ExDetailMotobikeComponent } from './ex-detail-motobike/ex-detail-motobike.component';
+import { ExDetailAccessoryComponent } from './ex-detail-accessory/ex-detail-accessory.component';
 
 @NgModule({
   imports: [
@@ -47,7 +50,10 @@ import { ContractItemComponent } from './contract-item/contract-item.component';
     ContractFieldListComponent,
     ContractStatusListComponent,
     KeeperListComponent,
-    ContractItemComponent
+    ContractItemComponent,
+    ExDetailCustomerComponent, 
+    ExDetailMotobikeComponent, 
+    ExDetailAccessoryComponent
   ],
   providers: [
     SellActivityService,

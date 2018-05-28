@@ -27,46 +27,6 @@
                     <form autocomplete="off" class="form-horizontal" [formGroup]="Form">
                         <input type="hidden" name="bookingId" formControlName="bookingId" [(ngModel)]="model.bookingId">
 
-                        <!-- <div class="row">
-                            <label for="" class="col-md-4 control-label">
-                                ประเภทสินเชื่อ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8 form-group">
-                                <div *ngFor="let item of sellType; let i=index;" class="radio radio-info radio-inline">
-                                    <input type="radio" [id]="item.value" formControlName="sellTypeId" [(ngModel)]="model.sellTypeId" [value]="item.value" name="sellTypeId"
-                                        checked="" (change)="onChangeSellActivity()">
-                                    <label [for]="item.value">{{item.text}}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="" class="col-md-4 control-label">
-                                สถาบันการเงิน :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8 form-group m-b-sm">
-                                <ng-select [items]="modelSellActivity" groupBy="sellTypeName" formControlName="sellAcitvityId" [(ngModel)]="model.sellAcitvityId"
-                                    bindLabel="activityName" bindValue="activityId" name="sellActivity">
-                                    <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                        <strong>{{item.sellTypeName}}</strong>
-                                    </ng-template>
-                                </ng-select>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="model.sellTypeId == 3">
-                            <label for="" class="col-md-4 control-label">
-                                ค่าส่งเสริมการขาย :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="form-group col-md-4">
-                                <input type="number" min="0.00" formControlName="promotionalPrice" [(ngModel)]="model.promotionalPrice" name="promotionalPrice"
-                                    #promotionalPrice class=form-control>
-                            </div>
-                        </div>
-
-                        <div class="hr-line-dashed m-t-xs"></div> -->
-
                         <div class="row">
                             <label for="" class="col-md-4 control-label">
                                 ราคาสินค้า (รวม VAT) :
@@ -158,10 +118,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="form-group col-md-4">
-                                <input type="date" formControlName="firstPayment" 
-                                [(ngModel)]="model.firstPayment" name="firstPayment" 
-                                #firstpayment class="form-control"
-                                (change)="instalmentCalculate()">
+                                <input type="date" formControlName="firstPayment" [(ngModel)]="model.firstPayment" name="firstPayment" #firstpayment class="form-control"
+                                    (change)="instalmentCalculate()">
                             </div>
                         </div>
 
@@ -171,9 +129,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="form-group col-md-4">
-                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" formControlName="dueDate" 
-                                [(ngModel)]="model.dueDate" name="dueDate" #duedate
-                                (change)="instalmentCalculate()">
+                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" formControlName="dueDate" [(ngModel)]="model.dueDate" name="dueDate"
+                                    #duedate (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
                         </div>
@@ -184,10 +141,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="form-group col-md-4">
-                                <input type="number" min="0" formControlName="nowVat" [(ngModel)]="model.nowVat" 
-                                name="nowVat" #nowVat class="form-control"
-                                (keyup)="instalmentCalculate()"
-                                (change)="instalmentCalculate()">
+                                <input type="number" min="0" formControlName="nowVat" [(ngModel)]="model.nowVat" name="nowVat" #nowVat class="form-control"
+                                    (keyup)="instalmentCalculate()" (change)="instalmentCalculate()">
                             </div>
                         </div>
 
@@ -218,46 +173,10 @@
                     <iboxtools></iboxtools>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-sm-6 form-group">
-                            <strong>วันที่จอง :</strong>
-                            {{modelBooking.bookingDate | date:'dd-MM-yyyy'}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>วันที่รับรถ :</strong>
-                            {{modelBooking.receiveDate | date:'dd-MM-yyyy'}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>รหัสลูกค้า :</strong>
-                            {{modelBooking.custCode}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>บัตรประชาชน :</strong>
-                            {{modelBooking.idCard}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>ชื่อ-นามสกุล :</strong>
-                            {{modelBooking.custFullName}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>เพศ :</strong>
-                            {{modelBooking.genderName}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>เบอร์ติดต่อ :</strong>
-                            {{modelBooking.contractNo}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <strong>อีเมล์ :</strong>
-                            {{modelBooking.email}}
-                        </div>
-                        <div class="col-sm-12 form-group">
-                            <strong>ที่อยู่ :</strong>
-                            {{modelBooking.address}}
-                        </div>
-                    </div>
+                    <app-ex-detail-customer></app-ex-detail-customer>
                 </div>
             </div>
+
 
             <div class="ibox none-ibox float-e-margins">
                 <div class="ibox-title">
