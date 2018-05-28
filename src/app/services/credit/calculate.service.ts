@@ -27,7 +27,6 @@ export class CalculateService {
     Add(calculate: CalculateModel, creditContactItem: ContractItemModel) {
         const apiURL = `${this.url}/Calculates`;
         const params = { calculate };
-        console.log(JSON.stringify(params));
 
         return this.http.post(apiURL, {params} , this.httpOptions);
     }

@@ -5,7 +5,6 @@ import { UserService } from '../../../../services/users';
 
 declare var $: any;
 declare var footable: any;
-declare var FooTable: any;
 
 @Component({
     selector: 'app-contract-item',
@@ -14,7 +13,6 @@ declare var FooTable: any;
 })
 export class ContractItemComponent implements OnInit {
 
-    // @Input() inputCalModel: CalculateModel;
     contractItemModel: ContractItemModel[];
 
     constructor(
@@ -27,6 +25,10 @@ export class ContractItemComponent implements OnInit {
     ngOnInit() {
         this._calService.currentData.subscribe(p => {
 
+            if (!p) {
+                return false;
+            }
+
             this.contractItemModel = new Array<ContractItemModel>()
 
             const instalmentEnd = p.instalmentEnd;
@@ -38,45 +40,47 @@ export class ContractItemComponent implements OnInit {
 
             let j = 1;
             for (let i = 0; i < instalmentEnd; i++) {
-                
+
+                // tslint:disable-next-line:prefer-const
                 let d: Date = (new Date);
                 const month = (firstPay.getMonth() + 1) + j;
                 d.setMonth(month);
                 d.setDate(p.dueDate);
                 const dueDate: Date = d;
+                // tslint:disable-next-line:prefer-const
                 let item = new ContractItemModel();
-                
-                item.contractItemId= null;
-                item.contractId= null;
+
+                item.contractItemId = null;
+                item.contractId = null;
                 this._userService.currentData.subscribe(user => item.contractBranchId = user.branchId);
-                item.instalmentNo= j;
-                item.dueDate= dueDate;
-                item.vatRate= vat;
-                item.balance= itemPrice;
-                item.balanceVatPrice= itemVatPrice;
-                item.balanceNetPrice= itemNetPrice;
-                item.payPrice= null;
-                item.payVatPrice= null;
-                item.payNetPrice= null;
-                item.discountRate= null;
-                item.discountPrice= null;
-                item.fineSum= null;
-                item.distcountSum= null;
-                item.taxInvoiceBranchId= null;
-                item.taxInvoiceNo= null;
-                item.netInvoice= null;
-                item.status= 'ยังไม่ชำระ';
-                item.interestInstalment= 0.00; // ดอกเบี้ย
-                item.interestRemainAccount= null;
-                item.GoodsPriceRemain= null;
-                item.instalmentPrice= null;
-                item.remain= null;
-                item.remainVatPrice= null;
-                item.remainNetPrice= null;
-                item.delayDueDate= null;
-                item.createDate= null;
-                item.createBy= null;
-                item.updateDate= null;
+                item.instalmentNo = j;
+                item.dueDate = dueDate;
+                item.vatRate = vat;
+                item.balance = itemPrice;
+                item.balanceVatPrice = itemVatPrice;
+                item.balanceNetPrice = itemNetPrice;
+                item.payPrice = null;
+                item.payVatPrice = null;
+                item.payNetPrice = null;
+                item.discountRate = null;
+                item.discountPrice = null;
+                item.fineSum = null;
+                item.distcountSum = null;
+                item.taxInvoiceBranchId = null;
+                item.taxInvoiceNo = null;
+                item.netInvoice = null;
+                item.status = 'ยังไม่ชำระ';
+                item.interestInstalment = 0.00; // ดอกเบี้ย
+                item.interestRemainAccount = null;
+                item.GoodsPriceRemain = null;
+                item.instalmentPrice = null;
+                item.remain = null;
+                item.remainVatPrice = null;
+                item.remainNetPrice = null;
+                item.delayDueDate = null;
+                item.createDate = null;
+                item.createBy = null;
+                item.updateDate = null;
                 item.updateBy = null;
 
                 this.contractItemModel.push(item)

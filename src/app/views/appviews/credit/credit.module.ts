@@ -27,6 +27,7 @@ import { ContractItemComponent } from './contract-item/contract-item.component';
 import { ExDetailCustomerComponent } from './ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from './ex-detail-motobike/ex-detail-motobike.component';
 import { ExDetailAccessoryComponent } from './ex-detail-accessory/ex-detail-accessory.component';
+import { CalculateService, ContractItemService } from '../../../services/credit';
 
 @NgModule({
   imports: [
@@ -51,15 +52,17 @@ import { ExDetailAccessoryComponent } from './ex-detail-accessory/ex-detail-acce
     ContractStatusListComponent,
     KeeperListComponent,
     ContractItemComponent,
-    ExDetailCustomerComponent, 
-    ExDetailMotobikeComponent, 
+    ExDetailCustomerComponent,
+    ExDetailMotobikeComponent,
     ExDetailAccessoryComponent
   ],
   providers: [
     SellActivityService,
     BookingService,
     // CreditService,
-    UserService
+    UserService,
+    CalculateService,
+    ContractItemService
   ]
 })
 export class CreditModule { }

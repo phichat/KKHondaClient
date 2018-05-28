@@ -6,11 +6,10 @@ import { SellActivityModel } from 'app/models/sell-activity';
 import { CalculateInterface } from 'app/interfaces/credit';
 import { CalculateModel, ContractItemModel } from 'app/models/credit';
 import { BookingModel, BookingItemModel } from 'app/models/selling';
-import { SellActivityService } from '../../../../services/sell-activity';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
-import { CalculateService, ContractItemService } from '../../../../services/credit';
+import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import { ExDetailCustomerComponent } from '../ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from '../ex-detail-motobike/ex-detail-motobike.component';
@@ -20,34 +19,19 @@ import { ExDetailAccessoryComponent } from '../ex-detail-accessory/ex-detail-acc
 // import * as $ from 'jquery';
 declare var $: any;
 declare var toastr: any;
-declare var footable: any;
 
 @Component({
     selector: 'app-calculate',
     templateUrl: './calculate.component.html',
-    styleUrls: ['./calculate.component.scss'],
-    providers: [
-        CalculateService,
-        ContractItemService
-    ]
+    styleUrls: ['./calculate.component.scss']
 })
-export class CalculateComponent implements CalculateInterface, OnInit {
+export class CalculateComponent implements OnInit {
 
     @ViewChild(ContractItemComponent) contractItem;
-<<<<<<< HEAD
-=======
-    // @ViewChild(ExDetailCustomerComponent) exCustomer;
-    // @ViewChild(ExDetailMotobikeComponent) exMotobike;
-    // @ViewChild(ExDetailAccessoryComponent) exAccessory;
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 
     model = new CalculateModel();
-    modelBooking = new BookingModel();
-    modelAccessory = new Array<BookingItemModel>();
-    modelMotobike = new BookingItemModel();
+    bookingNo: string;
 
-    path: string;
-    modelSellActivity = new Array<SellActivityModel>();
     sellType = [
         { value: 3, text: 'ลิสซิ่ง' },
         { value: 4, text: 'เช่าซื้อ' }]
@@ -68,7 +52,6 @@ export class CalculateComponent implements CalculateInterface, OnInit {
 
     constructor(
         private _activatedRoute: ActivatedRoute,
-        private _sellActivityService: SellActivityService,
         private _bookingService: BookingService,
         private _calcService: CalculateService,
         private _userService: UserService,
@@ -82,24 +65,24 @@ export class CalculateComponent implements CalculateInterface, OnInit {
         }
     }
 
-    // tslint:disable-next-line:member-ordering
-    Item: CalculateModel;
-    // tslint:disable-next-line:member-ordering
-    Form: FormGroup = this._builder.group({
-        creditId: [null],
-        bookingId: [null, Validators.required],
-        netPrice: [null, Validators.required],
-        deposit: [null, Validators.required],
-        depositPrice: [null, Validators.required],
-        instalmentEnd: [null, Validators.required],
-        instalmentPrice: [null, Validators.required],
-        interest: [null, Validators.required],
-        remain: [null, Validators.required],
-        firstPayment: [null, Validators.required],
-        dueDate: [null, Validators.required],
-        promotionalPrice: [0, Validators.required],
-        nowVat: [null, Validators.minLength(0)]
-    });
+    // // tslint:disable-next-line:member-ordering
+    // Item: CalculateModel;
+    // // tslint:disable-next-line:member-ordering
+    // Form: FormGroup = this._builder.group({
+    //     creditId: [null],
+    //     bookingId: [null, Validators.required],
+    //     netPrice: [null, Validators.required],
+    //     deposit: [null, Validators.required],
+    //     depositPrice: [null, Validators.required],
+    //     instalmentEnd: [null, Validators.required],
+    //     instalmentPrice: [null, Validators.required],
+    //     interest: [null, Validators.required],
+    //     remain: [null, Validators.required],
+    //     firstPayment: [null, Validators.required],
+    //     dueDate: [null, Validators.required],
+    //     promotionalPrice: [0, Validators.required],
+    //     nowVat: [null, Validators.minLength(0)]
+    // });
 
     ngOnInit() {
         this._activatedRoute.queryParams.subscribe(p => {
@@ -117,6 +100,7 @@ export class CalculateComponent implements CalculateInterface, OnInit {
             const month = i * 12;
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
+
         this.model.promotionalPrice = 0;
         this.model.deposit = 0;
         this.model.depositPrice = 0;
@@ -129,151 +113,74 @@ export class CalculateComponent implements CalculateInterface, OnInit {
         this.model.remain = 0;
         this.model.sellTypeId = 4;
         this.model.sellAcitvityId = 25;
-<<<<<<< HEAD
 
-        // this.onChangeSellActivity();
-=======
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
     }
 
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
-<<<<<<< HEAD
-                p.map(pp => {
-                    this.modelBooking = pp
-                    this.model.netPrice = pp.outStandingPrice;
-                    this.modelAccessory = pp.bookingItem.filter(i => i.catId !== 2 && i.catId !== 4 && i.catId !== 7);
-                    pp.bookingItem
-                        .filter(i => i.catId === 2 || i.catId === 4 || i.catId === 7)
-                        .map(i => this.modelMotobike = i);
-                });
-
-                this.chRef.detectChanges();
-
-                this.instalmentCalculate();
-
-                const accessory = $('table#accessory');
-                accessory.footable();
-            });
-
-    }
-
-    // onChangeSellActivity() {
-    //    this._sellActivityService
-    //       .filterByKey(this.model.sellTypeId.toString())
-    //       .subscribe(p => {
-    //          this.modelSellActivity = p;
-    //          if (this.model.sellTypeId === 4) {
-    //             this.model.sellAcitvityId = 25;
-    //          } else {
-    //             this.model.sellAcitvityId = null;
-    //          }
-    //       });
-    // }
-=======
+                this.bookingNo = p.bookingNo;
                 this.model.netPrice = p.outStandingPrice;
+                this.instalmentCalculate();
                 this._bookingService.changeData(p);
-                
-                // this.modelBooking = pp                
-                // this.modelAccessory = pp.bookingItem.filter(i => i.catId !== 2 && i.catId !== 4 && i.catId !== 7);
-                // pp.bookingItem
-                //     .filter(i => i.catId === 2 || i.catId === 4 || i.catId === 7)
-                //     .map(i => this.modelMotobike = i);
             });
-        // {
-        // this.modelBooking = pp
-        // this.model.netPrice = pp.outStandingPrice;
-        // this.modelAccessory = pp.bookingItem.filter(i => i.catId !== 2 && i.catId !== 4 && i.catId !== 7);
-        // pp.bookingItem
-        //     .filter(i => i.catId === 2 || i.catId === 4 || i.catId === 7)
-        //     .map(i => this.modelMotobike = i);
-        // });
-
-        //     this.chRef.detectChanges();
-
-        //     this.instalmentCalculate();
-
-        //     const accessory = $('table#accessory');
-        //     accessory.footable();
-        // });
-
     }
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
-        this.model.depositPrice = this.modelBooking.outStandingPrice * (this.model.deposit / 100);
+        this.model.depositPrice = this.model.netPrice * (this.model.deposit / 100);
+        console.log(this.model.depositPrice);
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        this.model.deposit = (this.model.depositPrice * 100) / this.modelBooking.outStandingPrice;
+        this.model.deposit = (this.model.depositPrice * 100) / this.model.netPrice;
+        console.log(this.model.deposit);
     }
 
     instalmentCalculate() {
-        if (!this.modelBooking) {
-            return false;
-        }
-        // คงเหลือ/ยอดจัด
-        // มูลค่าสินค้า - เงินดาวน์(บาท)
-        this.model.remain = this.modelBooking.outStandingPrice - this.model.depositPrice;
+        // ยอดจัด = ราคารถ-เงินดาวน์
+        // ดอกเบี้ย = (ยอดจัด*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
+        this.model.remain = this.model.netPrice - this.model.depositPrice;
 
-        // ค่างวด
-        // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
-        this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
+        // ผ่อนชำระต่องวด = (((ราคารถ-เงินดาวน์)+(((ราคารถ-เงินดาวน์)*(อัตราดอกเบี้ย/100))*(จำนวนเดือนผ่อนชำระ/12)))/จำนวนเดือนผ่อนชำระ)
+        this.model.instalmentPrice = (this.model.remain + (this.model.remain * (this.model.interest / 100)) *
+            (this.model.instalmentEnd / 12)) / this.model.instalmentEnd;
 
-<<<<<<< HEAD
         this._calcService.changeData(this.model);
-=======
-        this._calcService.changeMessage(this.model);
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 
     }
 
     onSubmit() {
-        if (this.Form.valid) {
-<<<<<<< HEAD
-=======
-            console.log(JSON.stringify(this.model));
-            console.log(JSON.stringify(this.contractItem.contractItemModel));
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
-            //    this._calcService
-            //       .Add(this.model, this.contractItem.contractItemModel)
-            //       .subscribe(
-            //          res => {
-            this.router.navigate(['credit/contract']);
-<<<<<<< HEAD
-=======
-            //          },
-            //          (err: HttpErrorResponse) => {
-            //             toastr.error(err.statusText);
-            //          }
-            //       )
 
-            //    toastr.success('success');
-            // console.log(JSON.stringify(this.model));
-            // console.log(JSON.stringify(this.contractItem.contractItemModel));
-            // this.router.navigate(['credit/contract']);
-            // this._calcService.Add(this.model).subscribe(
-            //    res => {
-            //       this.router.navigate(['credit/contract']);
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
-            //    },
-            //    (err: HttpErrorResponse) => {
-            //       toastr.error(err.statusText);
-            //    }
-<<<<<<< HEAD
-            // )
+        console.log(JSON.stringify(this.model));
+        console.log(JSON.stringify(this.contractItem.contractItemModel));
+        //    this._calcService
+        //       .Add(this.model, this.contractItem.contractItemModel)
+        //       .subscribe(
+        //          res => {
+        this.router.navigate(['credit/contract']);
+        //          },
+        //          (err: HttpErrorResponse) => {
+        //             toastr.error(err.statusText);
+        //          }
+        //       )
 
-=======
-            // );
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
-        } else {
-            toastr.error('กรุณาระบุข้อมูลให้ครบถ่วน!');
-        }
+        //    toastr.success('success');
+        // console.log(JSON.stringify(this.model));
+        // console.log(JSON.stringify(this.contractItem.contractItemModel));
+        // this.router.navigate(['credit/contract']);
+        // this._calcService.Add(this.model).subscribe(
+        //    res => {
+        //       this.router.navigate(['credit/contract']);
+        //    },
+        //    (err: HttpErrorResponse) => {
+        //       toastr.error(err.statusText);
+        //    }
+        // );
+
 
         // this._creditService.insert(this.model).subscribe(
         //   (res: HttpErrorResponse) => {

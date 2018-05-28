@@ -19,62 +19,235 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-<<<<<<< HEAD
-    <app-contract-item></app-contract-item>
-=======
-    <div class="row">
-        <label for="" class="control-label col-lg-2">เลขที่สัญญา :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
+
+    <div class="row form-group">
+        <div class="col-lg-7">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <strong>ผู้เช่าซื้อ :</strong>
+                                xxxxx-xxx-xx
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <h4>สัญญา</h4>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">เลขที่สัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required" disabled>
+                            </div>
+                            <label for="" class="control-label col-lg-2">สถานะสัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required" disabled>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">ประเภทสัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                            <label for="" class="control-label col-lg-2">เขตการเก็บเงิน :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">จุดทำสัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                            <label for="" class="control-label col-lg-2">กลุ่มสัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                        </div>
+
+
+                        <div class="hr-line-dashed m-b-sm"></div>
+                        <h4>
+                             ผู้ค้ำประกัน
+                        </h4>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">คนที่ 1:</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed m-b-sm"></div>
+                        <h4>ผู้ดำเนินการ</h4>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">ผู้ทำสัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                            <label for="" class="control-label col-lg-2">ผู้ตรวจสอบ :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">ผู้อนุมัติ :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                            <label for="" class="control-label col-lg-2">ผู้ดูแลสัญญา :</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
         </div>
-        <label for="" class="control-label col-lg-2">ประเภทสัญญา :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
+        <div class="col-lg-5">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
+                        <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                ราคาสินค้า (รวม VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="number" min="0.00" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control readonly>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                เงินดาวน์ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <input type="number" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control" min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
+
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+
+                            <!-- <label for="" class="col-md-1 control-label">
+                                หรือ
+                            </label>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <input type="number" required [(ngModel)]="model.deposit" name="deposit" class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
+                                        min="0.00">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div> -->
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                ระยะเวลาผ่อนชำระ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" required [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
+                                    (change)="instalmentCalculate()">
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                อัตราดอกเบี้ยต่อปี :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <input type="number" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                ยอดจัด (รวม VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="number" min="0.00" required [(ngModel)]="model.remain" name="remain" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                ค่างวด (รวม VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="number" required [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" class="form-control"
+                                    readonly>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                ชำระงวดแรก :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                ชำระทุกวันที่ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-lg-5 control-label">
+                                Vat ณ วันที่ทำสัญญา :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-6">
+                                <input type="number" min="0" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
+                                    (change)="instalmentCalculate()">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <label for="" class="control-label col-lg-2">เขตการเก็บเงิน :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-        <label for="" class="control-label col-lg-2">จุดทำสัญญา :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <app-contract-item></app-contract-item>
         </div>
     </div>
 
-    <div class="row">
-        <label for="" class="control-label col-lg-2">กลุ่มสัญญา :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-        <label for="" class="control-label col-lg-2">ผู้ค้ำประกัน :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-    </div>
-
-    <div class="row">
-        <label for="" class="control-label col-lg-2">ผู้ทำสัญญา :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-        <label for="" class="control-label col-lg-2">ผู้ตรวจสอบ :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-    </div>
-
-    <div class="row">
-        <label for="" class="control-label col-lg-2">ผู้อนุมัติ :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-        <label for="" class="control-label col-lg-2">ผู้ดูแลสัญญา :</label>
-        <div class="form-group col-lg-3">
-            <input type="text" class="form-control form-control-sm" required="required">
-        </div>
-    </div>
->>>>>>> 58230594adcefb44731f51af062fc61ecc76319a
 </div>
