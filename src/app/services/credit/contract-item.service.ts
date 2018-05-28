@@ -10,7 +10,7 @@ export class ContractItemService {
 
   constructor() { }
 
-  changeMessage(data: ContractItemModel) {
+  changeData(data: ContractItemModel) {
     this.dataSource.next(data)
   }
 

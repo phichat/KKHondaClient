@@ -20,14 +20,16 @@ export class CalculateService {
 
     constructor(private http: HttpClient) { }
 
-    changeMessage(data: CalculateModel) {
+    changeData(data: CalculateModel) {
         this.dataSource.next(data)
     }
 
     Add(calculate: CalculateModel, creditContactItem: ContractItemModel) {
         const apiURL = `${this.url}/Calculates`;
-        const params = { credits: { calculate, creditContactItem }};
-        return this.http.post<any>(apiURL, params);
+        const params = { calculate };
+        console.log(JSON.stringify(params));
+
+        return this.http.post(apiURL, {params} , this.httpOptions);
     }
 
 }
