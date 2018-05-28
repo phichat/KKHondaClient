@@ -1,0 +1,39 @@
+
+<div class="row">
+    <div class="col-sm-6 form-group">
+        <strong>วันที่จอง :</strong>
+        {{modelBooking.bookingDate | date:'dd-MM-yyyy'}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>วันที่รับรถ :</strong>
+        {{modelBooking.receiveDate | date:'dd-MM-yyyy'}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>รหัสลูกค้า :</strong>
+        {{modelBooking.custCode}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>บัตรประชาชน :</strong>
+        {{modelBooking.idCard}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>ชื่อ-นามสกุล :</strong>
+        {{modelBooking.custFullName}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>เพศ :</strong>
+        {{modelBooking.genderName}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>เบอร์ติดต่อ :</strong>
+        {{modelBooking.contractNo}}
+    </div>
+    <div class="col-sm-6 form-group">
+        <strong>อีเมล์ :</strong>
+        {{modelBooking.email}}
+    </div>
+    <div class="col-sm-12 form-group">
+        <strong>ที่อยู่ :</strong>
+        {{modelBooking.address}}
+    </div>
+</div>

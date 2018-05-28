@@ -27,7 +27,7 @@ import { CreditModule } from './credit/credit.module';
     StarterViewComponent,
     LoginComponent,
     HomeComponent,
-    StarterComponent,
+    StarterComponent
 
   ],
   imports: [
