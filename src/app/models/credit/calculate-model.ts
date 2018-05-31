@@ -15,6 +15,7 @@ export class CalculateModel {
     public dueDate: number;         // ชำระทุกวันที่
     public promotionalPrice: number; // ค่าส่งเสริมการขาย
     public nowVat: number;          // vat ณ วันที่ทำสัญญา
+    public irr: number;
     public createBy: number;
     public createDate: Date;
     public updateBy: number;

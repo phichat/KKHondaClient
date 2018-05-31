@@ -33,8 +33,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="form-group col-md-4">
-                                <input type="number" min="0.00" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control
-                                    readonly>
+                                <input type="number" min="0.00" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control readonly>
                             </div>
                         </div>
 
@@ -45,8 +44,7 @@
                             </label>
                             <div class="form-group col-md-4">
                                 <div class="input-group">
-                                    <input type="number" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control"
-                                        min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
+                                    <input type="number" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control" min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
 
                                     <span class="input-group-addon">บาท</span>
                                 </div>
@@ -70,8 +68,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="form-group col-md-4">
-                                <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" required [(ngModel)]="model.instalmentEnd"
-                                    name="instalmentEnd" (change)="instalmentCalculate()">
+                                <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" required [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
+                                    (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
                         </div>
@@ -83,8 +81,7 @@
                             </label>
                             <div class="form-group col-md-4">
                                 <div class="input-group">
-                                    <input type="number" required [(ngModel)]="model.interest" name="interest" class="form-control number"
-                                        min="0.00" (keyup)="instalmentCalculate()">
+                                    <input type="number" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -132,14 +129,30 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 Vat ณ วันที่ทำสัญญา :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
-                                <input type="number" min="0" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
-                                    (change)="instalmentCalculate()">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="number" min="0" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
+                                        (change)="instalmentCalculate()">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                I.R.R. :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="number" min="0" required [(ngModel)]="model.irr" name="irr" class="form-control">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
 
@@ -151,6 +164,7 @@
                                 </button>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>

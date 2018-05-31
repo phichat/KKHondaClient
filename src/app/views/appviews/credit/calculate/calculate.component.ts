@@ -65,25 +65,6 @@ export class CalculateComponent implements OnInit {
         }
     }
 
-    // // tslint:disable-next-line:member-ordering
-    // Item: CalculateModel;
-    // // tslint:disable-next-line:member-ordering
-    // Form: FormGroup = this._builder.group({
-    //     creditId: [null],
-    //     bookingId: [null, Validators.required],
-    //     netPrice: [null, Validators.required],
-    //     deposit: [null, Validators.required],
-    //     depositPrice: [null, Validators.required],
-    //     instalmentEnd: [null, Validators.required],
-    //     instalmentPrice: [null, Validators.required],
-    //     interest: [null, Validators.required],
-    //     remain: [null, Validators.required],
-    //     firstPayment: [null, Validators.required],
-    //     dueDate: [null, Validators.required],
-    //     promotionalPrice: [0, Validators.required],
-    //     nowVat: [null, Validators.minLength(0)]
-    // });
-
     ngOnInit() {
         this._activatedRoute.queryParams.subscribe(p => {
             if (p.bookingId) {
@@ -113,6 +94,7 @@ export class CalculateComponent implements OnInit {
         this.model.remain = 0;
         this.model.sellTypeId = 4;
         this.model.sellAcitvityId = 25;
+        this.model.irr = 0;
 
     }
 
