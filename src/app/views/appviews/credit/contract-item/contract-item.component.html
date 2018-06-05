@@ -1,0 +1,32 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-content">
+    <div class="table-responseive">
+      <table id="contractItem" class="footable table table-stripped toggle-arrow-tiny" data-page-size="5">
+        <thead>
+          <tr>
+            <th>ครั้งที่</th>
+            <th>กำหนดชำระ</th>
+            <th>ยอดสุทธิ</th>
+            <th>ยอดเงิน</th>
+            <th>VAT</th>
+            <th>VAT(%)</th>
+            <th>หมายเหตุ</th>
+            <th>ดอกผลเช่าซื้อต่องวด</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of contractItemModel; let i=index;">
+            <td>{{item.instalmentNo}}</td>
+            <td>{{item.dueDate | date: 'dd-MM-yyyy'}}</td>
+            <td>{{item.balanceNetPrice | number:'1.2-2'}}</td>
+            <td>{{item.balance | number:'1.2-2'}}</td>
+            <td>{{item.balanceVatPrice | number:'1.2-2'}}</td>
+            <td>{{item.vatRate}}</td>
+            <td>{{item.statusText}}</td>
+            <td>{{item.interestInstalment | number:'1.2-2'}}</td>            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
