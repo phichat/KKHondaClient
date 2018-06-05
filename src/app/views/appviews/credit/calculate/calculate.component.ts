@@ -14,11 +14,13 @@ import { ContractItemComponent } from '../contract-item/contract-item.component'
 import { ExDetailCustomerComponent } from '../ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from '../ex-detail-motobike/ex-detail-motobike.component';
 import { ExDetailAccessoryComponent } from '../ex-detail-accessory/ex-detail-accessory.component';
+import { Finance } from 'financejs';
 
 
 // import * as $ from 'jquery';
 declare var $: any;
 declare var toastr: any;
+// declare var finance: any;
 
 @Component({
     selector: 'app-calculate',
@@ -29,6 +31,7 @@ export class CalculateComponent implements OnInit {
 
     @ViewChild(ContractItemComponent) contractItem;
 
+    // finance: any;
     model = new CalculateModel();
     bookingNo: string;
 
@@ -55,9 +58,8 @@ export class CalculateComponent implements OnInit {
         private _bookingService: BookingService,
         private _calcService: CalculateService,
         private _userService: UserService,
-        private _builder: FormBuilder,
         private router: Router,
-        private chRef: ChangeDetectorRef,
+        private chRef: ChangeDetectorRef
     ) {
         toastr.options = {
             'closeButton': true,
@@ -94,7 +96,7 @@ export class CalculateComponent implements OnInit {
         this.model.remain = 0;
         this.model.sellTypeId = 4;
         this.model.sellAcitvityId = 25;
-        this.model.irr = 0;
+        // this.model.irr = 0;
 
     }
 
@@ -112,14 +114,12 @@ export class CalculateComponent implements OnInit {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
         this.model.depositPrice = this.model.netPrice * (this.model.deposit / 100);
-        console.log(this.model.depositPrice);
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
         this.model.deposit = (this.model.depositPrice * 100) / this.model.netPrice;
-        console.log(this.model.deposit);
     }
 
     instalmentCalculate() {
@@ -128,50 +128,35 @@ export class CalculateComponent implements OnInit {
         this.model.remain = this.model.netPrice - this.model.depositPrice;
 
         // ผ่อนชำระต่องวด = (((ราคารถ-เงินดาวน์)+(((ราคารถ-เงินดาวน์)*(อัตราดอกเบี้ย/100))*(จำนวนเดือนผ่อนชำระ/12)))/จำนวนเดือนผ่อนชำระ)
-        this.model.instalmentPrice = (this.model.remain + (this.model.remain * (this.model.interest / 100)) *
-            (this.model.instalmentEnd / 12)) / this.model.instalmentEnd;
+        this.model.instalmentPrice =
+            (
+                this.model.remain + (
+                    this.model.remain * (
+                        this.model.interest / 100
+                    )
+                ) * (
+                    this.model.instalmentEnd / 12
+                )
+            ) / this.model.instalmentEnd;
+
+            const finance: any = new Finance();
+        console.log(finance.IRR(this.model.instalmentEnd, -this.model.instalmentPrice, this.model.netPrice));
 
         this._calcService.changeData(this.model);
 
     }
 
     onSubmit() {
-
-        console.log(JSON.stringify(this.model));
-        console.log(JSON.stringify(this.contractItem.contractItemModel));
-        //    this._calcService
-        //       .Add(this.model, this.contractItem.contractItemModel)
-        //       .subscribe(
-        //          res => {
-        this.router.navigate(['credit/contract']);
-        //          },
-        //          (err: HttpErrorResponse) => {
-        //             toastr.error(err.statusText);
-        //          }
-        //       )
-
-        //    toastr.success('success');
-        // console.log(JSON.stringify(this.model));
-        // console.log(JSON.stringify(this.contractItem.contractItemModel));
-        // this.router.navigate(['credit/contract']);
-        // this._calcService.Add(this.model).subscribe(
-        //    res => {
-        //       this.router.navigate(['credit/contract']);
-        //    },
-        //    (err: HttpErrorResponse) => {
-        //       toastr.error(err.statusText);
-        //    }
-        // );
-
-
-        // this._creditService.insert(this.model).subscribe(
-        //   (res: HttpErrorResponse) => {
-        //     console.log(res.statusText);
-        //   },
-        //   (err: HttpErrorResponse) => {
-        //     console.log(err.statusText);
-        //   }
-        // );
+        this._calcService
+            .Add(this.model, this.contractItem.contractItemModel)
+            .subscribe(
+                res => {
+                    this.router.navigate(['credit/contract'], { queryParams: { contractId: res.contractId } });
+                },
+                (err: HttpErrorResponse) => {
+                    toastr.error(err.statusText);
+                }
+            )
     }
 
 }

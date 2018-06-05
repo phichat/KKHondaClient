@@ -24,11 +24,11 @@ export class CalculateService {
         this.dataSource.next(data)
     }
 
-    Add(calculate: CalculateModel, creditContactItem: ContractItemModel) {
+    Add(creditCalculate: CalculateModel, creditContactItem: ContractItemModel) {
         const apiURL = `${this.url}/Calculates`;
-        const params = { calculate };
+        const params = JSON.stringify({ creditCalculate, creditContactItem });
 
-        return this.http.post(apiURL, {params} , this.httpOptions);
+        return this.http.post<any>(apiURL, params , this.httpOptions);
     }
 
 }

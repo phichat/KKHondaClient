@@ -34,3 +34,4 @@ export class BookingModel {
     public freeWarranty: number;
     public bookingItem: Array<BookingItemModel>;
 }
+

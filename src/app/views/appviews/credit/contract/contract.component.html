@@ -25,18 +25,56 @@
             <form action="" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
                 <div class="row form-group">
                     <div class="col-lg-8 b-r">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <strong>ผู้เช่าซื้อ :</strong>
-                                xxxxx-xxx-xx
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">ผู้เช่าซื้อ:</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control form-control-sm" required="required" disabled [(ngModel)]="customerFullName" name="customerFullName">
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">คู่สมรส:</label>
+                            <div class="col-lg-4">
+                                <ng-select required [items]="customerDropdown" bindValue="customerCode" bindLabel="customerFullName" name="mate" [typeahead]="customerTypeahead"></ng-select>
+                            </div>
+                            <label for="" class="control-label col-lg-2">ผู้ให้เช่าซื้อ:</label>
+                            <div class="col-lg-4">
+                                <ng-select required [items]="customerDropdown" bindValue="customerCode" bindLabel="customerFullName" name="owner" [typeahead]="customerTypeahead">
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed m-b-sm"></div>
+                        <h4>
+                            ผู้ค้ำประกัน
+                        </h4>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">คนที่ 1:</label>
+                            <div class="col-lg-4">
+                                <ng-select required [items]="customerDropdown" bindValue="customerCode" bindLabel="customerFullName" name="guarantor1"></ng-select>
+                            </div>
+                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
+                            <div class="col-lg-4">
+                                <ng-select required></ng-select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
+                            <div class="col-lg-4">
+                                <ng-select required [items]="customerDropdown" bindValue="customerCode" bindLabel="customerFullName" name="guarantor2"></ng-select>
+                            </div>
+                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
+                            <div class="col-lg-4">
+                                <ng-select required></ng-select>
+                                <!-- <input type="text" class="form-control form-control-sm" required="required"> -->
+                            </div>
+                        </div>
+
                         <div class="hr-line-dashed"></div>
                         <h4>สัญญา</h4>
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">เลขที่สัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required" disabled>
+                                <input type="text" class="form-control form-control-sm" required="required" disabled [(ngModel)]="contractModel.contractNo" name="contractNo">
                             </div>
                             <label for="" class="control-label col-lg-2">สถานะสัญญา :</label>
                             <div class="col-lg-4">
@@ -47,48 +85,22 @@
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">ประเภทสัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">เขตการเก็บเงิน :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required></ng-select>
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">จุดทำสัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">กลุ่มสัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
-                            </div>
-                        </div>
-
-
-                        <div class="hr-line-dashed m-b-sm"></div>
-                        <h4>
-                            ผู้ค้ำประกัน
-                        </h4>
-                        <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">คนที่ 1:</label>
-                            <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
-                            </div>
-                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
-                            <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
-                            <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
-                            </div>
-                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
-                            <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required></ng-select>
                             </div>
                         </div>
 
@@ -97,27 +109,27 @@
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">ผู้ทำสัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required [items]="userDropdown" bindValue="id" bindLabel="fullName" name="createdBy"></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">ผู้ตรวจสอบ :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required [items]="userDropdown" bindValue="id" bindLabel="fullName" name="checkedBy"></ng-select>
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">ผู้อนุมัติ :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required [items]="userDropdown" bindValue="id" bindLabel="fullName" name="approvedBy"></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">ผู้ดูแลสัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required">
+                                <ng-select required [items]="userDropdown" bindValue="id" bindLabel="fullName" name="keeperBy"></ng-select>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
+                        <input type="hidden" name="bookingId" required [(ngModel)]="calculateModel.bookingId">
 
                         <div class="row form-group">
                             <label for="" class="col-lg-5 control-label">
@@ -125,7 +137,7 @@
 
                             </label>
                             <div class="col-lg-6">
-                                <input type="number" min="0.00" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control readonly>
+                                <input type="number" min="0.00" required [(ngModel)]="calculateModel.netPrice" name="netPrice" class=form-control readonly>
                             </div>
                         </div>
 
@@ -136,13 +148,11 @@
                             </label>
                             <div class="col-lg-6">
                                 <div class="input-group">
-                                    <input type="number" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control" min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
+                                    <input type="number" required [(ngModel)]="calculateModel.depositPrice" name="depositPrice" class="form-control" min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
 
                                     <span class="input-group-addon">บาท</span>
                                 </div>
                             </div>
-
-                            <!--  -->
                         </div>
 
                         <div class="row form-group">
@@ -151,7 +161,7 @@
                             </label>
                             <div class="col-lg-6">
                                 <div class="input-group">
-                                    <input type="number" required [(ngModel)]="model.deposit" name="deposit" class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
+                                    <input type="number" required [(ngModel)]="calculateModel.deposit" name="deposit" class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
                                         min="0.00">
                                     <span class="input-group-addon">%</span>
                                 </div>
@@ -164,7 +174,7 @@
 
                             </label>
                             <div class="col-lg-6">
-                                <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" required [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
+                                <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" required [(ngModel)]="calculateModel.instalmentEnd" name="instalmentEnd"
                                     (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
@@ -177,7 +187,7 @@
                             </label>
                             <div class="col-lg-6">
                                 <div class="input-group">
-                                    <input type="number" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
+                                    <input type="number" required [(ngModel)]="calculateModel.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -189,7 +199,7 @@
 
                             </label>
                             <div class="col-lg-6">
-                                <input type="number" min="0.00" required [(ngModel)]="model.remain" name="remain" class="form-control" readonly>
+                                <input type="number" min="0.00" required [(ngModel)]="calculateModel.remain" name="remain" class="form-control" readonly>
                             </div>
                         </div>
 
@@ -199,7 +209,7 @@
 
                             </label>
                             <div class="col-lg-6">
-                                <input type="number" required [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" class="form-control"
+                                <input type="number" required [(ngModel)]="calculateModel.instalmentPrice" min="0.00" name="instalmentPrice" class="form-control"
                                     readonly>
                             </div>
                         </div>
@@ -210,7 +220,7 @@
 
                             </label>
                             <div class="col-lg-6">
-                                <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()">
+                                <input type="date" required [(ngModel)]="calculateModel.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()">
                             </div>
                         </div>
 
@@ -220,7 +230,7 @@
 
                             </label>
                             <div class="col-lg-6">
-                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
+                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="calculateModel.dueDate" name="dueDate" (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
                         </div>
@@ -232,7 +242,7 @@
                             </label>
                             <div class="col-lg-6">
                                 <div class="input-group">
-                                    <input type="number" min="0" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
+                                    <input type="number" min="0" required [(ngModel)]="calculateModel.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
                                         (change)="instalmentCalculate()">
                                     <span class="input-group-addon">%</span>
                                 </div>
@@ -246,7 +256,7 @@
                             </label>
                             <div class="col-lg-6">
                                 <div class="input-group">
-                                    <input type="number" min="0" required [(ngModel)]="model.irr" name="irr" class="form-control">
+                                    <input type="number" min="0" required [(ngModel)]="calculateModel.irr" name="irr" class="form-control">
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -261,16 +271,46 @@
                         </button>
                     </div>
                 </div>
+
             </form>
 
         </div>
     </div>
 
-
+    <div class="row m-b-md">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab-customer">
+                            ข้อมูลลูกค้า
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#tab-motobike">
+                            ข้อมูลรถ
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-customer" class="tab-pane active">
+                        <div class="panel-body">
+                            <app-ex-detail-customer></app-ex-detail-customer>
+                        </div>
+                    </div>
+                    <div id="tab-motobike" class="tab-pane">
+                        <div class="panel-body">
+                            <app-ex-detail-motobike></app-ex-detail-motobike>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="ibox float-e-margins">
         <div class="ibox-content">
-            <app-contract-item></app-contract-item>
+            <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
         </div>
     </div>
 

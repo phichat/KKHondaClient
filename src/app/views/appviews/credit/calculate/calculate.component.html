@@ -27,22 +27,22 @@
                     <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
                         <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 ราคาสินค้า (รวม VAT) :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <input type="number" min="0.00" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control readonly>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 เงินดาวน์ :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="number" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control" min="0.00" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
 
@@ -53,7 +53,7 @@
                             <label for="" class="col-md-1 control-label">
                                 หรือ
                             </label>
-                            <div class="form-group col-lg-3 col-md-4">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="input-group">
                                     <input type="number" required [(ngModel)]="model.deposit" name="deposit" class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
                                         min="0.00">
@@ -62,24 +62,24 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 ระยะเวลาผ่อนชำระ :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <ng-select [items]="instalmentEnd" bindValue="value" bindLabel="text" required [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
                                     (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 อัตราดอกเบี้ยต่อปี :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="number" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
                                     <span class="input-group-addon">%</span>
@@ -87,43 +87,43 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 ยอดจัด (รวม VAT) :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <input type="number" min="0.00" required [(ngModel)]="model.remain" name="remain" class="form-control" readonly>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 ค่างวด (รวม VAT) :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <input type="number" required [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" class="form-control"
                                     readonly>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 ชำระงวดแรก :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()">
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row form-group ">
                             <label for="" class="col-md-4 control-label">
                                 ชำระทุกวันที่ :
                                 <span class="required">*</span>
                             </label>
-                            <div class="form-group col-md-4">
+                            <div class="col-md-4">
                                 <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
@@ -137,7 +137,7 @@
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="number" min="0" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
-                                        (change)="instalmentCalculate()">
+                                        (change)="instalmentCalculate()" disabled>
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="number" min="0" required [(ngModel)]="model.irr" name="irr" class="form-control">
+                                    <input type="number" min="0" required [(ngModel)]="model.irr" name="irr" class="form-control" disabled>
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -212,5 +212,5 @@
             </div>
         </div>
     </div>
-    <app-contract-item></app-contract-item>
+    <app-contract-item [contractItemModel]="[]"></app-contract-item>
 </div>
