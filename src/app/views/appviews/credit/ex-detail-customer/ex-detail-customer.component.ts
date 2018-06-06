@@ -12,6 +12,7 @@ export class ExDetailCustomerComponent implements OnInit {
   constructor(private _bookingService: BookingService) { }
 
   ngOnInit() {
+    console.log(this._bookingService.currentData);
     this._bookingService.currentData.subscribe(o => {
       this.modelBooking = o;
     });

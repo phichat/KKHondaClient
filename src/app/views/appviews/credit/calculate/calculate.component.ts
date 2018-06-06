@@ -104,6 +104,7 @@ export class CalculateComponent implements OnInit {
                 this.bookingNo = p.bookingNo;
                 this.model.netPrice = p.outStandingPrice;
                 this.instalmentCalculate();
+                console.log(p);
                 this._bookingService.changeData(p);
             });
     }
