@@ -123,6 +123,8 @@ export class CalculateComponent implements OnInit {
     }
 
     instalmentCalculate() {
+
+        // const priceExVat = this.model.
         // ยอดจัด = ราคารถ-เงินดาวน์
         // ดอกเบี้ย = (ยอดจัด*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
         this.model.remain = this.model.netPrice - this.model.depositPrice;
@@ -135,16 +137,72 @@ export class CalculateComponent implements OnInit {
                         this.model.interest / 100
                     )
                 ) * (
-                    this.model.instalmentEnd / 12
+                    this.model.instalmentEnd
                 )
             ) / this.model.instalmentEnd;
 
-            const finance: any = new Finance();
-        console.log(finance.IRR(this.model.instalmentEnd, -this.model.instalmentPrice, this.model.netPrice));
+        const finance: any = new Finance();
+        // console.log(finance.IRR(-4272.50, 70093.46, 24));
+        // console.log(this.rate( 24, -3583.05, 64482) * 100);
+        (this.rate(this.model.instalmentEnd, -this.model.instalmentPrice, this.model.netPrice) * 100).toFixed(2);
 
         this._calcService.changeData(this.model);
 
     }
+
+    rate(nper, pmt, pv, fv?, type?, guess?) {
+        // Sets default values for missing parameters
+        fv = typeof fv !== 'undefined' ? fv : 0;
+        type = typeof type !== 'undefined' ? type : 0;
+        guess = typeof guess !== 'undefined' ? guess : 0.1;
+
+        // Sets the limits for possible guesses to any
+        // number between 0% and 100%
+        let lowLimit = 0;
+        let highLimit = 1;
+
+        // Defines a tolerance of up to +/- 0.00005% of pmt, to accept
+        // the solution as valid.
+        const tolerance = Math.abs(0.00000005 * pmt);
+
+        // Tries at most 40 times to find a solution within the tolerance.
+        for (let i = 0; i < 40; i++) {
+            // Resets the balance to the original pv.
+            let balance = pv;
+
+            // Calculates the balance at the end of the loan, based
+            // on loan conditions.
+            for (let j = 0; j < nper; j++) {
+                if (type === 0) {
+                    // Interests applied before payment
+                    balance = balance * (1 + guess) + pmt;
+                } else {
+                    // Payments applied before insterests
+                    balance = (balance + pmt) * (1 + guess);
+                }
+            }
+
+            // Returns the guess if balance is within tolerance.  If not, adjusts
+            // the limits and starts with a new guess.
+            if (Math.abs(balance + fv) < tolerance) {
+                return guess;
+            } else if (balance + fv > 0) {
+                // Sets a new highLimit knowing that
+                // the current guess was too big.
+                highLimit = guess;
+            } else {
+                // Sets a new lowLimit knowing that
+                // the current guess was too small.
+                lowLimit = guess;
+            }
+
+            // Calculates the new guess.
+            guess = (highLimit + lowLimit) / 2;
+        }
+
+        // Returns null if no acceptable result was found after 40 tries.
+        return null;
+    };
 
     onSubmit() {
         this._calcService
