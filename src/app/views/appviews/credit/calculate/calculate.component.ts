@@ -121,6 +121,7 @@ export class CalculateComponent implements OnInit, OnDestroy {
                 this.model.outStandingPrice = p.outStandingPrice;
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
+                console.log(p);
                 this._bookingService.changeData(p);
             });
     }
