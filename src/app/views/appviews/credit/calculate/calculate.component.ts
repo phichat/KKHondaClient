@@ -126,96 +126,6 @@ export class CalculateComponent implements OnInit, OnDestroy {
             });
     }
 
-<<<<<<< HEAD
-            this.chRef.detectChanges();
-
-            this.instalmentCalculate();
-
-            const accessory = $('table#accessory');
-            accessory.footable();
-         });
-
-   }
-
-   // onChangeSellActivity() {
-   //    this._sellActivityService
-   //       .filterByKey(this.model.sellTypeId.toString())
-   //       .subscribe(p => {
-   //          this.modelSellActivity = p;
-   //          if (this.model.sellTypeId === 4) {
-   //             this.model.sellAcitvityId = 25;
-   //          } else {
-   //             this.model.sellAcitvityId = null;
-   //          }
-   //       });
-   // }
-
-   onChangeDeposit() {
-      // เงินดาวน์ (บาท)
-      // มูลค่าสินค้า * เงินดาวน์(%)
-      this.model.depositPrice = this.modelBooking.outStandingPrice * (this.model.deposit / 100);
-   }
-
-   onChangeDepositPrice() {
-      // เงินดาวน์ (%)
-      // เงินดาวน์ * 100 / มูลค่าสินค้า
-      this.model.deposit = (this.model.depositPrice * 100) / this.modelBooking.outStandingPrice;
-   }
-
-   instalmentCalculate() {
-      if (!this.modelBooking) {
-         return false;
-      }
-      // คงเหลือ/ยอดจัด
-      // มูลค่าสินค้า - เงินดาวน์(บาท)
-      this.model.remain = this.modelBooking.outStandingPrice - this.model.depositPrice;
-
-      // ค่างวด
-      // (ยอดคงเหลือ / จำนวนงวด) * (ดอกเบี้ยต่อปี (% --> บาท))
-      this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd) * (1 + (this.model.interest / 100))
-
-      this._calcService.changeMessage(this.model);
-
-   }
-
-   onSubmit() {
-      if (this.Form.valid) {
-      //    this._calcService
-      //       .Add(this.model, this.contractItem.contractItemModel)
-      //       .subscribe(
-      //          res => {
-                  this.router.navigate(['credit/contract']);
-            //    },
-            //    (err: HttpErrorResponse) => {
-            //       toastr.error(err.statusText);
-            //    }
-            // )
-         //    toastr.success('success');
-         // console.log(JSON.stringify(this.model));
-         // console.log(JSON.stringify(this.contractItem.contractItemModel));
-         // this.router.navigate(['credit/contract']);
-         // this._calcService.Add(this.model).subscribe(
-         //    res => {
-         //       this.router.navigate(['credit/contract']);
-         //    },
-         //    (err: HttpErrorResponse) => {
-         //       toastr.error(err.statusText);
-         //    }
-         // );
-      } else {
-         toastr.error('กรุณาระบุข้อมูลให้ครบถ่วน!');
-      }
-
-      // this._creditService.insert(this.model).subscribe(
-      //   (res: HttpErrorResponse) => {
-      //     console.log(res.statusText);
-      //   },
-      //   (err: HttpErrorResponse) => {
-      //     console.log(err.statusText);
-      //   }
-      // );
-   }
-=======
     onLoadCaculateData(calculateId: number) {
         this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
@@ -381,7 +291,6 @@ export class CalculateComponent implements OnInit, OnDestroy {
                 }
             );
     }
->>>>>>> 233c237c4ade93c1ab675beb9a27f74824fca27a
 
 }
 
