@@ -188,16 +188,16 @@ export class CalculateComponent implements CalculateInterface, OnInit {
 
    onSubmit() {
       if (this.Form.valid) {
-         this._calcService
-            .Add(this.model, this.contractItem.contractItemModel)
-            .subscribe(
-               res => {
+      //    this._calcService
+      //       .Add(this.model, this.contractItem.contractItemModel)
+      //       .subscribe(
+      //          res => {
                   this.router.navigate(['credit/contract']);
-               },
-               (err: HttpErrorResponse) => {
-                  toastr.error(err.statusText);
-               }
-            )
+            //    },
+            //    (err: HttpErrorResponse) => {
+            //       toastr.error(err.statusText);
+            //    }
+            // )
          //    toastr.success('success');
          // console.log(JSON.stringify(this.model));
          // console.log(JSON.stringify(this.contractItem.contractItemModel));
