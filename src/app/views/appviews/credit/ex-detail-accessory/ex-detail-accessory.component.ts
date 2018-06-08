@@ -24,11 +24,6 @@ export class ExDetailAccessoryComponent implements OnInit {
             this.modelAccessory = new Array<BookingItemModel>();
             if (o.bookingItem) {
                 this.modelAccessory = o.bookingItem.filter(i => i.itemType === 2);
-
-                this.chRef.detectChanges();
-
-                const table = $('table#accessory');
-                table.footable();
             }
 
         })

@@ -33,7 +33,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
-                                <input type="number" min="0.00" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control readonly>
+                                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class=form-control readonly>
                             </div>
                         </div>
 
@@ -76,7 +76,7 @@
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
-                                อัตราดอกเบี้ยเดือน :
+                                อัตราดอกเบี้ย/เดือน :
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
@@ -93,7 +93,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
-                                <input type="number" min="0.00" required [(ngModel)]="model.remain" name="remain" class="form-control" readonly>
+                                <input type="text" required [(ngModel)]="model.remain" name="remain" class="form-control" readonly>
                             </div>
                         </div>
 
@@ -103,7 +103,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
-                                <input type="number" required [(ngModel)]="model.instalmentPrice" min="0.00" name="instalmentPrice" class="form-control"
+                                <input type="text" required [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control"
                                     readonly>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="number" min="0" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
+                                    <input type="text" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control" (keyup)="instalmentCalculate()"
                                         (change)="instalmentCalculate()" disabled>
                                     <span class="input-group-addon">%</span>
                                 </div>
@@ -150,7 +150,7 @@
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="number" min="0" required [(ngModel)]="model.irr" name="irr" class="form-control" disabled>
+                                    <input type="text" required [(ngModel)]="model.irr" name="irr" class="form-control" disabled>
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -212,5 +212,5 @@
             </div>
         </div>
     </div>
-    <app-contract-item [contractItemModel]="[]"></app-contract-item>
+    <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
 </div>

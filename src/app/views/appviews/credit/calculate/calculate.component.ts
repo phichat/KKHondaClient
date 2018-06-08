@@ -1,10 +1,10 @@
-import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SellActivityModel } from 'app/models/sell-activity';
 import { CalculateInterface } from 'app/interfaces/credit';
-import { CalculateModel, ContractItemModel } from 'app/models/credit';
+import { CalculateModel, ContractItemModel, ContractModel } from 'app/models/credit';
 import { BookingModel, BookingItemModel } from 'app/models/selling';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
@@ -14,7 +14,6 @@ import { ContractItemComponent } from '../contract-item/contract-item.component'
 import { ExDetailCustomerComponent } from '../ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from '../ex-detail-motobike/ex-detail-motobike.component';
 import { ExDetailAccessoryComponent } from '../ex-detail-accessory/ex-detail-accessory.component';
-import { Finance } from 'financejs';
 
 
 // import * as $ from 'jquery';
@@ -27,17 +26,19 @@ declare var toastr: any;
     templateUrl: './calculate.component.html',
     styleUrls: ['./calculate.component.scss']
 })
-export class CalculateComponent implements OnInit {
+export class CalculateComponent implements OnInit, OnDestroy {
 
     @ViewChild(ContractItemComponent) contractItem;
 
-    // finance: any;
-    model = new CalculateModel();
+    model: CalculateModel = new CalculateModel();
+    contractModel: ContractModel = new ContractModel();
+    contractItemModel = new Array<ContractModel>();
     bookingNo: string;
+    mode: string;
 
-    sellType = [
-        { value: 3, text: 'ลิสซิ่ง' },
-        { value: 4, text: 'เช่าซื้อ' }]
+    // sellType = [
+    //     { value: 3, text: 'ลิสซิ่ง' },
+    //     { value: 4, text: 'เช่าซื้อ' }]
 
     instalmentEnd = [
         { value: 3, text: '3 เดือน' },
@@ -68,35 +69,47 @@ export class CalculateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._activatedRoute.queryParams.subscribe(p => {
-            if (p.bookingId) {
-                this.model.bookingId = p.bookingId;
-                this.onLoadBooking(p.bookingId);
-            }
-        });
-
-        this._userService.currentData.subscribe(p => {
-            this.model.createBy = p.userId;
-        })
-
         for (let i = 1; i < 7; i++) {
             const month = i * 12;
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
 
-        this.model.promotionalPrice = 0;
-        this.model.deposit = 0;
-        this.model.depositPrice = 0;
-        this.model.instalmentEnd = 3;
-        this.model.dueDate = 5;
-        this.model.firstPayment = moment().format('YYYY-MM-DD');
-        this.model.instalmentPrice = 0;
-        this.model.interest = 2;
-        this.model.nowVat = 7;
-        this.model.remain = 0;
-        this.model.sellTypeId = 4;
-        this.model.sellAcitvityId = 25;
-        // this.model.irr = 0;
+        this._activatedRoute.queryParams.subscribe(p => {
+
+            this.mode = p.mode;
+
+            if (p.mode === 'edit' && p.calculateId) {
+                this.onLoadCaculateData(p.calculateId);
+
+            } else if (p.mode === 'revice' && p.calculateId) {
+                this.onLoadCaculateData(p.calculateId);
+
+            } else if (p.mode === 'create' && p.bookingId) {
+                this.model.bookingId = p.bookingId;
+                this.onLoadBooking(p.bookingId);
+                this._userService.currentData.subscribe(u => {
+                    this.model.createBy = u.userId;
+                    this.contractModel.branchId = u.branchId;
+                    this.contractModel.bookingId = p.bookingId;
+                    this.contractModel.createBy = u.userId;
+                    this.contractModel.contractStatus = 32; // สัญญาใหม่
+                });
+
+                this.model.promotionalPrice = 0;
+                this.model.deposit = 0;
+                this.model.depositPrice = 0;
+                this.model.instalmentEnd = 3;
+                this.model.dueDate = 5;
+                this.model.firstPayment = moment().format('YYYY-MM-DD');
+                this.model.interest = 2;
+                this.model.remain = 0;
+                this.model.sellTypeId = 4;
+                this.model.sellAcitvityId = 25;
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
 
     }
 
@@ -105,21 +118,35 @@ export class CalculateComponent implements OnInit {
             .subscribe(p => {
                 this.bookingNo = p.bookingNo;
                 this.model.netPrice = p.outStandingPrice;
+                this.model.outStandingPrice = p.outStandingPrice;
+                this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
             });
     }
 
+    onLoadCaculateData(calculateId: number) {
+        this._calcService.GetById(calculateId.toString())
+            .subscribe(p => {
+                this.model = p.creditCalculate;
+                this.contractModel = p.creditContract;
+                this.contractItemModel = p.creditContractItem;
+                this.model.firstPayment = moment(p.firstPayment).format('YYYY-MM-DD');
+                this.bookingNo = p.booking.bookingNo;
+                this._bookingService.changeData(p.booking);
+            })
+    }
+
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
-        this.model.depositPrice = this.model.netPrice * (this.model.deposit / 100);
+        this.model.depositPrice = (this.model.netPrice * (this.model.deposit / 100));
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        this.model.deposit = (this.model.depositPrice * 100) / this.model.netPrice;
+        this.model.deposit = ((this.model.depositPrice * 100) / this.model.netPrice);
     }
 
     instalmentCalculate() {
@@ -128,26 +155,34 @@ export class CalculateComponent implements OnInit {
         // ยอดจัด = ราคารถ-เงินดาวน์
         // ดอกเบี้ย = (ยอดจัด*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
         this.model.remain = this.model.netPrice - this.model.depositPrice;
+        // this.model.instalmentRemain = this.model.remain;
 
-        // ผ่อนชำระต่องวด = (((ราคารถ-เงินดาวน์)+(((ราคารถ-เงินดาวน์)*(อัตราดอกเบี้ย/100))*(จำนวนเดือนผ่อนชำระ/12)))/จำนวนเดือนผ่อนชำระ)
-        this.model.instalmentPrice =
-            (
-                this.model.remain + (
-                    this.model.remain * (
-                        this.model.interest / 100
-                    )
-                ) * (
-                    this.model.instalmentEnd
+        // ผ่อนชำระต่องวด = (((ราคารถ-เงินดาวน์)+(((ราคารถ-เงินดาวน์)*(อัตราดอกเบี้ย/100))*(จำนวนเดือนผ่อนชำระ)))/จำนวนเดือนผ่อนชำระ)
+        const instalmentPrice = (
+            this.model.remain + (
+                this.model.remain * (
+                    this.model.interest / 100
                 )
-            ) / this.model.instalmentEnd;
+            ) * (
+                this.model.instalmentEnd
+            )
+        ) / this.model.instalmentEnd;
 
-        const finance: any = new Finance();
-        // console.log(finance.IRR(-4272.50, 70093.46, 24));
-        // console.log(this.rate( 24, -3583.05, 64482) * 100);
-        (this.rate(this.model.instalmentEnd, -this.model.instalmentPrice, this.model.netPrice) * 100).toFixed(2);
+        this.model.instalmentPrice = instalmentPrice;
+
+        const vatDown = (this.model.nowVat / 100);
+        const vatUp = 1 + vatDown;
+
+        // เงินดาวน์(ถอด vat)
+        const depositExcVat = this.model.depositPrice / vatUp;
+        // ราคาสินค้า(ถอด vat) - เงินดาวน์
+        const netPriceExcVat = (this.model.netPrice / vatUp) - depositExcVat;
+        // ค่างวดต่อเดือน(ถอด vat)
+        const instalmentPriceExcVat = this.model.instalmentPrice / vatUp;
+        // คำนวณ RATE
+        this.model.irr = (this.rate(this.model.instalmentEnd, -(instalmentPriceExcVat), netPriceExcVat) * 100);
 
         this._calcService.changeData(this.model);
-
     }
 
     rate(nper, pmt, pv, fv?, type?, guess?) {
@@ -205,16 +240,55 @@ export class CalculateComponent implements OnInit {
     };
 
     onSubmit() {
+        if (this.mode === 'create') {
+            this.onCreate();
+
+        } else if (this.mode === 'edit') {
+            this.onEdit();
+
+        } else if (this.mode === 'revice') {
+            this.onRevice();
+        }
+
+    }
+
+    onCreate() {
         this._calcService
-            .Add(this.model, this.contractItem.contractItemModel)
+            .Create(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
-                    this.router.navigate(['credit/contract'], { queryParams: { contractId: res.contractId } });
+                    this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: res.contractId } });
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);
                 }
-            )
+            );
+    }
+
+    onEdit() {
+        this._calcService
+            .Edit(this.model, this.contractModel, this.contractItem.contractItemModel)
+            .subscribe(
+                res => {
+                    this.router.navigate(['credit/contract-list']);
+                },
+                (err: HttpErrorResponse) => {
+                    toastr.error(err.statusText);
+                }
+            );
+    }
+
+    onRevice() {
+        this._calcService
+            .Revice(this.model, this.contractModel, this.contractItem.contractItemModel)
+            .subscribe(
+                res => {
+                    this.router.navigate(['credit/contract-list']);
+                },
+                (err: HttpErrorResponse) => {
+                    toastr.error(err.statusText);
+                }
+            );
     }
 
 }

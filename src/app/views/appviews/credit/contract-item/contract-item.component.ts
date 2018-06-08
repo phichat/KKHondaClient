@@ -33,44 +33,68 @@ export class ContractItemComponent implements OnInit {
 
                 this.contractItemModel = new Array<ContractItemModel>()
 
+                const vatUp = 1 + (p.nowVat / 100);
+                const vatDown = (p.nowVat / 100);
+
                 const instalmentEnd = p.instalmentEnd;
                 const firstPay = new Date(p.firstPayment);
-                const vat = p.nowVat;
-                const itemNetPrice = p.instalmentPrice;
-                const itemVatPrice = itemNetPrice * (vat / 100);
-                const itemPrice = itemNetPrice - itemVatPrice;
+
+                const depositPriceExcVat = p.depositPrice / vatUp;
+                const instalmentExcVat = p.instalmentPrice / vatUp;
+                const itemPriceExcVat = p.netPrice / vatUp;
 
                 let j = 1;
-                for (let i = 0; i < instalmentEnd; i++) {
+                for (let i = 0; i <= instalmentEnd; i++) {
 
                     // tslint:disable-next-line:prefer-const
                     let d: Date = (new Date);
-                    const month = (firstPay.getMonth() + 1) + j;
-                    d.setMonth(month);
-                    d.setDate(p.dueDate);
-                    const dueDate: Date = d;
+                    let dueDate: Date = firstPay;
+
+                    if (i > 0) {
+                        const month = (firstPay.getMonth()) + j;
+                        d.setMonth(month);
+                        d.setDate(p.dueDate);
+                        dueDate = d;
+                        j++;
+                    }
+
                     // tslint:disable-next-line:prefer-const
                     let item = new ContractItemModel();
 
+                    // ค่างวดไม่รวม vat
+                    // i : จำนวนรายการ
+                    // i = 0: รายการเงินดาน์
+                    // i > 0: รายการผ่อน
+                    const balance = (i === 0) ? depositPriceExcVat : instalmentExcVat;
+                    const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - instalmentExcVat;
+                    const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
+
+                    // ดอกเบี้ย
+                    const preIndex = (i === 0) ? 0 : i - 1;
+                    const preGoodsPriceRemail = (i === 0) ? 0 : (this.contractItemModel[preIndex].goodsPriceRemain);
+                    const interestInstalment = (i === 0) ? 0 : (preGoodsPriceRemail * p.irr) / 100;
+
+                    // ค่าสินค้าคงเหลือ
+                    const goodsPrice = (i === 0) ? balance : balance - interestInstalment;
+                    const goodsPriceRemain = (i === 0) ? itemPriceExcVat - balance : preGoodsPriceRemail - goodsPrice;
+
                     this._userService.currentData.subscribe(user => item.contractBranchId = user.branchId);
-                    item.instalmentNo = j;
+                    item.instalmentNo = i;
                     item.dueDate = dueDate;
-                    item.vatRate = vat;
-                    item.balance = itemPrice;
-                    item.balanceVatPrice = itemVatPrice;
-                    item.balanceNetPrice = itemNetPrice;
-                    item.status = 0;
-                    item.statusText = item.status === 0 ? 'ยังไม่ชำระ' : 'ชำระแล้ว';
-                    item.interestInstalment = 0.00; // ดอกเบี้ย
+                    item.vatRate = p.nowVat;
+                    item.balance = balance;
+                    item.balanceVatPrice = balanceVatPrice;
+                    item.balanceNetPrice = balanceNetPrice;
+                    // ดอกเบี้ย
+                    item.interestInstalment = interestInstalment;
+                    // ค่าสินค้า
+                    item.goodsPrice = goodsPrice;
+                    // ค่าสินค้าคงเหลือ
+                    item.goodsPriceRemain = goodsPriceRemain < 0 ? 0 : goodsPriceRemain;
 
-                    this.contractItemModel.push(item)
-                    j++;
+                    this.contractItemModel.push(item);
+
                 }
-
-                this.chRef.detectChanges();
-
-                const contract = $('table#contractItem');
-                contract.footable();
 
             })
         }
