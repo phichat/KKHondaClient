@@ -1,101 +1,101 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
-  <div class="sidebar-collapse">
-    <ul class="nav metismenu" id="side-menu">
-      <li class="nav-header">
-        <div class="profile-element" dropdown>
-          <!-- <img alt="image" class="img-circle" src="assets/images/profile_small.jpg"> -->
-          <a dropdownToggle>
-            <span class="block m-t-xs">
-              <strong class="font-bold">Super Admin</strong>
-            </span>
-            <span class="text-muted text-xs block">Super admin
-              <b class="caret"></b>
-            </span>
-          </a>
-          <ul class="animated fadeInRight dropdown-menu" *dropdownMenu>
-            <li>
-              <a href="#">Profile</a>
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="profile-element" dropdown>
+                    <!-- <img alt="image" class="img-circle" src="assets/images/profile_small.jpg"> -->
+                    <a dropdownToggle>
+                        <span class="block m-t-xs">
+                            <strong class="font-bold">Super Admin</strong>
+                        </span>
+                        <span class="text-muted text-xs block">Super admin
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="animated fadeInRight dropdown-menu" *dropdownMenu>
+                        <li>
+                            <a href="#">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#">Contacts</a>
+                        </li>
+                        <li>
+                            <a href="#">Mailbox</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
             </li>
-            <li>
-              <a href="#">Contacts</a>
+            <li [ngClass]="{active: activeRoute('credit')}">
+                <a href="#">
+                    <i class="fa fa-th-large"></i>
+                    <span class="nav-label">เช่าซื้อ</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('credit')}">
+                    <!-- <li [ngClass]="{active: activeRoute('credit')}">
+                        <a [routerLink]="['/credit/calculate-list']">
+                            <span class="nav-label">คำนวนณค่างวด</span>
+                        </a>
+                    </li> -->
+                    <li [ngClass]="{active: activeRoute('credit')}">
+                        <a [routerLink]="['/credit/contract-list']">
+                        <span class="nav-label">สัญญาเช่าซื้อ</span>
+                        </a>
+                    </li>
+                    <!--<li [ngClass]="{active: activeRoute('credit')}">
+                        <a [routerLink]="['/credit/keeper']">
+                        <span class="nav-label">เปลี่ยนผู้ดูแล</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('credit')}">
+                        <a [routerLink]="['/credit/contract-status']">
+                        <span class="nav-label">สอบถามข้อมูลสัญญา</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('credit')}">
+                        <a [routerLink]="['/credit/contract-field']">
+                        <span class="nav-label">เปลี่ยนเขตสัญญา</span>
+                        </a>
+                    </li> -->
+                </ul>
             </li>
-            <li>
-              <a href="#">Mailbox</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a href="#">Logout</a>
-            </li>
-          </ul>
-        </div>
-        <div class="logo-element">
-          IN+
-        </div>
-      </li>
-      <li [ngClass]="{active: activeRoute('credit')}">
-        <a href="#">
-          <i class="fa fa-th-large"></i>
-          <span class="nav-label">สินเชื่อ</span>
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('credit')}">
-          <li [ngClass]="{active: activeRoute('credit')}">
-            <a [routerLink]="['/credit/calculate-list']">
-              <span class="nav-label">คำนวนณค่างวด</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('credit')}">
-            <a [routerLink]="['/credit/contract-list']">
-              <span class="nav-label">ทำสัญญาเช่าซื้อ</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('credit')}">
-            <a [routerLink]="['/credit/keeper']">
-              <span class="nav-label">เปลี่ยนผู้ดูแล</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('credit')}">
-            <a [routerLink]="['/credit/contract-status']">
-              <span class="nav-label">สอบถามข้อมูลสัญญา</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('credit')}">
-            <a [routerLink]="['/credit/contract-field']">
-              <span class="nav-label">เปลี่ยนเขตสัญญา</span>
-            </a>
-          </li>
+            <!-- <li [ngClass]="{active: activeRoute('accounting-finance')}">
+                <a href="#">
+                    <i class="fa fa-th-large"></i>
+                    <span class="nav-label">บัญชีและการเงิน</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('accounting-finance')}">
+                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
+                        <a [routerLink]="['/accounting-finance/']">
+                            <span class="nav-label">รับชำระเงินงวดเดียว/ดาวน์</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
+                        <a [routerLink]="['/accounting-finance/']">
+                            <span class="nav-label">รับชำระเงินหลายงวด/ปิดสัญญา</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
+                        <a [routerLink]="['/accounting-finance/']">
+                            <span class="nav-label">รับชำระเงินประกันสัญญา</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
+                        <a [routerLink]="['/accounting-finance/']">
+                            <span class="nav-label">บันทึกรายละเอียดเช็ค</span>
+                        </a>
+                    </li>
+                </ul>
+            </li> -->
         </ul>
-      </li>
-      <li [ngClass]="{active: activeRoute('accounting-finance')}">
-        <a href="#">
-          <i class="fa fa-th-large"></i>
-          <span class="nav-label">บัญชีและการเงิน</span>
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('accounting-finance')}">
-          <li [ngClass]="{active: activeRoute('accounting-finance')}">
-            <a [routerLink]="['/accounting-finance/']">
-              <span class="nav-label">รับชำระเงินงวดเดียว/ดาวน์</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('accounting-finance')}">
-            <a [routerLink]="['/accounting-finance/']">
-              <span class="nav-label">รับชำระเงินหลายงวด/ปิดสัญญา</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('accounting-finance')}">
-            <a [routerLink]="['/accounting-finance/']">
-              <span class="nav-label">รับชำระเงินประกันสัญญา</span>
-            </a>
-          </li>
-          <li [ngClass]="{active: activeRoute('accounting-finance')}">
-            <a [routerLink]="['/accounting-finance/']">
-              <span class="nav-label">บันทึกรายละเอียดเช็ค</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
 
-  </div>
+    </div>
 </nav>

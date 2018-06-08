@@ -5,67 +5,100 @@ import { UserService } from '../../../../services/users';
 
 declare var $: any;
 declare var footable: any;
-declare var FooTable: any;
 
 @Component({
-   selector: 'app-contract-item',
-   templateUrl: './contract-item.component.html',
-   styleUrls: ['./contract-item.component.scss']
+    selector: 'app-contract-item',
+    templateUrl: './contract-item.component.html',
+    styleUrls: ['./contract-item.component.scss']
 })
 export class ContractItemComponent implements OnInit {
 
-   // @Input() inputCalModel: CalculateModel;
-   contractItemModel: ContractItemModel[];
+    // contractItemModel: ContractItemModel[];
 
-   constructor(
-      private chRef: ChangeDetectorRef,
-      private _calService: CalculateService,
-      private _userService: UserService
-   ) { }
+    @Input() contractItemModel: ContractItemModel[];
 
-   ngOnInit() {
-      this._calService.currentData.subscribe(p => {
+    constructor(
+        private chRef: ChangeDetectorRef,
+        private _calService: CalculateService,
+        private _userService: UserService
+    ) {
+    }
 
-         this.contractItemModel = new Array<ContractItemModel>()
+    ngOnInit() {
 
-         const instalmentEnd = p.instalmentEnd;
-         const firstPay = new Date(p.firstPayment);
-         const vat = p.nowVat;
-         const itemNetPrice = p.instalmentPrice;
-         const itemVatPrice = itemNetPrice * (vat / 100);
-         const itemPrice = itemNetPrice - itemVatPrice;
+        if (this.contractItemModel.length === 0) {
+            this._calService.currentData.subscribe(p => {
 
-         let j = 1;
-         for (let i = 0; i < instalmentEnd; i++) {
-            // tslint:disable-next-line:prefer-const
-            let d: Date = (new Date);
-            const month = (firstPay.getMonth() + 1) + j;
-            d.setMonth(month);
-            d.setDate(p.dueDate);
-            const dueDate: Date = d;
-            // tslint:disable-next-line:prefer-const
-            let item = new ContractItemModel;
+                // this.chRef.markForCheck();
 
-            item.instalmentNo = j;
-            item.dueDate = dueDate;
-            item.balanceNetPrice = itemNetPrice;
-            item.balance = itemPrice;
-            item.balanceVatPrice = itemVatPrice;
-            item.vatRate = vat;
-            item.status = 'ยังไม่ชำระ'
-            item.interestInstalment = 0;
-            this._userService.currentData.subscribe(user => item.contractBranchId = user.branchId);
+                this.contractItemModel = new Array<ContractItemModel>()
 
-            this.contractItemModel.push(item)
-            j++;
-         }
+                const vatUp = 1 + (p.nowVat / 100);
+                const vatDown = (p.nowVat / 100);
 
-         this.chRef.detectChanges();
+                const instalmentEnd = p.instalmentEnd;
+                const firstPay = new Date(p.firstPayment);
 
-         const contract = $('table#contractItem');
-         contract.footable();
+                const depositPriceExcVat = p.depositPrice / vatUp;
+                const instalmentExcVat = p.instalmentPrice / vatUp;
+                const itemPriceExcVat = p.netPrice / vatUp;
 
-      })
-   }
+                let j = 1;
+                for (let i = 0; i <= instalmentEnd; i++) {
+
+                    // tslint:disable-next-line:prefer-const
+                    let d: Date = (new Date);
+                    let dueDate: Date = firstPay;
+
+                    if (i > 0) {
+                        const month = (firstPay.getMonth()) + j;
+                        d.setMonth(month);
+                        d.setDate(p.dueDate);
+                        dueDate = d;
+                        j++;
+                    }
+
+                    // tslint:disable-next-line:prefer-const
+                    let item = new ContractItemModel();
+
+                    // ค่างวดไม่รวม vat
+                    // i : จำนวนรายการ
+                    // i = 0: รายการเงินดาน์
+                    // i > 0: รายการผ่อน
+                    const balance = (i === 0) ? depositPriceExcVat : instalmentExcVat;
+                    const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - instalmentExcVat;
+                    const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
+
+                    // ดอกเบี้ย
+                    const preIndex = (i === 0) ? 0 : i - 1;
+                    const preGoodsPriceRemail = (i === 0) ? 0 : (this.contractItemModel[preIndex].goodsPriceRemain);
+                    const interestInstalment = (i === 0) ? 0 : (preGoodsPriceRemail * p.irr) / 100;
+
+                    // ค่าสินค้าคงเหลือ
+                    const goodsPrice = (i === 0) ? balance : balance - interestInstalment;
+                    const goodsPriceRemain = (i === 0) ? itemPriceExcVat - balance : preGoodsPriceRemail - goodsPrice;
+
+                    this._userService.currentData.subscribe(user => item.contractBranchId = user.branchId);
+                    item.instalmentNo = i;
+                    item.dueDate = dueDate;
+                    item.vatRate = p.nowVat;
+                    item.balance = balance;
+                    item.balanceVatPrice = balanceVatPrice;
+                    item.balanceNetPrice = balanceNetPrice;
+                    // ดอกเบี้ย
+                    item.interestInstalment = interestInstalment;
+                    // ค่าสินค้า
+                    item.goodsPrice = goodsPrice;
+                    // ค่าสินค้าคงเหลือ
+                    item.goodsPriceRemain = goodsPriceRemain < 0 ? 0 : goodsPriceRemain;
+
+                    this.contractItemModel.push(item);
+
+                }
+
+            })
+        }
+
+    }
 
 }

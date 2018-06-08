@@ -1,0 +1,20 @@
+<table id="accessory" class="table table-sm table-bordered">
+  <thead>
+      <tr>
+          <th data-toggle="true">ลำดับ</th>
+          <th>รหัสสินค้า</th>
+          <th>รายการสินค้า</th>
+          <th>จำนวน</th>
+          <th>ราคาต่อหน่วย</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let item of modelAccessory; let i=index">
+          <td>{{i + 1}}</td>
+          <td>{{item.partCode}}</td>
+          <td>{{item.partName}}</td>
+          <td>{{item.itemQty}}</td>
+          <td>{{item.sellPrice}}</td>
+      </tr>
+  </tbody>
+</table>

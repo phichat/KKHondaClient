@@ -8,6 +8,7 @@ import { PersonService } from '../../../../services/customers/person.service';
   templateUrl: './modal-customer.component.html',
   styleUrls: ['./modal-customer.component.scss']
 })
+
 export class ModalCustomerComponent {
 
   // model = new ModelCustomer();

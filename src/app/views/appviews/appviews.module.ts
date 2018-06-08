@@ -21,13 +21,14 @@ import { FootableDirective } from '../../directives/footable.directive';
 import { FormsModule } from '@angular/forms';
 import { SellingModule } from './selling/selling.module';
 import { CreditModule } from './credit/credit.module';
+import { CustomerService } from '../../services/customers';
 
 @NgModule({
   declarations: [
     StarterViewComponent,
     LoginComponent,
     HomeComponent,
-    StarterComponent,
+    StarterComponent
 
   ],
   imports: [
@@ -43,7 +44,7 @@ import { CreditModule } from './credit/credit.module';
     // IcheckDirective
   ],
   providers: [
-    // ProductService
+    CustomerService
   ]
 })
 

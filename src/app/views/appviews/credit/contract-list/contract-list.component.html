@@ -1,3 +1,75 @@
-<p>
-  contract-list works!
-</p>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>สัญญาเช่าซื้อ</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li>
+                <a>เช่าซื้อ</a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2 text-right pull-right">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <table class="table table-hover" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>แก้ไขสัญญา</th>
+                        <th>จัดการค่างวด</th>
+                        <th>เลขที่สัญญา</th>
+                        <th>สถานะสัญญา</th>
+                        <th>วันที่ทำสัญญา</th>
+                        <th>กลุ่มสัญญา</th>
+                        <th>ประเภทสัญญา</th>
+                        <th>จุดทำสัญญา</th>
+                        <th>เขตการเก็บเงิน</th>
+                        <th>เลขที่อ้างอิงค่างวด</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of contractListModel">
+                        <td>
+                            <a *ngIf="item.status == 32" (click)="gotoCreateContract(item.calculateId)" class="btn btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                                อนุมัติสัญญา
+                            </a>
+                            <a *ngIf="item.status == 31" (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                                แก้ไขสัญญา
+                            </a>
+                        </td>
+                        <td>
+                            <a *ngIf="item.status == 32" (click)="gotoEditCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                                แก้ไขค่างวด
+                            </a>
+                            <a *ngIf="item.status == 31" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                                <i class="fa fa-calculator"></i>
+                                คำนวณค่างวดขณะทำสัญญา
+                            </a>
+                        </td>
+                        <td>{{item.contractNo}}</td>
+                        <td [ngClass]="{
+                            'text-info': item.status == 32,
+                            'text-danger': item.status == 0,
+                            'text-warning': item.status == 31
+                        }">{{item.contractStatus}}</td>
+                        <td>{{item.contractDate | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{item.contractGroup}}</td>
+                        <td>{{item.contractType}}</td>
+                        <td>{{item.contractPoint}}</td>
+                        <td>{{item.areaPayment}}</td>
+                        <td>{{item.refNo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
