@@ -34,7 +34,8 @@ export class ContractListComponent implements OnInit {
 
             const table: any = $('table');
             this.dataTable = table.DataTable({
-                'scrollX': true
+                'scrollX': true,
+                'scrollY': true
             });
 
         });

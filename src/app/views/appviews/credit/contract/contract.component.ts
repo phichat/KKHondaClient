@@ -1,20 +1,14 @@
 import { Component, OnInit, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { CalculateModel, ContractModel, ContractItemModel } from '../../../../models/credit';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
 import { CalculateService, ContractService, ContractItemService } from '../../../../services/credit';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserDropdownModel } from '../../../../models/users/user-dropdown-model';
-import { CustomerDropdownModel } from '../../../../models/customers';
 import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators'
 import { CustomerService } from '../../../../services/customers';
-import { Observable } from 'rxjs/Observable';
-import { concat } from 'rxjs/observable/concat';
 import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { runInThisContext } from 'vm';
 
 
 declare var toastr: any;
@@ -48,7 +42,6 @@ export class ContractComponent implements OnInit, OnDestroy {
         private _contractService: ContractService,
         private _customerService: CustomerService,
         private _bookingService: BookingService,
-        private _contractItemSerivce: ContractItemService,
         private chRef: ChangeDetectorRef,
         private router: Router
     ) {
@@ -82,7 +75,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractModel.contractType = this.checkNullAndReturnStr(o.creditContract.contractType);
                     this.contractModel.areaPayment = this.checkNullAndReturnStr(o.creditContract.areaPayment);
                     this.contractModel.contractPoint = this.checkNullAndReturnStr(o.creditContract.contractPoint);
-                    
+
                     this.contractModel.contractGroup = this.checkNullAndReturnStr(o.creditContract.contractGroup);
                     this.contractModel.contractType = this.checkNullAndReturnStr(o.creditContract.contractType);
                     this.contractModel.contractPoint = this.checkNullAndReturnStr(o.creditContract.contractPoint);
