@@ -135,6 +135,7 @@ export class CalculateComponent implements OnInit, OnDestroy {
                 this.model.firstPayment = moment(p.firstPayment).format('YYYY-MM-DD');
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
+                
             })
     }
 

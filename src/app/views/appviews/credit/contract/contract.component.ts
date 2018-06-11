@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { CalculateModel, ContractModel } from '../../../../models/credit';
+import { CalculateModel, ContractModel, ContractItemModel } from '../../../../models/credit';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
 import { CalculateService, ContractService, ContractItemService } from '../../../../services/credit';
@@ -14,6 +14,7 @@ import { concat } from 'rxjs/observable/concat';
 import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { runInThisContext } from 'vm';
 
 
 declare var toastr: any;
@@ -27,7 +28,7 @@ export class ContractComponent implements OnInit, OnDestroy {
     customerTypeahead = new EventEmitter<string>();
 
     contractModel: ContractModel;
-    contractItemModel: Array<ContractModel>;
+    contractItemModel: Array<ContractItemModel>;
     calculateModel: CalculateModel;
     customerFullName: string;
     userDropdown: Array<DropDownModel>;
@@ -77,15 +78,27 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractModel.statusText = o.statusText;
                     this.contractModel.contractHire = o.booking.customerCode;
 
+                    this.contractModel.contractGroup = this.checkNullAndReturnStr(o.creditContract.contractGroup);
+                    this.contractModel.contractType = this.checkNullAndReturnStr(o.creditContract.contractType);
+                    this.contractModel.areaPayment = this.checkNullAndReturnStr(o.creditContract.areaPayment);
+                    this.contractModel.contractPoint = this.checkNullAndReturnStr(o.creditContract.contractPoint);
+                    
+                    this.contractModel.contractGroup = this.checkNullAndReturnStr(o.creditContract.contractGroup);
+                    this.contractModel.contractType = this.checkNullAndReturnStr(o.creditContract.contractType);
+                    this.contractModel.contractPoint = this.checkNullAndReturnStr(o.creditContract.contractPoint);
+                    this.contractModel.createdBy = this.checkNullAndReturnStr(o.creditContract.createdBy);
+                    this.contractModel.checkedBy = this.checkNullAndReturnStr(o.creditContract.checkedBy);
+                    this.contractModel.approvedBy = this.checkNullAndReturnStr(o.creditContract.approvedBy);
+                    this.contractModel.keeperBy = this.checkNullAndReturnStr(o.creditContract.keeperBy);
+
                     this._bookingService.changeData(o.booking);
                     this.customerFullName = o.booking.custFullName;
                     this.contractItemModel = o.creditContractItem;
                     this.calculateModel = o.creditCalculate;
 
-
                     if (p.mode === 'create') {
                         this.contractModel.contractDate = (o.creditContract.contractDate == null && moment().format('YYYY-MM-DD'));
-                    } else if (p.mode === 'edit') {
+                    } else {
                         this.contractModel.contractDate = moment(this.contractModel.contractDate).format('YYYY-MM-DD');
                     }
                 });
@@ -94,6 +107,10 @@ export class ContractComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+    }
+
+    checkNullAndReturnStr(int: any) {
+        return int !== null && int.toString();
     }
 
     searchCustomer() {

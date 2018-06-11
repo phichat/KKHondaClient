@@ -26,20 +26,26 @@
                 <div class="row form-group">
                     <div class="col-lg-9 b-r">
                         <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">ผู้เช่าซื้อ:</label>
+                            <label for="" class="control-label col-lg-2">
+                                ผู้เช่าซื้อ:
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <input type="text" class="form-control form-control-sm" required="required" disabled [(ngModel)]="customerFullName" name="customerFullName">
                             </div>
-                        </div>
-                        <div class="row form-group">
                             <label for="" class="control-label col-lg-2">คู่สมรส:</label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractMate"
-                                    name="contractMate">
+                                <ng-select [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead"
+                                name="contractMate" [(ngModel)]="contractModel.contractMate">
 
                                 </ng-select>
                             </div>
-                            <label for="" class="control-label col-lg-2">ผู้ให้เช่าซื้อ:</label>
+                        </div>
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">
+                                ผู้ใช้รถ:
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractUser"
                                     name="contractUser">
@@ -54,25 +60,23 @@
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">คนที่ 1:</label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractGurantor1"
+                                <ng-select [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractGurantor1"
                                     name="contractGurantor1"></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation1"
-                                    name="gurantorRelation1"></ng-select>
+                                <ng-select [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation1" name="gurantorRelation1"></ng-select>
                             </div>
                         </div>
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractGurantor2"
+                                <ng-select [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractGurantor2"
                                     name="contractGurantor2"></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation2"
-                                    name="gurantorRelation2"></ng-select>
+                                <ng-select [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation2" name="gurantorRelation2"></ng-select>
                             </div>
                         </div>
 
@@ -92,7 +96,10 @@
                         </div>
 
                         <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">วันที่ทำสัญญา :</label>
+                            <label for="" class="control-label col-lg-2">
+                                วันที่ทำสัญญา :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <input type="date" [(ngModel)]="contractModel.contractDate" name="contractDate" required class="form-control">
                             </div>
@@ -100,24 +107,36 @@
 
 
                         <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">ประเภทสัญญา :</label>
-                            <div class="col-lg-4">
-                                <ng-select required [items]="contractTypeDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractType"
-                                    name="contractType"></ng-select>
-                            </div>
-                            <label for="" class="control-label col-lg-2">กลุ่มสัญญา :</label>
+                            <label for="" class="control-label col-lg-2">
+                                กลุ่มสัญญา :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="contractGroupDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractGroup"
                                     name="contractGroup"></ng-select>
                             </div>
+                            <label for="" class="control-label col-lg-2">
+                                ประเภทสัญญา :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-4">
+                                <ng-select required [items]="contractTypeDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractType"
+                                    name="contractType"></ng-select>
+                            </div>
                         </div>
 
                         <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">จุดทำสัญญา :</label>
+                            <label for="" class="control-label col-lg-2">
+                                จุดทำสัญญา :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="zoneDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractPoint" name="contractPoint"></ng-select>
                             </div>
-                            <label for="" class="control-label col-lg-2">เขตการเก็บเงิน :</label>
+                            <label for="" class="control-label col-lg-2">
+                                เขตการเก็บเงิน :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="branchDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.areaPayment" name="areaPayment"></ng-select>
                             </div>
@@ -126,24 +145,38 @@
                         <div class="hr-line-dashed m-b-sm"></div>
                         <h4>ผู้ดำเนินการ</h4>
                         <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">ผู้ทำสัญญา :</label>
+                            <label for="" class="control-label col-lg-2">
+                                ผู้ทำสัญญา :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="userDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.createdBy" name="createdBy"></ng-select>
                             </div>
-                            <label for="" class="control-label col-lg-2">ผู้ตรวจสอบ :</label>
+                            <label for="" class="control-label col-lg-2">
+                                ผู้ตรวจสอบ :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="userDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.checkedBy" name="checkedBy"></ng-select>
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <label for="" class="control-label col-lg-2">ผู้อนุมัติ :</label>
+                            <label for="" class="control-label col-lg-2">
+                                ผู้อนุมัติ :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
                                 <ng-select required [items]="userDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.approvedBy" name="approvedBy"></ng-select>
                             </div>
-                            <label for="" class="control-label col-lg-2">ผู้ดูแลสัญญา :</label>
+                            <label for="" class="control-label col-lg-2">
+                                ผู้ดูแลสัญญา :
+                                <span class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="userDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.keeperBy" name="keeperBy"></ng-select>
+                                <ng-select required [items]="userDropdown" 
+                                bindValue="value" bindLabel="text" 
+                                [(ngModel)]="contractModel.keeperBy" name="keeperBy"></ng-select>
                             </div>
                         </div>
 
@@ -157,7 +190,7 @@
 
                     </div>
                     <div class="col-lg-3">
-                        <input type="hidden" name="bookingId" [(ngModel)]="calculateModel.bookingId">
+                        <!-- <input type="hidden" name="bookingId" [(ngModel)]="calculateModel.bookingId"> -->
 
                         <div class="row form-group">
                             <label for="" class="col-lg-7 control-label">

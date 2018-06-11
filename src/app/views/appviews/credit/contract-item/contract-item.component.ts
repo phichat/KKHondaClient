@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, ChangeDetectorRef, AfterViewInit, ViewChild } from '@angular/core';
 import { CalculateModel, ContractItemModel } from '../../../../models/credit';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CalculateService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
 
