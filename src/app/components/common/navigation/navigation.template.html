@@ -45,16 +45,16 @@
                         </a>
                     </li> -->
                     <li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/contract-list']">
-                        <span class="nav-label">สัญญาเช่าซื้อ</span>
+                        <a [routerLink]="['/credit/contract-list/active']">
+                        <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
                         </a>
                     </li>
+                    <!-- <li [ngClass]="{active: activeRoute('credit')}">
+                        <a [routerLink]="['/credit/contract-list/canceled']">
+                        <span class="nav-label">รายการยกเลิกสัญญา</span>
+                        </a>
+                    </li> -->
                     <!--<li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/keeper']">
-                        <span class="nav-label">เปลี่ยนผู้ดูแล</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('credit')}">
                         <a [routerLink]="['/credit/contract-status']">
                         <span class="nav-label">สอบถามข้อมูลสัญญา</span>
                         </a>

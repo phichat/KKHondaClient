@@ -1,18 +1,17 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgModule } from '@angular/core';
 import { ContractService } from '../../../../services/credit';
-import { ContractListModel } from '../../../../models/credit';
 import { Router } from '@angular/router';
+import { ContractListModel } from '../../../../models/credit';
 
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
 
 @Component({
-    selector: 'app-contract-list',
-    templateUrl: './contract-list.component.html',
-    styleUrls: ['./contract-list.component.scss']
+    selector: 'app-contract-list-active',
+    templateUrl: './contract-list-active.component.html'
 })
-export class ContractListComponent implements OnInit {
+export class ContractListActiveComponent implements OnInit {
 
     contractListModel: ContractListModel[];
     dataTable: any;
@@ -24,7 +23,7 @@ export class ContractListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.contractService.Get().subscribe(o => {
+        this.contractService.GetActive().subscribe(o => {
 
             // this.chRef.markForCheck();
 
@@ -58,4 +57,12 @@ export class ContractListComponent implements OnInit {
         this.router.navigate(['credit/contract'], { queryParams: { mode: 'edit', contractId: contractId } });
     }
 
+    gotoCanceled(contractId: number) {
+        this.router.navigate(['credit/canceled'], { queryParams: { contractId: contractId } })
+    }
+
+    gotoDetail(contractId: number) {
+        this.router.navigate(['credit/detail'], { queryParams: { contractId: contractId } })
+    }
 }
+

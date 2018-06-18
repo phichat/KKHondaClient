@@ -1,32 +1,23 @@
-import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SellActivityModel } from 'app/models/sell-activity';
-import { CalculateInterface } from 'app/interfaces/credit';
-import { CalculateModel, ContractItemModel, ContractModel } from 'app/models/credit';
-import { BookingModel, BookingItemModel } from 'app/models/selling';
+import { CalculateModel, ContractModel } from 'app/models/credit';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-import { ExDetailCustomerComponent } from '../ex-detail-customer/ex-detail-customer.component';
-import { ExDetailMotobikeComponent } from '../ex-detail-motobike/ex-detail-motobike.component';
-import { ExDetailAccessoryComponent } from '../ex-detail-accessory/ex-detail-accessory.component';
+import * as $ from 'jquery';
+import * as Inputmask from 'inputmask';
 
-
-// import * as $ from 'jquery';
-declare var $: any;
 declare var toastr: any;
-// declare var finance: any;
 
 @Component({
     selector: 'app-calculate',
     templateUrl: './calculate.component.html',
     styleUrls: ['./calculate.component.scss']
 })
-export class CalculateComponent implements OnInit, OnDestroy {
+export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild(ContractItemComponent) contractItem;
 
@@ -74,6 +65,7 @@ export class CalculateComponent implements OnInit, OnDestroy {
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
 
+
         this._activatedRoute.queryParams.subscribe(p => {
 
             this.mode = p.mode;
@@ -95,10 +87,9 @@ export class CalculateComponent implements OnInit, OnDestroy {
                     this.contractModel.contractStatus = 32; // สัญญาใหม่
                 });
 
-                this.model.promotionalPrice = 0;
+                this.model.typePayment = '0';
                 this.model.deposit = 0;
                 this.model.depositPrice = 0;
-                this.model.instalmentEnd = 3;
                 this.model.dueDate = 5;
                 this.model.firstPayment = moment().format('YYYY-MM-DD');
                 this.model.interest = 2;
@@ -109,6 +100,27 @@ export class CalculateComponent implements OnInit, OnDestroy {
         });
     }
 
+    ngAfterViewInit() {
+
+        const selector = document.querySelectorAll('input.number');
+        const number2Digit = document.querySelectorAll('input.number-2-digit')
+
+        Inputmask({
+            'alias': 'numeric',
+            'groupSeparator': ',',
+            'autoGroup': true,
+            'digits': 0,
+            'digitsOptional': false
+        }).mask(selector);
+
+        Inputmask({
+            'alias': 'numeric',
+            'groupSeparator': ',',
+            'autoGroup': true,
+            'digits': 2
+        }).mask(number2Digit);
+    }
+
     ngOnDestroy(): void {
 
     }
@@ -117,11 +129,12 @@ export class CalculateComponent implements OnInit, OnDestroy {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
                 this.bookingNo = p.bookingNo;
-                this.model.netPrice = p.outStandingPrice;
+                // มูลค่าสินค้ารวม vat
+                this.model.netPrice = Math.ceil(p.outStandingPrice);
+                // ราคายืน
                 this.model.outStandingPrice = p.outStandingPrice;
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
-                console.log(p);
                 this._bookingService.changeData(p);
             });
     }
@@ -133,16 +146,17 @@ export class CalculateComponent implements OnInit, OnDestroy {
                 this.contractModel = p.creditContract;
                 this.contractItemModel = p.creditContractItem;
                 this.model.firstPayment = moment(p.firstPayment).format('YYYY-MM-DD');
+                this.model.typePayment = this.model.typePayment.toString();
+
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
-                
             })
     }
 
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
-        this.model.depositPrice = (this.model.netPrice * (this.model.deposit / 100));
+        this.model.depositPrice = Math.ceil(this.model.netPrice * (this.model.deposit / 100));
     }
 
     onChangeDepositPrice() {
@@ -156,7 +170,7 @@ export class CalculateComponent implements OnInit, OnDestroy {
         // const priceExVat = this.model.
         // ยอดจัด = ราคารถ-เงินดาวน์
         // ดอกเบี้ย = (ยอดจัด*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
-        this.model.remain = this.model.netPrice - this.model.depositPrice;
+        this.model.remain = Math.ceil(this.model.netPrice - this.model.depositPrice);
         // this.model.instalmentRemain = this.model.remain;
 
         // ผ่อนชำระต่องวด = (((ราคารถ-เงินดาวน์)+(((ราคารถ-เงินดาวน์)*(อัตราดอกเบี้ย/100))*(จำนวนเดือนผ่อนชำระ)))/จำนวนเดือนผ่อนชำระ)
@@ -165,12 +179,10 @@ export class CalculateComponent implements OnInit, OnDestroy {
                 this.model.remain * (
                     this.model.interest / 100
                 )
-            ) * (
-                this.model.instalmentEnd
-            )
+            ) * this.model.instalmentEnd
         ) / this.model.instalmentEnd;
 
-        this.model.instalmentPrice = instalmentPrice;
+        this.model.instalmentPrice = Math.ceil(instalmentPrice);
 
         const vatDown = (this.model.nowVat / 100);
         const vatUp = 1 + vatDown;
@@ -185,6 +197,10 @@ export class CalculateComponent implements OnInit, OnDestroy {
         this.model.irr = (this.rate(this.model.instalmentEnd, -(instalmentPriceExcVat), netPriceExcVat) * 100);
 
         this._calcService.changeData(this.model);
+    }
+
+    ceil10(int: number) {
+        return (Math.ceil(int / 10) * 10);
     }
 
     rate(nper, pmt, pv, fv?, type?, guess?) {
@@ -272,7 +288,7 @@ export class CalculateComponent implements OnInit, OnDestroy {
             .Edit(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
-                    this.router.navigate(['credit/contract-list']);
+                    this.router.navigate(['credit/contract-list/active']);
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);
@@ -285,7 +301,7 @@ export class CalculateComponent implements OnInit, OnDestroy {
             .Revice(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
-                    this.router.navigate(['credit/contract-list']);
+                    this.router.navigate(['credit/contract-list/active']);
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);

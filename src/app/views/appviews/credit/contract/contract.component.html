@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>ทำสัญญาเช่าซื้อ</h2>
+        <h2>เช่าซื้อ</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="/">หน้าแรก</a>
             </li>
             <li>
-                <a>สินเชื่อ</a>
+                <a>เช่าซื้อ</a>
             </li>
             <li class="active">
                 <strong>ทำสัญญาเช่าซื้อ</strong>
@@ -31,12 +31,14 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required" disabled [(ngModel)]="customerFullName" name="customerFullName">
+                                <input type="hidden" name="contractHire" [(ngModel)]="contractModel.contractHire">
+                                <input type="text" class="form-control form-control-sm" required disabled 
+                                [(ngModel)]="customerFullName" name="customerFullName">
                             </div>
                             <label for="" class="control-label col-lg-2">คู่สมรส:</label>
                             <div class="col-lg-4">
-                                <ng-select [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead"
-                                name="contractMate" [(ngModel)]="contractModel.contractMate">
+                                <ng-select [items]="contractMateDropdown" bindValue="value" bindLabel="text" [typeahead]="contractMateTypeahead" name="contractMate"
+                                    [(ngModel)]="contractModel.contractMate">
 
                                 </ng-select>
                             </div>
@@ -47,8 +49,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" 
-                                [(ngModel)]="contractModel.contractUser" name="contractUser">
+                                <ng-select required [items]="contractUserDropdown" bindValue="value" bindLabel="text" [typeahead]="contractUserTypeahead"
+                                    [(ngModel)]="contractModel.contractUser" name="contractUser">
                                 </ng-select>
                             </div>
                         </div>
@@ -60,23 +62,37 @@
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">คนที่ 1:</label>
                             <div class="col-lg-4">
-                                <ng-select [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractGurantor1"
-                                    name="contractGurantor1"></ng-select>
+                                <ng-select [items]="contractGurantor1Dropdown" bindValue="value" bindLabel="text" [typeahead]="contractGurantor1Typeahead"
+                                    [(ngModel)]="contractModel.contractGurantor1" name="contractGurantor1"></ng-select>
                             </div>
-                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
+                            <label for="" class="control-label col-lg-2">
+                                ความสัมพันธ์:
+                                <span *ngIf="contractModel.contractGurantor1" class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
-                                <ng-select [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation1" name="gurantorRelation1"></ng-select>
+                                <ng-select 
+                                [required]="contractModel.contractGurantor1"
+                                [items]="relationDropdown" bindValue="value" bindLabel="text" 
+                                [(ngModel)]="contractModel.gurantorRelation1" name="gurantorRelation1"></ng-select>
                             </div>
                         </div>
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
                             <div class="col-lg-4">
-                                <ng-select [items]="customerDropdown" bindValue="value" bindLabel="text" [typeahead]="customerTypeahead" [(ngModel)]="contractModel.contractGurantor2"
-                                    name="contractGurantor2"></ng-select>
+                                <ng-select
+                                [items]="contractGurantor2Dropdown" 
+                                bindValue="value" bindLabel="text" [typeahead]="contractGurantor2Typeahead"
+                                [(ngModel)]="contractModel.contractGurantor2" name="contractGurantor2"></ng-select>
                             </div>
-                            <label for="" class="control-label col-lg-2">ความสัมพันธ์:</label>
+                            <label for="" class="control-label col-lg-2">
+                                ความสัมพันธ์:
+                                <span *ngIf="contractModel.contractGurantor2" class="required">*</span>
+                            </label>
                             <div class="col-lg-4">
-                                <ng-select [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation2" name="gurantorRelation2"></ng-select>
+                                <ng-select 
+                                [required]="contractModel.contractGurantor2"
+                                [items]="relationDropdown" bindValue="value" bindLabel="text" 
+                                [(ngModel)]="contractModel.gurantorRelation2" name="gurantorRelation2"></ng-select>
                             </div>
                         </div>
 
@@ -90,8 +106,9 @@
                             </div>
                             <label for="" class="control-label col-lg-2">สถานะสัญญา :</label>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control form-control-sm" required="required" readonly [(ngModel)]="contractModel.statusText"
-                                    name="statusText">
+                                    <ng-select 
+                                    [items]="statusDropdown" bindValue="value" bindLabel="text" 
+                                    [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select>
                             </div>
                         </div>
 
@@ -174,9 +191,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="userDropdown" 
-                                bindValue="value" bindLabel="text" 
-                                [(ngModel)]="contractModel.keeperBy" name="keeperBy"></ng-select>
+                                <ng-select required [items]="userDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.keeperBy" name="keeperBy"></ng-select>
                             </div>
                         </div>
 
@@ -197,7 +212,7 @@
                                 ราคาสินค้า (รวม VAT) :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.netPrice | number: '1.2-2'}}</label>
+                                <label for="" class="control-label">{{calculateModel.netPrice | number}}</label>
                             </div>
                         </div>
 
@@ -206,7 +221,7 @@
                                 เงินดาวน์ :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.depositPrice | number: '1.2-2'}} ({{calculateModel.deposit | number}}%)</label>
+                                <label for="" class="control-label">{{calculateModel.depositPrice | number}} ({{calculateModel.deposit | number}}%)</label>
                             </div>
                         </div>
 
@@ -215,7 +230,8 @@
                                 ระยะเวลาผ่อนชำระ :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class=" control-label">{{calculateModel.instalmentEnd + ' เดือน'}}</label>
+                                <label *ngIf="calculateModel.typePayment == '0'" for="" class=" control-label">{{calculateModel.instalmentEnd + ' งวด'}}</label>
+                                <label *ngIf="calculateModel.typePayment == '1'" for="" class=" control-label">{{calculateModel.instalmentEnd + ' ปี'}}</label>
                             </div>
                         </div>
 
@@ -236,7 +252,7 @@
                                 ยอดจัด (รวม VAT) :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.remain | number:'1.2-2'}}</label>
+                                <label for="" class="control-label">{{calculateModel.remain | number}}</label>
                             </div>
                         </div>
 
@@ -246,7 +262,7 @@
 
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.instalmentPrice | number:'1.2-2'}}</label>
+                                <label for="" class="control-label">{{calculateModel.instalmentPrice | number}}</label>
                             </div>
                         </div>
 

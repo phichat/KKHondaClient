@@ -13,6 +13,33 @@ span.required {
    border-color: red !important;
 }
 
+.none-ibox {
+    margin-bottom: unset;
+    .ibox-title {
+        border-style: unset;
+        min-height: unset;
+        padding-left: 0px;
+        padding-right:  0px; 
+        background-color: transparent;      
+        
+       h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 5px;
+        }
+    }
+
+    .ibox-tools a{
+        color: teal !important;
+    }
+
+    .ibox-content {
+        border-style: dashed dashed none;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        border-color: #ddd;
+        background-color: transparent; 
+    }
+}
+
 // .ng-invalid.ng-touched:not(.ng-select-focused) {
 //    .ng-select .ng-select-container {
 //       border-color: red !important;

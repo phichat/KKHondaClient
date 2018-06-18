@@ -9,6 +9,7 @@ import { CustomerService } from '../../../../services/customers';
 import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BookingModel } from '../../../../models/selling';
 
 
 declare var toastr: any;
@@ -19,19 +20,26 @@ declare var toastr: any;
     styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit, OnDestroy {
-    customerTypeahead = new EventEmitter<string>();
+    contractMateTypeahead = new EventEmitter<string>();
+    contractUserTypeahead = new EventEmitter<string>();
+    contractGurantor1Typeahead = new EventEmitter<string>();
+    contractGurantor2Typeahead = new EventEmitter<string>();
 
-    contractModel: ContractModel;
-    contractItemModel: Array<ContractItemModel>;
-    calculateModel: CalculateModel;
+    contractModel: ContractModel = new ContractModel();
+    contractItemModel: Array<ContractItemModel> = new Array<ContractItemModel>();
+    calculateModel: CalculateModel = new CalculateModel();
     customerFullName: string;
-    userDropdown: Array<DropDownModel>;
-    customerDropdown: Array<DropDownModel>;
-    relationDropdown: Array<DropDownModel>;
-    contractGroupDropdown: Array<DropDownModel>;
-    contractTypeDropdown: Array<DropDownModel>;
-    zoneDropdown: Array<DropDownModel>;
-    branchDropdown: Array<DropDownModel>;
+    userDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractMateDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractUserDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractGurantor1Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractGurantor2Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    relationDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractGroupDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractTypeDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    zoneDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    branchDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    statusDropdown: Array<DropDownModel> = new Array<DropDownModel>();
 
     mode: string;
 
@@ -52,7 +60,10 @@ export class ContractComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.searchCustomer();
+        this.searchContractMate();
+        this.searchContractUser();
+        this.searchContractGurantor1();
+        this.searchContractGurantor2();
 
         this._activatedRoute.queryParams.subscribe(p => {
             this.mode = p.mode;
@@ -60,21 +71,30 @@ export class ContractComponent implements OnInit, OnDestroy {
                 this._contractService.getById(p.contractId).subscribe(o => {
 
                     this.userDropdown = o.userDropdown;
-                    this.customerDropdown = o.customerDropdown;
+                    this.contractMateDropdown = o.contractMateDropdown;
+                    this.contractUserDropdown = o.contractUserDropdown;
+                    this.contractGurantor1Dropdown = o.contractGurantor1Dropdown;
+                    this.contractGurantor2Dropdown = o.contractGurantor2Dropdown;
                     this.relationDropdown = o.relationDropdown;
                     this.contractGroupDropdown = o.contractGroupDropdown;
                     this.contractTypeDropdown = o.contractTypeDropdown;
+                    this.statusDropdown = o.statusDropdown;
                     this.zoneDropdown = o.zoneDropdown;
                     this.branchDropdown = o.branchDropdown;
 
                     this.contractModel = o.creditContract;
-                    this.contractModel.statusText = o.statusText;
+                    this.contractModel.statusDesc = o.statusDesc;
                     this.contractModel.contractHire = o.booking.customerCode;
+
+                    this.contractModel.gurantorRelation1 = this.checkNullAndReturnStr(o.creditContract.gurantorRelation1);
+                    this.contractModel.gurantorRelation2 = this.checkNullAndReturnStr(o.creditContract.gurantorRelation2);
 
                     this.contractModel.contractGroup = this.checkNullAndReturnStr(o.creditContract.contractGroup);
                     this.contractModel.contractType = this.checkNullAndReturnStr(o.creditContract.contractType);
                     this.contractModel.areaPayment = this.checkNullAndReturnStr(o.creditContract.areaPayment);
                     this.contractModel.contractPoint = this.checkNullAndReturnStr(o.creditContract.contractPoint);
+
+                    this.contractModel.contractStatus = this.checkNullAndReturnStr(o.creditContract.contractStatus);
 
                     this.contractModel.contractGroup = this.checkNullAndReturnStr(o.creditContract.contractGroup);
                     this.contractModel.contractType = this.checkNullAndReturnStr(o.creditContract.contractType);
@@ -84,8 +104,10 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractModel.approvedBy = this.checkNullAndReturnStr(o.creditContract.approvedBy);
                     this.contractModel.keeperBy = this.checkNullAndReturnStr(o.creditContract.keeperBy);
 
-                    this._bookingService.changeData(o.booking);
+                    this.contractModel.contractHire = o.booking.custCode;
                     this.customerFullName = o.booking.custFullName;
+
+                    this._bookingService.changeData(o.booking);
                     this.contractItemModel = o.creditContractItem;
                     this.calculateModel = o.creditCalculate;
 
@@ -93,6 +115,9 @@ export class ContractComponent implements OnInit, OnDestroy {
                         this.contractModel.contractDate = (o.creditContract.contractDate == null && moment().format('YYYY-MM-DD'));
                     } else {
                         this.contractModel.contractDate = moment(this.contractModel.contractDate).format('YYYY-MM-DD');
+                        this._userService.currentData.subscribe(u => {
+                            this.contractModel.updateBy = u.userId;
+                        });
                     }
                 });
             }
@@ -103,19 +128,58 @@ export class ContractComponent implements OnInit, OnDestroy {
     }
 
     checkNullAndReturnStr(int: any) {
-        return int !== null && int.toString();
+        return int !== null ? int.toString() : null;
     }
 
-    searchCustomer() {
-        this.customerTypeahead.pipe(
+    searchContractMate() {
+        this.contractMateTypeahead.pipe(
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._customerService.getByKey(term))
         ).subscribe(x => {
             this.chRef.markForCheck();
-            this.customerDropdown = x;
+            this.contractMateDropdown = x;
         }, (err) => {
-            this.customerDropdown = new Array<DropDownModel>();
+            this.contractMateDropdown = new Array<DropDownModel>();
+        });
+    }
+
+    searchContractUser() {
+        this.contractUserTypeahead.pipe(
+            distinctUntilChanged(),
+            debounceTime(300),
+            switchMap(term => this._customerService.getByKey(term))
+        ).subscribe(x => {
+            this.chRef.markForCheck();
+            this.contractUserDropdown = x;
+        }, (err) => {
+            this.contractUserDropdown = new Array<DropDownModel>();
+        });
+    }
+
+    searchContractGurantor1() {
+        this.contractGurantor1Typeahead.pipe(
+            distinctUntilChanged(),
+            debounceTime(300),
+            switchMap(term => this._customerService.getByKey(term))
+        ).subscribe(x => {
+            this.chRef.markForCheck();
+            this.contractGurantor1Dropdown = x;
+        }, (err) => {
+            this.contractGurantor1Dropdown = new Array<DropDownModel>();
+        });
+    }
+
+    searchContractGurantor2() {
+        this.contractGurantor2Typeahead.pipe(
+            distinctUntilChanged(),
+            debounceTime(300),
+            switchMap(term => this._customerService.getByKey(term))
+        ).subscribe(x => {
+            this.chRef.markForCheck();
+            this.contractGurantor2Dropdown = x;
+        }, (err) => {
+            this.contractGurantor2Dropdown = new Array<DropDownModel>();
         });
     }
 
@@ -124,7 +188,7 @@ export class ContractComponent implements OnInit, OnDestroy {
         if (this.mode === 'create') {
             this._contractService.Create(this.contractModel).subscribe(
                 res => {
-                    this.router.navigate(['credit/contract-list']);
+                    this.router.navigate(['credit/contract-list/active']);
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);
@@ -133,7 +197,7 @@ export class ContractComponent implements OnInit, OnDestroy {
         } else if (this.mode === 'edit') {
             this._contractService.Edit(this.contractModel).subscribe(
                 res => {
-                    this.router.navigate(['credit/contract-list']);
+                    this.router.navigate(['credit/contract-list/active']);
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);

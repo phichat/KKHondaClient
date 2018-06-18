@@ -22,58 +22,64 @@
                 <thead>
                     <tr>
                         <th style="width: 100px;">เลขที่สัญญา</th>
+                        <th style="width: 150px;">สถานะสัญญา</th>
+                        <th style="width: 100px;">รายละเอียด</th>
                         <th style="width: 100px;">แก้ไขสัญญา</th>
                         <th style="width: 150px;">จัดการค่างวด</th>
-                        <th style="width: 100px;">ยกเลิกสัญญา</th>
-                        <th style="width: 150px;">สถานะสัญญา</th>
+                        <!-- <th style="width: 100px;">ยกเลิกสัญญา</th> -->
                         <th style="width: 100px;">วันที่ทำสัญญา</th>
                         <th style="width: 100px;">กลุ่มสัญญา</th>
                         <th style="width: 150px;">ประเภทสัญญา</th>
                         <th style="width: 150px;">จุดทำสัญญา</th>
                         <th style="width: 150px;">เขตการเก็บเงิน</th>
-                        <th style="width: 100px;">เลขที่อ้างอิงค่างวด</th>
+                        <!-- <th style="width: 100px;">เลขที่อ้างอิงค่างวด</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of contractListModel">
                         <td>{{item.contractNo}}</td>
+                        <td>{{item.statusDesc}}</td>
+                        <!-- [ngClass]="{
+                            'text-info': item.contractStatus == 32,
+                            'text-warning': item.contractStatus == 31
+                        }" -->
                         <td>
-                            <a *ngIf="item.status == 32" (click)="gotoCreateContract(item.calculateId)" class="btn btn-success btn-xs">
+                            <a class="btn btn-info btn-xs" (click)="gotoDetail(item.contractId)">
+                                <i class="fa fa-file-text-o"></i>
+                                รายละเอียด</a>
+                        </td>
+                        <td>
+                            <a *ngIf="item.contractStatus == 32" (click)="gotoCreateContract(item.contractId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 อนุมัติสัญญา
                             </a>
-                            <a *ngIf="item.status == 31" (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
+                            <a *ngIf="item.contractStatus !== 32" (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขสัญญา
                             </a>
                         </td>
                         <td>
-                            <a *ngIf="item.status == 32" (click)="gotoEditCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                            <a *ngIf="item.contractStatus == 32" (click)="gotoEditCalculate(item.calculateId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขค่างวด
                             </a>
-                            <a *ngIf="item.status == 31" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                            <a *ngIf="item.contractStatus == 31" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-calculator"></i>
                                 คำนวณค่างวดขณะทำสัญญา
                             </a>
                         </td>
-                        <td>
-                            <a *ngIf="item.status == 31" class="btn btn-warning btn-xs">
+                        <!-- <td>
+                            <a *ngIf="item.contractStatus == 31" (click)="gotoCanceled(item.contractId)" class="btn btn-warning btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 ยกเลิกสัญญา
                             </a>
-                        </td>
-                        <td [ngClass]="{
-                            'text-info': item.status == 32,
-                            'text-danger': item.status == 0,
-                            'text-warning': item.status == 31
-                        }">{{item.contractStatus}}</td>
+                        </td> -->
                         <td>{{item.contractDate | date: 'dd-MM-yyyy' }}</td>
                         <td>{{item.contractGroup}}</td>
                         <td>{{item.contractType}}</td>
                         <td>{{item.contractPoint}}</td>
                         <td>{{item.areaPayment}}</td>
-                        <td>{{item.refNo}}</td>
+                        <!-- <td>{{item.refNo}}</td> -->
                     </tr>
                 </tbody>
             </table>

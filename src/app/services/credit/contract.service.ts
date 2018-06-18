@@ -17,8 +17,14 @@ export class ContractService {
 
     constructor(private http: HttpClient) { }
 
-    Get() {
-        return this.http.get<ContractListModel[]>(this.url);
+    GetActive() {
+        const apiUrl = `${this.url}/Active`;
+        return this.http.get<ContractListModel[]>(apiUrl);
+    }
+
+    GetCanceled() {
+        const apiUrl = `${this.url}/Canceled`;
+        return this.http.get<ContractListModel[]>(apiUrl);
     }
 
     getById(id: string) {
@@ -27,8 +33,14 @@ export class ContractService {
         return this.http.get<any>(api, { params });
     }
 
+    Detail(contractId: string) {
+        const apiURL = `${this.url}/Detail`;
+        const params = { contractId };
+        return this.http.get<any>(apiURL, { params });
+    }
+
     Edit(creditContract: ContractModel) {
-        const params = JSON.stringify( creditContract );
+        const params = JSON.stringify(creditContract);
         const apiURL = `${this.url}/Edit`;
         console.log(params);
 
@@ -36,9 +48,8 @@ export class ContractService {
     }
 
     Create(creditContract: ContractModel) {
-        const params = JSON.stringify( creditContract );
+        const params = JSON.stringify(creditContract);
         const apiURL = `${this.url}/Create`;
-        console.log(params);
 
         return this.http.post<any>(apiURL, params, this.httpOptions);
     }

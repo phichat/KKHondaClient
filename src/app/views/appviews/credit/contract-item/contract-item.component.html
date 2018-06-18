@@ -20,12 +20,24 @@
             <td class="text-right">{{item.dueDate | date: 'dd-MM-yyyy'}}</td>
             <td class="text-right">{{item.balance | number:'1.2-2'}}</td>
             <td class="text-right">{{item.balanceVatPrice | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
+            <td class="text-right">{{item.balanceNetPrice | number}}</td>
             <td class="text-right">{{item.interestInstalment | number:'1.2-2'}}</td>
             <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td>
             <td class="text-right">{{item.goodsPriceRemain | number:'1.2-2'}}</td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <th class="text-center">รวม</th>
+            <th></th>
+            <th class="text-right">{{balanchTotal | number:'1.2-2'}}</th>
+            <th class="text-right">{{balanchVatTotal | number:'1.2-2'}}</th>
+            <th class="text-right">{{balanchNetTotol | number}}</th>
+            <th class="text-right">{{interestTotal | number:'1.2-2'}}</th>
+            <th class="text-right">{{goodPriceTotal | number:'1.2-2'}}</th>
+            <th></th>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>

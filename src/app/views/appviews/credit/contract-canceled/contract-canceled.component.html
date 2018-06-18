@@ -1,0 +1,213 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>เช่าซื้อ</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li>
+                <a>เช่าซื้อ</a>
+            </li>
+            <li class="active">
+                <strong>ยกเลิกสัญญา</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2 text-right pull-right">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit(f)">
+                        <div class="row form-group">
+                            <div class="col-md-12 pull-right text-right">
+                                <h3 class="m-b-xs">เลขที่สัญญา</h3>
+                                <h2 class="no-margins text-navy" style="font-weight: normal">
+                                    {{contractDetailModel.contractNo}}
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="ibox none-ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h4>ยกเลิกสัญญา</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <label for="" class="control-label col-md-4">
+                                        สาเหตุการยกเลิก :
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" [(ngModel)]="contractDetailModel.remark" name="remark" #remark="ngModel" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox none-ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h4>ผู้เช่าซื้อ</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้เช่าซื้อ :</strong>
+                                        {{contractDetailModel.contractHire}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>คู่สมรส :</strong>
+                                        {{contractDetailModel.contractMate}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้ใช้รถ :</strong>
+                                        {{contractDetailModel.contractUser}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox none-ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h4>ผู้ค้ำประกัน</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>คนที่ 1 :</strong>
+                                        {{contractDetailModel.contractGurantor1}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ความสัมพันธ์ :</strong>
+                                        {{contractDetailModel.gurantorRelation1}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>คนที่ 2 :</strong>
+                                        {{contractDetailModel.contractGurantor2}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ความสัมพันธ์ :</strong>
+                                        {{contractDetailModel.contractGurantor2}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox none-ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h4>สัญญา</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>สถานะสัญญา :</strong>
+                                        {{contractDetailModel.statusDesc}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>วันที่ทำสัญญา :</strong>
+                                        {{contractDetailModel.contractDate | date: 'dd-MM-yyyy'}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>กลุ่มสัญญา :</strong>
+                                        {{contractDetailModel.contractGroup}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ประเภทสัญญา :</strong>
+                                        {{contractDetailModel.contractType}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>จุดทำสัญญา :</strong>
+                                        {{contractDetailModel.contractPoint}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>เขตการเก็บเงิน :</strong>
+                                        {{contractDetailModel.areaPayment}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox none-ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h4>ผู้ดำเนินการ</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้ทำสัญญา :</strong>
+                                        {{contractDetailModel.createdBy}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้ตรวจสอบ :</strong>
+                                        {{contractDetailModel.checkedBy}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้อนุมัติ :</strong>
+                                        {{contractDetailModel.approvedBy}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้ดูแลสัญญา :</strong>
+                                        {{contractDetailModel.keeperBy}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button type="submit" [disabled]="!f.valid" class="btn btn-primary">บันทึก</button>
+                                <a [routerLink]="['/credit/contract-list/active']" class="btn btn-white">ยกเลิก</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+
+            <div class="row form-group">
+                <div class="col-md-12 pull-right text-right">
+                    <h3 class="m-b-xs">เลขที่ใบจอง</h3>
+                    <h2 class="no-margins text-navy" style="font-weight: normal">
+                        {{bookingModel.bookingNo}}
+                    </h2>
+                </div>
+            </div>
+            <div class="ibox none-ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>ข้อมูลผู้จอง</h4>
+                </div>
+                <div class="ibox-content">
+                    <app-ex-detail-customer></app-ex-detail-customer>
+                </div>
+            </div>
+            <div class="ibox none-ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>ข้อมูลรถ</h4>
+                </div>
+                <div class="ibox-content">
+                    <app-ex-detail-motobike></app-ex-detail-motobike>
+                </div>
+            </div>
+            <div class="ibox none-ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>ข้อมูลของแถม</h4>
+                </div>
+                <div class="ibox-content">
+                    <app-ex-detail-accessory></app-ex-detail-accessory>
+                </div>
+            </div>
+            <div class="ibox none-ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>รายการฟรี</h4>
+                </div>
+                <div class="ibox-content">
+                    <app-ex-detail-free></app-ex-detail-free>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

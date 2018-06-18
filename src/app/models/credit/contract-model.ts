@@ -22,7 +22,8 @@ export class ContractModel {
     public approvedBy: string;
     public keeperBy: string;
     public contractStatus: number;
-    public statusText: string;
+    public statusDesc: string;
+    public remark: string;
     public createBy: number;
     public createDate: Date;
     public updateBy: number;

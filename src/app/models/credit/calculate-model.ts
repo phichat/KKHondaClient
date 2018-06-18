@@ -1,6 +1,7 @@
 export class CalculateModel {
     public creditId: number;
     public bookingId: number;
+    public typePayment: string;
     public outStandingPrice: number; // ยอดหนี้คงเหลือ
     public netPrice: number;         // ราคาสินค้าหลังหักส่วนลด
     public sellTypeId: number;        // ประเภทงานขาย

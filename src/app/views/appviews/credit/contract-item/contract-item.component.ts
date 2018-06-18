@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, ChangeDetectorRef, AfterViewInit, ViewChild } from '@angular/core';
-import { CalculateModel, ContractItemModel } from '../../../../models/credit';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, DoCheck, OnChanges } from '@angular/core';
+import { ContractItemModel } from '../../../../models/credit';
 import { CalculateService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
 
@@ -10,11 +9,17 @@ declare var footable: any;
 @Component({
     selector: 'app-contract-item',
     templateUrl: './contract-item.component.html',
-    styleUrls: ['./contract-item.component.scss']
+    styleUrls: ['./contract-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ContractItemComponent implements OnInit {
+export class ContractItemComponent implements OnInit, DoCheck {
 
     // contractItemModel: ContractItemModel[];
+    balanchTotal: number;
+    balanchVatTotal: number;
+    balanchNetTotol: number;
+    interestTotal: number;
+    goodPriceTotal: number;
 
     @Input() contractItemModel: ContractItemModel[];
 
@@ -23,14 +28,14 @@ export class ContractItemComponent implements OnInit {
         private _calService: CalculateService,
         private _userService: UserService
     ) {
+        // this.chRef.detach();
     }
 
     ngOnInit() {
-
         if (this.contractItemModel.length === 0) {
             this._calService.currentData.subscribe(p => {
 
-                // this.chRef.markForCheck();
+                this.chRef.markForCheck();
 
                 this.contractItemModel = new Array<ContractItemModel>()
 
@@ -40,9 +45,12 @@ export class ContractItemComponent implements OnInit {
                 const instalmentEnd = p.instalmentEnd;
                 const firstPay = new Date(p.firstPayment);
 
-                const depositPriceExcVat = p.depositPrice / vatUp;
-                const instalmentExcVat = p.instalmentPrice / vatUp;
-                const itemPriceExcVat = p.netPrice / vatUp;
+                // เงินจองถอด vat
+                const depositPriceExcVat = (p.depositPrice / vatUp);
+                // ค่างวดถอด vat
+                const instalmentExcVat = (p.instalmentPrice / vatUp);
+                // ค่าสินค้าถอด vat
+                const itemPriceExcVat = (p.netPrice / vatUp);
 
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
@@ -53,8 +61,17 @@ export class ContractItemComponent implements OnInit {
 
                     if (i > 0) {
                         const month = (firstPay.getMonth()) + j;
-                        d.setMonth(month);
+                        const year = (firstPay.getFullYear() + j);
                         d.setDate(p.dueDate);
+
+                        if (p.typePayment == '0') {
+                            // ชำระรายงวดห
+                            d.setMonth(month);
+                        } else if (p.typePayment == '1') {
+                            // ชำระรายปี
+                            d.setFullYear(year);
+                        }
+
                         dueDate = d;
                         j++;
                     }
@@ -67,13 +84,14 @@ export class ContractItemComponent implements OnInit {
                     // i = 0: รายการเงินดาน์
                     // i > 0: รายการผ่อน
                     const balance = (i === 0) ? depositPriceExcVat : instalmentExcVat;
-                    const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - instalmentExcVat;
+                    const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
+                    // const balanceVatPrice = p.instalmentPrice - balance;
                     const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
 
                     // ดอกเบี้ย
                     const preIndex = (i === 0) ? 0 : i - 1;
                     const preGoodsPriceRemail = (i === 0) ? 0 : (this.contractItemModel[preIndex].goodsPriceRemain);
-                    const interestInstalment = (i === 0) ? 0 : (preGoodsPriceRemail * p.irr) / 100;
+                    const interestInstalment = (i === 0) ? 0 : ((preGoodsPriceRemail * p.irr) / 100);
 
                     // ค่าสินค้าคงเหลือ
                     const goodsPrice = (i === 0) ? balance : balance - interestInstalment;
@@ -83,9 +101,9 @@ export class ContractItemComponent implements OnInit {
                     item.instalmentNo = i;
                     item.dueDate = dueDate;
                     item.vatRate = p.nowVat;
-                    item.balance = balance;
+                    item.balance = (balance);
                     item.balanceVatPrice = balanceVatPrice;
-                    item.balanceNetPrice = balanceNetPrice;
+                    item.balanceNetPrice = (balanceNetPrice);
                     // ดอกเบี้ย
                     item.interestInstalment = interestInstalment;
                     // ค่าสินค้า
@@ -97,9 +115,45 @@ export class ContractItemComponent implements OnInit {
 
                 }
 
+                this.setTotal();
+
             })
         }
-
     }
 
+    ngDoCheck() {
+        if (this.contractItemModel.length > 0) {
+            this.chRef.markForCheck();
+            this.setTotal();
+        }
+    }
+
+    // ngOnChanges() {
+
+    //     if (this.contractItemModel.length > 0) {
+    //         this.chRef.detectChanges();
+    //         console.log(this.contractItemModel);
+    //         this.setTotal();
+    //     }
+
+    // }
+
+    ceil10(int: number) {
+        return (Math.ceil(int / 10) * 10);
+    }
+
+    setTotal() {
+        this.balanchTotal = 0;
+        this.balanchVatTotal = 0;
+        this.balanchNetTotol = 0;
+        this.interestTotal = 0;
+        this.goodPriceTotal = 0;
+        this.contractItemModel.map(o => {
+            this.balanchTotal += o.balance;
+            this.balanchVatTotal += o.balanceVatPrice;
+            this.balanchNetTotol += o.balanceNetPrice;
+            this.interestTotal += o.interestInstalment;
+            this.goodPriceTotal += o.goodsPrice;
+        });
+    }
 }

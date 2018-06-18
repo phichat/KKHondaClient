@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BookingItemModel } from '../../../../models/selling';
 import { BookingService } from '../../../../services/selling';
-import { filter } from 'rxjs/operators';
-
+import * as $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs';
 declare var $: any;
 declare var toastr: any;
 declare var footable: any;
