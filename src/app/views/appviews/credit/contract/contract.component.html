@@ -32,8 +32,7 @@
                             </label>
                             <div class="col-lg-4">
                                 <input type="hidden" name="contractHire" [(ngModel)]="contractModel.contractHire">
-                                <input type="text" class="form-control form-control-sm" required disabled 
-                                [(ngModel)]="customerFullName" name="customerFullName">
+                                <input type="text" class="form-control form-control-sm" required disabled [(ngModel)]="customerFullName" name="customerFullName">
                             </div>
                             <label for="" class="control-label col-lg-2">คู่สมรส:</label>
                             <div class="col-lg-4">
@@ -70,29 +69,23 @@
                                 <span *ngIf="contractModel.contractGurantor1" class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <ng-select 
-                                [required]="contractModel.contractGurantor1"
-                                [items]="relationDropdown" bindValue="value" bindLabel="text" 
-                                [(ngModel)]="contractModel.gurantorRelation1" name="gurantorRelation1"></ng-select>
+                                <ng-select [required]="contractModel.contractGurantor1" [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation1"
+                                    name="gurantorRelation1"></ng-select>
                             </div>
                         </div>
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
                             <div class="col-lg-4">
-                                <ng-select
-                                [items]="contractGurantor2Dropdown" 
-                                bindValue="value" bindLabel="text" [typeahead]="contractGurantor2Typeahead"
-                                [(ngModel)]="contractModel.contractGurantor2" name="contractGurantor2"></ng-select>
+                                <ng-select [items]="contractGurantor2Dropdown" bindValue="value" bindLabel="text" [typeahead]="contractGurantor2Typeahead"
+                                    [(ngModel)]="contractModel.contractGurantor2" name="contractGurantor2"></ng-select>
                             </div>
                             <label for="" class="control-label col-lg-2">
                                 ความสัมพันธ์:
                                 <span *ngIf="contractModel.contractGurantor2" class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <ng-select 
-                                [required]="contractModel.contractGurantor2"
-                                [items]="relationDropdown" bindValue="value" bindLabel="text" 
-                                [(ngModel)]="contractModel.gurantorRelation2" name="gurantorRelation2"></ng-select>
+                                <ng-select [required]="contractModel.contractGurantor2" [items]="relationDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.gurantorRelation2"
+                                    name="gurantorRelation2"></ng-select>
                             </div>
                         </div>
 
@@ -106,9 +99,7 @@
                             </div>
                             <label for="" class="control-label col-lg-2">สถานะสัญญา :</label>
                             <div class="col-lg-4">
-                                    <ng-select 
-                                    [items]="statusDropdown" bindValue="value" bindLabel="text" 
-                                    [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select>
+                                <ng-select [items]="statusDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select>
                             </div>
                         </div>
 
@@ -347,10 +338,8 @@
         </div>
     </div>
 
-    <div class="ibox float-e-margins">
-        <div class="ibox-content">
-            <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
-        </div>
-    </div>
+    <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
+
+
 
 </div>

@@ -32,8 +32,4 @@ export class ContractDetailComponent implements OnInit {
 
     }
 
-    onSubmit(f: any) {
-
-    }
-
 }
