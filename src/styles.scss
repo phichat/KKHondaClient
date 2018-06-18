@@ -13,6 +13,14 @@ span.required {
    border-color: red !important;
 }
 
+.line-dashed {
+    border-style: dashed dashed none;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    border-color: #ddd;
+    background-color: transparent;
+}
+
 .none-ibox {
     margin-bottom: unset;
     .ibox-title {

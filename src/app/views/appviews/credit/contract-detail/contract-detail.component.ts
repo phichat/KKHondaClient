@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingModel } from '../../../../models/selling';
-import { ContractDetailModel } from '../../../../models/credit';
+import { ContractDetailModel, CalculateModel, ContractItemModel } from '../../../../models/credit';
 import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
@@ -13,6 +13,9 @@ export class ContractDetailComponent implements OnInit {
 
     contractDetailModel: ContractDetailModel = new ContractDetailModel();
     bookingModel: BookingModel = new BookingModel();
+    calculateModel: CalculateModel = new CalculateModel();
+    contractItemModel: Array<ContractItemModel> = new Array<ContractItemModel>();
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _credit: ContractService,
@@ -24,6 +27,8 @@ export class ContractDetailComponent implements OnInit {
             if (o.contractId) {
                 this._credit.Detail(o.contractId).subscribe(p => {
                     this.contractDetailModel = p.creditContractDetail;
+                    this.calculateModel = p.creditCalculate;
+                    this.contractItemModel = p.creditContractItem;
                     this.bookingModel = p.booking;
                     this._bookingService.changeData(p.booking);
                 });
