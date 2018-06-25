@@ -197,7 +197,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="row form-group">
+            <div class="row form-group" style="margin-top: 15px;">
                 <div class="col-md-12 pull-right text-right">
                     <h3 class="m-b-xs">เลขที่ใบจอง</h3>
                     <h3 class="no-margins text-navy" style="font-weight: normal">
@@ -247,41 +247,49 @@
 <div class="modal inmodal" id="frmPrint" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-sm">
         <div class="modal-content animated fadeIn">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">×</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <!-- <i class="fa fa-clock-o modal-icon"></i> -->
-                <h4 class="modal-title">พิมพ์</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="checkbox checkbox-info">
-                            <input type="checkbox" id="rpt1" value="" name="">
-                            <label for="rpt1">
-                                <strong>ใบสัญญาเช่าซื้อ</strong>
-                            </label>
-                        </div>
-                        <div class="checkbox checkbox-info">
-                            <input type="checkbox" id="rpt2" value="" name="">
-                            <label for="rpt2">
-                                <strong>ใบชำระค่างวด</strong>
-                            </label>
-                        </div>
-                        <div class="checkbox checkbox-info">
-                            <input type="checkbox" id="rpt3" value="" name="">
-                            <label for="rpt3">
-                                <strong>ใบส่งมอบ</strong>
-                            </label>
+            <form action="" #f="ngForm" (ngSubmit)="onPrint(f.value)">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <!-- <i class="fa fa-clock-o modal-icon"></i> -->
+                    <h4 class="modal-title">พิมพ์</h4>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="contractId" [(ngModel)]="contractDetailModel.contractId" ngModel>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" id="rpt1" name="formContract" ngModel>
+                                <label for="rpt1">
+                                    <strong>ใบสัญญาเช่าซื้อ</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" id="rpt2" name="formInstalmentTerm" ngModel>
+                                <label for="rpt2">
+                                    <strong>ใบชำระค่างวด</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" id="rpt3" name="formTransfer" ngModel>
+                                <label for="rpt3">
+                                    <strong>ใบส่งมอบ</strong>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">ตกลง</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">ตกลง</button>
+                </div>
+            </form>
+
         </div>
+
+
     </div>
 </div>

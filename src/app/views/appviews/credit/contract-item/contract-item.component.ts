@@ -15,11 +15,11 @@ declare var footable: any;
 export class ContractItemComponent implements OnInit, DoCheck {
 
     // contractItemModel: ContractItemModel[];
-    balanchTotal: number;
-    balanchVatTotal: number;
-    balanchNetTotol: number;
-    interestTotal: number;
-    goodPriceTotal: number;
+    balanchTotal: number = 0;
+    balanchVatTotal: number = 0;
+    balanchNetTotol: number = 0;
+    interestTotal: number = 0;
+    goodPriceTotal: number = 0;
 
     @Input() contractItemModel: ContractItemModel[];
 
@@ -50,7 +50,9 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 // ค่างวดถอด vat
                 const instalmentExcVat = (p.instalmentPrice / vatUp);
                 // ค่าสินค้าถอด vat
-                const itemPriceExcVat = (p.netPrice / vatUp);
+                const itemPriceExcVat = (p.outStandingPrice / vatUp);
+                // ยอดจัดถอด vat
+                const remainExcVat = (p.netPrice / vatUp);
 
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
@@ -78,6 +80,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
 
                     // tslint:disable-next-line:prefer-const
                     let item = new ContractItemModel();
+                    const preIndex = (i === 0) ? 0 : i - 1;
 
                     // ค่างวดไม่รวม vat
                     // i : จำนวนรายการ
@@ -85,11 +88,13 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     // i > 0: รายการผ่อน
                     const balance = (i === 0) ? depositPriceExcVat : instalmentExcVat;
                     const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
-                    // const balanceVatPrice = p.instalmentPrice - balance;
                     const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
 
-                    // ดอกเบี้ย
-                    const preIndex = (i === 0) ? 0 : i - 1;
+                    const remain = remainExcVat - (balance * (i == 0 ? 1 : i));
+                    const remainVatPrice = (remain * vatUp) - remain;
+                    const remainNetPrice = remain + remainVatPrice;       
+                    
+                    // ดอกเบี้ย                   
                     const preGoodsPriceRemail = (i === 0) ? 0 : (this.contractItemModel[preIndex].goodsPriceRemain);
                     const interestInstalment = (i === 0) ? 0 : ((preGoodsPriceRemail * p.irr) / 100);
 
@@ -104,6 +109,11 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     item.balance = (balance);
                     item.balanceVatPrice = balanceVatPrice;
                     item.balanceNetPrice = (balanceNetPrice);
+
+                    item.remain = remain;
+                    item.remainVatPrice = remainVatPrice;
+                    item.remainNetPrice = remainNetPrice;
+
                     // ดอกเบี้ย
                     item.interestInstalment = interestInstalment;
                     // ค่าสินค้า
@@ -112,31 +122,19 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     item.goodsPriceRemain = goodsPriceRemain < 0 ? 0 : goodsPriceRemain;
 
                     this.contractItemModel.push(item);
-
                 }
 
                 this.setTotal();
-
             })
         }
     }
 
     ngDoCheck() {
-        if (this.contractItemModel.length > 0) {
+        if (this.contractItemModel.length > 0 && this.balanchNetTotol == 0) {
             this.chRef.markForCheck();
             this.setTotal();
         }
     }
-
-    // ngOnChanges() {
-
-    //     if (this.contractItemModel.length > 0) {
-    //         this.chRef.detectChanges();
-    //         console.log(this.contractItemModel);
-    //         this.setTotal();
-    //     }
-
-    // }
 
     ceil10(int: number) {
         return (Math.ceil(int / 10) * 10);

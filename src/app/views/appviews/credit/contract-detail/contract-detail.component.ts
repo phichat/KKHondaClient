@@ -4,6 +4,7 @@ import { ContractDetailModel, CalculateModel, ContractItemModel } from '../../..
 import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
+import { Form } from '@angular/forms';
 
 @Component({
     selector: 'app-contract-detail',
@@ -35,6 +36,10 @@ export class ContractDetailComponent implements OnInit {
             }
         });
 
+    }
+
+    onPrint(f: Form) {
+        console.log(f);
     }
 
 }
