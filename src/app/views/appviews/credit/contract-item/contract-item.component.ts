@@ -52,7 +52,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 // ค่าสินค้าถอด vat
                 const itemPriceExcVat = (p.outStandingPrice / vatUp);
                 // ยอดจัดถอด vat
-                const netExcVat = (p.netPrice / vatUp);
+                const netPriceExcVat = (p.netPrice / vatUp);
 
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
@@ -90,7 +90,8 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
                     const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
 
-                    const remain = netExcVat - (balance * (i == 0 ? 1 : i));
+                    const rNet = netPriceExcVat - depositPriceExcVat;
+                    const remain = (i === 0) ? rNet : rNet - (instalmentExcVat * i);
                     const remainVatPrice = (remain * vatUp) - remain;
                     const remainNetPrice = remain + remainVatPrice;       
                     
