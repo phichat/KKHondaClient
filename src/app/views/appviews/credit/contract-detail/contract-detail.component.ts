@@ -6,6 +6,8 @@ import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
 import { Form } from '@angular/forms';
 
+import { appConfig } from '../../../../app.config';
+
 @Component({
     selector: 'app-contract-detail',
     templateUrl: './contract-detail.component.html'
@@ -38,8 +40,13 @@ export class ContractDetailComponent implements OnInit {
 
     }
 
-    onPrint(f: Form) {
-        console.log(f);
+    onPrint(f: any) {
+        let params = `contractId=${f.contractId}`;
+        params += `&formContract=${f.formContract}`;
+        params += `&formInstalmentTerm=${f.formInstalmentTerm}`;
+        params += `&formTransfer=${f.formTransfer}`;
+        
+        window.open(`${appConfig.reportUrl}/Credits/index.aspx?${params}`);
     }
 
 }
