@@ -42,10 +42,10 @@ export class ContractDetailComponent implements OnInit {
 
     onPrint(f: any) {
         let params = `contractId=${f.contractId}`;
-        params += `&formContract=${f.formContract}`;
-        params += `&formInstalmentTerm=${f.formInstalmentTerm}`;
-        params += `&formTransfer=${f.formTransfer}`;
-        
+        params += `&formContract=${f.formContract !== '' ? true : false}`;
+        params += `&formInstalmentTerm=${f.formInstalmentTerm !== '' ? true : false}`;
+        params += `&formTransfer=${f.formTransfer !== '' ? true : false}`;
+     
         window.open(`${appConfig.reportUrl}/Credits/index.aspx?${params}`);
     }
 
