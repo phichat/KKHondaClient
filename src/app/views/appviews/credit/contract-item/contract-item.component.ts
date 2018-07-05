@@ -15,11 +15,11 @@ declare var footable: any;
 export class ContractItemComponent implements OnInit, DoCheck {
 
     // contractItemModel: ContractItemModel[];
-    balanchTotal: number = 0;
-    balanchVatTotal: number = 0;
-    balanchNetTotol: number = 0;
-    interestTotal: number = 0;
-    goodPriceTotal: number = 0;
+    balanchTotal: number;
+    balanchVatTotal: number;
+    balanchNetTotol: number;
+    interestTotal: number;
+    goodPriceTotal: number;
 
     @Input() contractItemModel: ContractItemModel[];
 
@@ -40,8 +40,6 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 this.contractItemModel = new Array<ContractItemModel>()
 
                 const vatUp = 1 + (p.nowVat / 100);
-                const vatDown = (p.nowVat / 100);
-
                 const instalmentEnd = p.instalmentEnd;
                 const firstPay = new Date(p.firstPayment);
 
@@ -50,7 +48,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 // ค่างวดถอด vat
                 const instalmentExcVat = (p.instalmentPrice / vatUp);
                 // ค่าสินค้าถอด vat
-                const itemPriceExcVat = (p.outStandingPrice / vatUp);
+                const itemPriceExcVat = (p.netPrice / vatUp);
                 // ยอดจัดถอด vat
                 const remainExcVat = (p.netPrice / vatUp);
 
@@ -92,9 +90,9 @@ export class ContractItemComponent implements OnInit, DoCheck {
 
                     const remain = remainExcVat - (balance * (i == 0 ? 1 : i));
                     const remainVatPrice = (remain * vatUp) - remain;
-                    const remainNetPrice = remain + remainVatPrice;       
-                    
-                    // ดอกเบี้ย                   
+                    const remainNetPrice = remain + remainVatPrice;
+
+                    // ดอกเบี้ย
                     const preGoodsPriceRemail = (i === 0) ? 0 : (this.contractItemModel[preIndex].goodsPriceRemain);
                     const interestInstalment = (i === 0) ? 0 : ((preGoodsPriceRemail * p.irr) / 100);
 

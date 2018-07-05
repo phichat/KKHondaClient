@@ -9,6 +9,9 @@
             <th class="text-center">ค่างวดไม่รวม VAT</th>
             <th class="text-center">VAT</th>
             <th class="text-center">ค่างวดรวม VAT</th>
+            <!-- <th></th>
+            <th></th>
+            <th></th> -->
             <th class="text-center">ดอกผลเช่าซื้อต่องวดไม่รวม VAT</th>
             <th class="text-center">ค่าสินค้าไม่รวม VAT</th>
             <th class="text-center">ค่าสินค้าคงเหลือไม่รวม VAT</th>
@@ -21,6 +24,9 @@
             <td class="text-right">{{item.balance | number:'1.2-2'}}</td>
             <td class="text-right">{{item.balanceVatPrice | number:'1.2-2'}}</td>
             <td class="text-right">{{item.balanceNetPrice | number}}</td>
+            <!-- <td>{{item.remain | number:'1.2-2'}}</td>
+            <td>{{item.remainVatPrice | number:'1.2-2'}}</td>
+            <td>{{item.remainNetPrice | number:'1.2-2'}}</td> -->
             <td class="text-right">{{item.interestInstalment | number:'1.2-2'}}</td>
             <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td>
             <td class="text-right">{{item.goodsPriceRemain | number:'1.2-2'}}</td>
@@ -33,6 +39,9 @@
             <th class="text-right">{{balanchTotal | number:'1.2-2'}}</th>
             <th class="text-right">{{balanchVatTotal | number:'1.2-2'}}</th>
             <th class="text-right">{{balanchNetTotol | number}}</th>
+            <!-- <th></th>
+            <th></th>
+            <th></th> -->
             <th class="text-right">{{interestTotal | number:'1.2-2'}}</th>
             <th class="text-right">{{goodPriceTotal | number:'1.2-2'}}</th>
             <th></th>

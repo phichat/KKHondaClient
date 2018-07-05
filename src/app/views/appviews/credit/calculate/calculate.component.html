@@ -39,6 +39,19 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                อัตราดอกเบี้ย/เดือน :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
@@ -113,19 +126,6 @@
                             <div class="col-md-4">
                                 <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
                                 </ng-select>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                อัตราดอกเบี้ย/เดือน :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
-                                    <span class="input-group-addon">%</span>
-                                </div>
                             </div>
                         </div>
 
