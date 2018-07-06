@@ -34,12 +34,12 @@
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice" class="form-control number" readonly>
+                                    <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number" readonly>
                                     <span class="input-group-addon">บาท</span>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 อัตราดอกเบี้ย/เดือน :
@@ -243,9 +243,7 @@
                     <iboxtools></iboxtools>
                 </div>
                 <div class="ibox-content">
-                    <div class="table-responsive">
-                        <app-ex-detail-free></app-ex-detail-free>
-                    </div>
+                    <app-ex-detail-free></app-ex-detail-free>
                 </div>
             </div>
         </div>
