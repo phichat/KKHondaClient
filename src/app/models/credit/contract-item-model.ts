@@ -3,6 +3,8 @@ export class ContractItemModel {
     public contractId: number;
     public contractBranchId: number;
     public instalmentNo: number;
+    public instalmentNoText: string;
+    public refNo: string;
     public dueDate: Date;
     public vatRate: number;
     public balance: number;
@@ -21,6 +23,7 @@ export class ContractItemModel {
     public statusText: string;
     public interestInstalment: number;
     public interestRemainAccount: number;
+    public goodsPrice: number;
     public goodsPriceRemain: number;
     public instalmentPrice: number;
     public remain: number;

@@ -1,10 +1,6 @@
-export class ContractModel {
+export class ContractDetailModel {
     public contractId: number;
-    public bookingId: number;
-    public branchId: number;
-    public calculateId: number;
     public contractNo: string;
-    public refNo: string;
     public contractType: string;
     public contractDate: string;
     public areaPayment: string;
@@ -21,11 +17,6 @@ export class ContractModel {
     public checkedBy: string;
     public approvedBy: string;
     public keeperBy: string;
-    public contractStatus: number;
     public statusDesc: string;
     public remark: string;
-    public createBy: number;
-    public createDate: Date;
-    public updateBy: number;
-    public updateDate: Date;
 }

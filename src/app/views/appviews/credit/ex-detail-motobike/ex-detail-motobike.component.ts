@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingModel, BookingItemModel } from '../../../../models/selling';
 import { BookingService } from '../../../../services/selling';
-import { filter, map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-ex-detail-motobike',
@@ -12,6 +11,7 @@ export class ExDetailMotobikeComponent implements OnInit {
 
     modelBooking: BookingModel;
     modelMotobike: BookingItemModel;
+    selePriceExcVat: number;
 
     constructor(private _bookingService: BookingService) { }
 
@@ -22,6 +22,8 @@ export class ExDetailMotobikeComponent implements OnInit {
             if (o.bookingItem) {
 
                 this.modelBooking = o;
+
+                this.selePriceExcVat = this.modelBooking.sellPrice - this.modelBooking.vatPrice;
 
                 o.bookingItem
                     .filter(i => i.itemType === 1)

@@ -1,43 +1,35 @@
-import { Component, OnInit, OnChanges, DoCheck, ChangeDetectorRef, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SellActivityModel } from 'app/models/sell-activity';
-import { CalculateInterface } from 'app/interfaces/credit';
-import { CalculateModel, ContractItemModel } from 'app/models/credit';
-import { BookingModel, BookingItemModel } from 'app/models/selling';
+import { CalculateModel, ContractModel } from 'app/models/credit';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-import { ExDetailCustomerComponent } from '../ex-detail-customer/ex-detail-customer.component';
-import { ExDetailMotobikeComponent } from '../ex-detail-motobike/ex-detail-motobike.component';
-import { ExDetailAccessoryComponent } from '../ex-detail-accessory/ex-detail-accessory.component';
-import { Finance } from 'financejs';
+import * as $ from 'jquery';
+import * as Inputmask from 'inputmask';
 
-
-// import * as $ from 'jquery';
-declare var $: any;
 declare var toastr: any;
-// declare var finance: any;
 
 @Component({
     selector: 'app-calculate',
     templateUrl: './calculate.component.html',
     styleUrls: ['./calculate.component.scss']
 })
-export class CalculateComponent implements OnInit {
+export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild(ContractItemComponent) contractItem;
 
-    // finance: any;
-    model = new CalculateModel();
+    model: CalculateModel = new CalculateModel();
+    contractModel: ContractModel = new ContractModel();
+    contractItemModel = new Array<ContractModel>();
     bookingNo: string;
+    mode: string;
 
-    sellType = [
-        { value: 3, text: 'ลิสซิ่ง' },
-        { value: 4, text: 'เช่าซื้อ' }]
+    // sellType = [
+    //     { value: 3, text: 'ลิสซิ่ง' },
+    //     { value: 4, text: 'เช่าซื้อ' }]
 
     instalmentEnd = [
         { value: 3, text: '3 เดือน' },
@@ -68,35 +60,68 @@ export class CalculateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._activatedRoute.queryParams.subscribe(p => {
-            if (p.bookingId) {
-                this.model.bookingId = p.bookingId;
-                this.onLoadBooking(p.bookingId);
-            }
-        });
-
-        this._userService.currentData.subscribe(p => {
-            this.model.createBy = p.userId;
-        })
-
         for (let i = 1; i < 7; i++) {
             const month = i * 12;
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
 
-        this.model.promotionalPrice = 0;
-        this.model.deposit = 0;
-        this.model.depositPrice = 0;
-        this.model.instalmentEnd = 3;
-        this.model.dueDate = 5;
-        this.model.firstPayment = moment().format('YYYY-MM-DD');
-        this.model.instalmentPrice = 0;
-        this.model.interest = 2;
-        this.model.nowVat = 7;
-        this.model.remain = 0;
-        this.model.sellTypeId = 4;
-        this.model.sellAcitvityId = 25;
-        // this.model.irr = 0;
+
+        this._activatedRoute.queryParams.subscribe(p => {
+
+            this.mode = p.mode;
+
+            if (p.mode === 'edit' && p.calculateId) {
+                this.onLoadCaculateData(p.calculateId);
+
+            } else if (p.mode === 'revice' && p.calculateId) {
+                this.onLoadCaculateData(p.calculateId);
+
+            } else if (p.mode === 'create' && p.bookingId) {
+                this.model.bookingId = p.bookingId;
+                this.onLoadBooking(p.bookingId);
+                this._userService.currentData.subscribe(u => {
+                    this.model.createBy = u.userId;
+                    this.contractModel.branchId = u.branchId;
+                    this.contractModel.bookingId = p.bookingId;
+                    this.contractModel.createBy = u.userId;
+                    this.contractModel.contractStatus = 32; // สัญญาใหม่
+                });
+
+                this.model.typePayment = '0';
+                this.model.deposit = 0;
+                this.model.depositPrice = 0;
+                this.model.dueDate = 5;
+                this.model.firstPayment = moment().format('YYYY-MM-DD');
+                this.model.interest = 2;
+                this.model.remain = 0;
+                this.model.sellTypeId = 4;
+                this.model.sellAcitvityId = 25;
+            }
+        });
+    }
+
+    ngAfterViewInit() {
+
+        const selector = document.querySelectorAll('input.number');
+        const number2Digit = document.querySelectorAll('input.number-2-digit')
+
+        Inputmask({
+            'alias': 'numeric',
+            'groupSeparator': ',',
+            'autoGroup': true,
+            'digits': 0,
+            'digitsOptional': false
+        }).mask(selector);
+
+        Inputmask({
+            'alias': 'numeric',
+            'groupSeparator': ',',
+            'autoGroup': true,
+            'digits': 2
+        }).mask(number2Digit);
+    }
+
+    ngOnDestroy(): void {
 
     }
 
@@ -104,59 +129,173 @@ export class CalculateComponent implements OnInit {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
                 this.bookingNo = p.bookingNo;
-                this.model.netPrice = p.outStandingPrice;
+                this.model.outStandingPrice = p.outStandingPrice;
+                this.model.netPrice = p.netPrice;
+                this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
             });
     }
 
+    onLoadCaculateData(calculateId: number) {
+        this._calcService.GetById(calculateId.toString())
+            .subscribe(p => {
+                this.model = p.creditCalculate;
+                this.contractModel = p.creditContract;
+                this.contractItemModel = p.creditContractItem;
+                this.model.firstPayment = moment(p.firstPayment).format('YYYY-MM-DD');
+                this.model.typePayment = this.model.typePayment.toString();
+
+                this.bookingNo = p.booking.bookingNo;
+                this._bookingService.changeData(p.booking);
+            })
+    }
+
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
-        this.model.depositPrice = this.model.netPrice * (this.model.deposit / 100);
+        this.model.depositPrice = Math.ceil(this.model.netPrice * (this.model.deposit / 100));
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        this.model.deposit = (this.model.depositPrice * 100) / this.model.netPrice;
+        this.model.deposit = ((this.model.depositPrice * 100) / this.model.netPrice);
     }
 
     instalmentCalculate() {
         // ยอดจัด = ราคารถ-เงินดาวน์
-        // ดอกเบี้ย = (ยอดจัด*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
-        this.model.remain = this.model.netPrice - this.model.depositPrice;
+        // ราคาดอกเบี้ย = (ราคารถ*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
+        this.model.interestPrice = (this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
+        // ราคารถรวมดอกเบี้ย
+        const netPrice = (this.model.netPrice + this.model.interestPrice);
+        // ยอดจัด = (ราคารถรวมดอกเบี้ย - เงินดาวน์)        
+        this.model.remain = Math.ceil(netPrice - this.model.depositPrice);
+        // ผ่อนชำระต่องวด = ยอดจัด / จำนวนเดือนผ่อนชำระ
+        this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd);
 
-        // ผ่อนชำระต่องวด = (((ราคารถ-เงินดาวน์)+(((ราคารถ-เงินดาวน์)*(อัตราดอกเบี้ย/100))*(จำนวนเดือนผ่อนชำระ/12)))/จำนวนเดือนผ่อนชำระ)
-        this.model.instalmentPrice =
-            (
-                this.model.remain + (
-                    this.model.remain * (
-                        this.model.interest / 100
-                    )
-                ) * (
-                    this.model.instalmentEnd / 12
-                )
-            ) / this.model.instalmentEnd;
+        const vatUp = 1 + (this.model.nowVat / 100);
 
-            const finance: any = new Finance();
-        console.log(finance.IRR(this.model.instalmentEnd, -this.model.instalmentPrice, this.model.netPrice));
+        // เงินดาวน์
+        const depositExcVat = this.model.depositPrice / vatUp;
+        // ราคาสินค้า(ไม่รวมดอกเบี้ย) - เงินดาวน์
+        const netPriceExcVat = (this.model.netPrice / vatUp) - depositExcVat;
+        // ค่างวดต่อเดือน(รวมดอกเบี้ย)
+        const instalmentPriceExcVat = this.model.instalmentPrice / vatUp;
+        // คำนวณ RATE
+        this.model.irr = (this.RATE(this.model.instalmentEnd, -(instalmentPriceExcVat), netPriceExcVat) * 100);
 
         this._calcService.changeData(this.model);
+    }
+
+    ceil10(int: number) {
+        return (Math.ceil(int / 10) * 10);
+    }
+
+    RATE(nper, pmt, pv, fv?, type?, guess?) {
+        // Sets default values for missing parameters
+        fv = typeof fv !== 'undefined' ? fv : 0;
+        type = typeof type !== 'undefined' ? type : 0;
+        guess = typeof guess !== 'undefined' ? guess : 0.1;
+
+        // Sets the limits for possible guesses to any
+        // number between 0% and 100%
+        let lowLimit = 0;
+        let highLimit = 1;
+
+        // Defines a tolerance of up to +/- 0.00005% of pmt, to accept
+        // the solution as valid.
+        const tolerance = Math.abs(0.00000005 * pmt);
+
+        // Tries at most 40 times to find a solution within the tolerance.
+        for (let i = 0; i < 40; i++) {
+            // Resets the balance to the original pv.
+            let balance = pv;
+
+            // Calculates the balance at the end of the loan, based
+            // on loan conditions.
+            for (let j = 0; j < nper; j++) {
+                if (type === 0) {
+                    // Interests applied before payment
+                    balance = balance * (1 + guess) + pmt;
+                } else {
+                    // Payments applied before insterests
+                    balance = (balance + pmt) * (1 + guess);
+                }
+            }
+
+            // Returns the guess if balance is within tolerance.  If not, adjusts
+            // the limits and starts with a new guess.
+            if (Math.abs(balance + fv) < tolerance) {
+                return guess;
+            } else if (balance + fv > 0) {
+                // Sets a new highLimit knowing that
+                // the current guess was too big.
+                highLimit = guess;
+            } else {
+                // Sets a new lowLimit knowing that
+                // the current guess was too small.
+                lowLimit = guess;
+            }
+
+            // Calculates the new guess.
+            guess = (highLimit + lowLimit) / 2;
+        }
+
+        // Returns null if no acceptable result was found after 40 tries.
+        return null;
+    };
+
+    onSubmit() {
+        if (this.mode === 'create') {
+            this.onCreate();
+
+        } else if (this.mode === 'edit') {
+            this.onEdit();
+
+        } else if (this.mode === 'revice') {
+            this.onRevice();
+        }
 
     }
 
-    onSubmit() {
+    onCreate() {
         this._calcService
-            .Add(this.model, this.contractItem.contractItemModel)
+            .Create(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
-                    this.router.navigate(['credit/contract'], { queryParams: { contractId: res.contractId } });
+                    this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: res.contractId } });
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);
                 }
-            )
+            );
+    }
+
+    onEdit() {
+        this._calcService
+            .Edit(this.model, this.contractModel, this.contractItem.contractItemModel)
+            .subscribe(
+                res => {
+                    this.router.navigate(['credit/contract-list/active']);
+                },
+                (err: HttpErrorResponse) => {
+                    toastr.error(err.statusText);
+                }
+            );
+    }
+
+    onRevice() {
+        this._calcService
+            .Revice(this.model, this.contractModel, this.contractItem.contractItemModel)
+            .subscribe(
+                res => {
+                    this.router.navigate(['credit/contract-list/active']);
+                },
+                (err: HttpErrorResponse) => {
+                    toastr.error(err.statusText);
+                }
+            );
     }
 
 }

@@ -2,19 +2,14 @@ import { Routes } from '@angular/router';
 
 import { StarterViewComponent } from './views/appviews/starterview.component';
 import { LoginComponent } from './views/appviews/login.component';
-
-import { BlankLayoutComponent } from './components/common/layouts/blankLayout.component';
 import { BasicLayoutComponent } from './components/common/layouts/basicLayout.component';
-import { TopNavigationLayoutComponent } from './components/common/layouts/topNavigationlayout.component';
 import {
   ContractComponent,
   CalculateComponent,
-  KeeperComponent,
-  ContractFieldComponent,
-  ContractStatusComponent,
-  CalculateListComponent
+  ContractDetailComponent
 } from './views/appviews/credit';
-import { ContractListComponent } from './views/appviews/credit/contract-list/contract-list.component';
+import { ContractListActiveComponent } from './views/appviews/credit/contract-list/contract-list-active.component';
+import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -32,12 +27,15 @@ export const ROUTES: Routes = [
     path: 'credit', component: BasicLayoutComponent,
     children: [
       { path: 'contract', component: ContractComponent },
-      { path: 'contract-list', component: ContractListComponent },
-      { path: 'calculate', component: CalculateComponent },
-      { path: 'calculate-list', component: CalculateListComponent },
-      { path: 'contract-field', component: ContractFieldComponent },
-      { path: 'contract-status', component: ContractStatusComponent },
-      { path: 'keeper', component: KeeperComponent },
+      {
+        path: 'contract-list',
+        children: [
+          { path: 'active', component: ContractListActiveComponent },
+          { path: 'canceled', component: ContractListCanceledComponent }
+        ]
+      },
+      { path: 'detail', component: ContractDetailComponent },
+      { path: 'calculate', component: CalculateComponent }
     ]
   },
 

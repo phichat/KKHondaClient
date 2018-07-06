@@ -1,31 +1,22 @@
-export class ContractModel {
+export class ContractListModel {
     public contractId: number;
-    public bookingId: number;
-    public branchId: number;
     public calculateId: number;
+    public branch: string;
     public contractNo: string;
-    public refNo: string;
     public contractType: string;
-    public contractDate: string;
+    public contractDate: Date;
     public areaPayment: string;
     public contractPoint: string;
     public contractGroup: string;
     public contractHire: string;
-    public contractMate: string;
     public contractUser: string;
     public contractGurantor1: string;
-    public gurantorRelation1: string;
     public contractGurantor2: string;
-    public gurantorRelation2: string;
     public createdBy: string;
     public checkedBy: string;
     public approvedBy: string;
     public keeperBy: string;
-    public contractStatus: number;
     public statusDesc: string;
-    public remark: string;
-    public createBy: number;
-    public createDate: Date;
-    public updateBy: number;
-    public updateDate: Date;
+    public contractStatus: number;
+    public refNo: string;
 }

@@ -14,6 +14,7 @@ import { AppviewsModule } from './views/appviews/appviews.module';
 // App modules/components
 import { LayoutsModule } from './components/common/layouts/layouts.module';
 import { HttpClientModule } from '@angular/common/http';
+import { PageLoadWarpperService } from './services/common/page-load-warpper.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-
+    PageLoadWarpperService
   ],
   bootstrap: [AppComponent]
 })

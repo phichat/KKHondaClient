@@ -29,9 +29,9 @@ export class BookingModel {
     public totalDiscount: number;
     public vat: number;
     public vatPrice: number;
-    public freeAct: number;
-    public freeTag: number;
-    public freeWarranty: number;
+    public freeAct: boolean;
+    public freeTag: boolean;
+    public freeWarranty: boolean;
     public bookingItem: Array<BookingItemModel>;
 }
 
