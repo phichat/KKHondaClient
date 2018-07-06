@@ -35,60 +35,15 @@
         {{modelBooking.vatPrice | number:'1.2-2'}} ({{modelBooking.vat | number}}%)
     </div>
     <div class="col-sm-6 m-b-sm">
-        <strong>รวมราคาขาย :</strong>
-        {{modelBooking.netPrice | number:'1.2-2'}}
-    </div>
-    <div class="col-sm-6 m-b-sm">
         <strong>เงินมัดจำ :</strong>
         {{modelBooking.deposit | number:'1.2-2'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>รวมราคาขาย :</strong>
+        {{modelBooking.netPrice | number:'1.2-2'}}
     </div>
     <div class="col-sm-6 m-b-sm">
         <strong>ยอดคงค้าง :</strong>
         {{modelBooking.outStandingPrice | number:'1.2-2'}}
     </div>
-    <!-- <div>
-        <ul class="list-group clear-list m-b-xs">
-            <li class="list-group-item fist-item">
-                <strong class="pull-right">
-                    {{modelBooking.sellPrice | number:'1.2-2'}}
-                </strong>
-                <strong>ราคาขายก่อนภาษี :</strong>
-            </li>
-            <li class="list-group-item">
-                <strong class="pull-right">
-                    {{modelBooking.distcountPPrice | number:'1.2-2'}} ({{modelBooking.distcountP | number}}%)
-                </strong>
-                <strong>ส่วนลด :</strong>
-            </li>
-            <li class="list-group-item">
-                <strong class="pull-right">
-                    {{modelBooking.vatPrice | number:'1.2-2'}} ({{modelBooking.vat | number}}%)
-                </strong>
-                <strong>ภาษี :</strong>
-
-            </li>
-            <li class="list-group-item">
-                <strong class="pull-right">
-                    {{modelBooking.netPrice | number:'1.2-2'}}
-                </strong>
-                <strong>รวมราคาขาย :</strong>
-            </li>
-        </ul>
-    </div>
-    <div class="col-sm-6">
-        <ul class="list-group clear-list m-b-xs">
-            <li class="list-group-item fist-item">
-                <strong class="pull-right">
-                    {{modelBooking.deposit | number:'1.2-2'}}
-                </strong>
-                <strong>เงินมัดจำ :</strong>
-            </li>
-            <li class="list-group-item">
-                <strong class="pull-right">
-                    {{modelBooking.outStandingPrice | number:'1.2-2'}}
-                </strong>
-                <strong>ยอดคงค้าง :</strong>
-            </li>
-        </ul>
-    </div> -->
 </div>

@@ -47,8 +47,9 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 const depositPriceExcVat = (p.depositPrice / vatUp);
                 // ค่างวดถอด vat
                 const instalmentExcVat = (p.instalmentPrice / vatUp);
-                // ค่าสินค้าถอด vat
-                const itemPriceExcVat = (p.netPrice / vatUp);
+                // ค่าสินค้า(ราคายืน) ถอด vat
+                // p.netPrice
+                const itemPriceExcVat = (p.outStandingPrice / vatUp);
                 // ยอดจัดถอด vat
                 const remainExcVat = (p.remain / vatUp);
 
