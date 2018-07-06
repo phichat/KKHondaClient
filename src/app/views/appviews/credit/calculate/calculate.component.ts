@@ -130,7 +130,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(p => {
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
-                this.model.netPrice = p.outStandingPrice;
+                this.model.netPrice = p.netPrice;
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
@@ -171,9 +171,10 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         // this.model.netPrice
         this.model.interestPrice = (this.model.outStandingPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
         // ราคารถรวมดอกเบี้ย
-        this.model.netPrice = (this.model.outStandingPrice + this.model.interestPrice);
+        // this.model.netPrice
+        const netPrice = (this.model.outStandingPrice + this.model.interestPrice);
         // ยอดจัด = (ราคารถรวมดอกเบี้ย - เงินดาวน์)        
-        this.model.remain = Math.ceil(this.model.netPrice - this.model.depositPrice);
+        this.model.remain = Math.ceil(netPrice - this.model.depositPrice);
         // ผ่อนชำระต่องวด = ยอดจัด / จำนวนเดือนผ่อนชำระ
         this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd);
 
