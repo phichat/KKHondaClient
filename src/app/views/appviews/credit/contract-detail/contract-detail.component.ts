@@ -40,12 +40,17 @@ export class ContractDetailComponent implements OnInit {
     }
 
     onPrint(f: any) {
-        let params = `contractId=${f.contractId}`;
-        params += `&formContract=${f.formContract !== '' ? true : false}`;
-        params += `&formInstalmentTerm=${f.formInstalmentTerm !== '' ? true : false}`;
-        params += `&formTransfer=${f.formTransfer !== '' ? true : false}`;
+        let contract = `contractId=${f.contractId}`;
      
-        window.open(`${appConfig.reportUrl}/Credits/index.aspx?${params}`);
+        if (f.formContract) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&formContract=true`);
+        }
+        if (f.formInstalmentTerm) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&formInstalmentTerm=true`);
+        }
+        if (f.formTransfer) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&formTransfer=true`);
+        }
     }
 
 }

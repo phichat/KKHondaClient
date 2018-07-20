@@ -22,6 +22,11 @@ import { ContractListCanceledComponent } from './contract-list/contract-list-can
 import { ContractDetailComponent } from './contract-detail/contract-detail.component';
 import { ContractCanceledComponent } from './contract-canceled/contract-canceled.component';
 import { ExDetailFreeComponent } from './ex-detail-free/ex-detail-free.component';
+import { RptCutOffSaleModule } from './rpt-cut-off-sale/rpt-cut-off-sale.module';
+import { RptDelayedInterestModule } from './rpt-delayed-interest/rpt-delayed-interest.module';
+import { RptDiscountTermModule } from './rpt-discount-term/rpt-discount-term.module';
+import { RptOutstandingModule } from './rpt-outstanding/rpt-outstanding.module';
+import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-history.module';
 
 @NgModule({
   imports: [
@@ -31,7 +36,12 @@ import { ExDetailFreeComponent } from './ex-detail-free/ex-detail-free.component
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
-    IboxtoolsModule
+    IboxtoolsModule,
+    RptCutOffSaleModule,
+    RptDelayedInterestModule,
+    RptDiscountTermModule,
+    RptOutstandingModule,
+    RptPaymentHistoryModule
   ],
   declarations: [
     CreditComponent,

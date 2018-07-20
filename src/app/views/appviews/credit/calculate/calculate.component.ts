@@ -27,10 +27,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     bookingNo: string;
     mode: string;
 
-    // sellType = [
-    //     { value: 3, text: 'ลิสซิ่ง' },
-    //     { value: 4, text: 'เช่าซื้อ' }]
-
     instalmentEnd = [
         { value: 3, text: '3 เดือน' },
         { value: 6, text: '6 เดือน' },

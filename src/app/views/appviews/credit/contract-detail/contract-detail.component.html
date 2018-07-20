@@ -22,226 +22,289 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
+
     <div class="row form-group">
-        <div class="col-md-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <form action="" class="form-horizontal">
-                        <div class="row form-group">
-                            <div class="col-md-12 pull-right text-right">
-                                <h3 class="m-b-xs">เลขที่สัญญา</h3>
-                                <h3 class="no-margins text-navy" style="font-weight: normal">
-                                    {{contractDetailModel.contractNo}}
-                                </h3>
-                            </div>
-                        </div>
-
-                        <div class="ibox none-ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h4>ผู้เช่าซื้อ</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ผู้เช่าซื้อ :</strong>
-                                        {{contractDetailModel.contractHire}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>คู่สมรส :</strong>
-                                        {{contractDetailModel.contractMate}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ผู้ใช้รถ :</strong>
-                                        {{contractDetailModel.contractUser}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox none-ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h4>ผู้ค้ำประกัน</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>คนที่ 1 :</strong>
-                                        {{contractDetailModel.contractGurantor1}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ความสัมพันธ์ :</strong>
-                                        {{contractDetailModel.gurantorRelation1}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>คนที่ 2 :</strong>
-                                        {{contractDetailModel.contractGurantor2}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ความสัมพันธ์ :</strong>
-                                        {{contractDetailModel.contractGurantor2}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox none-ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h4>สัญญา</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>สถานะสัญญา :</strong>
-                                        {{contractDetailModel.statusDesc}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>วันที่ทำสัญญา :</strong>
-                                        {{contractDetailModel.contractDate | date: 'dd-MM-yyyy'}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>กลุ่มสัญญา :</strong>
-                                        {{contractDetailModel.contractGroup}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ประเภทสัญญา :</strong>
-                                        {{contractDetailModel.contractType}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>จุดทำสัญญา :</strong>
-                                        {{contractDetailModel.contractPoint}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>เขตการเก็บเงิน :</strong>
-                                        {{contractDetailModel.areaPayment}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox none-ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h4>ผู้ดำเนินการ</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ผู้ทำสัญญา :</strong>
-                                        {{contractDetailModel.createdBy}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ผู้ตรวจสอบ :</strong>
-                                        {{contractDetailModel.checkedBy}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ผู้อนุมัติ :</strong>
-                                        {{contractDetailModel.approvedBy}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ผู้ดูแลสัญญา :</strong>
-                                        {{contractDetailModel.keeperBy}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ibox none-ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h4>รายละเอียดเช่าซื้อ</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong> ราคาสินค้า (รวม VAT) :</strong>
-                                        {{calculateModel.netPrice | number}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>เงินดาวน์ :</strong>
-                                        {{calculateModel.depositPrice | number}} ({{calculateModel.deposit | number}}%)
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ระยะเวลาผ่อนชำระ :</strong>
-                                        <span *ngIf="calculateModel.typePayment == '0'">{{calculateModel.instalmentEnd + ' งวด'}}</span>
-                                        <span *ngIf="calculateModel.typePayment == '1'">{{calculateModel.instalmentEnd + ' ปี'}}</span>
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>อัตราดอกเบี้ย/เดือน :</strong>
-                                        {{calculateModel.interest | number}}%
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ยอดจัด (รวม VAT) :</strong>
-                                        {{calculateModel.remain | number}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ค่างวด (รวม VAT) :</strong>
-                                        {{calculateModel.instalmentPrice | number}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ชำระงวดแรก :</strong>
-                                        {{calculateModel.firstPayment | date: 'dd-MM-yyyy'}}
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>ชำระทุกวันที่ :</strong>
-                                        {{calculateModel.dueDate}} ของเดือน
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>Vat ณ วันที่ทำสัญญา :</strong>
-                                        {{calculateModel.nowVat}}%
-                                    </div>
-                                    <div class="col-md-6 m-b-sm">
-                                        <strong>I.R.R. :</strong>
-                                        {{calculateModel.irr | number:'1.2-2' }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="row form-group" style="margin-top: 15px;">
-                <div class="col-md-12 pull-right text-right">
-                    <h3 class="m-b-xs">เลขที่ใบจอง</h3>
-                    <h3 class="no-margins text-navy" style="font-weight: normal">
-                        {{bookingModel.bookingNo}}
-                    </h3>
-                </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>ข้อมูลผู้จอง</h4>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-customer></app-ex-detail-customer>
-                </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>ข้อมูลรถ</h4>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-motobike></app-ex-detail-motobike>
-                </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>ข้อมูลของแถม</h4>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-accessory></app-ex-detail-accessory>
-                </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>รายการฟรี</h4>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-free></app-ex-detail-free>
-                </div>
-            </div>
-
-
+        <div class="col-md-12">
+            <h3 class="m-b-xs">เลขที่สัญญา</h3>
+            <h2 class="no-margins text-navy" style="font-weight: normal">
+                {{contractDetailModel.contractNo}}
+            </h2>
         </div>
     </div>
-    <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
+
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#tab-contract-detail">
+                    รายละเอียดสัญญา
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#tab-outstanding">
+                    รายละเอียดยอดค้างชำระ
+                </a>
+            </li>
+            <li>
+                <a href="#tab-delayed-interest" data-toggle="tab">
+                    รายละเอียดเบี้ยล่าช้า
+                </a>
+            </li>
+            <li>
+                <a href="#tab-discount-term" data-toggle="tab">
+                    รายละเอียดส่วนลดต่องวด
+                </a>
+            </li>
+            <li>
+                <a href="#tab-cut-off-sale" data-toggle="tab">
+                    รายละเอียดยอดตัดสด
+                </a>
+            </li>
+            <li>
+                <a href="#tab-payment-history" data-toggle="tab">
+                    รายละเอียดประวัติการชำระ
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="tab-contract-detail" class="tab-pane active">
+                <div class="panel-body">
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <form action="" class="form-horizontal">
+                                <div class="ibox none-ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h4>ผู้เช่าซื้อ</h4>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ผู้เช่าซื้อ :</strong>
+                                                {{contractDetailModel.contractHire}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>คู่สมรส :</strong>
+                                                {{contractDetailModel.contractMate}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ผู้ใช้รถ :</strong>
+                                                {{contractDetailModel.contractUser}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox none-ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h4>ผู้ค้ำประกัน</h4>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>คนที่ 1 :</strong>
+                                                {{contractDetailModel.contractGurantor1}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ความสัมพันธ์ :</strong>
+                                                {{contractDetailModel.gurantorRelation1}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>คนที่ 2 :</strong>
+                                                {{contractDetailModel.contractGurantor2}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ความสัมพันธ์ :</strong>
+                                                {{contractDetailModel.contractGurantor2}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox none-ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h4>สัญญา</h4>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>สถานะสัญญา :</strong>
+                                                {{contractDetailModel.statusDesc}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>วันที่ทำสัญญา :</strong>
+                                                {{contractDetailModel.contractDate | date: 'dd-MM-yyyy'}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>กลุ่มสัญญา :</strong>
+                                                {{contractDetailModel.contractGroup}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ประเภทสัญญา :</strong>
+                                                {{contractDetailModel.contractType}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>จุดทำสัญญา :</strong>
+                                                {{contractDetailModel.contractPoint}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>เขตการเก็บเงิน :</strong>
+                                                {{contractDetailModel.areaPayment}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox none-ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h4>ผู้ดำเนินการ</h4>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ผู้ทำสัญญา :</strong>
+                                                {{contractDetailModel.createdBy}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ผู้ตรวจสอบ :</strong>
+                                                {{contractDetailModel.checkedBy}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ผู้อนุมัติ :</strong>
+                                                {{contractDetailModel.approvedBy}}
+                                            </div>
+                                            <div class="col-md-6 m-b-sm">
+                                                <strong>ผู้ดูแลสัญญา :</strong>
+                                                {{contractDetailModel.keeperBy}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="ibox none-ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>รายละเอียดเช่าซื้อ</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="row">
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong> ราคาสินค้า (รวม VAT) :</strong>
+                                            {{calculateModel.netPrice | number}}
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>เงินดาวน์ :</strong>
+                                            {{calculateModel.depositPrice | number}} ({{calculateModel.deposit | number}}%)
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>ระยะเวลาผ่อนชำระ :</strong>
+                                            <span *ngIf="calculateModel.typePayment == '0'">{{calculateModel.instalmentEnd + ' งวด'}}</span>
+                                            <span *ngIf="calculateModel.typePayment == '1'">{{calculateModel.instalmentEnd + ' ปี'}}</span>
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>อัตราดอกเบี้ย/เดือน :</strong>
+                                            {{calculateModel.interest | number}}%
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>ยอดจัด (รวม VAT) :</strong>
+                                            {{calculateModel.remain | number}}
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>ค่างวด (รวม VAT) :</strong>
+                                            {{calculateModel.instalmentPrice | number}}
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>ชำระงวดแรก :</strong>
+                                            {{calculateModel.firstPayment | date: 'dd-MM-yyyy'}}
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>ชำระทุกวันที่ :</strong>
+                                            {{calculateModel.dueDate}} ของเดือน
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>Vat ณ วันที่ทำสัญญา :</strong>
+                                            {{calculateModel.nowVat}}%
+                                        </div>
+                                        <div class="col-md-6 m-b-sm">
+                                            <strong>I.R.R. :</strong>
+                                            {{calculateModel.irr | number:'1.2-2' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row form-group">
+                                <div class="col-md-12 pull-right text-right">
+                                    <h3 class="m-b-xs">เลขที่ใบจอง</h3>
+                                    <h3 class="no-margins text-navy" style="font-weight: normal">
+                                        {{bookingModel.bookingNo}}
+                                    </h3>
+                                </div>
+                            </div> -->
+                            <!-- <div class="ibox none-ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>ข้อมูลผู้จอง</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <app-ex-detail-customer></app-ex-detail-customer>
+                                </div>
+                            </div> -->
+                            <div class="ibox none-ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>ข้อมูลรถ</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <app-ex-detail-motobike></app-ex-detail-motobike>
+                                </div>
+                            </div>
+                            <div class="ibox none-ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>ข้อมูลของแถม</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <app-ex-detail-accessory></app-ex-detail-accessory>
+                                </div>
+                            </div>
+                            <div class="ibox none-ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>รายการฟรี</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <app-ex-detail-free></app-ex-detail-free>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-outstanding" class="tab-pane">
+                <div class="panel-body">
+                    <app-rpt-outstanding></app-rpt-outstanding>
+                </div>
+            </div>
+            <div id="tab-delayed-interest" class="tab-pane">
+                <div class="panel-body">
+                    <app-rpt-delayed-interest></app-rpt-delayed-interest>
+                </div>
+            </div>
+            <div id="tab-discount-term" class="tab-pane">
+                <div class="panel-body">
+                    <app-rpt-discount-term></app-rpt-discount-term>
+                </div>
+            </div>
+            <div id="tab-cut-off-sale" class="tab-pane">
+                <div class="panel-body">
+                    <app-rpt-cut-off-sale></app-rpt-cut-off-sale>
+                </div>
+            </div>
+            <div id="tab-payment-history" class="tab-pane">
+                <div class="panel-body">
+                    <app-rpt-payment-history></app-rpt-payment-history>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item> -->
 </div>
 
 <div class="modal inmodal" id="frmPrint" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
@@ -263,21 +326,59 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="checkbox checkbox-info">
-                                <input type="checkbox" id="rpt1" name="formContract" ngModel>
+                                <input type="checkbox" value="false" id="rpt1" name="formContract" ngModel>
                                 <label for="rpt1">
                                     <strong>ใบสัญญาเช่าซื้อ</strong>
                                 </label>
                             </div>
                             <div class="checkbox checkbox-info">
-                                <input type="checkbox" id="rpt2" name="formInstalmentTerm" ngModel>
+                                <input type="checkbox" value="false" id="rpt2" name="formInstalmentTerm" ngModel>
                                 <label for="rpt2">
                                     <strong>ใบชำระค่างวด</strong>
                                 </label>
                             </div>
                             <div class="checkbox checkbox-info">
-                                <input type="checkbox" id="rpt3" name="formTransfer" ngModel>
+                                <input type="checkbox" value="false" id="rpt3" name="formTransfer" ngModel>
                                 <label for="rpt3">
                                     <strong>ใบส่งมอบ</strong>
+                                </label>
+                            </div>
+
+                            <hr>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" value="false" id="rpt3-1" name="rptContractDetail" ngModel>
+                                <label for="rpt3-1">
+                                    <strong>รายงานยอดค้างชำระ</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" value="false" id="rpt4" name="rptOutstanding" ngModel>
+                                <label for="rpt4">
+                                    <strong>รายงานยอดค้างชำระ</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" value="false" id="rpt5" name="rptDelayedInterest" ngModel>
+                                <label for="rpt5">
+                                    <strong>รายงานเบี้ยล่าช้า</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" value="false" id="rpt6" name="rptDiscountTerm" ngModel>
+                                <label for="rpt6">
+                                    <strong>รายงานส่วนลดต่องวด</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" value="false" id="rpt7" name="rptCutOffSale" ngModel>
+                                <label for="rpt7">
+                                    <strong>รายงานยอดตัดสด</strong>
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-info">
+                                <input type="checkbox" value="false" id="rpt8" name="rptPaymentHistory" ngModel>
+                                <label for="rpt8">
+                                    <strong>รายงานประวัติการชำระ</strong>
                                 </label>
                             </div>
                         </div>
