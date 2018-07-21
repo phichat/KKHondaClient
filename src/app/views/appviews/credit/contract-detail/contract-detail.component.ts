@@ -6,6 +6,7 @@ import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
 import { Form } from '@angular/forms';
 import { appConfig } from 'app/app.config';
+import { Outstanding } from '../../../../models/credit/outstanding-model';
 
 @Component({
     selector: 'app-contract-detail',
@@ -17,6 +18,7 @@ export class ContractDetailComponent implements OnInit {
     bookingModel: BookingModel = new BookingModel();
     calculateModel: CalculateModel = new CalculateModel();
     contractItemModel: Array<ContractItemModel> = new Array<ContractItemModel>();
+    outstanding = new Outstanding()
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -32,6 +34,7 @@ export class ContractDetailComponent implements OnInit {
                     this.calculateModel = p.creditCalculate;
                     this.contractItemModel = p.creditContractItem;
                     this.bookingModel = p.booking;
+                    this.outstanding = p.outstanding;
                     this._bookingService.changeData(p.booking);
                 });
             }

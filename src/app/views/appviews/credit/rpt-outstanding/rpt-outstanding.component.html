@@ -1,10 +1,38 @@
-<p>
-  เงินประกันค้างชำระ :
-</p>
-<p>ดอกเบี้ยล่าช้าค้างชำระ :</p>
-<p>เงินดาวน์ค้างชำระ :</p>
-<div>
-  <p>ค่างวดค้างชำระ :</p>
-  <span>ตั้งแต่งวดที่ :</span>
-  <span>ถึงงวดที่ :</span>
+<div class="row">
+    <label class="col-md-3">
+        เงินประกันค้างชำระ :
+    </label>
 </div>
+
+<div class="row">
+    <label class="col-md-3">ดอกเบี้ยล่าช้าค้างชำระ :</label>
+</div>
+<div class="row">
+    <label class="col-md-3">เงินดาวน์ค้างชำระ :</label>
+</div>
+<div class="row">
+    <label class="col-md-3">ค่างวดค้างชำระ :</label>
+    <span>ตั้งแต่งวดที่ :</span>
+    <span>ถึงงวดที่ :</span>
+</div>
+<div class="row">
+    <label for="" class="col-md-3">ยอดค้างชำระทั้งสิ้น :</label>
+</div>
+<div class="row">
+    <label for="" class="col-md-3">ยอดรับชำระทั้งสิ้น :</label>
+</div>
+<hr>
+<h4>งวดต่อไปที่ต้องชำระ</h4>
+<div class="row">
+    <label for="" class="col-md-3">งวดที่ :</label>
+    <label for="">จำนวนเงิน :</label>
+    <label for="">วันที่ครบกำหนดชำระ :</label>
+</div>
+<hr>
+<div class="row">
+    <label for="" class="col-md-3">ค่างวดที่ยังไม่ถึงกำหนดชำระ จำนวน :</label>
+    <span>งวด</span>
+    <label for="">เป็นเงิน :</label>
+</div>
+
+{{outStanding | json}}
