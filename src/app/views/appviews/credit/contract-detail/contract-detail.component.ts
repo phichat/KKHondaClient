@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingModel } from '../../../../models/selling';
-import { ContractDetailModel, CalculateModel, ContractItemModel } from '../../../../models/credit';
+import { ContractDetailModel, CalculateModel } from '../../../../models/credit';
 import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
-import { Form } from '@angular/forms';
 import { appConfig } from 'app/app.config';
 import { Outstanding } from '../../../../models/credit/outstanding-model';
+import { DelayedInterestModel } from '../../../../models/credit/delayed-interest.model';
+import { DiscountModel } from '../../../../models/credit/discount.model';
+import { CutOffSaleModel } from '../../../../models/credit/cut-off-sale.model';
+import { HistoryPaymentModel } from '../../../../models/credit/history-payment.model';
 
 @Component({
     selector: 'app-contract-detail',
@@ -17,8 +20,11 @@ export class ContractDetailComponent implements OnInit {
     contractDetailModel: ContractDetailModel = new ContractDetailModel();
     bookingModel: BookingModel = new BookingModel();
     calculateModel: CalculateModel = new CalculateModel();
-    contractItemModel: Array<ContractItemModel> = new Array<ContractItemModel>();
+    delayedInterest = new Array<DelayedInterestModel>()
+    discount = new Array<DiscountModel>()
     outstanding = new Outstanding()
+    cutOffSale = new CutOffSaleModel()
+    historyPayment = new HistoryPaymentModel()
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -32,10 +38,13 @@ export class ContractDetailComponent implements OnInit {
                 this._credit.Detail(o.contractId).subscribe(p => {
                     this.contractDetailModel = p.creditContractDetail;
                     this.calculateModel = p.creditCalculate;
-                    this.contractItemModel = p.creditContractItem;
                     this.bookingModel = p.booking;
                     this.outstanding = p.outstanding;
-                    this._bookingService.changeData(p.booking);
+                    this.delayedInterest = p.delayedInterest;
+                    this.discount = p.discounts
+                    this.cutOffSale = p.cutOffSale
+                    this.historyPayment = p.historyPayment
+                    this._bookingService.changeData(p.booking);                    
                 });
             }
         });

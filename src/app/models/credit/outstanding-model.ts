@@ -5,6 +5,8 @@ export class Outstanding {
     public startInstalment: number;
     public endInstalment: number;
     public nextInstalment: number;
+    public OutstandingTotal: number;
+    public PayPriceTotal: number;
     public nextInstalmentBalance: number;
     public nextDueDate: Date;
     public futureInstalment: number;

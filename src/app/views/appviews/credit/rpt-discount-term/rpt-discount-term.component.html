@@ -9,12 +9,12 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+    <tr *ngFor="let item of discount; let i=index">
+      <td>{{item.InstalmentNo}}</td>
+      <td>{{item.DueDate}}</td>
+      <td>{{item.Balance}}</td>
+      <td>{{item.Outstanding}}</td>
+      <td>{{item.Discount}}</td>
     </tr>
   </tbody>
 </table>

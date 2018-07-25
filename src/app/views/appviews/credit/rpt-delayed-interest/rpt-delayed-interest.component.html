@@ -11,14 +11,14 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+        <tr *ngFor="let item of delayedInterest;">
+            <td>{{item.InstalmentNo}}</td>
+            <td>{{item.DueDate}}</td>
+            <td>{{item.Balance}}</td>
+            <td>{{item.FineSum}}</td>
+            <td>{{item.Outstanding}}</td>
+            <td>{{item.DelayDueDate}}</td>
+            <td>{{item.Remark}}</td>
         </tr>
     </tbody>
 </table>
@@ -41,3 +41,4 @@
     <label class="col-md-3">ยอดคงค้าง :</label>
     <div class="col-md-2"></div>
 </div>
+{{delayedInterest | json}}
