@@ -49,10 +49,10 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 const instalmentExcVat = (p.instalmentPrice / vatUp);
                 // ค่าสินค้า(ราคายืน) ถอด vat
                 // p.netPrice
-                const itemPriceExcVat = (p.outStandingPrice / vatUp);
+                const itemPriceExcVat = (p.netPrice / vatUp);
                 // ยอดจัดถอด vat
                 const remainExcVat = (p.remain / vatUp);
-
+                
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
 
@@ -89,7 +89,10 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
                     const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
 
-                    const remain = remainExcVat - (balance * (i == 0 ? 1 : i));
+
+                    // งวดที่ 0 หรือเงินดาวน์จะไม่ถูกหักเงินดาวน์ เนื่องจากยอดจัดถูกหักดาวน์ไปแล้ว
+                    // const preRemain = (i === 0) ? remainExcVat : (this.contractItemModel[preIndex].goodsPriceRemain);
+                    const remain = (i == 0) ?  remainExcVat : remainExcVat - (balance * i);
                     const remainVatPrice = (remain * vatUp) - remain;
                     const remainNetPrice = remain + remainVatPrice;
 
@@ -120,7 +123,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     // ค่าสินค้าคงเหลือ
                     item.goodsPriceRemain = goodsPriceRemain < 0 ? 0 : goodsPriceRemain;
 
-                    this.contractItemModel.push(item);
+                    this.contractItemModel.push(item);                    
                 }
 
                 this.setTotal();

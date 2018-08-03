@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { HistoryPaymentModel } from '../../../../models/credit/history-payment.model';
 
 @Component({
   selector: 'app-rpt-payment-history',
@@ -6,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RptPaymentHistoryComponent implements OnInit {
 
-  constructor() { }
+  @Input() paymentHistory = new HistoryPaymentModel();
+
+  constructor() { 
+  }
 
   ngOnInit() {
   }

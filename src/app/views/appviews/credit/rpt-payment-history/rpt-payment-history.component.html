@@ -11,14 +11,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+    <tr *ngIf="paymentHistory != null">
+      <td>{{paymentHistory.contractNo}}</td>
+      <td>{{paymentHistory.instalmentEnd}}</td>
+      <td>{{paymentHistory.payBefore}}</td>
+      <td>{{paymentHistory.payMatch}}</td>
+      <td>{{paymentHistory.payLate}}</td>
+      <td>{{paymentHistory.rateLate}}</td>
+      <td>{{paymentHistory.grade}}</td>
     </tr>
   </tbody>
 </table>

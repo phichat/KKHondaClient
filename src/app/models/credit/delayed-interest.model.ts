@@ -1,9 +1,10 @@
 export class DelayedInterestModel {
-    public InstalmentNo: number;
-    public DueDate: Date;
-    public Balance: number;
-    public FineSum: number;
-    public Outstanding: number;
-    public DelayDueDate: number;
-    public Remark: string;
+    public instalmentNo: number;
+    public dueDate: Date;
+    public balance: number;
+    public fineSum: number;
+    public payFineSum: number;
+    public outstanding: number;
+    public delayDueDate: number;
+    public remark: string;
 }

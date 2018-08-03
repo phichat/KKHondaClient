@@ -1,7 +1,8 @@
 export class DiscountModel {
-    public InstalmentNo: number;
-    public DueDate: Date;
-    public Balance: number;
-    public Outstanding: number;
-    public Discount: number;
+    public instalmentNo: number;
+    public dueDate: Date;
+    public balance: number;
+    public outstanding: number;
+    public discount: number;
+    public useDiscount: number;
 }

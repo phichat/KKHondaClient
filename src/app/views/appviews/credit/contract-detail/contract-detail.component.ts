@@ -53,7 +53,6 @@ export class ContractDetailComponent implements OnInit {
 
     onPrint(f: any) {
         let contract = `contractId=${f.contractId}`;
-     
         if (f.formContract) {
             window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&formContract=true`);
         }
@@ -62,6 +61,9 @@ export class ContractDetailComponent implements OnInit {
         }
         if (f.formTransfer) {
             window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&formTransfer=true`);
+        }
+        if (f.sumInterestDelay) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&sumInterestDelay=true`)
         }
     }
 

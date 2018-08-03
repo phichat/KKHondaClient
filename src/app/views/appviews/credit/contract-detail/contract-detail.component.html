@@ -289,17 +289,17 @@
             </div>
             <div id="tab-discount-term" class="tab-pane">
                 <div class="panel-body">
-                    <app-rpt-discount-term []></app-rpt-discount-term>
+                    <app-rpt-discount-term [discount]="discount"></app-rpt-discount-term>
                 </div>
             </div>
             <div id="tab-cut-off-sale" class="tab-pane">
                 <div class="panel-body">
-                    <app-rpt-cut-off-sale></app-rpt-cut-off-sale>
+                    <app-rpt-cut-off-sale [cutOffSale]="cutOffSale"></app-rpt-cut-off-sale>
                 </div>
             </div>
             <div id="tab-payment-history" class="tab-pane">
                 <div class="panel-body">
-                    <app-rpt-payment-history></app-rpt-payment-history>
+                    <app-rpt-payment-history [paymentHistory]="historyPayment"></app-rpt-payment-history>
                 </div>
             </div>
         </div>
@@ -358,7 +358,7 @@
                                 </label>
                             </div>
                             <div class="checkbox checkbox-info">
-                                <input type="checkbox" value="false" id="rpt5" name="rptDelayedInterest" ngModel>
+                                <input type="checkbox" value="false" id="rpt5" name="sumInterestDelay" ngModel>
                                 <label for="rpt5">
                                     <strong>รายงานเบี้ยล่าช้า</strong>
                                 </label>

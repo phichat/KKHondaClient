@@ -46,8 +46,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         private _bookingService: BookingService,
         private _calcService: CalculateService,
         private _userService: UserService,
-        private router: Router,
-        private chRef: ChangeDetectorRef
+        private router: Router
     ) {
         toastr.options = {
             'closeButton': true,
@@ -81,17 +80,16 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.contractModel.bookingId = p.bookingId;
                     this.contractModel.createBy = u.userId;
                     this.contractModel.contractStatus = 32; // สัญญาใหม่
+                    this.model.typePayment = '0';
+                    this.model.deposit = 0;
+                    this.model.depositPrice = 0;
+                    this.model.dueDate = 5;
+                    this.model.firstPayment = moment().format('YYYY-MM-DD');
+                    this.model.interest = 2;
+                    this.model.remain = 0;
+                    this.model.sellTypeId = 4;
+                    this.model.sellAcitvityId = 25;
                 });
-
-                this.model.typePayment = '0';
-                this.model.deposit = 0;
-                this.model.depositPrice = 0;
-                this.model.dueDate = 5;
-                this.model.firstPayment = moment().format('YYYY-MM-DD');
-                this.model.interest = 2;
-                this.model.remain = 0;
-                this.model.sellTypeId = 4;
-                this.model.sellAcitvityId = 25;
             }
         });
     }
@@ -126,7 +124,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(p => {
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
-                this.model.netPrice = p.netPrice;
+                this.model.netPrice = p.outStandingPrice;
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
@@ -151,24 +149,25 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
         // this.model.netPrice
-        this.model.depositPrice = Math.ceil(this.model.outStandingPrice * (this.model.deposit / 100));
+        this.model.depositPrice = Math.ceil(this.model.netPrice * (this.model.deposit / 100));
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
         // this.model.netPrice
-        this.model.deposit = ((this.model.depositPrice * 100) / this.model.outStandingPrice);
+        this.model.deposit = ((this.model.depositPrice * 100) / this.model.netPrice);
     }
 
     instalmentCalculate() {
         // ยอดจัด = ราคารถ-เงินดาวน์
         // ราคาดอกเบี้ย = (ราคารถ*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
         // this.model.netPrice
-        this.model.interestPrice = (this.model.outStandingPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
+        this.model.interestPrice = (this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
         // ราคารถรวมดอกเบี้ย
         // this.model.netPrice
-        const netPrice = (this.model.outStandingPrice + this.model.interestPrice);
+        const netPrice = (this.model.netPrice + this.model.interestPrice);
+        this.model.outStandingPrice = netPrice;
         // ยอดจัด = (ราคารถรวมดอกเบี้ย - เงินดาวน์)        
         this.model.remain = Math.ceil(netPrice - this.model.depositPrice);
         // ผ่อนชำระต่องวด = ยอดจัด / จำนวนเดือนผ่อนชำระ
@@ -180,12 +179,11 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         const depositExcVat = this.model.depositPrice / vatUp;
         // ราคาสินค้า(ไม่รวมดอกเบี้ย) - เงินดาวน์ 
         // this.model.netPrice
-        const netPriceExcVat = (this.model.outStandingPrice / vatUp) - depositExcVat;
+        const netPriceExcVat = (this.model.netPrice / vatUp) - depositExcVat;
         // ค่างวดต่อเดือน(รวมดอกเบี้ย)
         const instalmentPriceExcVat = this.model.instalmentPrice / vatUp;
         // คำนวณ RATE
         this.model.irr = (this.RATE(this.model.instalmentEnd, -(instalmentPriceExcVat), netPriceExcVat) * 100);
-
         this._calcService.changeData(this.model);
     }
 
