@@ -10,6 +10,7 @@ import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BookingModel } from '../../../../models/selling';
+import { PageloaderService } from '../../pageloader/pageloader.component';
 
 
 declare var toastr: any;
@@ -51,7 +52,8 @@ export class ContractComponent implements OnInit, OnDestroy {
         private _customerService: CustomerService,
         private _bookingService: BookingService,
         private chRef: ChangeDetectorRef,
-        private router: Router
+        private router: Router,
+        private pageloader: PageloaderService
     ) {
         toastr.options = {
             'closeButton': true,
@@ -65,10 +67,11 @@ export class ContractComponent implements OnInit, OnDestroy {
         this.searchContractGurantor1();
         this.searchContractGurantor2();
 
-        this._activatedRoute.queryParams.subscribe(p => {
+        this._activatedRoute.queryParams.subscribe(async p => {
             this.mode = p.mode;
             if (p.contractId) {
-                this._contractService.getById(p.contractId).subscribe(o => {
+                this.pageloader.setShowPageloader(true);
+                await this._contractService.getById(p.contractId).subscribe(o => {
 
                     this.userDropdown = o.userDropdown;
                     this.contractMateDropdown = o.contractMateDropdown;
@@ -120,6 +123,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                         });
                     }
                 });
+                this.pageloader.setShowPageloader(false);
             }
         });
     }
@@ -183,10 +187,11 @@ export class ContractComponent implements OnInit, OnDestroy {
         });
     }
 
-    onSubmit() {
-
+    async onSubmit() {
+        this.pageloader.setShowPageloader(true)
         if (this.mode === 'create') {
-            this._contractService.Create(this.contractModel).subscribe(
+
+            await this._contractService.Create(this.contractModel).subscribe(
                 res => {
                     this.router.navigate(['credit/contract-list/active']);
                 },
@@ -195,7 +200,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                 }
             );
         } else if (this.mode === 'edit') {
-            this._contractService.Edit(this.contractModel).subscribe(
+            await this._contractService.Edit(this.contractModel).subscribe(
                 res => {
                     this.router.navigate(['credit/contract-list/active']);
                 },
@@ -204,8 +209,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                 }
             );
         }
-
-
+        this.pageloader.setShowPageloader(false);
     }
 
 }

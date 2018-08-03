@@ -10,6 +10,7 @@ import { DelayedInterestModel } from '../../../../models/credit/delayed-interest
 import { DiscountModel } from '../../../../models/credit/discount.model';
 import { CutOffSaleModel } from '../../../../models/credit/cut-off-sale.model';
 import { HistoryPaymentModel } from '../../../../models/credit/history-payment.model';
+import { PageloaderService } from '../../pageloader/pageloader.component';
 
 @Component({
     selector: 'app-contract-detail',
@@ -29,11 +30,13 @@ export class ContractDetailComponent implements OnInit {
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _credit: ContractService,
-        private _bookingService: BookingService
+        private _bookingService: BookingService,
+        private pageloader: PageloaderService
     ) { }
 
-    ngOnInit() {
-        this._activatedRoute.queryParams.subscribe(o => {
+    async ngOnInit() {
+        this.pageloader.setShowPageloader(true);
+        await this._activatedRoute.queryParams.subscribe(o => {
             if (o.contractId) {
                 this._credit.Detail(o.contractId).subscribe(p => {
                     this.contractDetailModel = p.creditContractDetail;
@@ -44,10 +47,11 @@ export class ContractDetailComponent implements OnInit {
                     this.discount = p.discounts
                     this.cutOffSale = p.cutOffSale
                     this.historyPayment = p.historyPayment
-                    this._bookingService.changeData(p.booking);                    
+                    this._bookingService.changeData(p.booking);
                 });
             }
         });
+        this.pageloader.setShowPageloader(false);
 
     }
 

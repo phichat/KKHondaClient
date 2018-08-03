@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreditComponent } from './credit.component';
+import { PageloaderComponent } from './pageloader.component';
 
-describe('CreditComponent', () => {
-  let component: CreditComponent;
-  let fixture: ComponentFixture<CreditComponent>;
+describe('PageloaderComponent', () => {
+  let component: PageloaderComponent;
+  let fixture: ComponentFixture<PageloaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreditComponent ]
+      declarations: [ PageloaderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreditComponent);
+    fixture = TestBed.createComponent(PageloaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

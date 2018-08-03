@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { detectBody } from '../../../app.helpers';
-import { PageLoadWarpperService } from '../../../services/common/page-load-warpper.service';
 
 declare var jQuery: any;
 
@@ -13,15 +12,9 @@ declare var jQuery: any;
 })
 export class BasicLayoutComponent implements OnInit {
 
-  // onLoadWarpper: boolean;
-  // constructor(private pageLoadWarpperService: PageLoadWarpperService) {
-  //   this.pageLoadWarpperService.currentData.subscribe(p => {
-  //     this.onLoadWarpper = p;
-  //   });
-  // }
-
-  public ngOnInit(): any {
+  ngOnInit() {
     detectBody();
+    
   }
 
   public onResize() {

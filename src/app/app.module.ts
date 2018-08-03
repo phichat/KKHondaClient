@@ -15,6 +15,7 @@ import { AppviewsModule } from './views/appviews/appviews.module';
 import { LayoutsModule } from './components/common/layouts/layouts.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PageLoadWarpperService } from './services/common/page-load-warpper.service';
+import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
 
 @NgModule({
   declarations: [
@@ -28,10 +29,10 @@ import { PageLoadWarpperService } from './services/common/page-load-warpper.serv
     LayoutsModule,
     AppviewsModule,
     RouterModule.forRoot(ROUTES),
+    PageloaderModule
   ],
   providers: [
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
-    PageLoadWarpperService
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
   bootstrap: [AppComponent]
 })

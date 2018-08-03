@@ -6,6 +6,7 @@ import { ContractListModel } from '../../../../models/credit';
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
+import { PageloaderService } from '../../pageloader/pageloader.component';
 
 @Component({
     selector: 'app-contract-list-active',
@@ -19,14 +20,13 @@ export class ContractListActiveComponent implements OnInit {
     constructor(
         private contractService: ContractService,
         private chRef: ChangeDetectorRef,
-        private router: Router
+        private router: Router,
+        private pageloader: PageloaderService
     ) { }
 
-    ngOnInit() {
-        this.contractService.GetActive().subscribe(o => {
-
-            // this.chRef.markForCheck();
-
+    async ngOnInit() {
+        this.pageloader.setShowPageloader(true);
+        await this.contractService.GetActive().subscribe(o => {
             this.contractListModel = o;
 
             this.chRef.detectChanges();
@@ -38,7 +38,7 @@ export class ContractListActiveComponent implements OnInit {
             });
 
         });
-
+        this.pageloader.setShowPageloader(false);
     }
 
     gotoEditCalculate(calculateId: number) {

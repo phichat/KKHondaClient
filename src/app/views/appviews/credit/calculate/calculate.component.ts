@@ -9,6 +9,7 @@ import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import * as $ from 'jquery';
 import * as Inputmask from 'inputmask';
+import { PageloaderService } from '../../pageloader/pageloader.component';
 
 declare var toastr: any;
 
@@ -46,7 +47,8 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         private _bookingService: BookingService,
         private _calcService: CalculateService,
         private _userService: UserService,
-        private router: Router
+        private router: Router,
+        private pageloader: PageloaderService
     ) {
         toastr.options = {
             'closeButton': true,
@@ -131,8 +133,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    onLoadCaculateData(calculateId: number) {
-        this._calcService.GetById(calculateId.toString())
+    async onLoadCaculateData(calculateId: number) {
+        this.pageloader.setShowPageloader(true);
+        await this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
                 this.model = p.creditCalculate;
                 this.contractModel = p.creditContract;
@@ -143,6 +146,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
             })
+        this.pageloader.setShowPageloader(false);
     }
 
     onChangeDeposit() {
@@ -258,8 +262,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
-    onCreate() {
-        this._calcService
+    async onCreate() {
+        this.pageloader.setShowPageloader(true)
+        await this._calcService
             .Create(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
@@ -269,10 +274,12 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     toastr.error(err.statusText);
                 }
             );
+        this.pageloader.setShowPageloader(false)
     }
 
-    onEdit() {
-        this._calcService
+    async onEdit() {
+        this.pageloader.setShowPageloader(true)
+        await this._calcService
             .Edit(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
@@ -282,10 +289,12 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     toastr.error(err.statusText);
                 }
             );
+        this.pageloader.setShowPageloader(false)
     }
 
-    onRevice() {
-        this._calcService
+    async onRevice() {
+        this.pageloader.setShowPageloader(true)
+        await this._calcService
             .Revice(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
@@ -295,6 +304,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     toastr.error(err.statusText);
                 }
             );
+        this.pageloader.setShowPageloader(false);
     }
 
 }

@@ -27,6 +27,8 @@ import { RptDelayedInterestModule } from './rpt-delayed-interest/rpt-delayed-int
 import { RptDiscountTermModule } from './rpt-discount-term/rpt-discount-term.module';
 import { RptOutstandingModule } from './rpt-outstanding/rpt-outstanding.module';
 import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-history.module';
+import { PageloaderModule } from '../pageloader/pageloader.module';
+import { PageloaderService } from '../pageloader/pageloader.component';
 
 @NgModule({
   imports: [
@@ -41,7 +43,8 @@ import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-histo
     RptDelayedInterestModule,
     RptDiscountTermModule,
     RptOutstandingModule,
-    RptPaymentHistoryModule
+    RptPaymentHistoryModule,
+    PageloaderModule
   ],
   declarations: [
     CreditComponent,
@@ -65,7 +68,8 @@ import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-histo
     UserService,
     CalculateService,
     ContractItemService,
-    ContractService
+    ContractService,
+    PageloaderService
   ]
 })
 export class CreditModule { }

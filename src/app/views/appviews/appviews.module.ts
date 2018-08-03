@@ -11,15 +11,9 @@ import { LoginComponent } from './login.component';
 
 import { PeityModule } from '../../components/charts/peity';
 import { SparklineModule } from '../../components/charts/sparkline';
-import { HomeComponent } from './home/home.component';
 import { StarterComponent } from './starter/starter.component';
 
-// Directives
-import { IcheckDirective } from '../../directives/icheck.directive';
-import { FootableDirective } from '../../directives/footable.directive';
-
 import { FormsModule } from '@angular/forms';
-import { SellingModule } from './selling/selling.module';
 import { CreditModule } from './credit/credit.module';
 import { CustomerService } from '../../services/customers';
 
@@ -27,7 +21,6 @@ import { CustomerService } from '../../services/customers';
   declarations: [
     StarterViewComponent,
     LoginComponent,
-    HomeComponent,
     StarterComponent
 
   ],
