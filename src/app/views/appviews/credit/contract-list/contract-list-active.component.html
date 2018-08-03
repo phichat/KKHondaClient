@@ -28,11 +28,17 @@
                         <th style="width: 150px;">จัดการค่างวด</th>
                         <!-- <th style="width: 100px;">ยกเลิกสัญญา</th> -->
                         <th style="width: 100px;">วันที่ทำสัญญา</th>
+                        <th style="width: 150px;">ผู้เช่าซื้อ</th>
+                        <th style="width: 150px;">เลขบัตรประชาชน</th>
                         <th style="width: 100px;">กลุ่มสัญญา</th>
                         <th style="width: 150px;">ประเภทสัญญา</th>
                         <th style="width: 150px;">จุดทำสัญญา</th>
                         <th style="width: 150px;">เขตการเก็บเงิน</th>
-                        <!-- <th style="width: 100px;">เลขที่อ้างอิงค่างวด</th> -->
+                        <th style="width: 150px;">ยี่ห้อรถ</th>
+                        <th style="width: 150px;">สีรถ</th>
+                        <th style="width: 150px;">รุ่นรถ</th>
+                        <th style="width: 150px;">เลขเครื่อง</th>
+                        <th style="width: 150px;">เลขโครง</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,11 +81,17 @@
                             </a>
                         </td> -->
                         <td>{{item.contractDate | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{item.hireFullName}}</td>
+                        <td>{{item.hireIdCard}}</td>
                         <td>{{item.contractGroup}}</td>
                         <td>{{item.contractType}}</td>
                         <td>{{item.contractPoint}}</td>
                         <td>{{item.areaPayment}}</td>
-                        <!-- <td>{{item.refNo}}</td> -->
+                        <td>{{item.brand}}</td>
+                        <td>{{item.color}}</td>
+                        <td>{{item.model}}</td>
+                        <td>{{item.engineNo}}</td>
+                        <td>{{item.frameNo}}</td>
                     </tr>
                 </tbody>
             </table>

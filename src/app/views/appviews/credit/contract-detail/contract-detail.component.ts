@@ -62,8 +62,25 @@ export class ContractDetailComponent implements OnInit {
         if (f.formTransfer) {
             window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&formTransfer=true`);
         }
+
+        if (f.sumCutOffCash) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&sumCutOffCash=true`)
+        }
+
+        if (f.sumDiscountByTerm) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&sumDiscountByTerm=true`)
+        }
+
         if (f.sumInterestDelay) {
             window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&sumInterestDelay=true`)
+        }
+
+        if (f.sumOutstanding) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&sumOutstanding=true`)
+        }
+
+        if (f.sumPaymentHistory) {
+            window.open(`${appConfig.reportUrl}/Credits/index.aspx?${contract}&sumPaymentHistory=true`)
         }
     }
 

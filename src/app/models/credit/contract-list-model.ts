@@ -19,4 +19,11 @@ export class ContractListModel {
     public statusDesc: string;
     public contractStatus: number;
     public refNo: string;
+    hireFullName: string;
+    hireIdCard: string;
+    brand: string;
+    color: string;
+    model: string;
+    engineNo: string;
+    frameNo: string;
 }
