@@ -17,7 +17,7 @@ import { ContractItemComponent } from './contract-item/contract-item.component';
 import { ExDetailCustomerComponent } from './ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from './ex-detail-motobike/ex-detail-motobike.component';
 import { ExDetailAccessoryComponent } from './ex-detail-accessory/ex-detail-accessory.component';
-import { CalculateService, ContractItemService, ContractService } from '../../../services/credit';
+import { CalculateService, ContractItemService, ContractService, RptSummayCloseContractService } from '../../../services/credit';
 import { ContractListCanceledComponent } from './contract-list/contract-list-canceled.component';
 import { ContractDetailComponent } from './contract-detail/contract-detail.component';
 import { ContractCanceledComponent } from './contract-canceled/contract-canceled.component';
@@ -29,6 +29,7 @@ import { RptOutstandingModule } from './rpt-outstanding/rpt-outstanding.module';
 import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-history.module';
 import { PageloaderModule } from '../pageloader/pageloader.module';
 import { PageloaderService } from '../pageloader/pageloader.component';
+import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { PageloaderService } from '../pageloader/pageloader.component';
     ContractListCanceledComponent,
     ContractDetailComponent,
     ContractCanceledComponent,
-    ExDetailFreeComponent
+    ExDetailFreeComponent,
+    RptSummaryCloseContractComponent
   ],
   providers: [
     SellActivityService,
@@ -69,7 +71,8 @@ import { PageloaderService } from '../pageloader/pageloader.component';
     CalculateService,
     ContractItemService,
     ContractService,
-    PageloaderService
+    PageloaderService,
+    RptSummayCloseContractService
   ]
 })
 export class CreditModule { }
