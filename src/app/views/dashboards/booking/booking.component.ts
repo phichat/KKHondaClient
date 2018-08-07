@@ -45,7 +45,11 @@ export class BookingComponent implements OnInit, AfterViewInit {
       yaxis: {
          borderWidth: 1,
       },
-      tooltip: false
+      tooltip: true,
+      tooltipOpts: {
+         content: "%y คัน"
+      }
+
    };
 
    public bookingPayMentType: any[] = [];
@@ -69,8 +73,11 @@ export class BookingComponent implements OnInit, AfterViewInit {
 
    }
 
-   async onSubmit(value: any) {
-      await this.dashBookingService.GetByCon(value.startDate, value.endDate).subscribe(res => {
+   onSubmit(value: any) {
+      value.startDate = (new Date(value.startDate)).toISOString();
+      value.endDate = (new Date(value.endDate)).toISOString();
+
+      this.dashBookingService.GetByCon(value.startDate, value.endDate).subscribe(res => {
          this.bookingDetail = res.bookingDetail;
          this.RenderChart(res);
       });
