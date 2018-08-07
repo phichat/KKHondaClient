@@ -11,10 +11,19 @@ import {
 import { ContractListActiveComponent } from './views/appviews/credit/contract-list/contract-list-active.component';
 import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
 import { RptSummaryCloseContractComponent } from './views/appviews/credit/rpt-summary-close-contract/rpt-summary-close-contract.component';
+import { BookingComponent } from './views/dashboards/booking/booking.component';
 
 export const ROUTES: Routes = [
   // Main redirect
   { path: '', redirectTo: 'starterview', pathMatch: 'full' },
+
+  // Dashboard
+  {
+    path: 'dashboards', component: BasicLayoutComponent,
+    children: [
+      { path: 'booking', component: BookingComponent }
+    ]
+  },
 
   // App views
   {
@@ -37,7 +46,7 @@ export const ROUTES: Routes = [
       },
       { path: 'detail', component: ContractDetailComponent },
       { path: 'calculate', component: CalculateComponent },
-      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent}
+      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent }
     ]
   },
 

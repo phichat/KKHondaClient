@@ -1,0 +1,93 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="flot-chart m-b-md">
+                    <div #chart flotChart class="flot-chart-content" [options]="flotOptions" [dataset]="flotDataset"></div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+
+                <ul #legendsToggle class="list-group clear-list m-t-0">
+                    <li class="list-group-item" *ngFor="let item of legends; let i=index">
+                        <span class="label" [style.background-color]="item.color">&nbsp;</span>
+                        <label class="">
+                            {{item.name}}
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <table id="bookingDetail" class="table table-striped" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>วันที่จอง</th>
+                    <th>เลขที่ใบจอง</th>
+                    <th>ชื่อผู้จอง</th>
+                    <th>สาขา</th>
+                    <th>มูลค่าสินค้า(ก่อน VAT)</th>                    
+                    <th>ประเภทการชำระเงิน</th>
+                    <th>สถานะ</th>
+                    <th>ยี่ห้อ</th>
+                    <th>ประเภท</th>
+                    <th>รหัสรุ่น</th>
+                    <th>สี</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of bookingDetail; let i=index;">
+                    <td>{{i+1}}</td>
+                    <td>{{item.bookingDate | date:'dd-MM-yyyy'}}</td>
+                    <td>{{item.bookingNo}}</td>
+                    <td>{{item.bookingFullName}}</td>
+                    <td>{{item.branchName}}</td>
+                    <td>{{item.bookSellPrice | number:'1.2-2'}}</td>
+                    <td>{{item.bookingPaymentTypeDesc}}</td>
+                    <td>{{item.bookingStatus}}</td>
+                    <td>{{item.brandName}}</td>
+                    <td>{{item.typeName}}</td>
+                    <td>{{item.modelCode}}</td>
+                    <td>{{item.colorName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="" class="open-config">
+            <a class="open-small-chat" data-toggle="modal" data-target="#modalConfig">
+                <i class="fas fa-cog fa-lg fa-spin"></i>
+            </a>
+        </div>
+
+        <div class="modal inmodal" id="modalConfig" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content animated fadeIn">
+                    <form action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <i class="fa fa-clock-o modal-icon"></i>
+                            <h4>ค้นหาข้อมูลวันที่จอง</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>ระหว่างวันที่</label>
+                                <input type="date" name="startDate" ngModel class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>ถึงวันที่</label>
+                                <input type="date" name="endDate" ngModel class="form-control">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.valid">ยืนยัน</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">ยกเลิก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CalculateModel, ContractModel } from 'app/models/credit';
+import { CalculateModel, ContractModel } from '../../../../models/credit';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import * as moment from 'moment';

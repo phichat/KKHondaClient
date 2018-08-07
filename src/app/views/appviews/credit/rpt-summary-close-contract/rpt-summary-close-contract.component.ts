@@ -5,7 +5,7 @@ import { RptSumCloseContractModel } from '../../../../models/credit/rpt-sum-clos
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
-import { appConfig } from 'app/app.config';
+import { appConfig } from '../../../../app.config';
 // import { PageloaderService } from '../../pageloader/pageloader.component';
 
 @Component({

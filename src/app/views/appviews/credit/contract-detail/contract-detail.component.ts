@@ -4,7 +4,7 @@ import { ContractDetailModel, CalculateModel } from '../../../../models/credit';
 import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
-import { appConfig } from 'app/app.config';
+import { appConfig } from '../../../../app.config';
 import { Outstanding } from '../../../../models/credit/outstanding-model';
 import { DelayedInterestModel } from '../../../../models/credit/delayed-interest.model';
 import { DiscountModel } from '../../../../models/credit/discount.model';

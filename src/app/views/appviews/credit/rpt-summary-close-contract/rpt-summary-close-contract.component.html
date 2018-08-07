@@ -73,7 +73,7 @@
             <tr *ngFor="let item of prtSumCloseContract; let i=index;">
                 <td>{{i+1}}</td>
                 <td>{{item.contractNo}}</td>
-                <td>{{item.contractDate}}</td>
+                <td>{{item.contractDate | date:'dd-MM-yyyy'}}</td>
                 <td>{{item.endDueDate}}</td>
                 <td>{{item.hireFullName}}</td>
                 <td>{{item.endContractDate}}</td>
