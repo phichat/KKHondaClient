@@ -15,6 +15,7 @@ import { BookingDetailModel } from './bookingDetail.model';
 export class BookingComponent implements OnInit, AfterViewInit {
 
    dataTable: any;
+   isUpdateChart: boolean | false;
 
    public color: any = ['#1C84C6', '#1ab394', '#ff3333'];
    public legends: any = [];
