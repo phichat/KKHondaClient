@@ -3,7 +3,7 @@ export class BookingType {
     branchName: string;
     bookingType: number;
     bookingTypeDesc: string;
-    bookSellPrice: number;
+    bookingSellPrice: number;
     itemAmount: number;
     startDate: Date;
     endDate: Date;

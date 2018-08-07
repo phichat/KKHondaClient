@@ -14,69 +14,54 @@ import { BookingDetailModel } from './bookingDetail.model';
 })
 export class BookingComponent implements OnInit, AfterViewInit {
 
-
    dataTable: any;
 
-   public color: any = ['#1ab394', '#1C84C6', '#FCC918'];
-   public legends = [
-      { name: 'จอง', color: this.color[0] },
-      { name: 'ขาย', color: this.color[1] },
-      { name: 'ยกเลิก', color: this.color[2] },
-   ];
-   public xaxisTricks = [[0, 'dd']];
-   public flotDataset: Array<any> = [[0, 0]]
+   public color: any = ['#1C84C6', '#1ab394', '#ff3333'];
+   public legends: any = [];
 
-   public flotOptions: any =
-      {
-         series: {
-            lines: {
-               show: false,
-               fill: true
-            },
-            splines: {
-               show: true,
-               tension: 0.4,
-               lineWidth: 1,
-               fill: 0.4
-            },
-            points: {
-               radius: 0,
-               show: true
-            },
-            shadowSize: 2
-         },
-         grid: {
-            hoverable: true,
-            clickable: true,
+   public xaxisTricks = [[0, "กระสัง"], [1, "จอหอ"], [2, "ถนนช้างเผือก"], [3, "นางรอง"], [4, "สำนักงานใหญ่"], [5, "สุนทรเทพ"]];
+   public flotDataset: Array<any> = []
+
+   public flotOptions = {
+      series: {
+         points: {
+            radius: 0,
             show: true,
-            borderWidth: 2,
-            color: 'transparent'
+            // borderWidth: 0.5,
          },
-         colors: this.color,
-         xaxis: {
-            ticks: this.xaxisTricks
-         },
-         yaxis: {
-            borderWidth: 1,
-         },
-         tooltip: false
-      };
+         shadowSize: 2
+      },
+      grid: {
+         hoverable: true,
+         clickable: true,
+         show: true,
+         borderWidth: 2,
+         color: 'transparent'
+      },
+      colors: this.color,
+      xaxis: {
+         ticks: this.xaxisTricks
+      },
+      yaxis: {
+         borderWidth: 1,
+      },
+      tooltip: false
+   };
 
-   public bookingPayMentType: BookingPaymentTypeModel[];
+   public bookingPayMentType: any[] = [];
    public bookingType: BookingType[];
    public bookingDetail: BookingDetailModel[];
 
    constructor(private dashBookingService: BookingService, private chRef: ChangeDetectorRef) { }
 
-   async ngOnInit() {
+   ngOnInit() {
       const date = new Date(), y = date.getFullYear(), m = date.getMonth();
       const startDate = (new Date(2018, 1, 5)).toISOString();
       const endDate = (new Date()).toISOString();
 
-      await this.dashBookingService.GetByCon(startDate, endDate).subscribe(res => {
+      this.dashBookingService.GetByCon(startDate, endDate).subscribe(res => {
          this.bookingDetail = res.bookingDetail;
          this.RenderChart(res);
-         this.onDetectTable();
       });
    }
 
@@ -85,7 +70,6 @@ export class BookingComponent implements OnInit, AfterViewInit {
    }
 
    async onSubmit(value: any) {
-
       await this.dashBookingService.GetByCon(value.startDate, value.endDate).subscribe(res => {
          this.bookingDetail = res.bookingDetail;
          this.RenderChart(res);
@@ -97,42 +81,146 @@ export class BookingComponent implements OnInit, AfterViewInit {
       let _sell: any[] = [];
       let _cancel: any[] = [];
 
+      let totalBooking = 0;
+      let totalSell = 0;
+      let totalCancel = 0;
+
+      let totalPriceBooking = 0;
+      let totalPriceSell = 0;
+      let totalPriceCancel = 0;
+
       res.bookingType
          .filter((item: BookingType) => item.bookingType == 1)
          .map((item: BookingType, i) => {
-            _booking.push([i, item.itemAmount])
+            _booking.push([i, item.itemAmount]);
+            totalBooking += item.itemAmount;
+            totalPriceBooking += item.bookingSellPrice;
          })
 
 
       res.bookingType
          .filter((item: BookingType) => item.bookingType == 2)
-         .map((item: BookingType, i) => _sell.push([i, item.itemAmount]))
+         .map((item: BookingType, i) => {
+            _sell.push([i, item.itemAmount])
+            totalSell += item.itemAmount;
+            totalPriceSell += item.bookingSellPrice;
+         })
 
       res.bookingType
          .filter((item: BookingType) => item.bookingType == 9)
-         .map((item: BookingType, i) => _cancel.push([i, item.itemAmount]))
+         .map((item: BookingType, i) => {
+            _cancel.push([i, item.itemAmount])
+            totalCancel += item.itemAmount;
+            totalPriceCancel += item.bookingSellPrice;
+         })
 
 
-      let result = [...res.bookingType.map(item => item.branchName)];
-      result = result.sort().reduce((accumulator, current) => {
+      let totalCash = 0;
+      let totalLeasing = 0;
+      let totalCredit = 0;
+      let totalCredit2 = 0;
+      let totalPriceCash = 0;
+      let totalPriceLeasing = 0;
+      let totalPriceCredit = 0;
+      let totalPriceCredit2 = 0;
+
+      res.bookingPayMentType.filter((item) => item.bookingPaymentType == 1)
+         .map((item: BookingPaymentTypeModel) => {
+            totalCash += item.itemAmount;
+            totalPriceCash += item.bookSellPrice;
+         })
+
+      res.bookingPayMentType.filter((item) => item.bookingPaymentType == 2)
+         .map((item: BookingPaymentTypeModel) => {
+            totalLeasing += item.itemAmount;
+            totalPriceLeasing += item.bookSellPrice;
+         })
+
+      res.bookingPayMentType.filter((item) => item.bookingPaymentType == 3)
+         .map((item: BookingPaymentTypeModel) => {
+            totalCredit += item.itemAmount;
+            totalPriceCredit += item.bookSellPrice;
+         })
+
+      res.bookingPayMentType.filter((item) => item.bookingPaymentType == 4)
+         .map((item: BookingPaymentTypeModel) => {
+            totalCredit2 += item.itemAmount;
+            totalPriceCredit2 += item.bookSellPrice;
+         })
+
+      // let result = [...res.bookingType.map(item => item.branchName)];
+      // result = result.sort().reduce((accumulator, current) => {
+      //    const length = accumulator.length
+      //    if (length === 0 || accumulator[length - 1] !== current) {
+      //       accumulator.push(current);
+      //    }
+      //    return accumulator;
+      // }, [])
+
+      // let _xaxisTricks = []
+      // result.map((item, i) => {
+      //    _xaxisTricks.push([i, item])
+      // })
+
+      // this.xaxisTricks = _xaxisTricks;
+
+      // this.flotOptions.xaxis.ticks = _xaxisTricks;
+
+      this.flotDataset = [
+         {
+            data: _booking,
+            splines: {
+               show: true,
+               tension: 0.4,
+               lineWidth: 1,
+               fill: 0.4
+            },
+         },
+         {
+            data: _sell,
+            splines: {
+               show: true,
+               tension: 0.4,
+               lineWidth: 1,
+               fill: 0.4
+            },
+         },
+         {
+            data: _cancel,
+            lines: {
+               show: true,
+               fill: false
+            },
+         }
+      ];
+
+      this.legends = [
+         { name: 'จอง', color: this.color[0], itemAmount: totalBooking, totalPrice: totalPriceBooking },
+         { name: 'ขาย', color: this.color[1], itemAmount: totalSell, totalPrice: totalPriceSell },
+         { name: 'ยกเลิก', color: this.color[2], itemAmount: totalCancel, totalPrice: totalPriceCancel }
+      ]
+
+      this.bookingPayMentType = [
+         { name: 'เงินสด', itemAmount: totalCash, totalPrice: totalPriceCash },
+         { name: 'สินเชื่อ', itemAmount: totalLeasing, totalPrice: totalPriceLeasing },
+         { name: 'เช่าซื้อ', itemAmount: totalCredit, totalPrice: totalPriceCredit },
+         { name: 'ขายเชื่อ', itemAmount: totalCredit2, totalPrice: totalPriceCredit2 }
+      ]
+
+      this.onDetectTable();
+   }
+
+   private reduceArray(array: any[]) {
+      return array.sort().reduce((accumulator, current) => {
          const length = accumulator.length
          if (length === 0 || accumulator[length - 1] !== current) {
             accumulator.push(current);
          }
          return accumulator;
       }, [])
-
-      let _xaxisTricks = []
-      result.map((item, i) => {
-         _xaxisTricks.push([i, item])
-      })
-
-      this.xaxisTricks = _xaxisTricks;
-
-      this.flotDataset = [_booking, _sell, _cancel];
    }
 
-    onDetectTable() {
+   onDetectTable() {
 
       const table: any = $('#bookingDetail');
 
@@ -141,7 +229,7 @@ export class BookingComponent implements OnInit, AfterViewInit {
          this.dataTable.destroy();
       }
 
-       this.chRef.detectChanges();
+      this.chRef.detectChanges();
 
       this.dataTable = $('#bookingDetail').DataTable({
          'scrollX': true,
