@@ -30,6 +30,7 @@ import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-histo
 import { PageloaderModule } from '../pageloader/pageloader.module';
 import { PageloaderService } from '../pageloader/pageloader.component';
 import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
+import { PaymentModule } from './payment/payment.module';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/r
     RptDiscountTermModule,
     RptOutstandingModule,
     RptPaymentHistoryModule,
-    PageloaderModule
+    PageloaderModule,
+    PaymentModule
   ],
   declarations: [
     CreditComponent,

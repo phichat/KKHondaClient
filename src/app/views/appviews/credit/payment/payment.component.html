@@ -1,0 +1,169 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>บันทึกการชำระเงิน</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>
+        <a>เช่าซื้อ</a>
+      </li>
+      <li class="active">
+        <strong>บันทึกการชำระเงิน</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right"></div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight form-horizontal">
+  <div class="row form-group-md">
+    <label for="" class="col-sm-2 control-label">เลขที่สัญญา : </label>
+    <strong class="col-md-2">{{contractModel.contractNo}}</strong>
+    <label for="" class="col-sm-2 control-label">วันที่ทำสัญญา : </label>
+    <strong class="col-md-2">{{contractModel.contractDate | date:'dd-MM-yyyy'}}</strong>
+    <label for="" class="col-sm-2 control-label">สถานะสัญญา : </label>
+    <strong class="col-md-2 text-danger">{{contractModel.statusDesc}}</strong>
+  </div>
+  <div class="row form-group-md">
+    <label for="" class="col-sm-2 control-label">ชื่อลูกค้า : </label>
+    <strong class="col-md-2">{{contractModel.contractHire}}</strong>
+    <label for="" class="col-sm-2 control-label">ชื่อผู้ขาย : </label>
+    <strong class="col-md-2">{{contractModel.saleName}}</strong>
+  </div>
+  <div class="row form-group-md">
+    <label for="" class="col-sm-2 control-label">หมายเลขเครื่อง : </label>
+    <strong class="col-md-2">{{bookingModel.engineNo}}</strong>
+    <label for="" class="col-sm-2 control-label">หมายเลขตัวถัง : </label>
+    <strong class="col-md-2">{{bookingModel.frameNo}}</strong>
+    <label for="" class="col-sm-2 control-label">ยี่ห้อ : </label>
+    <strong class="col-md-2">{{bookingModel.brandName}}</strong>
+  </div>
+  <div class="row form-group-md">
+    <label for="" class="col-md-2 control-label">รุ่น : </label>
+    <strong class="col-md-2">{{bookingModel.modelCode}}</strong>
+    <label for="" class="col-md-2 control-label">สี : </label>
+    <strong class="col-md-2">{{bookingModel.color}}</strong>
+  </div>
+  <div class="row form-group">
+    <label for="price" class="col-sm-2 control-label">ราคา : </label>
+    <strong id="price" class="col-md-2 col-sm-6">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
+    <label for="ispay" class="col-sm-2 control-label">ชำระแล้ว : </label>
+    <strong id="ispay" class="col-md-2 col-sm-6">{{isPayModel.isPayPrice | number:'1.2-2'}} บาท ({{isPayModel.isPayTerm}}
+      งวด)
+    </strong>
+    <label for="" class="col-sm-2 control-label">ค้างชำระ : </label>
+    <strong class="col-md-2 col-sm-6">{{isOutstandingModel.isOutstandingPrice | number:'1.2-2'}} บาท ({{isOutstandingModel.isOutstandingTerm}}
+      งวด)
+    </strong>
+  </div>
+
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <div class="row form-group">
+        <div class="col-md-6 b-r">
+          <div style="max-height: 600px; overflow-y: auto;">
+            <table class="table table-striped table-bordered table-sm table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center"></th>
+                  <th class="text-center">ครั้งที่</th>
+                  <th class="text-center">เลขที่ใบรับเงิน</th>
+                  <th class="text-center">วันที่ครบกำหนดชำระ</th>
+                  <th class="text-center">วันที่ชำระ</th>
+                  <th class="text-right">จำนวนเงิน</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of contractItemModel;">
+                  <td class="text-center">
+                    <input (click)="setFormPayment(item.instalmentNo)" type="radio" id="select{{item.instalmentNo}}" value="{{item.instalmentNo}}"
+                      name="instalmentNo">
+                  </td>
+                  <td class="text-center">
+                    <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
+                    <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
+                  </td>
+                  <td class="text-center">{{item.taxInvoiceNo}}</td>
+                  <td class="text-center">{{item.dueDate | date:'dd-MM-yyyy'}}</td>
+                  <td class="text-center">{{item.payDate | date:'dd-MM-yyyy'}}</td>
+                  <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <form action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+            <div class="row form-group">
+              <label for="" class="col-md-3">เลขที่ใบรับเงิน : </label>
+              <div class="col-md-3 text-right">{{paymentModel.taxInvoiceNo}}</div>
+              <label for="" class="col-md-3">วันที่รับชำระ :</label>
+              <div class="col-md-3">{{paymentModel.payDate | date:'dd-MM-yyyy'}}</div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-3">ผู้รับเงิน :</label>
+              <div class="col-md-1 text-right">{{userName}}</div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-3">หมายเหตุ :</label>
+              <div class="col-sm-9 text-right">
+                <textarea name="remark" [(ngModel)]="paymentModel.remark" rows="2" class="form-control" ></textarea>
+              </div>
+            </div>
+            <hr class="hr-dashed">
+
+            <div class="row form-group">
+                <label for="" class="col-md-4">ครั้งที่ :</label>
+                <strong class="col-md-8">{{paymentModel.instalmentNo}}</strong>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4">ช่องทางการรับชำระ :</label>
+              <div class="col-md-8">
+                <div class="radio radio-info radio-inline">
+                  <input type="radio" id="paymentType0" value="1" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <label for="paymentType0">เงินสด</label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                  <input type="radio" id="paymentType1" value="2" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <label for="paymentType1">โอน</label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                  <input type="radio" id="paymentType2" value="3" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <label for="paymentType2">เช็ค</label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                  <input type="radio" id="paymentType3" value="4" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <label for="paymentType3">บัตรเครดิต</label>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4">ยอดคงค้าง (รวม VAT) :</label>
+              <div class="col-md-4 text-right">
+                <input type="text" name="outstanding" [(ngModel)]="paymentModel.outstanding" readonly class="form-control form-control-sm number-2-digit">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4">ยอดชำระ (รวม VAT) :</label>
+              <div class="col-md-4 text-right">
+                <input type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice" class="form-control form-control-sm number-2-digit">
+              </div>
+            </div>
+
+            <hr class="hr-dashed">
+
+            <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-sm-8">
+                <button type="button" class="btn btn-primary" [disabled]="!f.valid">บันทึก</button>
+                <button type="reset" class="btn">ยกเลิก</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

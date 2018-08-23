@@ -21,6 +21,10 @@ span.required {
     background-color: transparent;
 }
 
+.hr-dashed {
+    border-top: 1px dashed rgba(0, 0, 0, 0.14) !important
+}
+
 .none-ibox {
     margin-bottom: unset;
     .ibox-title {
@@ -46,6 +50,10 @@ span.required {
         border-color: #ddd;
         background-color: transparent; 
     }
+}
+
+.form-group-md {
+    margin-bottom: 5px;
 }
 
 // .ng-invalid.ng-touched:not(.ng-select-focused) {

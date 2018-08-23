@@ -57,6 +57,10 @@ export class ContractListActiveComponent implements OnInit {
         this.router.navigate(['credit/contract'], { queryParams: { mode: 'edit', contractId: contractId } });
     }
 
+    gotoPayment(contractId: number) {
+        this.router.navigate(['credit/payment', contractId]);
+    }
+
     gotoCanceled(contractId: number) {
         this.router.navigate(['credit/canceled'], { queryParams: { contractId: contractId } })
     }

@@ -12,6 +12,7 @@ import { ContractListActiveComponent } from './views/appviews/credit/contract-li
 import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
 import { RptSummaryCloseContractComponent } from './views/appviews/credit/rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
+import { PaymentComponent } from './views/appviews/credit/payment/payment.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -46,7 +47,8 @@ export const ROUTES: Routes = [
       },
       { path: 'detail', component: ContractDetailComponent },
       { path: 'calculate', component: CalculateComponent },
-      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent }
+      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent },
+      { path: 'payment/:id', component: PaymentComponent}
     ]
   },
 
