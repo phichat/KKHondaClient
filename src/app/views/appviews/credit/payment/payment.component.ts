@@ -1,9 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import * as Inputmask from 'inputmask';
 import { ActivatedRoute } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { Outstanding } from '../../../../models/credit/outstanding-model';
 
 @Component({
   selector: 'app-payment',
@@ -13,7 +14,7 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 export class PaymentComponent implements OnInit, AfterViewInit {
 
   userName: string = 'Admin'
-  contractItemModel: ContractItem[];
+  contractItemModel: ContractItem[] = [];
   contractModel: Contract = new Contract();
   bookingModel: Booking = new Booking();
   isPayModel: IsPay = new IsPay();
@@ -28,18 +29,44 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.paymentModel.payDate = new Date();
-
     this._activatedRoute.params.subscribe(async param => {
       if (param['id']) {
-        await this._paymentService.GetByContractId(param['id']).subscribe(item => {
-          this.contractModel = item.contract;
-          this.contractItemModel = item.contractItem;
-          this.bookingModel = item.booking;
-          this.isPayModel = item.isPay;
-          this.isOutstandingModel = item.isOutstanding;
-        })
+        await this._paymentService.GetByContractId(param['id']).subscribe(item => this.loadCreditPayment(item))
       };
     })
+
+  }
+
+  async loadCreditPayment(item: Payment) {
+    this.contractModel = item.contract;
+    this.bookingModel = item.booking;
+    this.isPayModel = item.isPay;
+    this.isOutstandingModel = item.isOutstanding;
+
+    await item.contractItem.map(res => {
+      this.contractItemModel.push({
+        isSlect: false,
+        contractItemId: res.contractItemId,
+        contractId: item.contract.contractId,
+        instalmentNo: res.instalmentNo,
+        taxInvoiceNo: res.taxInvoiceNo,
+        dueDate: res.dueDate,
+        payDate: res.payDate,
+        balanceNetPrice: res.balanceNetPrice,
+        payNetPrice: res.payNetPrice,
+        paymentType: res.paymentType,
+        remark: res.remark,
+        payeer: res.payeer
+      })
+    });
+
+    let outstandingPrice = this.contractItemModel
+      .filter(item => item.payNetPrice == null)
+      .reduce((accumulator, current) => {
+        return accumulator + current.balanceNetPrice;
+      }, 0)
+
+    this.paymentModel.outstanding = outstandingPrice;
   }
 
   ngAfterViewInit() {
@@ -53,30 +80,46 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     }).mask(number2Digit);
   }
 
-  setFormPayment(instalmentNo: number) {
-    const outstandingPrice = this.contractItemModel
-      .filter(item => item.payNetPrice == null)
+  instalmentCount: number = 0;
+  setFormPayment() {
+    this.instalmentCount = this.contractItemModel
+      .filter(item => item.payNetPrice == null && item.isSlect == true)
+      .reduce((accumulator) => {
+        return accumulator += 1;
+      }, 0)
+
+    let balanceNetPrice = this.contractItemModel
+      .filter(item => item.payNetPrice == null && item.isSlect == true)
       .reduce((accumulator, current) => {
         return accumulator + current.balanceNetPrice;
       }, 0)
-
-    this.contractItemModel
-      .filter(item => item.instalmentNo == instalmentNo)
-      .map((item: ContractItem) => {
-        this.paymentModel.instalmentNo = item.instalmentNo;
-        this.paymentModel.refNo = this.contractModel.refNo;
-        this.paymentModel.taxInvoiceNo = item.taxInvoiceNo;
-         this.paymentModel.outstanding = outstandingPrice;
-        this.paymentModel.paymentType = item.paymentType;
-        this.paymentModel.payDate = !item.payDate ? (new Date()) : item.payDate;
-        this.paymentModel.payNetPrice = item.balanceNetPrice;
-        this.paymentModel.remark = item.remark;
-      })
+    this.paymentModel.payNetPrice = balanceNetPrice;
   }
 
   onSubmit(value: any) {
-  console.log('====================================');
-  console.log(value);
-  console.log('====================================');
+    if (confirm('ยืนยันการรับชำระหรือไม่?')) {
+      // const payment = this.contractItemModel.filter(item => item.payNetPrice == null && item.isSlect == true);
+      const payment = {
+        contractItemId: 1,
+        contractId: 1,
+        payeer: 1,
+        payDate: (new Date()).toISOString(),
+        paymentType: 1
+      }
+      this._paymentService.PaymentTerm(payment).subscribe(item => {
+        this.loadCreditPayment(item);
+      })
+    }
+  }
+
+  onCancel(contrictItemId: string, instalmentNo: number) {
+    const p = prompt(`ยืนยันการยกเลิกรายการรับชำระ ครั้งที่ ${instalmentNo} หรือไม่\nระบุหมายเหตุ:`);
+    if (p === '') {
+      alert('กรุณาระบุหมายเหตุของการยกเลิก!')
+    } else if (p !== '' && p !== null) {
+      this._paymentService.CancelContractTerm(contrictItemId).subscribe(item => {
+        this.loadCreditPayment(item);
+      })
+    }
   }
 }

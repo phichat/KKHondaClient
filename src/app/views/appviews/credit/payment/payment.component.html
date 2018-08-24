@@ -47,13 +47,13 @@
   </div>
   <div class="row form-group">
     <label for="price" class="col-sm-2 control-label">ราคา : </label>
-    <strong id="price" class="col-md-2 col-sm-6">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
+    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">ชำระแล้ว : </label>
-    <strong id="ispay" class="col-md-2 col-sm-6">{{isPayModel.isPayPrice | number:'1.2-2'}} บาท ({{isPayModel.isPayTerm}}
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{isPayModel.isPayPrice | number:'1.2-2'}} บาท ({{isPayModel.isPayTerm}}
       งวด)
     </strong>
     <label for="" class="col-sm-2 control-label">ค้างชำระ : </label>
-    <strong class="col-md-2 col-sm-6">{{isOutstandingModel.isOutstandingPrice | number:'1.2-2'}} บาท ({{isOutstandingModel.isOutstandingTerm}}
+    <strong class="col-md-2 col-sm-6 text-danger">{{isOutstandingModel.isOutstandingPrice | number:'1.2-2'}} บาท ({{isOutstandingModel.isOutstandingTerm}}
       งวด)
     </strong>
   </div>
@@ -62,60 +62,51 @@
     <div class="ibox-content">
       <div class="row form-group">
         <div class="col-md-6 b-r">
-          <div style="max-height: 600px; overflow-y: auto;">
-            <table class="table table-striped table-bordered table-sm table-hover">
-              <thead>
-                <tr>
-                  <th class="text-center"></th>
-                  <th class="text-center">ครั้งที่</th>
-                  <th class="text-center">เลขที่ใบรับเงิน</th>
-                  <th class="text-center">วันที่ครบกำหนดชำระ</th>
-                  <th class="text-center">วันที่ชำระ</th>
-                  <th class="text-right">จำนวนเงิน</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of contractItemModel;">
-                  <td class="text-center">
-                    <input (click)="setFormPayment(item.instalmentNo)" type="radio" id="select{{item.instalmentNo}}" value="{{item.instalmentNo}}"
-                      name="instalmentNo">
-                  </td>
-                  <td class="text-center">
-                    <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
-                    <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
-                  </td>
-                  <td class="text-center">{{item.taxInvoiceNo}}</td>
-                  <td class="text-center">{{item.dueDate | date:'dd-MM-yyyy'}}</td>
-                  <td class="text-center">{{item.payDate | date:'dd-MM-yyyy'}}</td>
-                  <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="table table-striped table-bordered table-sm table-hover">
+            <thead>
+              <tr>
+                <th class="text-center"></th>
+                <th class="text-center">ครั้งที่</th>
+                <th class="text-center">เลขที่ใบรับเงิน</th>
+                <th class="text-center">วันที่ครบกำหนดชำระ</th>
+                <th class="text-center">วันที่ชำระ</th>
+                <th class="text-right">จำนวนเงิน</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of contractItemModel;">
+                <td class="text-center">
+                  <a href="javascript:void(0);" class="btn btn-danger btn-xs" *ngIf="item.payNetPrice" (click)="onCancel(item.contractItemId, item.instalmentNo)">
+                    <i class="fa fa-times"></i> ยกเลิก
+                  </a>
+                  <input *ngIf="!item.payNetPrice" (change)="setFormPayment();" type="checkbox" id="select{{item.instalmentNo}}" name="isSelect"
+                    [(ngModel)]="item.isSlect">
+                </td>
+                <td class="text-center">
+                  <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
+                  <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
+                </td>
+                <td class="text-center">{{item.taxInvoiceNo}}</td>
+                <td class="text-center">{{item.dueDate | date:'dd-MM-yyyy'}}</td>
+                <td class="text-center">{{item.payDate | date:'dd-MM-yyyy'}}</td>
+                <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="col-md-6">
           <form action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
             <div class="row form-group">
-              <label for="" class="col-md-3">เลขที่ใบรับเงิน : </label>
-              <div class="col-md-3 text-right">{{paymentModel.taxInvoiceNo}}</div>
-              <label for="" class="col-md-3">วันที่รับชำระ :</label>
-              <div class="col-md-3">{{paymentModel.payDate | date:'dd-MM-yyyy'}}</div>
+              <label for="" class="col-md-4">วันที่รับชำระ :</label>
+              <strong class="col-md-3">{{paymentModel.payDate | date:'dd-MM-yyyy'}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-3">ผู้รับเงิน :</label>
-              <div class="col-md-1 text-right">{{userName}}</div>
+              <label for="" class="col-md-4">ผู้รับเงิน :</label>
+              <strong class="col-md-1 text-right">{{userName}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-3">หมายเหตุ :</label>
-              <div class="col-sm-9 text-right">
-                <textarea name="remark" [(ngModel)]="paymentModel.remark" rows="2" class="form-control" ></textarea>
-              </div>
-            </div>
-            <hr class="hr-dashed">
-
-            <div class="row form-group">
-                <label for="" class="col-md-4">ครั้งที่ :</label>
-                <strong class="col-md-8">{{paymentModel.instalmentNo}}</strong>
+              <label for="" class="col-md-4">ชำระ :</label>
+              <strong class="col-md-8">{{instalmentCount}} งวด</strong>
             </div>
             <div class="row form-group">
               <label for="" class="col-md-4">ช่องทางการรับชำระ :</label>
@@ -147,7 +138,7 @@
             <div class="row form-group">
               <label for="" class="col-md-4">ยอดชำระ (รวม VAT) :</label>
               <div class="col-md-4 text-right">
-                <input type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice" class="form-control form-control-sm number-2-digit">
+                <input type="text" required readonly name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice" class="form-control form-control-sm number-2-digit">
               </div>
             </div>
 
@@ -156,7 +147,7 @@
             <div class="row">
               <div class="col-md-4"></div>
               <div class="col-sm-8">
-                <button type="button" class="btn btn-primary" [disabled]="!f.valid">บันทึก</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid">บันทึก</button>
                 <button type="reset" class="btn">ยกเลิก</button>
               </div>
             </div>

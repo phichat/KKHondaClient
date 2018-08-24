@@ -51,6 +51,9 @@ export class IsOutstanding {
 }
 
 export class ContractItem {
+    isSlect: boolean;
+    contractItemId: number;
+    contractId: number;
     instalmentNo: number;
     taxInvoiceNo: string;
     dueDate: Date;
@@ -59,5 +62,5 @@ export class ContractItem {
     payNetPrice: number; 
     paymentType: number;
     remark: string;
-    updateBy: string;
+    payeer: string;
 }
