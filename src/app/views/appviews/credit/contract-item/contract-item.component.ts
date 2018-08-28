@@ -31,6 +31,14 @@ export class ContractItemComponent implements OnInit, DoCheck {
         // this.chRef.detach();
     }
 
+    currencyToFloat(str: any) {
+        if (!str) 
+            return 0;
+            
+        str = str.toString();
+        return parseFloat(str.replace(/,/i, ''));
+     }
+
     ngOnInit() {
         if (this.contractItemModel.length === 0) {
             this._calService.currentData.subscribe(p => {
@@ -44,12 +52,14 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 const firstPay = new Date(p.firstPayment);
 
                 // เงินจองถอด vat
-                const depositPriceExcVat = (p.depositPrice / vatUp);
+                const depositPriceExcVat = (this.currencyToFloat(p.depositPrice) / vatUp);
+
                 // ค่างวดถอด vat
                 const instalmentExcVat = (p.instalmentPrice / vatUp);
+
                 // ค่าสินค้า(ราคายืน) ถอด vat
-                // p.netPrice
                 const itemPriceExcVat = (p.netPrice / vatUp);
+                
                 // ยอดจัดถอด vat
                 const remainExcVat = (p.remain / vatUp);
                 
@@ -85,9 +95,10 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     // i : จำนวนรายการ
                     // i = 0: รายการเงินดาน์
                     // i > 0: รายการผ่อน
+                    const depositPrice = this.currencyToFloat(p.depositPrice)
                     const balance = (i === 0) ? depositPriceExcVat : instalmentExcVat;
-                    const balanceVatPrice = (i === 0) ? p.depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
-                    const balanceNetPrice = (i === 0) ? p.depositPrice : p.instalmentPrice;
+                    const balanceVatPrice = (i === 0) ? depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
+                    const balanceNetPrice = (i === 0) ? depositPrice : p.instalmentPrice;
 
 
                     // งวดที่ 0 หรือเงินดาวน์จะไม่ถูกหักเงินดาวน์ เนื่องจากยอดจัดถูกหักดาวน์ไปแล้ว

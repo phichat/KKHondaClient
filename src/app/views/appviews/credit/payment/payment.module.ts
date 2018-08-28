@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PaymentComponent } from './payment.component';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { FormsModule } from '@angular/forms';
+import { PageLoadWarpperService } from '../../../../services/common/page-load-warpper.service';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { FormsModule } from '@angular/forms';
   ],
   declarations: [PaymentComponent],
   providers: [
-    PaymentService
+    PaymentService,
+    PageLoadWarpperService
   ]
 })
 export class PaymentModule { }

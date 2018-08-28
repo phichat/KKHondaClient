@@ -126,7 +126,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(p => {
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
-                this.model.netPrice = p.outStandingPrice;
+                // this.model.netPrice = p.outStandingPrice;
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
@@ -143,6 +143,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.firstPayment = moment(p.firstPayment).format('YYYY-MM-DD');
                 this.model.typePayment = this.model.typePayment.toString();
 
+                // test
+                this.model.outStandingPrice = 62000
+
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
             })
@@ -152,47 +155,51 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
-        // this.model.netPrice
-        this.model.depositPrice = Math.ceil(this.model.netPrice * (this.model.deposit / 100));
+        this.model.depositPrice = Math.ceil(this.model.outStandingPrice * (this.model.deposit / 100));
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        // this.model.netPrice
-        this.model.deposit = ((this.model.depositPrice * 100) / this.model.netPrice);
+        let deposit: number = this.currencyToFloat(this.model.depositPrice.toString()); 
+        this.model.deposit = ((deposit * 100) / this.model.outStandingPrice);
     }
 
     instalmentCalculate() {
-        // ยอดจัด = ราคารถ-เงินดาวน์
-        // ราคาดอกเบี้ย = (ราคารถ*(อัตราดอกเบี้ย/100))*((จำนวนเดือนผ่อนชำระ))
-        // this.model.netPrice
+        // ราคาสินค้าคงเหลือ
+        let deposit: number = this.currencyToFloat(this.model.depositPrice.toString());
+        this.model.netPrice = (this.model.outStandingPrice - deposit);
+         
+        // จำนวนดอกเบี้ยที่ต้องชำระ
         this.model.interestPrice = (this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
-        // ราคารถรวมดอกเบี้ย
-        // this.model.netPrice
-        const netPrice = (this.model.netPrice + this.model.interestPrice);
-        this.model.outStandingPrice = netPrice;
-        // ยอดจัด = (ราคารถรวมดอกเบี้ย - เงินดาวน์)        
-        this.model.remain = Math.ceil(netPrice - this.model.depositPrice);
-        // ผ่อนชำระต่องวด = ยอดจัด / จำนวนเดือนผ่อนชำระ
+
+        // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
+        this.model.remain = this.model.netPrice + this.model.interestPrice;
+
+        // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
         this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd);
+        
+        // จำนวนค่าภาษีมูลค่าเพิ่ม
+        this.model.vatPrice = (this.model.instalmentPrice * this.model.nowVat) / (this.model.nowVat + 100); 
+        
+        // ค่าเช่าซื้อต่องวดก่อนรวมภาษี
+        this.model.instalmentPriceExtVat = this.model.instalmentPrice - this.model.vatPrice;
 
-        const vatUp = 1 + (this.model.nowVat / 100);
-
-        // เงินดาวน์
-        const depositExcVat = this.model.depositPrice / vatUp;
-        // ราคาสินค้า(ไม่รวมดอกเบี้ย) - เงินดาวน์ 
-        // this.model.netPrice
-        const netPriceExcVat = (this.model.netPrice / vatUp) - depositExcVat;
-        // ค่างวดต่อเดือน(รวมดอกเบี้ย)
-        const instalmentPriceExcVat = this.model.instalmentPrice / vatUp;
         // คำนวณ RATE
-        this.model.irr = (this.RATE(this.model.instalmentEnd, -(instalmentPriceExcVat), netPriceExcVat) * 100);
+        this.model.irr = (this.RATE(this.model.instalmentEnd, -(this.model.instalmentPrice), this.model.netPrice) * 100);
+
+        // คำนวนอัตราดอกเบี้ยที่แท้จริงต่อปี
+        this.model.mrr = this.model.irr * this.model.instalmentEnd;
+
         this._calcService.changeData(this.model);
     }
 
     ceil10(int: number) {
         return (Math.ceil(int / 10) * 10);
+    }
+
+    currencyToFloat(str: string) {
+       return parseFloat(str.replace(/,/i, ''));
     }
 
     RATE(nper, pmt, pv, fv?, type?, guess?) {

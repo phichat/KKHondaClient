@@ -14,6 +14,7 @@ export class PaymentFG {
     paymentType: number;
     payDate: Date;
     payNetPrice: number;
+    fineSum: number;
     remark: string;
     updateBy: string;
 }
@@ -61,6 +62,7 @@ export class ContractItem {
     balanceNetPrice: number;
     payNetPrice: number; 
     paymentType: number;
+    fineSum: number;
     remark: string;
     payeer: string;
 }

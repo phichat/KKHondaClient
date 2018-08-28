@@ -22,14 +22,15 @@ export class PaymentService {
     return this.http.get<Payment>(api);
   }
 
-  CancelContractTerm(id: string) {
-    const api = `${this.url}/CreditPayment/${id}`;
-    return this.http.delete<Payment>(api);
+  CancelContractTerm(param: any) {
+    const params = JSON.stringify(param);
+    const api = `${this.url}/CreditPayment/CancelItemPayment`;
+    return this.http.post<Payment>(api, params, this.httpOptions);
   }
 
   PaymentTerm(payment: any) {
     const api = `${this.url}/CreditPayment/PaymentTerm`;
-    const params = {payment};
+    const params = JSON.stringify(payment);
     return this.http.post<any>(api, params, this.httpOptions);
   }
 

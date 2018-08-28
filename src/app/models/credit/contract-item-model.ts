@@ -29,6 +29,7 @@ export class ContractItemModel {
     public remain: number;
     public remainVatPrice: number;
     public remainNetPrice: number;
+    public remainInterest: number;
     public delayDueDate: number;
     public createBy: number;
     public createDate: Date;

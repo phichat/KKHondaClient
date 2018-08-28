@@ -9,6 +9,7 @@ export class CalculateModel {
     public deposit: number;              // เงินดาวน์ %
     public depositPrice: number;         // เงินดาวน์
     public instalmentEnd: number;        // จำนวนงวด
+    public instalmentPriceExtVat: number;
     public instalmentPrice: number;      // ค่างวด
     public instalmentRemain: number;     // ยอดคงเหลือ
     public interest: number;             // ดอกเบี้ย/เดือน
@@ -18,7 +19,9 @@ export class CalculateModel {
     public dueDate: number;              // ชำระทุกวันที่
     public promotionalPrice: number;     // ค่าส่งเสริมการขาย
     public nowVat: number;               // vat ณ วันที่ทำสัญญา
+    public vatPrice: number;
     public irr: number;                  // internal return rate
+    public mrr: number;                  // ดอกเบี้ยต่อปี
     public createBy: number;
     public createDate: Date;
     public updateBy: number;

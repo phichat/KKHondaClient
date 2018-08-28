@@ -34,21 +34,8 @@
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number" readonly>
+                                    <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice" class="form-control number" readonly>
                                     <span class="input-group-addon">บาท</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                อัตราดอกเบี้ย/เดือน :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number" min="0.00" (keyup)="instalmentCalculate()">
-                                    <span class="input-group-addon">%</span>
                                 </div>
                             </div>
                         </div>
@@ -70,8 +57,34 @@
                             </label>
                             <div class="col-lg-3 col-md-4">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number" (keyup)="onChangeDeposit(); instalmentCalculate();"
+                                    <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit" (keyup)="onChangeDeposit(); instalmentCalculate();"
                                         min="0.00">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ราคาสินค้าคงเหลือ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"readonly>
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                อัตราดอกเบี้ย/เดือน :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number-2-digit" min="0.00" (keyup)="instalmentCalculate()">
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
@@ -127,33 +140,7 @@
                                 <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ยอดจัด (รวม VAT) :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
-                                    <span class="input-group-addon">บาท</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ค่างวด (รวม VAT) :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number" readonly>
-                                    <span class="input-group-addon">บาท</span>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                        
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
@@ -171,12 +158,90 @@
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
+                                ดอกเบี้ย (รวม VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.interestPrice" name="interestPrice" class="form-control number" readonly>
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ยอดจัด (รวม VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ค่างวด (รวม VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number" readonly>
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ภาษีในแต่ละงวด :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.vatPrice" name="vatPrice" class="form-control number" readonly>
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ค่างวด(ก่อน VAT) :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.instalmentPriceExtVat" name="instalmentPriceExtVat" class="form-control number" readonly>
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
                                 I.R.R. :
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="text" required [(ngModel)]="model.irr" name="irr" class="form-control number-2-digit" readonly>
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                อัตราดอกเบีย/ปี :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit" readonly>
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>

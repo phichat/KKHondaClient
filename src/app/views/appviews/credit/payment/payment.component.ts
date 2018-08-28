@@ -3,8 +3,10 @@ import * as Inputmask from 'inputmask';
 import { ActivatedRoute } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
-import { Outstanding } from '../../../../models/credit/outstanding-model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { PageLoadWarpperService } from '../../../../services/common/page-load-warpper.service';
+
+declare var toastr: any;
 
 @Component({
   selector: 'app-payment',
@@ -14,6 +16,8 @@ import { Outstanding } from '../../../../models/credit/outstanding-model';
 export class PaymentComponent implements OnInit, AfterViewInit {
 
   userName: string = 'Admin'
+  userId: string = '1';
+
   contractItemModel: ContractItem[] = [];
   contractModel: Contract = new Contract();
   bookingModel: Booking = new Booking();
@@ -23,12 +27,17 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _paymentService: PaymentService
-  ) { }
+    private _paymentService: PaymentService,
+    private _pageWarpperService: PageLoadWarpperService
+  ) {
+    toastr.options = {
+      'closeButton': true,
+      'progressBar': true,
+    }
+  }
 
   ngOnInit() {
 
-    this.paymentModel.payDate = new Date();
     this._activatedRoute.params.subscribe(async param => {
       if (param['id']) {
         await this._paymentService.GetByContractId(param['id']).subscribe(item => this.loadCreditPayment(item))
@@ -43,6 +52,10 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.isPayModel = item.isPay;
     this.isOutstandingModel = item.isOutstanding;
 
+    this.instalmentCount = 0;
+    this.contractItemModel = [];
+    this.paymentModel = new PaymentFG();
+
     await item.contractItem.map(res => {
       this.contractItemModel.push({
         isSlect: false,
@@ -55,8 +68,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         balanceNetPrice: res.balanceNetPrice,
         payNetPrice: res.payNetPrice,
         paymentType: res.paymentType,
+        fineSum: res.fineSum,
         remark: res.remark,
-        payeer: res.payeer
+        payeer: this.userId
       })
     });
 
@@ -65,7 +79,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       .reduce((accumulator, current) => {
         return accumulator + current.balanceNetPrice;
       }, 0)
-
+      
+    this.paymentModel.payDate = new Date();
     this.paymentModel.outstanding = outstandingPrice;
   }
 
@@ -96,29 +111,40 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.payNetPrice = balanceNetPrice;
   }
 
-  onSubmit(value: any) {
+  async onSubmit(value: any) {
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
-      // const payment = this.contractItemModel.filter(item => item.payNetPrice == null && item.isSlect == true);
-      const payment = {
-        contractItemId: 1,
-        contractId: 1,
-        payeer: 1,
-        payDate: (new Date()).toISOString(),
-        paymentType: 1
-      }
-      this._paymentService.PaymentTerm(payment).subscribe(item => {
-        this.loadCreditPayment(item);
+
+      const payment = this.contractItemModel.filter(item => item.payNetPrice == null && item.isSlect == true);
+      payment.map(item => {
+        item.paymentType = this.paymentModel.paymentType;
+        item.payDate = new Date();
+      });
+
+      await this._paymentService.PaymentTerm(payment).subscribe((res) => {
+        toastr.success('บันทึกรายการสำเร็จ!');
+        this.loadCreditPayment(res);
+      }, (err: HttpErrorResponse) => {
+        toastr.error(err.statusText);
       })
+
     }
   }
 
-  onCancel(contrictItemId: string, instalmentNo: number) {
+  onCancel(contractItemId: string, instalmentNo: number) {
     const p = prompt(`ยืนยันการยกเลิกรายการรับชำระ ครั้งที่ ${instalmentNo} หรือไม่\nระบุหมายเหตุ:`);
     if (p === '') {
       alert('กรุณาระบุหมายเหตุของการยกเลิก!')
     } else if (p !== '' && p !== null) {
-      this._paymentService.CancelContractTerm(contrictItemId).subscribe(item => {
+      const params = {
+        contractItemId: contractItemId,
+        remark: p,
+        updateBy: this.userId
+      }
+      this._paymentService.CancelContractTerm(params).subscribe(item => {
+        toastr.success('ยกเลิกรายการสำเร็จ!');
         this.loadCreditPayment(item);
+      }, (err: HttpErrorResponse) => {
+        toastr.error(err.statusText);
       })
     }
   }
