@@ -79,19 +79,6 @@
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
-                                อัตราดอกเบี้ย/เดือน :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number-2-digit" min="0.00" (keyup)="instalmentCalculate()">
-                                    <span class="input-group-addon">%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
                                 รูปแบบการชำระ :
                                 <span class="required">*</span>
                             </label>
@@ -103,6 +90,19 @@
                                 <div class="radio radio-info radio-inline">
                                     <input type="radio" id="typePayment1" value=1 required [(ngModel)]="model.typePayment" name="typePayment" (change)="instalmentCalculate()">
                                     <label for="typePayment1">ชำระรายปี</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                อัตราดอกเบี้ย/เดือน :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number-2-digit" min="0.00" (keyup)="instalmentCalculate()">
+                                    <span class="input-group-addon">%</span>
                                 </div>
                             </div>
                         </div>
@@ -223,7 +223,7 @@
                             </div>
                         </div> -->
 
-                        <div class="row form-group">
+                        <!-- <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 I.R.R. :
                                 <span class="required">*</span>
@@ -234,7 +234,7 @@
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">

@@ -61,7 +61,7 @@
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <div class="row form-group">
-        <div class="col-md-6 b-r">
+        <div class="col-md-7 b-r">
           <table class="table table-striped table-bordered table-sm table-hover">
             <thead>
               <tr>
@@ -70,7 +70,7 @@
                 <th class="text-center">เลขที่ใบรับเงิน</th>
                 <th class="text-center">วันที่ครบกำหนดชำระ</th>
                 <th class="text-center">วันที่ชำระ</th>
-                <th class="text-right">จำนวนเงิน</th>
+                <th class="text-right">จำนวนเงินที่ต้องชำระ</th>
               </tr>
             </thead>
             <tbody>
@@ -79,8 +79,8 @@
                   <a href="javascript:void(0);" class="btn btn-danger btn-xs" *ngIf="item.payNetPrice" (click)="onCancel(item.contractItemId, item.instalmentNo)">
                     <i class="fa fa-times"></i> ยกเลิก
                   </a>
-                  <input *ngIf="!item.payNetPrice" (change)="setFormPayment();" type="checkbox" id="select{{item.instalmentNo}}" name="isSelect"
-                    [(ngModel)]="item.isSlect">
+                  <!-- <input *ngIf="!item.payNetPrice" (change)="setFormPayment();" type="checkbox" id="select{{item.instalmentNo}}" name="isSelect"
+                    [(ngModel)]="item.isSlect"> -->
                 </td>
                 <td class="text-center">
                   <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
@@ -94,8 +94,8 @@
             </tbody>
           </table>
         </div>
-        <div class="col-md-6">
-          <form action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+        <div class="col-md-5">
+          <form autocomplete="off" action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
             <div class="row form-group">
               <label for="" class="col-md-4">วันที่รับชำระ :</label>
               <strong class="col-md-3">{{paymentModel.payDate | date:'dd-MM-yyyy'}}</strong>
@@ -130,19 +130,19 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4">ยอดคงค้าง (รวม VAT) :</label>
+              <label for="" class="col-md-4">ยอดคงค้าง :</label>
               <div class="col-md-4 text-right">
                 <input type="text" name="outstanding" [(ngModel)]="paymentModel.outstanding" readonly class="form-control form-control-sm number-2-digit">
               </div>
             </div>
-            <!-- <div class="row form-group">
-              <label for="" class="col-md-4">ดอกเบี้ยล่าช้า (รวม VAT) :</label>
-              <div class="col-md-4 text-right">
-                <input type="text" name="outstanding" [(ngModel)]="paymentModel.fineSum" readonly class="form-control form-control-sm number-2-digit">
-              </div>
-            </div> -->
             <div class="row form-group">
-              <label for="" class="col-md-4">ยอดชำระ (รวม VAT) :</label>
+              <label for="" class="col-md-4">ยอดที่ต้องชำระ :</label>
+              <div class="col-md-4 text-right">
+                <input type="text" name="balanceNetPrice" [(ngModel)]="paymentModel.balanceNetPrice" readonly class="form-control form-control-sm number-2-digit">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4">ยอดชำระจริง :</label>
               <div class="col-md-4 text-right">
                 <input type="text" required name="payNetPrice" 
                 [(ngModel)]="paymentModel.payNetPrice" 

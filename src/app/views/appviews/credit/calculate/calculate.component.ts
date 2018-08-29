@@ -64,10 +64,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             const month = i * 12;
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
-    console.log('====================================');
-    console.log(resetLocalDate('2561-08-29'));
-    console.log('====================================');
-
+        
         this._activatedRoute.queryParams.subscribe(p => {
 
             this.mode = p.mode;
@@ -181,13 +178,14 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.netPrice = (this.model.outStandingPrice - deposit);
 
         // จำนวนดอกเบี้ยที่ต้องชำระ
-        this.model.interestPrice = (this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
+        this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
         this.model.remain = this.model.netPrice + this.model.interestPrice;
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
-        this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd);
+        const interestP = this.model.remain / this.model.instalmentEnd;
+        this.model.instalmentPrice = (interestP);
 
         // จำนวนค่าภาษีมูลค่าเพิ่ม
         this.model.vatPrice = (this.model.instalmentPrice * this.model.nowVat) / (this.model.nowVat + 100);

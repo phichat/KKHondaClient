@@ -79,9 +79,12 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       .reduce((accumulator, current) => {
         return accumulator + current.balanceNetPrice;
       }, 0)
-      
+
+    let balanceNetPrice = this.contractItemModel.filter(item => item.payNetPrice == null)[0].balanceNetPrice;
+
     this.paymentModel.payDate = new Date();
     this.paymentModel.outstanding = outstandingPrice;
+    this.paymentModel.balanceNetPrice = balanceNetPrice;
   }
 
   ngAfterViewInit() {

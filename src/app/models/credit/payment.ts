@@ -14,6 +14,7 @@ export class PaymentFG {
     paymentType: number;
     payDate: Date;
     payNetPrice: number;
+    balanceNetPrice: number;
     fineSum: number;
     remark: string;
     updateBy: string;

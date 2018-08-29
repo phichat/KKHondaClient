@@ -17,8 +17,8 @@ export function resetLocalDate(date: string): string {
     if (date === '' || date == null) {
         return null;
     }
-
-    const _date = new Date(date)
+    const _d = date.split('-');
+    const _date = new Date(`${_d[2]}-${_d[1]}-${_d[0]}`);
     const dd = setZero(_date.getDate());
     const mm = setZero(_date.getMonth() + 1);
     const yyyy = _date.getFullYear() - 543;
