@@ -7,9 +7,11 @@ import { UserService } from '../../../../services/users';
 import * as moment from 'moment';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-import * as $ from 'jquery';
+// import * as $ from 'jquery';
 import * as Inputmask from 'inputmask';
 import { PageloaderService } from '../../pageloader/pageloader.component';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate } from '../../../../app.config';
+import { IMyDateModel } from 'mydatepicker-th';
 
 declare var toastr: any;
 
@@ -27,6 +29,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     contractItemModel = new Array<ContractModel>();
     bookingNo: string;
     mode: string;
+    myDatePickerOptions = MyDatePickerOptions;
 
     instalmentEnd = [
         { value: 3, text: '3 เดือน' },
@@ -61,7 +64,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             const month = i * 12;
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
-
+    console.log('====================================');
+    console.log(resetLocalDate('2561-08-29'));
+    console.log('====================================');
 
         this._activatedRoute.queryParams.subscribe(p => {
 
@@ -86,7 +91,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.model.deposit = 0;
                     this.model.depositPrice = 0;
                     this.model.dueDate = 5;
-                    this.model.firstPayment = moment().format('YYYY-MM-DD');
+                    this.model.firstPayment = setDateMyDatepicker(new Date());
                     this.model.interest = 2;
                     this.model.remain = 0;
                     this.model.sellTypeId = 4;
@@ -133,16 +138,22 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
+    onChangeDueDate(event: IMyDateModel) {
+        // debugger
+        this.model.firstPayment = event;
+        this._calcService.changeData(this.model);
+    }
+
     async onLoadCaculateData(calculateId: number) {
         this.pageloader.setShowPageloader(true);
         await this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
+                const firstPayment = p.creditCalculate.firstPayment || new Date();
                 this.model = p.creditCalculate;
                 this.contractModel = p.creditContract;
                 this.contractItemModel = p.creditContractItem;
-                this.model.firstPayment = moment(p.firstPayment).format('YYYY-MM-DD');
+                this.model.firstPayment = setDateMyDatepicker(new Date(firstPayment));
                 this.model.typePayment = this.model.typePayment.toString();
-
                 // test
                 this.model.outStandingPrice = 62000
 
@@ -151,7 +162,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             })
         this.pageloader.setShowPageloader(false);
     }
-
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
@@ -161,7 +171,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        let deposit: number = this.currencyToFloat(this.model.depositPrice.toString()); 
+        let deposit: number = this.currencyToFloat(this.model.depositPrice.toString());
         this.model.deposit = ((deposit * 100) / this.model.outStandingPrice);
     }
 
@@ -169,7 +179,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         // ราคาสินค้าคงเหลือ
         let deposit: number = this.currencyToFloat(this.model.depositPrice.toString());
         this.model.netPrice = (this.model.outStandingPrice - deposit);
-         
+
         // จำนวนดอกเบี้ยที่ต้องชำระ
         this.model.interestPrice = (this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd;
 
@@ -178,10 +188,10 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
         this.model.instalmentPrice = (this.model.remain / this.model.instalmentEnd);
-        
+
         // จำนวนค่าภาษีมูลค่าเพิ่ม
-        this.model.vatPrice = (this.model.instalmentPrice * this.model.nowVat) / (this.model.nowVat + 100); 
-        
+        this.model.vatPrice = (this.model.instalmentPrice * this.model.nowVat) / (this.model.nowVat + 100);
+
         // ค่าเช่าซื้อต่องวดก่อนรวมภาษี
         this.model.instalmentPriceExtVat = this.model.instalmentPrice - this.model.vatPrice;
 
@@ -199,7 +209,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     currencyToFloat(str: string) {
-       return parseFloat(str.replace(/,/i, ''));
+        return parseFloat(str.replace(/,/i, ''));
     }
 
     RATE(nper, pmt, pv, fv?, type?, guess?) {
@@ -257,15 +267,22 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     onSubmit() {
-        if (this.mode === 'create') {
-            this.onCreate();
+        this.model.firstPayment = getDateMyDatepicker(this.model.firstPayment);
+        this.contractItem.contractItemModel.map(item => {
+            item.dueDate = resetLocalDate(item.dueDate);
+        })
+        console.log('====================================');
+        console.log(this.contractItem.contractItemModel);
+        console.log('====================================');
+        // if (this.mode === 'create') {
+        //     this.onCreate();
 
-        } else if (this.mode === 'edit') {
-            this.onEdit();
+        // } else if (this.mode === 'edit') {
+        //     this.onEdit();
 
-        } else if (this.mode === 'revice') {
-            this.onRevice();
-        }
+        // } else if (this.mode === 'revice') {
+        //     this.onRevice();
+        // }
 
     }
 

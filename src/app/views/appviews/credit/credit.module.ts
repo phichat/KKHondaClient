@@ -31,6 +31,7 @@ import { PageloaderModule } from '../pageloader/pageloader.module';
 import { PageloaderService } from '../pageloader/pageloader.component';
 import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { PaymentModule } from './payment/payment.module';
+import { MyDatePickerTHModule } from 'mydatepicker-th';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { PaymentModule } from './payment/payment.module';
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
+    MyDatePickerTHModule,
     IboxtoolsModule,
     RptCutOffSaleModule,
     RptDelayedInterestModule,

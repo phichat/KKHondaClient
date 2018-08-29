@@ -127,7 +127,9 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
-                                <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()">
+                                    <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" 
+                                    [options]="myDatePickerOptions" (dateChanged)="onChangeDueDate($event)" required></my-date-picker-th>
+                                <!-- <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()"> -->
                             </div>
                         </div>
 

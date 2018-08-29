@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, D
 import { ContractItemModel } from '../../../../models/credit';
 import { CalculateService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
+import { getDateMyDatepicker, setLocalDate } from '../../../../app.config';
 
 declare var $: any;
 declare var footable: any;
@@ -42,14 +43,13 @@ export class ContractItemComponent implements OnInit, DoCheck {
     ngOnInit() {
         if (this.contractItemModel.length === 0) {
             this._calService.currentData.subscribe(p => {
-
                 this.chRef.markForCheck();
 
                 this.contractItemModel = new Array<ContractItemModel>()
 
                 const vatUp = 1 + (p.nowVat / 100);
                 const instalmentEnd = p.instalmentEnd;
-                const firstPay = new Date(p.firstPayment);
+                const firstPay = getDateMyDatepicker(p.firstPayment);
 
                 // เงินจองถอด vat
                 const depositPriceExcVat = (this.currencyToFloat(p.depositPrice) / vatUp);
@@ -116,8 +116,9 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     const goodsPriceRemain = (i === 0) ? itemPriceExcVat - balance : preGoodsPriceRemail - goodsPrice;
 
                     this._userService.currentData.subscribe(user => item.contractBranchId = user.branchId);
+                    
                     item.instalmentNo = i;
-                    item.dueDate = dueDate;
+                    item.dueDate = setLocalDate(dueDate.toString());
                     item.vatRate = p.nowVat;
                     item.balance = (balance);
                     item.balanceVatPrice = balanceVatPrice;
@@ -139,12 +140,15 @@ export class ContractItemComponent implements OnInit, DoCheck {
 
                 this.setTotal();
             })
-        }
+        } 
     }
 
     ngDoCheck() {
         if (this.contractItemModel.length > 0 && this.balanchNetTotol == 0) {
             this.chRef.markForCheck();
+            this.contractItemModel.map(item => {
+                item.dueDate = setLocalDate(item.dueDate.toString());
+            })
             this.setTotal();
         }
     }

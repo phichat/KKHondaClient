@@ -5,7 +5,7 @@ export class ContractItemModel {
     public instalmentNo: number;
     public instalmentNoText: string;
     public refNo: string;
-    public dueDate: Date;
+    public dueDate: any;
     public vatRate: number;
     public balance: number;
     public balanceVatPrice: number;

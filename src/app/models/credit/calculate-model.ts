@@ -15,7 +15,7 @@ export class CalculateModel {
     public interest: number;             // ดอกเบี้ย/เดือน
     public interestPrice: number;        // ราคาดอกเบี้ย
     public remain: number;               // ยอดจัด
-    public firstPayment: string;         // ชำระงวดแรก
+    public firstPayment: any;         // ชำระงวดแรก
     public dueDate: number;              // ชำระทุกวันที่
     public promotionalPrice: number;     // ค่าส่งเสริมการขาย
     public nowVat: number;               // vat ณ วันที่ทำสัญญา
