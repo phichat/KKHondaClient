@@ -38,6 +38,7 @@ export class ContractItemModel {
 
     public initialPrice: number;
     public principal: number;
-    public principalRemail: number;
+    public principalRemain: number;
+    public interestPrincipalRemain: number;
 }
 

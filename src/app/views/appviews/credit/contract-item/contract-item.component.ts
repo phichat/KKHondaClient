@@ -15,12 +15,11 @@ declare var footable: any;
 })
 export class ContractItemComponent implements OnInit, DoCheck {
 
-    // contractItemModel: ContractItemModel[];
-    balanchTotal: number;
-    balanchVatTotal: number;
     balanchNetTotol: number;
+    principalTotal: number;
     interestTotal: number;
-    goodPriceTotal: number;
+    balanchVatTotal: number;
+    principalRemainTotal: number;
 
     @Input() contractItemModel: ContractItemModel[];
 
@@ -65,7 +64,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 const remainExcVat = p.remain - p.carcassPrice // (p.remain / vatUp);
 
                 // ค่าเฉลี่ยดอกเบี้ยต่อปี
-                const avgMrr = p.mrr / p.instalmentEnd
+                // const avgMrr = p.mrr / p.instalmentEnd
 
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
@@ -85,7 +84,6 @@ export class ContractItemComponent implements OnInit, DoCheck {
                             // ชำระรายปี
                             d.setFullYear(year);
                         }
-
                         dueDate = d;
                         j++;
                     }
@@ -109,19 +107,30 @@ export class ContractItemComponent implements OnInit, DoCheck {
 
                     let initialPrice = 0;
                     let principal = 0;
+                    let interestPrincipalRemain = 0;
                     let interestInstalment = 0;
+
                     if (i == 1) {
                         initialPrice = itemPrice;
+                        // // จำนวนดอกเบี้ยที่ต้องชำระ ถอด vat
+                        // const interestPriceExVat = (p.interestPrice / ((p.nowVat + 100) / 100))
+                        // // ดอกเบี้ยเงินต้นคงเหลือ
+                        // interestPrincipalRemain = interestPriceExVat - interestInstalment;
                     }
                     else if (i > 1) {
-                        initialPrice = this.contractItemModel[preIndex].principalRemail;
+                        initialPrice = this.contractItemModel[preIndex].principalRemain;
+                        // // ดอกเบี้ยค่าเช่าซื้อ
+                        // interestInstalment = (initialPrice * p.irr) / 100;
+                        // // ดอกเบี้ยเงินต้นคงเหลือ
+                        // interestPrincipalRemain = this.contractItemModel[preIndex].interestPrincipalRemain - interestInstalment; 
                     };
-                    // ดอกเบี้ย
-                    interestInstalment = (initialPrice * avgMrr) / 100;
+                    // ดอกเบี้ยค่าเช่าซื้อ
+                    interestInstalment = (initialPrice * p.irr) / 100;
                     // เงินต้น
                     principal = balance - interestInstalment;
                     // เงินต้นคงเหลือ
-                    const principalRemail = (i == 0) ? p.netPrice : initialPrice - principal;
+                    const principalRemain = (i == 0) ? p.netPrice : initialPrice - principal;
+
 
                     // งวดที่ 0 หรือเงินดาวน์จะไม่ถูกหักเงินดาวน์ เนื่องจากยอดจัดถูกหักดาวน์ไปแล้ว
                     // const preRemain = (i === 0) ? remainExcVat : (this.contractItemModel[preIndex].goodsPriceRemain);
@@ -154,7 +163,9 @@ export class ContractItemComponent implements OnInit, DoCheck {
                     // ดอกเบี้ย
                     item.interestInstalment = interestInstalment;
                     // เงินต้นคงเหลือ
-                    item.principalRemail = principalRemail;
+                    item.principalRemain = principalRemain;
+                    // ดอกเบี้ยเงินต้นคงเหลือ
+                    // item.interestPrincipalRemain = interestPrincipalRemain;
                     // item.remain = remain;
                     // item.remainVatPrice = remainVatPrice;
                     // item.remainNetPrice = remainNetPrice;
@@ -176,7 +187,8 @@ export class ContractItemComponent implements OnInit, DoCheck {
     ngDoCheck() {
         if (this.contractItemModel.length > 0 && this.balanchNetTotol == 0) {
             this.chRef.markForCheck();
-            this.contractItemModel.map(item => {
+
+            this.contractItemModel.map((item, i) => {
                 item.dueDate = setLocalDate(item.dueDate.toString());
             })
             this.setTotal();
@@ -187,18 +199,28 @@ export class ContractItemComponent implements OnInit, DoCheck {
         return (Math.ceil(int / 10) * 10);
     }
 
-    setTotal() {
-        this.balanchTotal = 0;
-        this.balanchVatTotal = 0;
+    async setTotal() {
         this.balanchNetTotol = 0;
+        this.principalTotal = 0;
         this.interestTotal = 0;
-        this.goodPriceTotal = 0;
-        this.contractItemModel.map(o => {
-            this.balanchTotal += o.balance;
-            this.balanchVatTotal += o.balanceVatPrice;
+        this.balanchVatTotal = 0;
+
+        await this.contractItemModel.map((o, i) => {
             this.balanchNetTotol += o.balanceNetPrice;
+            this.principalTotal += o.principal;
             this.interestTotal += o.interestInstalment;
-            this.goodPriceTotal += o.goodsPrice;
+            this.balanchVatTotal += o.balanceVatPrice;
+            this.principalRemainTotal += o.principalRemain;
+
+            const preIndex = (i === 0) ? 0 : i - 1;
+            if (i == 1) {
+                // ดอกเบี้ยเงินต้นคงเหลือ
+                o.interestPrincipalRemain = this.principalRemainTotal - o.interestInstalment;
+            } else if (i > 2) {
+                o.interestPrincipalRemain = this.contractItemModel[preIndex].interestPrincipalRemain - o.interestInstalment; 
+            }
         });
+
+        // this.contractItemModel. 
     }
 }

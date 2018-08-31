@@ -29,22 +29,21 @@
             <td class="text-right">{{item.principal | number:'1.2-2'}}</td>
             <td class="text-right">{{item.interestInstalment | number:'1.2-2'}}</td>
             <td class="text-right">{{item.balanceVatPrice | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.principalRemail | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td>
+            <td class="text-right">{{item.principalRemain | number:'1.2-2'}}</td>
+            <td class="text-right">{{item.interestPrincipalRemain | number:'1.2-2'}}</td>
             <td></td>
             <!-- <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td> -->
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <!-- <th class="text-center">รวม</th>
-            <th></th>
-            <th class="text-right">{{balanchTotal | number:'1.2-2'}}</th>
-            <th class="text-right">{{balanchVatTotal | number:'1.2-2'}}</th>
-            <th class="text-right">{{balanchNetTotol | number}}</th>
+            <th class="text-center" colspan="2">รวม</th>
+            <th class="text-right">{{balanchNetTotol | number:'1.2-2'}}</th>
+            <th class="text-right">{{principalTotal | number:'1.2-2'}}</th>
             <th class="text-right">{{interestTotal | number:'1.2-2'}}</th>
-            <th class="text-right">{{goodPriceTotal | number:'1.2-2'}}</th>
-            <th></th> -->
+            <th class="text-right">{{balanchVatTotal | number:'1.2-2'}}</th>
+            <th class="text-right">{{principalRemainTotal | number:'1.2-2'}}</th>
+            <th></th>
           </tr>
         </tfoot>
       </table>
