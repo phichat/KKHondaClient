@@ -65,7 +65,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
                 const remainExcVat = p.remain - p.carcassPrice // (p.remain / vatUp);
 
                 // ค่าเฉลี่ยดอกเบี้ยต่อปี
-                const avgMrr = p.mrr / p.instalmentEnd
+                // const avgMrr = p.mrr / p.instalmentEnd
 
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
@@ -117,7 +117,7 @@ export class ContractItemComponent implements OnInit, DoCheck {
                         initialPrice = this.contractItemModel[preIndex].principalRemail;
                     };
                     // ดอกเบี้ย
-                    interestInstalment = (initialPrice * avgMrr) / 100;
+                    interestInstalment = (initialPrice * p.irr) / 100;
                     // เงินต้น
                     principal = balance - interestInstalment;
                     // เงินต้นคงเหลือ
