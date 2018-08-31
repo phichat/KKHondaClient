@@ -11,8 +11,6 @@ declare var jQuery: any;
 
 export class NavigationComponent {
 
-  public kkHondaWeb = 'http://203.154.126.61/KK-Honda-Web/backoffice';
-
   constructor(private router: Router) { }
 
   ngAfterViewInit() {
@@ -29,7 +27,5 @@ export class NavigationComponent {
     return this.router.url.indexOf(routename) > -1;
   }
 
-  signOut() {
-    
-  }
+
 }

@@ -13,9 +13,4 @@ export class TopNavbarComponent {
     smoothlyMenu();
   }
 
-  signOut() {
-    console.log('====================================');
-    console.log(document.cookie);
-    console.log('====================================');
-  }
 }
