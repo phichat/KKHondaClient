@@ -8,7 +8,7 @@ export const appConfig = {
 }
 
 export const MyDatePickerOptions: IMyOptions = {
-    dateFormat: 'dd-mm-yyyy',
+    dateFormat: 'dd / mm / yyyy',
     showClearDateBtn: false,
     height: '30px'
 };
@@ -36,7 +36,7 @@ export function setLocalDate(date: string): string {
     const mm = setZero(_date.getMonth() + 1);
     const yyyy = _date.getFullYear() + 543;
 
-    return `${dd}-${mm}-${yyyy}`;
+    return `${dd} / ${mm} / ${yyyy}`;
 }
 
 export function setZero(num: number) {

@@ -185,7 +185,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
         const interestP = this.model.remain / this.model.instalmentEnd;
-        this.model.instalmentPrice = (interestP);
+        this.model.instalmentPrice = this.ceil10(interestP);
 
         // จำนวนค่าภาษีมูลค่าเพิ่ม
         this.model.vatPrice = (this.model.instalmentPrice * this.model.nowVat) / (this.model.nowVat + 100);

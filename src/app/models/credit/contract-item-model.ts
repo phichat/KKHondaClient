@@ -34,6 +34,10 @@ export class ContractItemModel {
     public createBy: number;
     public createDate: Date;
     public updateBy: number;
-    public updateDate: Date
+    public updateDate: Date;
+
+    public initialPrice: number;
+    public principal: number;
+    public principalRemail: number;
 }
 

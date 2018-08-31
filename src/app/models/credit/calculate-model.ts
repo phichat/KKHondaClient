@@ -12,6 +12,7 @@ export class CalculateModel {
     public instalmentPriceExtVat: number;
     public instalmentPrice: number;      // ค่างวด
     public instalmentRemain: number;     // ยอดคงเหลือ
+    public carcassPrice: number;         // ราคาซาก
     public interest: number;             // ดอกเบี้ย/เดือน
     public interestPrice: number;        // ราคาดอกเบี้ย
     public remain: number;               // ยอดจัด

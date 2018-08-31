@@ -26,10 +26,10 @@
             <td class="text-center">{{ item.instalmentNo == 0 ? "เงินดาวน์" : item.instalmentNo}}</td>
             <td class="text-right">{{item.dueDate}}</td>
             <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.balance | number:'1.2-2'}}</td>
+            <td class="text-right">{{item.principal | number:'1.2-2'}}</td>
             <td class="text-right">{{item.interestInstalment | number:'1.2-2'}}</td>
             <td class="text-right">{{item.balanceVatPrice | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.goodsPriceRemain | number:'1.2-2'}}</td>
+            <td class="text-right">{{item.principalRemail | number:'1.2-2'}}</td>
             <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td>
             <td></td>
             <!-- <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td> -->

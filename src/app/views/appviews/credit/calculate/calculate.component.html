@@ -79,6 +79,19 @@
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
+                                ราคาซาก :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" required [(ngModel)]="model.carcassPrice" name="carcassPrice" class="form-control number-2-digit">
+                                    <span class="input-group-addon">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
                                 รูปแบบการชำระ :
                                 <span class="required">*</span>
                             </label>
