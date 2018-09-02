@@ -10,7 +10,7 @@ import { ContractItemComponent } from '../contract-item/contract-item.component'
 // import * as $ from 'jquery';
 import * as Inputmask from 'inputmask';
 import { PageloaderService } from '../../pageloader/pageloader.component';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate } from '../../../../app.config';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZero, setZeroHours, currencyToFloat } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 
 declare var toastr: any;
@@ -64,7 +64,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             const month = i * 12;
             this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
         }
-        
+
         this._activatedRoute.queryParams.subscribe(p => {
 
             this.mode = p.mode;
@@ -136,26 +136,24 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onChangeDueDate(event: IMyDateModel) {
-        // debugger
         this.model.firstPayment = event;
-        this._calcService.changeData(this.model);
+        this.instalmentCalculate();
     }
 
     async onLoadCaculateData(calculateId: number) {
         this.pageloader.setShowPageloader(true);
         await this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
-                const firstPayment = p.creditCalculate.firstPayment || new Date();
+                const firstPayment = p.creditCalculate.firstPayment;
                 this.model = p.creditCalculate;
-                this.contractModel = p.creditContract;
-                this.contractItemModel = p.creditContractItem;
                 this.model.firstPayment = setDateMyDatepicker(new Date(firstPayment));
                 this.model.typePayment = this.model.typePayment.toString();
-                // test
-                this.model.outStandingPrice = 62000
+                this.contractModel = p.creditContract;
+                this.contractItemModel = p.creditContractItem;
 
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
+                // this._calcService.changeData(this.model)
             })
         this.pageloader.setShowPageloader(false);
     }
@@ -168,13 +166,13 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        let deposit: number = this.currencyToFloat(this.model.depositPrice.toString());
+        let deposit: number = currencyToFloat(this.model.depositPrice.toString());
         this.model.deposit = ((deposit * 100) / this.model.outStandingPrice);
     }
 
     instalmentCalculate() {
         // ราคาสินค้าคงเหลือ
-        let deposit: number = this.currencyToFloat(this.model.depositPrice.toString());
+        let deposit: number = currencyToFloat(this.model.depositPrice.toString());
         this.model.netPrice = (this.model.outStandingPrice - deposit);
 
         // จำนวนดอกเบี้ยที่ต้องชำระ
@@ -204,10 +202,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ceil10(int: number) {
         return (Math.ceil(int / 10) * 10);
-    }
-
-    currencyToFloat(str: string) {
-        return parseFloat(str.replace(/,/i, ''));
     }
 
     RATE(nper, pmt, pv, fv?, type?, guess?) {
@@ -264,28 +258,30 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         return null;
     };
 
-    onSubmit() {
-        this.model.firstPayment = getDateMyDatepicker(this.model.firstPayment);
+    async onSubmit() {
+        this.pageloader.setShowPageloader(true);
+
+        const firstPayment = getDateMyDatepicker(this.model.firstPayment);
+        this.model.firstPayment = setZeroHours(firstPayment);
         this.contractItem.contractItemModel.map(item => {
             item.dueDate = resetLocalDate(item.dueDate);
         })
-        console.log('====================================');
-        console.log(this.contractItem.contractItemModel);
-        console.log('====================================');
-        // if (this.mode === 'create') {
-        //     this.onCreate();
 
-        // } else if (this.mode === 'edit') {
-        //     this.onEdit();
+        if (this.mode === 'create') {
+           await this.onCreate();
 
-        // } else if (this.mode === 'revice') {
-        //     this.onRevice();
-        // }
+        } else if (this.mode === 'edit') {
+           await this.onEdit();
+
+        } else if (this.mode === 'revice') {
+           await this.onRevice();
+        }
+
+        this.pageloader.setShowPageloader(false);
 
     }
 
     async onCreate() {
-        this.pageloader.setShowPageloader(true)
         await this._calcService
             .Create(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
@@ -296,11 +292,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     toastr.error(err.statusText);
                 }
             );
-        this.pageloader.setShowPageloader(false)
     }
 
     async onEdit() {
-        this.pageloader.setShowPageloader(true)
         await this._calcService
             .Edit(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
@@ -311,11 +305,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     toastr.error(err.statusText);
                 }
             );
-        this.pageloader.setShowPageloader(false)
     }
 
     async onRevice() {
-        this.pageloader.setShowPageloader(true)
         await this._calcService
             .Revice(this.model, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
@@ -326,7 +318,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     toastr.error(err.statusText);
                 }
             );
-        this.pageloader.setShowPageloader(false);
     }
 
 }

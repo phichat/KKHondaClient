@@ -54,4 +54,11 @@ export class ContractService {
         return this.http.post<any>(apiURL, params, this.httpOptions);
     }
 
+    Termination(from: any) {
+        const params = JSON.stringify(from);
+        const apiURL = `${this.url}/ContractTermination`;
+
+        return this.http.post<any>(apiURL, params, this.httpOptions);
+    }
+
 }

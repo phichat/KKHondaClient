@@ -6,7 +6,8 @@ import { BasicLayoutComponent } from './components/common/layouts/basicLayout.co
 import {
   ContractComponent,
   CalculateComponent,
-  ContractDetailComponent
+  ContractDetailComponent,
+  ContractCanceledComponent
 } from './views/appviews/credit';
 import { ContractListActiveComponent } from './views/appviews/credit/contract-list/contract-list-active.component';
 import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
@@ -38,6 +39,7 @@ export const ROUTES: Routes = [
     path: 'credit', component: BasicLayoutComponent,
     children: [
       { path: 'contract', component: ContractComponent },
+      { path: 'contract-canceled', component: ContractCanceledComponent },
       {
         path: 'contract-list',
         children: [
@@ -48,7 +50,7 @@ export const ROUTES: Routes = [
       { path: 'detail', component: ContractDetailComponent },
       { path: 'calculate', component: CalculateComponent },
       { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent },
-      { path: 'payment/:id', component: PaymentComponent}
+      { path: 'payment/:id', component: PaymentComponent }
     ]
   },
 

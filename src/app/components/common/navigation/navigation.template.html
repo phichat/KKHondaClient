@@ -107,6 +107,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_pending_wd_list">
+                            <span class="nav-label">รายการรอเบิกสินค้า</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_cyclecount_action_list">
                             <span class="nav-label">ตรวจนับสินค้า</span>
                         </a>
@@ -183,9 +188,14 @@
                             <span class="nav-label">รายการขายรถ</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('credit')}">
+                    <li [ngClass]="{active: activeRoute('active')}">
                         <a [routerLink]="['/credit/contract-list/active']">
                             <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('canceled')}">
+                        <a [routerLink]="['/credit/contract-list/canceled']">
+                            <span class="nav-label">รายการยกเลิกสัญญาเช่าซื้อ</span>
                         </a>
                     </li>
                     <li [ngClass]="{active: activeRoute('rpt-sum-close-contract')}">

@@ -40,5 +40,6 @@ export class ContractItemModel {
     public principal: number;
     public principalRemain: number;
     public interestPrincipalRemain: number;
+    public discountInterest: number;
 }
 

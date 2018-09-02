@@ -4,7 +4,7 @@ import { ContractDetailModel, CalculateModel } from '../../../../models/credit';
 import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
-import { appConfig } from '../../../../app.config';
+import { appConfig, setLocalDate } from '../../../../app.config';
 import { Outstanding } from '../../../../models/credit/outstanding-model';
 import { DelayedInterestModel } from '../../../../models/credit/delayed-interest.model';
 import { DiscountModel } from '../../../../models/credit/discount.model';
@@ -39,11 +39,24 @@ export class ContractDetailComponent implements OnInit {
         await this._activatedRoute.queryParams.subscribe(o => {
             if (o.contractId) {
                 this._credit.Detail(o.contractId).subscribe(p => {
+                    p.creditContractDetail.contractDate = setLocalDate(p.creditContractDetail.contractDate);
                     this.contractDetailModel = p.creditContractDetail;
+
+                    p.creditCalculate.firstPayment = setLocalDate(p.creditCalculate.firstPayment)
                     this.calculateModel = p.creditCalculate;
                     this.bookingModel = p.booking;
+
+                    p.outstanding.nextDueDate = setLocalDate(p.outstanding.nextDueDate);
                     this.outstanding = p.outstanding;
+
+                    p.delayedInterest.map(item => {
+                        item.dueDate = setLocalDate(item.dueDate);
+                    })
                     this.delayedInterest = p.delayedInterest;
+
+                    p.discounts.map(item => {
+                        item.dueDate = setLocalDate(item.dueDate);
+                    })
                     this.discount = p.discounts
                     this.cutOffSale = p.cutOffSale
                     this.historyPayment = p.historyPayment

@@ -7,6 +7,7 @@ import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
 import { PageloaderService } from '../../pageloader/pageloader.component';
+import { setLocalDate } from '../../../../app.config';
 
 @Component({
     selector: 'app-contract-list-active',
@@ -27,6 +28,11 @@ export class ContractListActiveComponent implements OnInit {
     async ngOnInit() {
         this.pageloader.setShowPageloader(true);
         await this.contractService.GetActive().subscribe(o => {
+
+            o.map(item => {
+                item.contractDate = setLocalDate(item.contractDate.toString());
+            })
+            
             this.contractListModel = o;
 
             this.chRef.detectChanges();
@@ -62,7 +68,7 @@ export class ContractListActiveComponent implements OnInit {
     }
 
     gotoCanceled(contractId: number) {
-        this.router.navigate(['credit/canceled'], { queryParams: { contractId: contractId } })
+        this.router.navigate(['credit/contract-canceled'], { queryParams: { contractId: contractId } })
     }
 
     gotoDetail(contractId: number) {

@@ -12,7 +12,7 @@
   <tbody>
     <tr *ngFor="let item of discount; let i=index">
       <td>{{item.instalmentNo}}</td>
-      <td>{{item.dueDate | date:'dd-MM-yyyy'}}</td>
+      <td>{{item.dueDate}}</td>
       <td>{{item.balance | number:'1.2-2'}}</td>
       <td [ngClass]="{'text-warning':item.outstanding > 0}">{{item.outstanding | number:'1.2-2'}}</td>
       <td [ngClass]="{'text-navy':item.discount > 0}">{{item.discount | number:'1.2-2'}}</td>

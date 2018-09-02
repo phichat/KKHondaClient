@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingModel } from '../../../../models/selling';
 import { BookingService } from '../../../../services/selling';
+import { setLocalDate } from '../../../../app.config';
 
 @Component({
     selector: 'app-ex-detail-customer',
@@ -14,6 +15,8 @@ export class ExDetailCustomerComponent implements OnInit {
     ngOnInit() {
         this._bookingService.currentData.subscribe(o => {
             this.modelBooking = new BookingModel();
+            o.bookingDate = setLocalDate(o.bookingDate);
+            o.receiveDate = setLocalDate(o.receiveDate);
             this.modelBooking = o;
         });
     }

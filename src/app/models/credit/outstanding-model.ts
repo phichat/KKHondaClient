@@ -8,7 +8,7 @@ export class Outstanding {
     public outstandingTotal: number;
     public payPriceTotal: number;
     public nextInstalmentBalance: number;
-    public nextDueDate: Date;
+    public nextDueDate: any;
     public futureInstalment: number;
     public futureInstalmentBalance: number;
 }

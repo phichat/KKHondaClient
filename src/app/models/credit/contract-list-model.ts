@@ -4,7 +4,7 @@ export class ContractListModel {
     public branch: string;
     public contractNo: string;
     public contractType: string;
-    public contractDate: Date;
+    public contractDate: any;
     public areaPayment: string;
     public contractPoint: string;
     public contractGroup: string;

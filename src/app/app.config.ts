@@ -17,8 +17,14 @@ export function resetLocalDate(date: string): string {
     if (date === '' || date == null) {
         return null;
     }
-    const _d = date.split('-');
-    const _date = new Date(`${_d[2]}-${_d[1]}-${_d[0]}`);
+
+    const _d = date.split('/');
+
+    if (_d.length <= 1){
+        return date;
+    }
+
+    const _date = new Date(`${_d[2].trim()}-${_d[1].trim()}-${_d[0].trim()}`);
     const dd = setZero(_date.getDate());
     const mm = setZero(_date.getMonth() + 1);
     const yyyy = _date.getFullYear() - 543;
@@ -44,7 +50,7 @@ export function setZero(num: number) {
 }
 
 export function setDateMyDatepicker(date: Date) {
-    if(!date) 
+    if (!date)
         return null;
 
     date = new Date(date);
@@ -52,9 +58,22 @@ export function setDateMyDatepicker(date: Date) {
 }
 
 export function getDateMyDatepicker(date: any) {
-    if(!date)
+    if (!date)
         return null;
-    
+
     date = date.date
     return new Date(`${date.year}-${date.month}-${date.day}`);
+}
+
+export function setZeroHours(date: Date): string {
+    if (!date)
+        return null;
+
+    date = new Date(date);
+    date.setHours(0, -date.getTimezoneOffset(), 0, 0);
+    return date.toISOString();
+}
+
+export function currencyToFloat(str: string) {
+    return parseFloat(str.replace(/,/i, ''));
 }

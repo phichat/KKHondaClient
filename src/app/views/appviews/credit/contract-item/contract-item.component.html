@@ -7,7 +7,7 @@
         <thead>
           <tr>
             <th class="text-center" style="vertical-align: middle;" rowspan="2">งวดที่</th>
-            <th class="text-center" style="vertical-align: middle;" rowspan="2">กำหนดชำระ</th>         
+            <th class="text-center" style="vertical-align: middle;" rowspan="2">กำหนดชำระ</th>
             <th class="text-center" style="vertical-align: middle;" rowspan="2">ค่างวดรวม VAT</th>
             <th class="text-center" colspan="3">การนำเงินค่างวดไปชำระ</th>
             <th class="text-center" colspan="2">ค่าเช่าซื้อคงค้าง</th>
@@ -31,8 +31,7 @@
             <td class="text-right">{{item.balanceVatPrice | number:'1.2-2'}}</td>
             <td class="text-right">{{item.principalRemain | number:'1.2-2'}}</td>
             <td class="text-right">{{item.interestPrincipalRemain | number:'1.2-2'}}</td>
-            <td></td>
-            <!-- <td class="text-right">{{item.goodsPrice | number:'1.2-2'}}</td> -->
+            <td class="text-right">{{item.discountInterest | number: '1.2-2'}}</td>
           </tr>
         </tbody>
         <tfoot>
@@ -42,8 +41,6 @@
             <th class="text-right">{{principalTotal | number:'1.2-2'}}</th>
             <th class="text-right">{{interestTotal | number:'1.2-2'}}</th>
             <th class="text-right">{{balanchVatTotal | number:'1.2-2'}}</th>
-            <th class="text-right">{{principalRemainTotal | number:'1.2-2'}}</th>
-            <th></th>
           </tr>
         </tfoot>
       </table>

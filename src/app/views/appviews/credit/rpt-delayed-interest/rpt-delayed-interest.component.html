@@ -13,7 +13,7 @@
     <tbody>
         <tr *ngFor="let item of delayedInterest;">
             <td>{{item.instalmentNo}}</td>
-            <td>{{item.dueDate | date:'dd-MM-yyyy'}}</td>
+            <td>{{item.dueDate}}</td>
             <td>{{item.balance | number:'1.2-2'}}</td>
             <td [ngClass]="{'text-warning':item.fineSum > 0}">{{item.fineSum | number:'1.2-2'}}</td>
             <td [ngClass]="{'text-danger':item.outstanding > 0}">{{item.outstanding | number:'1.2-2'}}</td>

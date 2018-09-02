@@ -13,7 +13,7 @@ export class BookingModel {
     public genderCode: number;
     public genderName: string;
     public idCard: string;
-    public bookingDate: Date;
+    public bookingDate: any;
     public depositType: number;
     public bookingId: number;
     public bookingNo: string;
@@ -23,7 +23,7 @@ export class BookingModel {
     public netPrice: number;
     public nickName: string;
     public outStandingPrice: number;
-    public receiveDate: Date;
+    public receiveDate: any;
     public remark: string;
     public sellPrice: number;
     public totalDiscount: number;

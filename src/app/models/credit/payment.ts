@@ -7,15 +7,14 @@ export class Payment {
 }
 
 export class PaymentFG {
-    instalmentNo: number;
-    refNo: string;
-    taxInvoiceNo: string;
+    contractId: number;
     outstanding: number;
     paymentType: number;
-    payDate: Date;
+    dueDate: any;
+    payDate: any;
     payNetPrice: number;
+    payeer: string;
     balanceNetPrice: number;
-    fineSum: number;
     remark: string;
     updateBy: string;
 }
@@ -26,7 +25,7 @@ export class Contract {
     bookingId: number;
     refNo: string;
     contractNo: string;
-    contractDate: Date;
+    contractDate: any;
     statusDesc: string;
     contractHire: string;
     saleName: string;
@@ -57,9 +56,8 @@ export class ContractItem {
     contractItemId: number;
     contractId: number;
     instalmentNo: number;
-    taxInvoiceNo: string;
-    dueDate: Date;
-    payDate: Date;
+    dueDate: any;
+    payDate: any;
     balanceNetPrice: number;
     payNetPrice: number; 
     paymentType: number;

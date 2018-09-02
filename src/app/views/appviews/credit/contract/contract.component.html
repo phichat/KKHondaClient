@@ -99,7 +99,9 @@
                             </div>
                             <label for="" class="control-label col-lg-2">สถานะสัญญา :</label>
                             <div class="col-lg-4">
-                                <ng-select readonly [items]="statusDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select>
+                                <label class="control-label text-danger">{{contractModel.statusDesc}}</label>
+                                
+                                <!-- <ng-select readonly [items]="statusDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select> -->
                             </div>
                         </div>
 
@@ -109,7 +111,9 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <input type="date" [(ngModel)]="contractModel.contractDate" name="contractDate" required class="form-control">
+                                    <my-date-picker-th [(ngModel)]="contractModel.contractDate" name="contractDate" 
+                                    [options]="myDatePickerOptions" (dateChanged)="onChangeContractDate($event)" required></my-date-picker-th>
+                                <!-- <input type="date" [(ngModel)]="contractModel.contractDate" name="contractDate" required class="form-control"> -->
                             </div>
                         </div>
 
@@ -203,7 +207,7 @@
                                 ราคาสินค้า (รวม VAT) :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.netPrice | number}}</label>
+                                <label for="" class="control-label">{{calculateModel.netPrice | number:'1.2-2'}}</label>
                             </div>
                         </div>
 
@@ -212,7 +216,7 @@
                                 เงินดาวน์ :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.depositPrice | number}} ({{calculateModel.deposit | number}}%)</label>
+                                <label for="" class="control-label">{{calculateModel.depositPrice | number:'1.2-2'}} ({{calculateModel.deposit | number:'1.2-2'}}%)</label>
                             </div>
                         </div>
 
@@ -233,7 +237,7 @@
                             </label>
                             <div class="col-lg-5">
                                 <div class="input-group">
-                                    <label for="" class="control-label">{{calculateModel.interest | number}}%</label>
+                                    <label for="" class="control-label">{{calculateModel.interest | number:'1.2-2'}}%</label>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +247,7 @@
                                 ยอดจัด (รวม VAT) :
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.remain | number}}</label>
+                                <label for="" class="control-label">{{calculateModel.remain | number:'1.2-2'}}</label>
                             </div>
                         </div>
 
@@ -253,7 +257,7 @@
 
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.instalmentPrice | number}}</label>
+                                <label for="" class="control-label">{{calculateModel.instalmentPrice | number:'1.2-2'}}</label>
                             </div>
                         </div>
 
@@ -263,7 +267,7 @@
 
                             </label>
                             <div class="col-lg-5">
-                                <label for="" class="control-label">{{calculateModel.firstPayment | date: 'dd-MM-yyyy'}}</label>
+                                <label for="" class="control-label">{{calculateModel.firstPayment}}</label>
                             </div>
                         </div>
 

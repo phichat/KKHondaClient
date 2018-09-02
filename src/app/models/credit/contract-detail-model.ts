@@ -17,6 +17,7 @@ export class ContractDetailModel {
     public checkedBy: string;
     public approvedBy: string;
     public keeperBy: string;
+    public contractStatus: string;
     public statusDesc: string;
     public remark: string;
 }

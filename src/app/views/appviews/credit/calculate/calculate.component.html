@@ -77,7 +77,7 @@
                             </div>
                         </div>
 
-                        <div class="row form-group">
+                        <!-- <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
                                 ราคาซาก :
                                 <span class="required">*</span>
@@ -88,7 +88,7 @@
                                     <span class="input-group-addon">บาท</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
@@ -152,7 +152,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-4">
-                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
+                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" 
+                                (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
                         </div>                        

@@ -6,7 +6,7 @@ export class ContractModel {
     public contractNo: string;
     public refNo: string;
     public contractType: string;
-    public contractDate: string;
+    public contractDate: any;
     public areaPayment: string;
     public contractPoint: string;
     public contractGroup: string;

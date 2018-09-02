@@ -6,7 +6,7 @@
                 <a href="/">หน้าแรก</a>
             </li>
             <li>
-                <a>เช่าซื้อ</a>
+                <a>รายการสัญญาเช่าซื้อ</a>
             </li>
         </ol>
     </div>
@@ -25,8 +25,8 @@
                         <th style="width: 150px;">สถานะสัญญา</th>
                         <th style="width: 100px;">รายละเอียด</th>
                         <th style="width: 100px;">แก้ไขสัญญา</th>
-                        <th style="width: 100px;">จัดการค่างวด</th>
                         <th style="width: 100px;">ชำระค่างวด</th>
+                        <th style="width: 100px;"></th>
                         <th style="width: 100px;">วันที่ทำสัญญา</th>
                         <th style="width: 150px;">ผู้เช่าซื้อ</th>
                         <th style="width: 150px;">เลขบัตรประชาชน</th>
@@ -61,18 +61,22 @@
                             </a>
                         </td>
                         <td>
-                            <a *ngIf="item.contractStatus == 31" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
-                                <i class="fa fa-pencil"></i>
-                                แก้ไขค่างวด
-                            </a>
-                        </td>
-                        <td>
                             <a (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-xs">
                                 <i class="fa fa-money"></i>
                                 ชำระค่างวด
                             </a>
                         </td>
-                        <td>{{item.contractDate | date: 'dd-MM-yyyy' }}</td>
+                        <td>
+                            <a *ngIf="item.contractStatus == 32" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                                แก้ไขค่างวด
+                            </a>
+                            <a *ngIf="item.contractStatus !== 32" class="btn btn-danger btn-xs" (click)="gotoCanceled(item.contractId)" >
+                                <i class="fa fa-times"></i>
+                                บอกเลิกสัญญา
+                            </a>
+                        </td>
+                        <td>{{item.contractDate}}</td>
                         <td>{{item.hireFullName}}</td>
                         <td>{{item.hireIdCard}}</td>
                         <td>{{item.contractGroup}}</td>

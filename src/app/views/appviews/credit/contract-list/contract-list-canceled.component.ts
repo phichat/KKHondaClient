@@ -6,6 +6,7 @@ import 'datatables.net';
 import 'datatables.net-bs';
 import { ContractListModel } from '../../../../models/credit';
 import { ContractService } from '../../../../services/credit';
+import { setLocalDate } from '../../../../app.config';
 
 @Component({
     selector: 'app-contract-list-canceled',
@@ -26,8 +27,10 @@ export class ContractListCanceledComponent implements OnInit {
         this.contractService.GetCanceled().subscribe(o => {
 
             // this.chRef.markForCheck();
-
             this.contractListModel = o;
+            this.contractListModel.map(item => {
+                item.contractDate = setLocalDate(item.contractDate);
+            })
 
             this.chRef.detectChanges();
 
@@ -40,8 +43,8 @@ export class ContractListCanceledComponent implements OnInit {
         });
     }
 
-    gotoDetail(calculateId: number) {
-        this.router.navigate(['credit/calculate'], { queryParams: { mode: 'edit', calculateId: calculateId } })
+    gotoDetail(contractId: number) {
+        this.router.navigate(['credit/detail'], { queryParams: { contractId: contractId } })
     }
 
 }

@@ -9,8 +9,9 @@ import { CustomerService } from '../../../../services/customers';
 import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { BookingModel } from '../../../../models/selling';
 import { PageloaderService } from '../../pageloader/pageloader.component';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZero, setZeroHours, setLocalDate } from '../../../../app.config';
+import { IMyDateModel } from 'mydatepicker-th';
 
 
 declare var toastr: any;
@@ -40,9 +41,13 @@ export class ContractComponent implements OnInit, OnDestroy {
     contractTypeDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     zoneDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     branchDropdown: Array<DropDownModel> = new Array<DropDownModel>();
-    statusDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    
+
+    myDatePickerOptions = MyDatePickerOptions;
 
     mode: string;
+
+    statusDesc: string;
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -59,6 +64,7 @@ export class ContractComponent implements OnInit, OnDestroy {
             'closeButton': true,
             'progressBar': true,
         }
+        this.myDatePickerOptions.height = '34px';
     }
 
     ngOnInit() {
@@ -81,7 +87,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.relationDropdown = o.relationDropdown;
                     this.contractGroupDropdown = o.contractGroupDropdown;
                     this.contractTypeDropdown = o.contractTypeDropdown;
-                    this.statusDropdown = o.statusDropdown;
+                    // this.statusDropdown = o.statusDropdown;
                     this.zoneDropdown = o.zoneDropdown;
                     this.branchDropdown = o.branchDropdown;
 
@@ -112,12 +118,14 @@ export class ContractComponent implements OnInit, OnDestroy {
 
                     this._bookingService.changeData(o.booking);
                     this.contractItemModel = o.creditContractItem;
+
+                    o.creditCalculate.firstPayment = setLocalDate(o.creditCalculate.firstPayment);
                     this.calculateModel = o.creditCalculate;
 
                     if (p.mode === 'create') {
-                        this.contractModel.contractDate = (o.creditContract.contractDate == null && moment().format('YYYY-MM-DD'));
+                        this.contractModel.contractDate = (o.creditContract.contractDate == null && setDateMyDatepicker(new Date()));
                     } else {
-                        this.contractModel.contractDate = moment(this.contractModel.contractDate).format('YYYY-MM-DD');
+                        this.contractModel.contractDate = setDateMyDatepicker(new Date(this.contractModel.contractDate));
                         this._userService.currentData.subscribe(u => {
                             this.contractModel.updateBy = u.userId;
                         });
@@ -189,11 +197,14 @@ export class ContractComponent implements OnInit, OnDestroy {
 
     async onSubmit() {
         this.pageloader.setShowPageloader(true)
+        const contractDate = getDateMyDatepicker(this.contractModel.contractDate);
+        this.contractModel.contractDate = setZeroHours(contractDate);
+        
         if (this.mode === 'create') {
 
             await this._contractService.Create(this.contractModel).subscribe(
                 res => {
-                    this.router.navigate(['credit/contract-list/active']);
+                    this.router.navigate(['credit/payment', this.contractModel.contractId]);
                 },
                 (err: HttpErrorResponse) => {
                     toastr.error(err.statusText);
@@ -212,4 +223,7 @@ export class ContractComponent implements OnInit, OnDestroy {
         this.pageloader.setShowPageloader(false);
     }
 
+    onChangeContractDate(event: IMyDateModel) {
+        this.contractModel.contractDate = event;
+    }
 }
