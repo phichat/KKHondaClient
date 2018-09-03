@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import 'jquery-slimscroll';
+import { appConfig } from '../../../app.config';
 
 declare var jQuery: any;
 
@@ -11,9 +12,11 @@ declare var jQuery: any;
 
 export class NavigationComponent {
 
-  public kkHondaWeb = 'http://203.154.126.61/KK-Honda-Web/backoffice';
+  public kkHondaWeb = appConfig.apikkWeb;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) { 
+    
+  }
 
   ngAfterViewInit() {
     jQuery('#side-menu').metisMenu();
@@ -30,7 +33,7 @@ export class NavigationComponent {
   }
 
   signOut(){
-    
+    document.cookie = null;
   }
 
 }

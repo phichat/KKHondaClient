@@ -3,6 +3,7 @@ import { IMyOptions } from "mydatepicker-th";
 export const appConfig = {
     // apiUrl: 'http://203.154.126.61/kk-honda-api/api',
     // reportUrl: 'http://203.154.126.61/kk-honda-report',
+    apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice',
     apiUrl: 'http://localhost:53076/api',
     reportUrl: 'http://localhost:58874/'
 }
