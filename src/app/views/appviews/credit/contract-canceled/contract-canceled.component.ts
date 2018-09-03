@@ -54,11 +54,13 @@ export class ContractCanceledComponent implements OnInit {
     }
 
     onSubmit(f: any) {
-        this._credit.Termination(f).subscribe(p => {
-            toastr.success('บอกเลิกสัญญาเช่าซื้อ สำเร็จ!');
-            this.router.navigate(['credit/contract-list/active']);
-        }, (err: HttpErrorResponse) => {
-            toastr.error(err.statusText);
-        })
+        if (alert('ยืนยันการยกเลิกสัญญาเช่าซื้อหรือไม่ ?')) {
+            this._credit.Termination(f).subscribe(p => {
+                toastr.success('ยกเลิกสัญญาเช่าซื้อ สำเร็จ!');
+                this.router.navigate(['credit/contract-list/active']);
+            }, (err: HttpErrorResponse) => {
+                toastr.error(err.statusText);
+            })
+        }
     }
 }

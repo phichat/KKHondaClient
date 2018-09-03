@@ -25,7 +25,7 @@
                         <th style="width: 150px;">สถานะสัญญา</th>
                         <th style="width: 100px;">รายละเอียด</th>
                         <th style="width: 100px;">แก้ไขสัญญา</th>
-                        <th style="width: 100px;">ชำระค่างวด</th>
+                        <th style="width: 100px;"></th>
                         <th style="width: 100px;"></th>
                         <th style="width: 100px;">วันที่ทำสัญญา</th>
                         <th style="width: 150px;">ผู้เช่าซื้อ</th>
@@ -61,7 +61,7 @@
                             </a>
                         </td>
                         <td>
-                            <a (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-xs">
+                            <a *ngIf="item.contractStatus == 31" (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-xs">
                                 <i class="fa fa-money"></i>
                                 ชำระค่างวด
                             </a>
@@ -71,9 +71,9 @@
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขค่างวด
                             </a>
-                            <a *ngIf="item.contractStatus !== 32" class="btn btn-danger btn-xs" (click)="gotoCanceled(item.contractId)" >
+                            <a *ngIf="item.contractStatus !== 32" class="btn btn-danger btn-xs" (click)="gotoCanceled(item.contractId)">
                                 <i class="fa fa-times"></i>
-                                บอกเลิกสัญญา
+                                ยกเลิกสัญญา
                             </a>
                         </td>
                         <td>{{item.contractDate}}</td>

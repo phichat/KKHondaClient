@@ -61,7 +61,6 @@ export function getDateMyDatepicker(date: any) {
     if (!date)
         return null;
 
-    console.log(date);
     if (!date.date)
         return date;
 

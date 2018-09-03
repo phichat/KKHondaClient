@@ -201,7 +201,6 @@ export class ContractComponent implements OnInit, OnDestroy {
         this.contractModel.contractDate = setZeroHours(contractDate);
         
         if (this.mode === 'create') {
-
             await this._contractService.Create(this.contractModel).subscribe(
                 res => {
                     this.router.navigate(['credit/payment', this.contractModel.contractId]);
