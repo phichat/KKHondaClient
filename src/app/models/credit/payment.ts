@@ -17,6 +17,7 @@ export class PaymentFG {
     balanceNetPrice: number;
     remark: string;
     updateBy: string;
+    branchId: number;
 }
 
 export class Contract {
@@ -55,6 +56,7 @@ export class ContractItem {
     isSlect: boolean;
     contractItemId: number;
     contractId: number;
+    taxInvoiceNo: string;
     instalmentNo: number;
     dueDate: any;
     payDate: any;

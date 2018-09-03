@@ -79,10 +79,10 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.bookingId = p.bookingId;
                 this.onLoadBooking(p.bookingId);
                 this._userService.currentData.subscribe(u => {
-                    this.model.createBy = u.userId;
-                    this.contractModel.branchId = u.branchId;
+                    this.model.createBy = u.id;
+                    this.contractModel.branchId = u.branch;
                     this.contractModel.bookingId = p.bookingId;
-                    this.contractModel.createBy = u.userId;
+                    this.contractModel.createBy = u.id;
                     this.contractModel.contractStatus = 32; // สัญญาใหม่
                     this.model.typePayment = '0';
                     this.model.deposit = 0;

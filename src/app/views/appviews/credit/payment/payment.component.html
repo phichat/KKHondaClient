@@ -49,11 +49,11 @@
     <label for="price" class="col-sm-2 control-label">ยอดจัด : </label>
     <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">ชำระแล้ว : </label>
-    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{isPayModel.isPayPrice | number:'1.2-2'}} บาท ({{isPayModel.isPayTerm}}
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท ({{(isPayModel.isPayTerm || 0)}}
       งวด)
     </strong>
     <label for="" class="col-sm-2 control-label">ค้างชำระ : </label>
-    <strong class="col-md-2 col-sm-6 text-danger">{{isOutstandingModel.isOutstandingPrice | number:'1.2-2'}} บาท ({{isOutstandingModel.isOutstandingTerm}}
+    <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท ({{(isOutstandingModel.isOutstandingTerm || 0)}}
       งวด)
     </strong>
   </div>
@@ -68,8 +68,9 @@
                 <!-- <th class="text-center"></th> -->
                 <th class="text-center">งวดที่</th>
                 <th class="text-center">วันที่ครบกำหนดชำระ</th>
+                <th class="text-right">ยอดที่ต้องชำระ</th>
+                <th class="text-center">เลขที่ใบกำกับภาษี</th>
                 <th class="text-center">วันที่ชำระ</th>
-                <th class="text-right">จำนวนเงินที่ต้องชำระ</th>
                 <th class="text-right">ชำระแล้ว</th>
               </tr>
             </thead>
@@ -85,8 +86,9 @@
                   <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
                 </td>
                 <td class="text-center">{{item.dueDate}}</td>
-                <td class="text-center">{{item.payDate}}</td>
                 <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
+                <td class="text-center">{{item.taxInvoiceNo}}</td>
+                <td class="text-center">{{item.payDate}}</td>
                 <td class="text-right">{{item.payNetPrice | number:'1.2-2'}}</td>
               </tr>
             </tbody>
@@ -96,15 +98,15 @@
           <form autocomplete="off" action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
             <div class="row form-group">
               <label for="" class="col-md-4">วันที่ครบกำหนดชำระ :</label>
-              <strong class="col-md-3">{{paymentModel.dueDate}}</strong>
+              <strong class="col-md-8">{{paymentModel.dueDate}}</strong>
             </div>
             <div class="row form-group">
               <label for="" class="col-md-4">วันที่รับชำระ :</label>
-              <strong class="col-md-3">{{paymentModel.payDate}}</strong>
+              <strong class="col-md-8">{{paymentModel.payDate}}</strong>
             </div>
             <div class="row form-group">
               <label for="" class="col-md-4">ผู้รับเงิน :</label>
-              <strong class="col-md-1 text-right">{{userName}}</strong>
+              <strong class="col-md-8">{{user.adminName}}</strong>
             </div>
             <!-- <div class="row form-group">
               <label for="" class="col-md-4">ชำระ :</label>

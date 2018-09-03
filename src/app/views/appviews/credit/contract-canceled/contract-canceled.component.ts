@@ -29,7 +29,7 @@ export class ContractCanceledComponent implements OnInit {
         private router: Router
     ) {
         this._userService.currentData.subscribe(u => {
-            this.userId = u.userId
+            this.userId = u.id
         });
 
         toastr.options = {

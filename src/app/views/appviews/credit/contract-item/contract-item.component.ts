@@ -107,7 +107,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     // เงินต้นคงเหลือ
                     const principalRemain = (i == 0) ? p.netPrice : initialPrice - principal;
 
-                    this._userService.currentData.subscribe(user => item.contractBranchId = user.branchId);
+                    this._userService.currentData.subscribe(user => item.contractBranchId = user.branch);
 
                     item.instalmentNo = i;
                     item.dueDate = setLocalDate(dueDate.toString());

@@ -127,7 +127,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     } else {
                         this.contractModel.contractDate = setDateMyDatepicker(new Date(this.contractModel.contractDate));
                         this._userService.currentData.subscribe(u => {
-                            this.contractModel.updateBy = u.userId;
+                            this.contractModel.updateBy = u.id;
                         });
                     }
                 });

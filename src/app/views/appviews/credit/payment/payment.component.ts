@@ -7,6 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PageLoadWarpperService } from '../../../../services/common/page-load-warpper.service';
 import { setLocalDate, resetLocalDate, currencyToFloat } from 'app/app.config';
 import { PageloaderService } from '../../pageloader/pageloader.component';
+import { ModelUser } from '../../../../models/users';
+import { UserService } from '../../../../services/users';
 
 declare var toastr: any;
 
@@ -17,8 +19,7 @@ declare var toastr: any;
 })
 export class PaymentComponent implements OnInit, AfterViewInit {
 
-  userName: string = 'Admin'
-  userId: string = '1';
+  user = new ModelUser();
 
   contractItemModel: ContractItem[] = [];
   contractModel: Contract = new Contract();
@@ -30,8 +31,10 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _paymentService: PaymentService,
-    private pageloader: PageloaderService
+    private pageloader: PageloaderService,
+    private _userService: UserService
   ) {
+    this._userService.currentData.subscribe(u => this.user = u);
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -62,6 +65,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     await item.contractItem.map(res => {
       this.contractItemModel.push({
         isSlect: false,
+        taxInvoiceNo: res.taxInvoiceNo,
         contractItemId: res.contractItemId,
         contractId: item.contract.contractId,
         instalmentNo: res.instalmentNo,
@@ -72,7 +76,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         paymentType: res.paymentType,
         fineSum: res.fineSum,
         remark: res.remark,
-        payeer: this.userId
+        payeer: this.user.id.toString()
       })
     });
 
@@ -85,13 +89,14 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     let contractItem = this.contractItemModel.filter(item => item.payDate == null)[0];
 
     this.paymentModel.contractId = item.contract.contractId;
-    this.paymentModel.payeer = this.userId;
-    this.paymentModel.updateBy = this.userId;
+    this.paymentModel.payeer = this.user.id.toString();
+    this.paymentModel.updateBy = this.user.id.toString();
+    this.paymentModel.branchId = this.user.branch;
     this.paymentModel.payDate = setLocalDate((new Date()).toISOString());
     this.paymentModel.outstanding = outstandingPrice;
-    this.paymentModel.balanceNetPrice = contractItem.balanceNetPrice;
-    this.paymentModel.payNetPrice = contractItem.balanceNetPrice;
-    this.paymentModel.dueDate = contractItem.dueDate;
+    this.paymentModel.balanceNetPrice = contractItem ? contractItem.balanceNetPrice : 0.00;
+    this.paymentModel.payNetPrice = this.paymentModel.balanceNetPrice;
+    this.paymentModel.dueDate = contractItem ? contractItem.dueDate : null;
   }
 
   ngAfterViewInit() {
@@ -150,7 +155,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       const params = {
         contractItemId: contractItemId,
         remark: p,
-        updateBy: this.userId
+        updateBy: this.user.id.toString()
       }
       this._paymentService.CancelContractTerm(params).subscribe(item => {
         toastr.success('ยกเลิกรายการสำเร็จ!');
