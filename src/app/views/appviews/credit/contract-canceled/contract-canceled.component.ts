@@ -54,7 +54,7 @@ export class ContractCanceledComponent implements OnInit {
     }
 
     onSubmit(f: any) {
-        if (alert('ยืนยันการยกเลิกสัญญาเช่าซื้อหรือไม่ ?')) {
+        if (confirm('ยืนยันการยกเลิกสัญญาเช่าซื้อหรือไม่ ?')) {
             this._credit.Termination(f).subscribe(p => {
                 toastr.success('ยกเลิกสัญญาเช่าซื้อ สำเร็จ!');
                 this.router.navigate(['credit/contract-list/active']);
