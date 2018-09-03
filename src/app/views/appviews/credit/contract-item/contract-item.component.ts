@@ -138,7 +138,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
             this.chRef.markForCheck();
 
             this.contractItemModel.map((item, i) => {
-                item.dueDate = setLocalDate(item.dueDate.toString());
+                item.dueDate = setLocalDate(item.dueDate);
             })
             this.setTotal();
         }

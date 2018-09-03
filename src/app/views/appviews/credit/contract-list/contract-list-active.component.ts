@@ -30,7 +30,7 @@ export class ContractListActiveComponent implements OnInit {
         await this.contractService.GetActive().subscribe(o => {
 
             o.map(item => {
-                item.contractDate = setLocalDate(item.contractDate.toString());
+                item.contractDate = setLocalDate(item.contractDate);
             })
             
             this.contractListModel = o;
