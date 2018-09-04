@@ -31,6 +31,13 @@ export class CalculateService {
         return this.http.get<any>(apiURL, { params });
     }
 
+    GetModelNumber(term: string) {
+        const apiURL = `${this.url}/GetById`;
+        const params = { term };
+
+        return this.http.get<any>(apiURL, { params });
+    }
+
     Create(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
         const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
         const apiURL = `${this.url}/Create`;

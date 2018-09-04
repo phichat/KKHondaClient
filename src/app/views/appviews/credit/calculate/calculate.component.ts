@@ -1,10 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalculateModel, ContractModel } from '../../../../models/credit';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
-import * as moment from 'moment';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 // import * as $ from 'jquery';
@@ -12,6 +11,8 @@ import * as Inputmask from 'inputmask';
 import { PageloaderService } from '../../pageloader/pageloader.component';
 import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZero, setZeroHours, currencyToFloat } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
+import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
+import { DropdownTemplate } from 'app/models/drop-down-model';
 
 declare var toastr: any;
 
@@ -31,11 +32,15 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     mode: string;
     myDatePickerOptions = MyDatePickerOptions;
 
-    instalmentEnd = [
-        { value: 3, text: '3 เดือน' },
-        { value: 6, text: '6 เดือน' },
-        { value: 9, text: '9 เดือน' }
-    ];
+    engineTypeahead = new EventEmitter<string>();
+    engineDropdown = new Array<DropdownTemplate>();
+
+    // engine: any[] = [
+    //     { model: 'abcdefg-1234', engineNo: 'abcdefg-1234', frameNo: 'abcdefg-1234' },
+    //     { model: 'abcdefg-5678', engineNo: 'abcdefg-5678', frameNo: 'abcdefg-5678' },
+    //     { model: 'abcdefg-9012', engineNo: 'abcdefg-9012', frameNo: 'abcdefg-9012' },
+    //     { model: 'abcdefg-3456', engineNo: 'abcdefg-3456', frameNo: 'abcdefg-3456' }
+    // ]
 
     dueDate = [
         { value: 5, text: '5 ของเดือน' },
@@ -51,7 +56,8 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         private _calcService: CalculateService,
         private _userService: UserService,
         private router: Router,
-        private pageloader: PageloaderService
+        private pageloader: PageloaderService,
+        private chRef: ChangeDetectorRef
     ) {
         toastr.options = {
             'closeButton': true,
@@ -60,10 +66,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        for (let i = 1; i < 7; i++) {
-            const month = i * 12;
-            this.instalmentEnd.push({ value: month, text: `${month} เดือน(${i} ปี)` });
-        }
 
         this._activatedRoute.queryParams.subscribe(p => {
 
@@ -123,6 +125,19 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
+    searchContractMate() {
+        this.engineTypeahead.pipe(
+            distinctUntilChanged(),
+            debounceTime(300),
+            switchMap(term => this._calcService.GetModelNumber(term))
+        ).subscribe(x => {
+            this.chRef.markForCheck();
+            this.engineDropdown = x;
+        }, () => {
+            this.engineDropdown = new Array<DropdownTemplate>();
+        });
+    }
+
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
@@ -157,6 +172,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             })
         this.pageloader.setShowPageloader(false);
     }
+
     onChangeDeposit() {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
@@ -268,13 +284,13 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         })
 
         if (this.mode === 'create') {
-           await this.onCreate();
+            await this.onCreate();
 
         } else if (this.mode === 'edit') {
-           await this.onEdit();
+            await this.onEdit();
 
         } else if (this.mode === 'revice') {
-           await this.onRevice();
+            await this.onRevice();
         }
 
         this.pageloader.setShowPageloader(false);
