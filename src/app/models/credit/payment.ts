@@ -18,6 +18,7 @@ export class PaymentFG {
     remark: string;
     updateBy: string;
     branchId: number;
+    documentRef: string;
 }
 
 export class Contract {
@@ -40,14 +41,17 @@ export class Booking {
     modelCode: string;
     color: string;
     price: number;
+    depositPrice: number;
 }
 
 export class IsPay {
+    depositIsPayment: number;
     isPayPrice: number;
     isPayTerm: number;
 }
 
 export class IsOutstanding {
+    depositIsOutstanding: number;
     isOutstandingPrice: number;
     isOutstandingTerm: number;
 }

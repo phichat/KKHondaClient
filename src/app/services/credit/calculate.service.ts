@@ -31,9 +31,9 @@ export class CalculateService {
         return this.http.get<any>(apiURL, { params });
     }
 
-    GetModelNumber(term: string) {
-        const apiURL = `${this.url}/GetById`;
-        const params = { term };
+    GetEngineByKeyword(bookingId: string, branchId: string, term: string) {
+        const apiURL = `${this.url}/GetEngineByKeyword`;
+        const params = { bookingId, branchId, term };
 
         return this.http.get<any>(apiURL, { params });
     }

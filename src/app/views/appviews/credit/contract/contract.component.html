@@ -27,11 +27,11 @@
                     <div class="col-lg-9 b-r">
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">
-                                ผู้เช่าซื้อ:
+                                ผู้จอง :
                                 <span class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <input type="hidden" name="contractHire" [(ngModel)]="contractModel.contractHire">
+                                <input type="hidden" name="contractBooking" [(ngModel)]="contractModel.contractBooking">
                                 <input type="text" class="form-control form-control-sm" required disabled [(ngModel)]="customerFullName" name="customerFullName">
                             </div>
                             <label for="" class="control-label col-lg-2">คู่สมรส:</label>
@@ -44,12 +44,12 @@
                         </div>
                         <div class="row form-group">
                             <label for="" class="control-label col-lg-2">
-                                ผู้ใช้รถ:
+                                ผู้เช่าซื้อ :
                                 <span class="required">*</span>
                             </label>
                             <div class="col-lg-4">
-                                <ng-select required [items]="contractUserDropdown" bindValue="value" bindLabel="text" [typeahead]="contractUserTypeahead"
-                                    [(ngModel)]="contractModel.contractUser" name="contractUser">
+                                <ng-select required [items]="contractHireDropdown" bindValue="value" bindLabel="text" [typeahead]="contractHireTypeahead"
+                                    [(ngModel)]="contractModel.contractHire" name="contractHire">
                                 </ng-select>
                             </div>
                         </div>

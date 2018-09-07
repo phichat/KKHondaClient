@@ -46,13 +46,23 @@
     <strong class="col-md-2">{{bookingModel.color}}</strong>
   </div>
   <div class="row form-group">
+      <label for="price" class="col-sm-2 control-label">เงินดาวน์ : </label>
+      <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2'}} บาท</strong>
+      <label for="ispay" class="col-sm-2 control-label">เงินดาวน์ชำระแล้ว : </label>
+      <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(bookingModel.depositPrice || 0) | number:'1.2-2'}} บาท
+      </strong>
+      <label for="" class="col-sm-2 control-label">เงินดาวน์ค้างชำระ : </label>
+      <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.depositIsOutstanding || 0) | number:'1.2-2'}} บาท
+      </strong>
+  </div>
+  <div class="row form-group">
     <label for="price" class="col-sm-2 control-label">ยอดจัด : </label>
     <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
-    <label for="ispay" class="col-sm-2 control-label">ชำระแล้ว : </label>
+    <label for="ispay" class="col-sm-2 control-label">ค่างวดชำระแล้ว : </label>
     <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท ({{(isPayModel.isPayTerm || 0)}}
       งวด)
     </strong>
-    <label for="" class="col-sm-2 control-label">ค้างชำระ : </label>
+    <label for="" class="col-sm-2 control-label">ค่างวดค้างชำระ : </label>
     <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท ({{(isOutstandingModel.isOutstandingTerm || 0)}}
       งวด)
     </strong>
@@ -97,24 +107,24 @@
         <div class="col-md-5">
           <form autocomplete="off" action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
             <div class="row form-group">
-              <label for="" class="col-md-4">วันที่ครบกำหนดชำระ :</label>
-              <strong class="col-md-8">{{paymentModel.dueDate}}</strong>
+              <label for="" class="col-lg-4">วันที่ครบกำหนดชำระ :</label>
+              <strong class="col-lg-8">{{paymentModel.dueDate}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4">วันที่รับชำระ :</label>
-              <strong class="col-md-8">{{paymentModel.payDate}}</strong>
+              <label for="" class="col-lg-4">วันที่รับชำระ :</label>
+              <strong class="col-lg-8">{{paymentModel.payDate}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4">ผู้รับเงิน :</label>
-              <strong class="col-md-8">{{user.adminName}}</strong>
+              <label for="" class="col-lg-4">ผู้รับเงิน :</label>
+              <strong class="col-lg-8">{{user.adminName}}</strong>
             </div>
             <!-- <div class="row form-group">
               <label for="" class="col-md-4">ชำระ :</label>
               <strong class="col-md-8">{{instalmentCount}} งวด</strong>
             </div> -->
             <div class="row form-group">
-              <label for="" class="col-md-4">ช่องทางการรับชำระ :</label>
-              <div class="col-md-8">
+              <label for="" class="col-lg-4">ช่องทางการรับชำระ :</label>
+              <div class="col-lg-8">
                 <div class="radio radio-info radio-inline">
                   <input type="radio" id="paymentType0" value="1" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
                   <label for="paymentType0">เงินสด</label>
@@ -134,30 +144,42 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4">ยอดคงค้าง :</label>
-              <div class="col-md-4 text-right">
+              <label for="" class="col-lg-4">ยอดคงค้าง :</label>
+              <div class="col-lg-4 text-right">
                 <input type="text" name="outstanding" [(ngModel)]="paymentModel.outstanding" readonly class="form-control form-control-sm number-2-digit">
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4">ยอดชำระขั้นต่ำ :</label>
-              <div class="col-md-4 text-right">
+              <label for="" class="col-lg-4">ยอดชำระขั้นต่ำ :</label>
+              <div class="col-lg-4 text-right">
                 <input type="text" name="balanceNetPrice" [(ngModel)]="paymentModel.balanceNetPrice" readonly class="form-control form-control-sm number-2-digit">
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4">ยอดชำระจริง :</label>
-              <div class="col-md-4 text-right">
+              <label for="" class="col-lg-4">ยอดชำระจริง :</label>
+              <div class="col-lg-4 text-right">
                 <input type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice" class="form-control form-control-sm number-2-digit">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-lg-4">เอกสารอ้างอิง :</label>
+              <div class="col-lg-8 text-right">
+                <input type="text" name="documentRef" [(ngModel)]="paymentModel.documentRef" class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-lg-4">บันทึกเพิ่มเติม :</label>
+              <div class="col-lg-8 text-right">
+                <textarea class="form-control form-control-sm" name="remark" [(ngModel)]="paymentModel.remark" rows="3"></textarea>
               </div>
             </div>
 
             <hr class="hr-dashed">
 
             <div class="row">
-              <div class="col-md-4"></div>
+              <div class="col-lg-4"></div>
               <div class="col-sm-8">
-                <button type="submit" class="btn btn-primary" [disabled]="!f.valid">บันทึก</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid || paymentModel.outstanding == 0">บันทึก</button>
                 <button type="button" class="btn" [routerLink]="['/credit/contract-list/active']">ยกเลิก</button>
               </div>
             </div>

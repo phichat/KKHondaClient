@@ -23,7 +23,7 @@ declare var toastr: any;
 })
 export class ContractComponent implements OnInit, OnDestroy {
     contractMateTypeahead = new EventEmitter<string>();
-    contractUserTypeahead = new EventEmitter<string>();
+    contractHireTypeahead = new EventEmitter<string>();
     contractGurantor1Typeahead = new EventEmitter<string>();
     contractGurantor2Typeahead = new EventEmitter<string>();
 
@@ -33,7 +33,7 @@ export class ContractComponent implements OnInit, OnDestroy {
     customerFullName: string;
     userDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractMateDropdown: Array<DropDownModel> = new Array<DropDownModel>();
-    contractUserDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    contractHireDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGurantor1Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGurantor2Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
     relationDropdown: Array<DropDownModel> = new Array<DropDownModel>();
@@ -69,7 +69,7 @@ export class ContractComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.searchContractMate();
-        this.searchContractUser();
+        this.searchcontractHire();
         this.searchContractGurantor1();
         this.searchContractGurantor2();
 
@@ -81,7 +81,7 @@ export class ContractComponent implements OnInit, OnDestroy {
 
                     this.userDropdown = o.userDropdown;
                     this.contractMateDropdown = o.contractMateDropdown;
-                    this.contractUserDropdown = o.contractUserDropdown;
+                    this.contractHireDropdown = o.contractHireDropdown;
                     this.contractGurantor1Dropdown = o.contractGurantor1Dropdown;
                     this.contractGurantor2Dropdown = o.contractGurantor2Dropdown;
                     this.relationDropdown = o.relationDropdown;
@@ -93,7 +93,7 @@ export class ContractComponent implements OnInit, OnDestroy {
 
                     this.contractModel = o.creditContract;
                     this.contractModel.statusDesc = o.statusDesc;
-                    this.contractModel.contractHire = o.booking.customerCode;
+                    // this.contractModel.contractHire = o.booking.customerCode;
 
                     this.contractModel.gurantorRelation1 = this.checkNullAndReturnStr(o.creditContract.gurantorRelation1);
                     this.contractModel.gurantorRelation2 = this.checkNullAndReturnStr(o.creditContract.gurantorRelation2);
@@ -113,7 +113,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractModel.approvedBy = this.checkNullAndReturnStr(o.creditContract.approvedBy);
                     this.contractModel.keeperBy = this.checkNullAndReturnStr(o.creditContract.keeperBy);
 
-                    this.contractModel.contractHire = o.booking.custCode;
+                    this.contractModel.contractBooking = o.booking.custCode;
                     this.customerFullName = o.booking.custFullName;
 
                     this._bookingService.changeData(o.booking);
@@ -156,16 +156,16 @@ export class ContractComponent implements OnInit, OnDestroy {
         });
     }
 
-    searchContractUser() {
-        this.contractUserTypeahead.pipe(
+    searchcontractHire() {
+        this.contractHireTypeahead.pipe(
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._customerService.getByKey(term))
         ).subscribe(x => {
             this.chRef.markForCheck();
-            this.contractUserDropdown = x;
+            this.contractHireDropdown = x;
         }, (err) => {
-            this.contractUserDropdown = new Array<DropDownModel>();
+            this.contractHireDropdown = new Array<DropDownModel>();
         });
     }
 

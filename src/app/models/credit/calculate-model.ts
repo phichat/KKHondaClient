@@ -27,4 +27,9 @@ export class CalculateModel {
     public createDate: Date;
     public updateBy: number;
     public updateDate: string;
+
+    public model: string;
+    public logReceiveId: string;
+    public engineNo?: string;
+    public frameNo?: string;
 }

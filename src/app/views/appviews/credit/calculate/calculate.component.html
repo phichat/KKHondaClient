@@ -28,7 +28,7 @@
                         <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
 
                         <div class="row form-group">
-                            <label for="model" class="col-md-4 control-label">
+                            <label for="" class="col-md-4 control-label">
                                 ค้นหาหมายเลขรถ :
                                 <span class="required">*</span>
                             </label>
@@ -36,25 +36,25 @@
                                 <ng-select 
                                     [items]="engineDropdown"
                                     [typeahead]="engineTypeahead"
-                                    [(ngModel)]="model.carcassPrice"
-                                    name=""
-                                    #select
+                                    [(ngModel)]="model.logReceiveId"
+                                    (change)="selectItemEnging($event)"
+                                    name="logReceiveId"
                                     dropdownPosition="auto"
-                                    bindLabel="model"
-                                    bindValue="model"
+                                    bindLabel="text"
+                                    bindValue="value"
                                     labelForId="model"
                                     [virtualScroll]="true"
                                     placeholder="ค้นหาหมายเลขรถ">
-                                <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                                    <p class="m-b-xs !important">
-                                        <strong>โมเดล: </strong>
-                                        <span [ngOptionHighlight]="search">{{item.model}}</span>
-                                    </p>
-                                    <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>   
-                                    <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span> 
-                                    <hr class="hr-dashed m-t-xs m-b-xs">
-                                </ng-template>
-                         </ng-select>
+                                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                                        <p class="m-b-xs !important">
+                                            <strong>โมเดล: </strong>
+                                            <span [ngOptionHighlight]="search">{{item.model}}</span>
+                                        </p>
+                                        <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>   
+                                        <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span> 
+                                        <hr class="hr-dashed m-t-xs m-b-xs">
+                                    </ng-template>
+                                </ng-select>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -63,7 +63,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required name="" class="form-control" readonly>
+                                <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -72,7 +72,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required name="" class="form-control" readonly>
+                                <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control" readonly>
                             </div>
                         </div>
                         <hr class="hr-dashed">

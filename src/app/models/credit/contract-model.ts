@@ -12,7 +12,7 @@ export class ContractModel {
     public contractGroup: string;
     public contractHire: string;
     public contractMate: string;
-    public contractUser: string;
+    public contractBooking: string;
     public contractGurantor1: string;
     public gurantorRelation1: string;
     public contractGurantor2: string;

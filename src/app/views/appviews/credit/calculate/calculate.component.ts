@@ -13,6 +13,7 @@ import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLoc
 import { IMyDateModel } from 'mydatepicker-th';
 import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
+import { ModelUser } from '../../../../models/users';
 
 declare var toastr: any;
 
@@ -28,12 +29,13 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     model: CalculateModel = new CalculateModel();
     contractModel: ContractModel = new ContractModel();
     contractItemModel = new Array<ContractModel>();
+    userModel = new ModelUser();
     bookingNo: string;
     mode: string;
     myDatePickerOptions = MyDatePickerOptions;
 
     engineTypeahead = new EventEmitter<string>();
-    engineDropdown = new Array<DropdownTemplate>();
+    engineDropdown: Array<DropdownTemplate> = new Array<DropdownTemplate>();
 
     // engine: any[] = [
     //     { model: 'abcdefg-1234', engineNo: 'abcdefg-1234', frameNo: 'abcdefg-1234' },
@@ -67,20 +69,20 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit() {
 
-        this._activatedRoute.queryParams.subscribe(p => {
+        this._activatedRoute.queryParams.subscribe(async p => {
 
             this.mode = p.mode;
 
             if (p.mode === 'edit' && p.calculateId) {
-                this.onLoadCaculateData(p.calculateId);
+                await this.onLoadCaculateData(p.calculateId);
 
             } else if (p.mode === 'revice' && p.calculateId) {
-                this.onLoadCaculateData(p.calculateId);
+                await this.onLoadCaculateData(p.calculateId);
 
             } else if (p.mode === 'create' && p.bookingId) {
                 this.model.bookingId = p.bookingId;
-                this.onLoadBooking(p.bookingId);
-                this._userService.currentData.subscribe(u => {
+                await this.onLoadBooking(p.bookingId);
+                await this._userService.currentData.subscribe(u => {
                     this.model.createBy = u.id;
                     this.contractModel.branchId = u.branch;
                     this.contractModel.bookingId = p.bookingId;
@@ -97,6 +99,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.model.sellAcitvityId = 25;
                 });
             }
+            await this._userService.currentData.subscribe(u => this.userModel = u);
+
+            this.searchEngine();
         });
     }
 
@@ -125,14 +130,23 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
-    searchContractMate() {
+    selectItemEnging(e: any){
+        this.model.engineNo = e ? e.engineNo : null;
+        this.model.frameNo = e ? e.frameNo : null;
+    }
+
+    searchEngine() {
         this.engineTypeahead.pipe(
             distinctUntilChanged(),
             debounceTime(300),
-            switchMap(term => this._calcService.GetModelNumber(term))
+            switchMap(term => this._calcService.GetEngineByKeyword(this.model.bookingId.toString(), this.userModel.branch.toString(), term))
         ).subscribe(x => {
             this.chRef.markForCheck();
             this.engineDropdown = x;
+            this.engineDropdown.map(item => {
+                item.text = `หมายเลขเครื่อง: ${item.engineNo}, หมายเลขตัวถัง: ${item.frameNo}`;
+                item.value = item.logId.toString();
+            })
         }, () => {
             this.engineDropdown = new Array<DropdownTemplate>();
         });
