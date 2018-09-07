@@ -44,7 +44,8 @@
                 <tbody>
                     <tr *ngFor="let item of contractListModel">
                         <td>{{item.contractNo}}</td>
-                        <td>{{item.statusDesc}}</td>
+                        <td [ngClass]="{'text-info': item.contractStatus == 30, 
+                        'text-warning': item.contractStatus == 31}">{{item.statusDesc}}</td>
                         <td>
                             <a class="btn btn-info btn-xs" (click)="gotoDetail(item.contractId)">
                                 <i class="fa fa-file-text-o"></i>
@@ -61,10 +62,16 @@
                             </a>
                         </td>
                         <td>
-                            <a *ngIf="item.contractStatus == 31" (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-xs">
+                            <a *ngIf="item.contractStatus == 31; else other" (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-xs">
                                 <i class="fa fa-money"></i>
                                 ชำระค่างวด
                             </a>
+                            <ng-template #other>
+                                <a (click)="gotoPayment(item.contractId)" class="btn btn-success btn-xs">
+                                    <i class="fa fa-print"></i>
+                                    พิมพ์ใบเสร็จรับเงิน
+                                </a>
+                            </ng-template>
                         </td>
                         <td>
                             <a *ngIf="item.contractStatus == 32" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">

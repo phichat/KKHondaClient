@@ -42,16 +42,16 @@ export class Booking {
     color: string;
     price: number;
     depositPrice: number;
+    depositIsPay: number;
+    depositIsOutstanding: number;
 }
 
 export class IsPay {
-    depositIsPayment: number;
     isPayPrice: number;
     isPayTerm: number;
 }
 
 export class IsOutstanding {
-    depositIsOutstanding: number;
     isOutstandingPrice: number;
     isOutstandingTerm: number;
 }

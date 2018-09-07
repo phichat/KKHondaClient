@@ -165,4 +165,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       })
     }
   }
+
+  onPrint(value: any) {
+    console.log(value);
+  }
 }

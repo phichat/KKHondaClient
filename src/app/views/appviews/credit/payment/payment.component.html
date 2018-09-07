@@ -13,7 +13,12 @@
       </li>
     </ol>
   </div>
-  <div class="col-lg-2 text-right pull-right"></div>
+  <div class="col-lg-2 text-right pull-right">
+    <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrint">
+      <i class="fa fa-print"></i>
+      พิมพ์ใบเสร็จรับเงิน
+    </button>
+  </div>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight form-horizontal">
@@ -46,25 +51,25 @@
     <strong class="col-md-2">{{bookingModel.color}}</strong>
   </div>
   <div class="row form-group">
-      <label for="price" class="col-sm-2 control-label">เงินดาวน์ : </label>
-      <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2'}} บาท</strong>
-      <label for="ispay" class="col-sm-2 control-label">เงินดาวน์ชำระแล้ว : </label>
-      <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(bookingModel.depositPrice || 0) | number:'1.2-2'}} บาท
-      </strong>
-      <label for="" class="col-sm-2 control-label">เงินดาวน์ค้างชำระ : </label>
-      <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.depositIsOutstanding || 0) | number:'1.2-2'}} บาท
-      </strong>
+    <label for="price" class="col-sm-2 control-label">เงินดาวน์ : </label>
+    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2'}} บาท</strong>
+    <label for="ispay" class="col-sm-2 control-label">เงินดาวน์ชำระแล้ว : </label>
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(bookingModel.depositIsPay || 0) | number:'1.2-2'}} บาท
+    </strong>
+    <label for="" class="col-sm-2 control-label">เงินดาวน์ค้างชำระ : </label>
+    <strong class="col-md-2 col-sm-6 text-danger">{{(bookingModel.depositIsOutstanding || 0) | number:'1.2-2'}} บาท
+    </strong>
   </div>
   <div class="row form-group">
     <label for="price" class="col-sm-2 control-label">ยอดจัด : </label>
     <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">ค่างวดชำระแล้ว : </label>
-    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท ({{(isPayModel.isPayTerm || 0)}}
-      งวด)
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท ({{(isPayModel.isPayTerm
+      || 0)}} งวด)
     </strong>
     <label for="" class="col-sm-2 control-label">ค่างวดค้างชำระ : </label>
-    <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท ({{(isOutstandingModel.isOutstandingTerm || 0)}}
-      งวด)
+    <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท ({{(isOutstandingModel.isOutstandingTerm
+      || 0)}} งวด)
     </strong>
   </div>
 
@@ -189,4 +194,39 @@
     </div>
   </div>
 
+
+  <div class="modal inmodal" id="frmPrint" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content animated fadeIn">
+        <form class="form-horizontal" action="" #f="ngForm" (ngSubmit)="onPrint(f.value)">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <!-- <i class="fa fa-clock-o modal-icon"></i> -->
+            <h4 class="modal-title">พิมพ์</h4>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" name="contractId" [(ngModel)]="contractModel.contractId">
+            <div class="row">
+              <label for="" class="col-lg-12">เลือกงวดที่รับชำระ :</label>
+              <div class="col-lg-12">
+                <select name="instalmentNo" class="form-control form-control-sm" required ngModel>
+                  <option *ngFor="let item of contractItemModel" [value]="item.instalmentNo" [disabled]="item.payDate == null">
+                    <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
+                    <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!f.valid">ตกลง</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
