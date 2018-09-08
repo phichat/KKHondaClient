@@ -5,7 +5,7 @@ import { RptSumCloseContractModel } from '../../../../models/credit/rpt-sum-clos
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
-import { appConfig } from '../../../../app.config';
+import { appConfig, MyDatePickerOptions, getDateMyDatepicker, setZeroHours, setLocalDate } from '../../../../app.config';
 // import { PageloaderService } from '../../pageloader/pageloader.component';
 
 @Component({
@@ -17,6 +17,8 @@ export class RptSummaryCloseContractComponent implements OnInit {
     branchDropDown: DropDownModel[];
     prtSumCloseContract: RptSumCloseContractModel[];
     dataTable: any;
+
+    myDatePickerOptions = MyDatePickerOptions;
 
     constructor(
         private rptSumCloseService: RptSummayCloseContractService,
@@ -38,12 +40,19 @@ export class RptSummaryCloseContractComponent implements OnInit {
     }
 
     onSubmit(value: any) {
-        value.endContractDateStart = (new Date(value.endContractDateStart)).toISOString();
-        value.endContractDateEnd = (new Date(value.endContractDateEnd)).toISOString();
+        const sdate = getDateMyDatepicker(value.endContractDateStart);
+        const edate = getDateMyDatepicker(value.endContractDateEnd);
+        
+        value.endContractDateStart = setZeroHours(sdate);
+        value.endContractDateEnd = setZeroHours(edate);
 
         this.rptSumCloseService.GetByCon(value).subscribe(p => {
             this.prtSumCloseContract = p;
-
+            this.prtSumCloseContract.map(x => {
+                x.contractDate = setLocalDate(x.contractDate);
+                x.endDueDate = setLocalDate(x.endDueDate);
+                x.endContractDate = setLocalDate(x.endContractDate);
+            })
             this.onDetectTable()
         })
     }

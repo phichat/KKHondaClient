@@ -27,13 +27,15 @@
             <div class="row form-group">
                 <label for="sDate" class="col-sm-2">ปิดสัญญาวันที่ :</label>
                 <div class="col-sm-3">
-                    <input type="date" name="endContractDateStart" id="sDate" ngModel class="form-control from-control-sm" required>
+                    <my-date-picker-th name="endContractDateStart" ngModel [options]="myDatePickerOptions" required></my-date-picker-th>
+                    <!-- <input type="date" name="endContractDateStart" id="sDate" ngModel class="form-control from-control-sm" required> -->
                 </div>
             </div>
             <div class="row form-group">
                 <label for="eDate" class="col-sm-2">ถึงวันที่ :</label>
                 <div class="col-sm-3">
-                    <input type="date" name="endContractDateEnd" id="eDate" ngModel class="form-control from-control-sm" required>
+                    <my-date-picker-th name="endContractDateEnd" ngModel [options]="myDatePickerOptions" required></my-date-picker-th>
+                    <!-- <input type="date" name="endContractDateEnd" id="eDate" ngModel class="form-control from-control-sm" required> -->
                 </div>
             </div>
             <div class="row form-group">
@@ -73,7 +75,7 @@
             <tr *ngFor="let item of prtSumCloseContract; let i=index;">
                 <td>{{i+1}}</td>
                 <td>{{item.contractNo}}</td>
-                <td>{{item.contractDate | date:'dd-MM-yyyy'}}</td>
+                <td>{{item.contractDate}}</td>
                 <td>{{item.endDueDate}}</td>
                 <td>{{item.hireFullName}}</td>
                 <td>{{item.endContractDate}}</td>

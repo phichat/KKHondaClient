@@ -1,16 +1,16 @@
 export class RptSumCloseContractModel {
     id: number;
     contractNo: string;
-    contractDate: Date;
+    contractDate: any;
     contractBranchId: string;
     contractBranchName: string;
     contractHire: string;
     hireFullName: string;
-    endContractDate: Date;
+    endContractDate: any;
     remainTotal: number;
     contractStatus: string;
     contractStatusDesc: string;
-    endDueDate: Date;
+    endDueDate: any;
     keeperBy: string;
     keeperByFullName: string;
 }
