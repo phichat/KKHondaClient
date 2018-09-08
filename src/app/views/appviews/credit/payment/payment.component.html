@@ -180,11 +180,10 @@
             </div>
 
             <hr class="hr-dashed">
-
             <div class="row">
               <div class="col-lg-4"></div>
               <div class="col-sm-8">
-                <button type="submit" class="btn btn-primary" [disabled]="!f.valid || paymentModel.outstanding == 0">บันทึก</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid">บันทึก</button>
                 <button type="button" class="btn" [routerLink]="['/credit/contract-list/active']">ยกเลิก</button>
               </div>
             </div>
@@ -198,7 +197,7 @@
   <div class="modal inmodal" id="frmPrint" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-sm">
       <div class="modal-content animated fadeIn">
-        <form class="form-horizontal" action="" #f="ngForm" (ngSubmit)="onPrint(f.value)">
+        <form class="form-horizontal" action="" #fm="ngForm" (ngSubmit)="onPrint(fm.value)">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">×</span>
@@ -223,7 +222,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="!f.valid">ตกลง</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!fm.valid">ตกลง</button>
           </div>
         </form>
       </div>

@@ -127,6 +127,10 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   // }
 
   async onSubmit(value: any) {
+    if (this.paymentModel.outstanding == 0) {
+      return;
+    } 
+
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
 
       this.pageloader.setShowPageloader(true);
