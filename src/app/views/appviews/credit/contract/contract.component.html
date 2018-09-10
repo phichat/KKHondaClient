@@ -54,6 +54,38 @@
                             </div>
                         </div>
 
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">
+                                ชื่อจดทะเบียน :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="text" name="cusSellName" [(ngModel)]="bookingModel.cusSellName" [value]="" class="form-control form-control-sm" required>
+                            </div>
+                            <label for="" class="control-label col-lg-2">
+                                สถานประกอบการ :
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="text" name="cusTaxBranch" [(ngModel)]="bookingModel.cusTaxBranch" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="control-label col-lg-2">
+                                เลขประจำตัวผู้เสียภาษี :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="text" name="cusTaxNo" [(ngModel)]="bookingModel.cusTaxNo" class="form-control form-control-sm" required>
+                            </div>
+                            <label for="" class="control-label col-lg-2">
+                                หมายเหตุ :
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="text" name="sellRemark" [(ngModel)]="bookingModel.sellRemark" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
                         <div class="hr-line-dashed m-b-sm"></div>
                         <h4>
                             ผู้ค้ำประกัน
@@ -292,15 +324,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="row form-group">
-                            <label for="" class="col-lg-7 control-label">
-                                I.R.R. :
-
-                            </label>
+                            <label for="" class="col-lg-7 control-label">อัตราดอกเบี้ยต่อปี :</label>
                             <div class="col-lg-5">
                                 <div class="input-group">
-                                    <label for="" class="control-label">{{calculateModel.irr | number:'1.2-2' }}</label>
+                                    <label for="" class="control-label">{{calculateModel.mrr | number:'1.2-2' }}</label>
                                 </div>
                             </div>
                         </div>
@@ -310,7 +339,7 @@
 
         </div>
     </div>
-
+<!-- 
     <div class="row m-b-md">
         <div class="col-lg-12">
             <div class="tabs-container">
@@ -340,7 +369,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
 

@@ -33,5 +33,10 @@ export class BookingModel {
     public freeTag: boolean;
     public freeWarranty: boolean;
     public bookingItem: Array<BookingItemModel>;
+
+    public cusSellName: string;
+    public cusTaxNo: string;
+    public cusTaxBranch: string;
+    public sellRemark: string;
 }
 

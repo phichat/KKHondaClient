@@ -12,6 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PageloaderService } from '../../pageloader/pageloader.component';
 import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZero, setZeroHours, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
+import { BookingModel } from '../../../../models/selling';
 
 
 declare var toastr: any;
@@ -30,6 +31,7 @@ export class ContractComponent implements OnInit, OnDestroy {
     contractModel: ContractModel = new ContractModel();
     contractItemModel: Array<ContractItemModel> = new Array<ContractItemModel>();
     calculateModel: CalculateModel = new CalculateModel();
+    bookingModel: BookingModel = new BookingModel();
     customerFullName: string;
     userDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractMateDropdown: Array<DropDownModel> = new Array<DropDownModel>();
@@ -116,6 +118,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractModel.contractBooking = o.booking.custCode;
                     this.customerFullName = o.booking.custFullName;
 
+                    this.bookingModel = o.booking;
                     this._bookingService.changeData(o.booking);
                     this.contractItemModel = o.creditContractItem;
 
@@ -201,7 +204,7 @@ export class ContractComponent implements OnInit, OnDestroy {
         this.contractModel.contractDate = setZeroHours(contractDate);
         
         if (this.mode === 'create') {
-            await this._contractService.Create(this.contractModel).subscribe(
+            await this._contractService.Create(this.contractModel, this.bookingModel).subscribe(
                 res => {
                     this.router.navigate(['credit/payment', this.contractModel.contractId]);
                 },
@@ -210,7 +213,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                 }
             );
         } else if (this.mode === 'edit') {
-            await this._contractService.Edit(this.contractModel).subscribe(
+            await this._contractService.Edit(this.contractModel, this.bookingModel).subscribe(
                 res => {
                     this.router.navigate(['credit/contract-list/active']);
                 },

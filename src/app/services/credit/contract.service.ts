@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { appConfig } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ContractListModel, ContractModel } from '../../models/credit';
+import { BookingModel } from '../../models/selling';
 
 @Injectable()
 export class ContractService {
@@ -39,16 +40,15 @@ export class ContractService {
         return this.http.get<any>(apiURL, { params });
     }
 
-    Edit(creditContract: ContractModel) {
-        const params = JSON.stringify(creditContract);
+    Edit(creditContract: ContractModel, booking: BookingModel) {
+        const params = JSON.stringify({contract: creditContract, booking});
         const apiURL = `${this.url}/Edit`;
-        console.log(params);
 
         return this.http.post<any>(apiURL, params, this.httpOptions);
     }
 
-    Create(creditContract: ContractModel) {
-        const params = JSON.stringify(creditContract);
+    Create(creditContract: ContractModel, booking: BookingModel) {
+        const params = JSON.stringify({contract: creditContract, booking});
         const apiURL = `${this.url}/Create`;
 
         return this.http.post<any>(apiURL, params, this.httpOptions);

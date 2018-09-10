@@ -77,17 +77,41 @@
                                     </div>
                                     <div class="ibox-content">
                                         <div class="row">
-                                            <div class="col-md-6 m-b-sm">
-                                                <strong>ผู้จอง :</strong>
+                                            <label for="" class="col-md-4">ผู้จอง :</label>
+                                            <div class="col-md-8 m-b-sm">
                                                 {{contractDetailModel.contractBooking}}
                                             </div>
-                                            <div class="col-md-6 m-b-sm">
-                                                <strong>คู่สมรส :</strong>
-                                                {{contractDetailModel.contractMate}}
+                                            <label for="" class="col-md-4 m-b-sm">คู่สมรส :</label>
+                                            <div class="col-md-8 m-b-sm">
+                                                <span>{{contractDetailModel.contractMate}}</span>
                                             </div>
-                                            <div class="col-md-6 m-b-sm">
-                                                <strong>ผู้เช่าซื้อ :</strong>
+                                        </div>
+
+                                        <div class="row">
+                                            <label for="" class="col-md-4">ผู้เช่าซื้อ :</label>
+                                            <div class="col-md-8 m-b-sm">
                                                 {{contractDetailModel.contractHire}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label for="" class="col-md-4">ชื่อจดทะเบียน :</label>
+                                            <div class="col-md-8 m-b-sm">
+                                                {{bookingModel.cusSellName}}
+                                            </div>
+
+                                            <label for="" class="col-md-4">สถานประกอบการ :</label>
+                                            <div class="col-md-8 m-b-sm">
+                                                {{bookingModel.cusTaxBranch}}
+                                            </div>
+
+                                            <label for="" class="col-md-4">เลขประจำตัวผู้เสียภาษี :</label>
+                                            <div class="col-md-8 m-b-sm">
+                                                {{bookingModel.cusTaxNo}}
+                                            </div>
+
+                                            <label for="" class="col-md-4">หมายเหตุ :</label>
+                                            <div class="col-md-8  m-b-sm">
+                                                {{bookingModel.sellRemark}}
                                             </div>
                                         </div>
                                     </div>
@@ -193,12 +217,15 @@
                                         </div>
                                         <div class="col-md-6 m-b-sm">
                                             <strong>เงินดาวน์ :</strong>
-                                            {{calculateModel.depositPrice | number}} ({{calculateModel.deposit | number}}%)
+                                            {{calculateModel.depositPrice | number}} ({{calculateModel.deposit |
+                                            number}}%)
                                         </div>
                                         <div class="col-md-6 m-b-sm">
                                             <strong>ระยะเวลาผ่อนชำระ :</strong>
-                                            <span *ngIf="calculateModel.typePayment == '0'">{{calculateModel.instalmentEnd + ' งวด'}}</span>
-                                            <span *ngIf="calculateModel.typePayment == '1'">{{calculateModel.instalmentEnd + ' ปี'}}</span>
+                                            <span *ngIf="calculateModel.typePayment == '0'">{{calculateModel.instalmentEnd
+                                                + ' งวด'}}</span>
+                                            <span *ngIf="calculateModel.typePayment == '1'">{{calculateModel.instalmentEnd
+                                                + ' ปี'}}</span>
                                         </div>
                                         <div class="col-md-6 m-b-sm">
                                             <strong>อัตราดอกเบี้ย/เดือน :</strong>
@@ -225,28 +252,12 @@
                                             {{calculateModel.nowVat}}%
                                         </div>
                                         <div class="col-md-6 m-b-sm">
-                                            <strong>I.R.R. :</strong>
-                                            {{calculateModel.irr | number:'1.2-2' }}
+                                            <strong>อัตราดอกเบี้ยต่อปี :</strong>
+                                            {{calculateModel.mrr | number:'1.2-2' }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="row form-group">
-                                <div class="col-md-12 pull-right text-right">
-                                    <h3 class="m-b-xs">เลขที่ใบจอง</h3>
-                                    <h3 class="no-margins text-navy" style="font-weight: normal">
-                                        {{bookingModel.bookingNo}}
-                                    </h3>
-                                </div>
-                            </div> -->
-                            <!-- <div class="ibox none-ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h4>ข้อมูลผู้จอง</h4>
-                                </div>
-                                <div class="ibox-content">
-                                    <app-ex-detail-customer></app-ex-detail-customer>
-                                </div>
-                            </div> -->
                             <div class="ibox none-ibox float-e-margins">
                                 <div class="ibox-title">
                                     <h4>ข้อมูลรถ</h4>
