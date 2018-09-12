@@ -43,8 +43,11 @@ export class ContractListCanceledComponent implements OnInit {
         });
     }
 
+    gotoEditContract(contractId: number) {
+        this.router.navigate(['credit/contract'], { queryParams: { mode: 'edit', contractId: contractId } });
+    }
+
     gotoDetail(contractId: number) {
         this.router.navigate(['credit/detail'], { queryParams: { contractId: contractId } })
     }
-
 }

@@ -97,11 +97,14 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.balanceNetPrice = contractItem ? contractItem.balanceNetPrice : 0.00;
     this.paymentModel.payNetPrice = this.paymentModel.balanceNetPrice;
     this.paymentModel.dueDate = contractItem ? contractItem.dueDate : null;
+    this.paymentModel.disCountPrice = 0.00;
+    this.paymentModel.disCountRate = 0.00;
+    this.paymentModel.totalPrice = this.paymentModel.payNetPrice;
   }
 
   ngAfterViewInit() {
     const number2Digit = document.querySelectorAll('input.number-2-digit');
-
+    const numberPercent = document.querySelectorAll('input.number-percent');
     Inputmask({
       'alias': 'numeric',
       'groupSeparator': ',',
@@ -129,7 +132,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   async onSubmit(value: any) {
     if (this.paymentModel.outstanding == 0) {
       return;
-    } 
+    }
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
 
@@ -172,5 +175,13 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   onPrint(value: any) {
     console.log(value);
+  }
+
+  changeDiscount() {
+    let payNetPrice = currencyToFloat(this.paymentModel.payNetPrice.toString());
+    let disCountPrice = currencyToFloat(this.paymentModel.disCountPrice.toString());
+
+    this.paymentModel.totalPrice = payNetPrice - disCountPrice;
+    this.paymentModel.disCountRate = (disCountPrice * 100) / payNetPrice;
   }
 }

@@ -64,11 +64,13 @@
     <label for="price" class="col-sm-2 control-label">ยอดจัด : </label>
     <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">ค่างวดชำระแล้ว : </label>
-    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท ({{(isPayModel.isPayTerm
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท
+      ({{(isPayModel.isPayTerm
       || 0)}} งวด)
     </strong>
     <label for="" class="col-sm-2 control-label">ค่างวดค้างชำระ : </label>
-    <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท ({{(isOutstandingModel.isOutstandingTerm
+    <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท
+      ({{(isOutstandingModel.isOutstandingTerm
       || 0)}} งวด)
     </strong>
   </div>
@@ -76,11 +78,10 @@
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <div class="row form-group">
-        <div class="col-md-7 b-r">
+        <div class="col-md-7">
           <table class="table table-striped table-bordered table-sm table-hover">
             <thead>
               <tr>
-                <!-- <th class="text-center"></th> -->
                 <th class="text-center">งวดที่</th>
                 <th class="text-center">กำหนดชำระ</th>
                 <th class="text-right">ยอดที่ต้องชำระ</th>
@@ -91,11 +92,6 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of contractItemModel;">
-                <!-- <td class="text-center">
-                  <a href="javascript:void(0);" class="btn btn-danger btn-xs" *ngIf="item.payDate" (click)="onCancel(item.contractItemId, item.instalmentNo)">
-                    <i class="fa fa-times"></i> ยกเลิก
-                  </a>
-                </td> -->
                 <td class="text-center">
                   <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
                   <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
@@ -109,26 +105,23 @@
             </tbody>
           </table>
         </div>
-        <div class="col-md-5">
-          <form autocomplete="off" action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+
+        <div class="col-md-5 b-l">
+          <form class="form-horizontal" autocomplete="off" action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
             <div class="row form-group">
-              <label for="" class="col-lg-4">วันที่ครบกำหนดชำระ :</label>
+              <label for="" class="col-lg-4 control-label">วันที่ครบกำหนดชำระ :</label>
               <strong class="col-lg-8">{{paymentModel.dueDate}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">วันที่รับชำระ :</label>
+              <label for="" class="col-lg-4 control-label">วันที่รับชำระ :</label>
               <strong class="col-lg-8">{{paymentModel.payDate}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">ผู้รับเงิน :</label>
+              <label for="" class="col-lg-4 control-label">ผู้รับเงิน :</label>
               <strong class="col-lg-8">{{user.adminName}}</strong>
             </div>
-            <!-- <div class="row form-group">
-              <label for="" class="col-md-4">ชำระ :</label>
-              <strong class="col-md-8">{{instalmentCount}} งวด</strong>
-            </div> -->
             <div class="row form-group">
-              <label for="" class="col-lg-4">ช่องทางการรับชำระ :</label>
+              <label for="" class="col-lg-4 control-label">ช่องทางการรับชำระ :</label>
               <div class="col-lg-8">
                 <div class="radio radio-info radio-inline">
                   <input type="radio" id="paymentType0" value="1" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
@@ -149,31 +142,50 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">ยอดคงค้าง :</label>
+              <label for="" class="col-lg-4 control-label">ยอดคงค้าง :</label>
               <div class="col-lg-4 text-right">
                 <input type="text" name="outstanding" [(ngModel)]="paymentModel.outstanding" readonly class="form-control form-control-sm number-2-digit">
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">ยอดชำระขั้นต่ำ :</label>
+              <label for="" class="col-lg-4 control-label">ยอดชำระขั้นต่ำ :</label>
               <div class="col-lg-4 text-right">
                 <input type="text" name="balanceNetPrice" [(ngModel)]="paymentModel.balanceNetPrice" readonly class="form-control form-control-sm number-2-digit">
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">ยอดชำระจริง :</label>
+              <label for="" class="col-lg-4 control-label">ยอดชำระ :</label>
               <div class="col-lg-4 text-right">
-                <input type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice" class="form-control form-control-sm number-2-digit">
+                <input (keyup)="changeDiscount()" type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice"
+                  class="form-control form-control-sm number-2-digit">
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">เอกสารอ้างอิง :</label>
+              <label for="" class="col-lg-4 control-label">ส่วนลด :</label>
+              <div class="col-lg-4 text-right">
+                <input (keyup)="changeDiscount()" required type="text" name="disCountPrice" [(ngModel)]="paymentModel.disCountPrice"
+                  class="form-control form-control-sm number-2-digit">
+              </div>
+              <div class="col-lg-4">
+                <strong>{{paymentModel.disCountRate | number:'1.2-2'}} %</strong>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-lg-4 control-label">ยอดชำระจริง :</label>
+              <div class="col-lg-4 text-right">
+                <input type="text" readonly required name="totalPrice" [(ngModel)]="paymentModel.totalPrice" class="form-control form-control-sm number-2-digit">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-lg-4 control-label">เอกสารอ้างอิง :</label>
               <div class="col-lg-8 text-right">
                 <input type="text" name="documentRef" [(ngModel)]="paymentModel.documentRef" class="form-control form-control-sm">
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4">บันทึกเพิ่มเติม :</label>
+              <label for="" class="col-lg-4 control-label">บันทึกเพิ่มเติม :</label>
               <div class="col-lg-8 text-right">
                 <textarea class="form-control form-control-sm" name="remark" [(ngModel)]="paymentModel.remark" rows="3"></textarea>
               </div>

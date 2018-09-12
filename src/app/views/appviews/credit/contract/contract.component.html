@@ -129,11 +129,14 @@
                                 <input type="text" class="form-control form-control-sm" required="required" readonly [(ngModel)]="contractModel.contractNo"
                                     name="contractNo">
                             </div>
-                            <label for="" class="control-label col-lg-2">สถานะสัญญา :</label>
+                            <label for="" class="control-label col-lg-2">
+                                    สถานะสัญญา :
+                                    <span class="required">*</span>
+                                </label>
                             <div class="col-lg-4">
-                                <label class="control-label text-danger">{{contractModel.statusDesc}}</label>
+                                <!-- <label class="control-label text-danger">{{contractModel.statusDesc}}</label> -->
                                 
-                                <!-- <ng-select readonly [items]="statusDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select> -->
+                                <ng-select required [items]="statusDropdown" bindValue="value" bindLabel="text" [(ngModel)]="contractModel.contractStatus" name="contractStatus"></ng-select>
                             </div>
                         </div>
 

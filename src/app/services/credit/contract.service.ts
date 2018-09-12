@@ -28,6 +28,16 @@ export class ContractService {
         return this.http.get<ContractListModel[]>(apiUrl);
     }
 
+    GetCloseContract() {
+        const apiUrl = `${this.url}/CloseContract`;
+        return this.http.get<ContractListModel[]>(apiUrl);
+    }
+
+    GetOtherContract() {
+        const apiUrl = `${this.url}/OtherContract`;
+        return this.http.get<ContractListModel[]>(apiUrl);
+    }
+
     getById(id: string) {
         const api = `${this.url}/GetById`;
         const params = { id };

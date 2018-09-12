@@ -26,6 +26,6 @@ export class ContractModel {
     public remark: string;
     public createBy: number;
     public createDate: Date;
-    public updateBy: number;
+    public updateBy: string;
     public updateDate: Date;
 }

@@ -14,6 +14,8 @@ import { ContractListCanceledComponent } from './views/appviews/credit/contract-
 import { RptSummaryCloseContractComponent } from './views/appviews/credit/rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
 import { PaymentComponent } from './views/appviews/credit/payment/payment.component';
+import { ContractListCloseContractComponent } from './views/appviews/credit/contract-list/contract-list-close-contract.component';
+import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -44,7 +46,9 @@ export const ROUTES: Routes = [
         path: 'contract-list',
         children: [
           { path: 'active', component: ContractListActiveComponent },
-          { path: 'canceled', component: ContractListCanceledComponent }
+          // { path: 'canceled', component: ContractListCanceledComponent },
+          { path: 'close-contract', component: ContractListCloseContractComponent },
+          { path: 'other-contract', component: ContractListOtherContractComponent }
         ]
       },
       { path: 'detail', component: ContractDetailComponent },

@@ -19,6 +19,9 @@ export class PaymentFG {
     updateBy: string;
     branchId: number;
     documentRef: string;
+    disCountPrice: number;
+    disCountRate: number;
+    totalPrice: number;
 }
 
 export class Contract {

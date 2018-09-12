@@ -35,6 +35,7 @@ export class ContractComponent implements OnInit, OnDestroy {
     customerFullName: string;
     userDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractMateDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    statusDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractHireDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGurantor1Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGurantor2Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
@@ -89,7 +90,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.relationDropdown = o.relationDropdown;
                     this.contractGroupDropdown = o.contractGroupDropdown;
                     this.contractTypeDropdown = o.contractTypeDropdown;
-                    // this.statusDropdown = o.statusDropdown;
+                    this.statusDropdown = o.statusDropdown;
                     this.zoneDropdown = o.zoneDropdown;
                     this.branchDropdown = o.branchDropdown;
 
@@ -127,10 +128,16 @@ export class ContractComponent implements OnInit, OnDestroy {
 
                     if (p.mode === 'create') {
                         this.contractModel.contractDate = (o.creditContract.contractDate == null && setDateMyDatepicker(new Date()));
+                        this._userService.currentData.subscribe(u => {
+                            this.contractModel.createdBy = u.id.toString();
+                            this.contractModel.checkedBy = u.id.toString();
+                            this.contractModel.approvedBy = u.id.toString();
+                            this.contractModel.keeperBy = u.id.toString();
+                        })
                     } else {
                         this.contractModel.contractDate = setDateMyDatepicker(new Date(this.contractModel.contractDate));
                         this._userService.currentData.subscribe(u => {
-                            this.contractModel.updateBy = u.id;
+                            this.contractModel.updateBy = u.id.toString();
                         });
                     }
                 });

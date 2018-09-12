@@ -32,6 +32,8 @@ import { PageloaderService } from '../pageloader/pageloader.component';
 import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { PaymentModule } from './payment/payment.module';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
+import { ContractListCloseContractComponent } from './contract-list/contract-list-close-contract.component';
+import { ContractListOtherContractComponent } from './contract-list/contract-list-other-contract.component';
 
 @NgModule({
   imports: [
@@ -65,7 +67,9 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
     ContractDetailComponent,
     ContractCanceledComponent,
     ExDetailFreeComponent,
-    RptSummaryCloseContractComponent
+    RptSummaryCloseContractComponent,
+    ContractListCloseContractComponent,
+    ContractListOtherContractComponent
   ],
   providers: [
     SellActivityService,

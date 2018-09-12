@@ -38,12 +38,12 @@
                         <div class="ibox-content">
                             <div class="row">
                                 <div class="col-md-6 m-b-sm">
-                                    <strong>ผู้เช่าซื้อ :</strong>
-                                    {{contractDetailModel.contractHire}}
+                                    <strong>ผู้ใช้จอง :</strong>
+                                    {{contractDetailModel.contractBooking}}
                                 </div>
                                 <div class="col-md-6 m-b-sm">
-                                    <strong>ผู้ใช้รถ :</strong>
-                                    {{contractDetailModel.contractUser}}
+                                    <strong>ผู้เช่าซื้อ :</strong>
+                                    {{contractDetailModel.contractHire}}
                                 </div>
                                 <div class="col-md-6 m-b-sm">
                                     <strong>สถานะสัญญา :</strong>
@@ -60,18 +60,19 @@
                     <form action="" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
                         <div class="ibox none-ibox float-e-margins">
                             <div class="ibox-title">
-                                <h4>ยกเลิกสัญญาเช่าซื้อ</h4>
+                                <h4>บอกเลิกสัญญาเช่าซื้อ</h4>
                             </div>
                             <div class="ibox-content">
                                 <input type="hidden" name="contractId" [(ngModel)]="contractDetailModel.contractId">
                                 <input type="hidden" name="updateBy" [(ngModel)]="userId">
                                 <div class="row form-group">
-                                    <label for="" class="control-label col-md-4">
-                                        สาเหตุการยกเลิก :
+                                    <label for="" class="control-label col-md-3">
+                                        สาเหตุ :
                                         <span class="required">*</span>
                                     </label>
-                                    <div class="col-md-8">
-                                        <textarea name="remark" ngModel cols="30" rows="4" class="form-control" required></textarea>
+                                    <div class="col-md-9">
+                                        <textarea name="remark" ngModel cols="30" rows="4" class="form-control"
+                                            required></textarea>
                                     </div>
                                 </div>
                             </div>

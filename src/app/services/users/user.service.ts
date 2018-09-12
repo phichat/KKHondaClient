@@ -7,6 +7,7 @@ export class UserService {
   private user = [
     { name: 'admin_name', value: 'Admin+001' },
     { name: 'branch', value: '1' },
+    { name: 'id', value: '9' },
     { name: 'menu', value: 'open' },
     { name: 'name', value: '001' },
     { name: 'user_type', value: '2' }

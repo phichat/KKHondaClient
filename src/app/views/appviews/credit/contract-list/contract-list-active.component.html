@@ -25,7 +25,7 @@
                         <th style="width: 150px;">สถานะสัญญา</th>
                         <th style="width: 100px;">รายละเอียด</th>
                         <th style="width: 100px;">แก้ไขสัญญา</th>
-                        <th style="width: 100px;"></th>
+                        <!-- <th style="width: 100px;"></th> -->
                         <th style="width: 100px;"></th>
                         <th style="width: 100px;">วันที่ทำสัญญา</th>
                         <th style="width: 150px;">ผู้เช่าซื้อ</th>
@@ -44,45 +44,40 @@
                 <tbody>
                     <tr *ngFor="let item of contractListModel">
                         <td>{{item.contractNo}}</td>
-                        <td [ngClass]="{'text-info': item.contractStatus == 30, 
-                        'text-warning': item.contractStatus == 31}">{{item.statusDesc}}</td>
+                        <td [ngClass]="{'text-navy': item.contractStatus == 32, 
+                        'text-warning': item.contractStatus == 31,
+                        'text-success': item.contractStatus == 30 }">{{item.statusDesc}}</td>
                         <td>
                             <a class="btn btn-info btn-xs" (click)="gotoDetail(item.contractId)">
                                 <i class="fa fa-file-text-o"></i>
                                 รายละเอียด</a>
                         </td>
-                        <td>
-                            <a *ngIf="item.contractStatus == 32" (click)="gotoCreateContract(item.contractId)" class="btn btn-success btn-xs">
+                        <td [ngSwitch]="item.contractStatus">
+                            <a *ngSwitchCase="32" (click)="gotoCreateContract(item.contractId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 อนุมัติสัญญา
                             </a>
-                            <a *ngIf="item.contractStatus !== 32" (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
+                            <a *ngSwitchDefault (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขสัญญา
                             </a>
                         </td>
-                        <td>
-                            <a *ngIf="item.contractStatus == 31; else other" (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-xs">
+                        <td [ngSwitch]="item.contractStatus">
+                            <a *ngSwitchCase="31" (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-outline btn-xs">
                                 <i class="fa fa-money"></i>
                                 ชำระค่างวด
                             </a>
-                            <ng-template #other>
-                                <a (click)="gotoPayment(item.contractId)" class="btn btn-success btn-xs">
-                                    <i class="fa fa-print"></i>
-                                    พิมพ์ใบเสร็จรับเงิน
-                                </a>
-                            </ng-template>
-                        </td>
-                        <td>
-                            <a *ngIf="item.contractStatus == 32" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                            <a *ngSwitchCase="32" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขค่างวด
                             </a>
-                            <a *ngIf="item.contractStatus !== 32" class="btn btn-danger btn-xs" (click)="gotoCanceled(item.contractId)">
-                                <i class="fa fa-times"></i>
-                                ยกเลิกสัญญา
-                            </a>
                         </td>
+                        <!-- <td>
+                            <a class="btn btn-danger btn-xs" (click)="gotoCanceled(item.contractId)">
+                                <i class="fa fa-times"></i>
+                                บอกเลิกสัญญา
+                            </a>
+                        </td> -->
                         <td>{{item.contractDate}}</td>
                         <td>{{item.hireFullName}}</td>
                         <td>{{item.hireIdCard}}</td>
