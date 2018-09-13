@@ -2,11 +2,21 @@ import { Injectable } from '@angular/core';
 import { ModelUser } from '../../models/users';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { getCookie, appConfig } from '../../app.config';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
   private user = ['admin_name', 'branch', 'id', 'name', 'user_type'];
+
+  private __user = [
+    { name: 'admin_name', value: 'Admin+001' },
+    { name: 'branch', value: '1' },
+    { name: 'id', value: '9' },
+    { name: 'menu', value: 'open' },
+    { name: 'name', value: '001' },
+    { name: 'user_type', value: '2' }
+  ];
+
 
   private url = `${appConfig.apiUrl}/Users`;
 
@@ -15,6 +25,10 @@ export class UserService {
   // currentData = this.dataSource.asObservable();
 
   constructor(private http: HttpClient) {
+    this.__user.map(async x => {
+      await this.setCookie(x.name, x.value);
+    })
+
     if (getCookie('id')) {
       const id = getCookie('id');
       this.getUserById(id).then(x => this.changeData(x));
@@ -26,7 +40,7 @@ export class UserService {
   }
 
   signOut() {
-    this.user.map(x => this.deleteCookie(x));
+    this.user.map(async x => await this.deleteCookie(x));
     window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
   }
 
@@ -38,12 +52,12 @@ export class UserService {
 
   }
 
-  // private setCookie(cname, cvalue) {
-  //   let d = new Date();
-  //   d.setTime(d.getTime() + 60 * 60 * 24 * 1000);
-  //   const expires = "expires=" + d.toUTCString();
-  //   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  // }
+  private setCookie(cname, cvalue) {
+    let d = new Date();
+    d.setTime(d.getTime() + 60 * 60 * 24 * 1000);
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
 
   async  getUserById(id: string): Promise<ModelUser> {
     const apiURL = `${this.url}/GetUserById`;
