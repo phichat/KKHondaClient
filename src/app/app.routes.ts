@@ -16,6 +16,7 @@ import { BookingComponent } from './views/dashboards/booking/booking.component';
 import { PaymentComponent } from './views/appviews/credit/payment/payment.component';
 import { ContractListCloseContractComponent } from './views/appviews/credit/contract-list/contract-list-close-contract.component';
 import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
+import { GuardGuard } from 'app/guards/guard.guard';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -34,27 +35,27 @@ export const ROUTES: Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
       { path: 'starterview', component: StarterViewComponent },
-      { path: 'login', component: LoginComponent },
+      // { path: 'login', component: LoginComponent },
     ]
   },
   {
     path: 'credit', component: BasicLayoutComponent,
     children: [
-      { path: 'contract', component: ContractComponent },
-      { path: 'contract-canceled', component: ContractCanceledComponent },
+      { path: 'contract', component: ContractComponent, canActivate: [GuardGuard]},
+      { path: 'contract-canceled', component: ContractCanceledComponent, canActivate: [GuardGuard] },
       {
         path: 'contract-list',
         children: [
-          { path: 'active', component: ContractListActiveComponent },
+          { path: 'active', component: ContractListActiveComponent, canActivate: [GuardGuard] },
           // { path: 'canceled', component: ContractListCanceledComponent },
-          { path: 'close-contract', component: ContractListCloseContractComponent },
-          { path: 'other-contract', component: ContractListOtherContractComponent }
+          { path: 'close-contract', component: ContractListCloseContractComponent, canActivate: [GuardGuard] },
+          { path: 'other-contract', component: ContractListOtherContractComponent, canActivate: [GuardGuard] }
         ]
       },
-      { path: 'detail', component: ContractDetailComponent },
-      { path: 'calculate', component: CalculateComponent },
-      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent },
-      { path: 'payment/:id', component: PaymentComponent }
+      { path: 'detail', component: ContractDetailComponent, canActivate: [GuardGuard] },
+      { path: 'calculate', component: CalculateComponent, canActivate: [GuardGuard] },
+      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent, canActivate: [GuardGuard] },
+      { path: 'payment/:id', component: PaymentComponent, canActivate: [GuardGuard] }
     ]
   },
 

@@ -16,7 +16,7 @@
   <div class="col-lg-2 text-right pull-right">
     <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrint">
       <i class="fa fa-print"></i>
-      พิมพ์ใบเสร็จรับเงิน
+      พิมพ์
     </button>
   </div>
 </div>
@@ -121,7 +121,7 @@
             </div>
             <div class="row form-group">
               <label for="" class="col-lg-4 control-label">ผู้รับเงิน :</label>
-              <strong class="col-lg-8">{{user.adminName}}</strong>
+              <strong class="col-lg-8" *ngIf="asyncUser | async; let user">{{user.fullName}}</strong>
             </div>
             <div class="row form-group">
               <label for="" class="col-lg-4 control-label">ช่องทางการรับชำระ :</label>
@@ -220,11 +220,26 @@
             </button>
             <!-- <i class="fa fa-clock-o modal-icon"></i> -->
             <h4 class="modal-title">พิมพ์</h4>
+            <p>ใบเสร็จรับเงิน - ใบกำกับภาษี</p>
           </div>
 
           <div class="modal-body">
             <input type="hidden" name="contractId" [(ngModel)]="contractModel.contractId">
             <div class="row">
+              <div class="col-lg-12">
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" value="false" id="rpt1" name="receipt" ngModel>
+                  <label for="rpt1">
+                    <strong>ใบเสร็จรับเงิน</strong>
+                  </label>
+                </div>
+                <div class="checkbox checkbox-info">
+                  <input type="checkbox" value="false" id="rpt2" name="invoice" ngModel>
+                  <label for="rpt2">
+                    <strong>ใบกำกับภาษี</strong>
+                  </label>
+                </div>
+              </div>
               <label for="" class="col-lg-12">เลือกงวดที่รับชำระ :</label>
               <div class="col-lg-12">
                 <select name="instalmentNo" class="form-control form-control-sm" required ngModel>

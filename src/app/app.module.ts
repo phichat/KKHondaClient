@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PageLoadWarpperService } from './services/common/page-load-warpper.service';
 import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
 import { BookingModule } from './views/dashboards/booking/booking.module';
+import { GuardGuard } from './guards/guard.guard';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { BookingModule } from './views/dashboards/booking/booking.module';
     BookingModule
   ],
   providers: [
+    GuardGuard,
     { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
   bootstrap: [AppComponent]

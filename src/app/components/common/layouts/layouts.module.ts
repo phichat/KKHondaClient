@@ -13,6 +13,7 @@ import {FooterComponent} from "../footer/footer.component";
 import {TopNavbarComponent} from "../topnavbar/topnavbar.component";
 import {TopNavigationNavbarComponent} from "../topnavbar/topnavigationnavbar.component";
 import { PageLoadWarpperComponent } from "../page-load-warpper/page-load-warpper.component";
+import { UserService } from "../../../services/users";
 
 
 @NgModule({
@@ -40,6 +41,9 @@ import { PageLoadWarpperComponent } from "../page-load-warpper/page-load-warpper
     TopNavbarComponent,
     TopNavigationNavbarComponent
   ],
+  providers: [
+    UserService
+  ]
 })
 
 export class LayoutsModule {}

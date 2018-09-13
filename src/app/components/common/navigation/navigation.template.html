@@ -2,34 +2,23 @@
     <div class="sidebar-collapse">
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
-                <div class="profile-element" dropdown>
-                    <!-- <img alt="image" class="img-circle" src="assets/images/profile_small.jpg"> -->
-                    <a dropdownToggle>
-                        <span class="block m-t-xs">
-                            <strong class="font-bold">Super Admin</strong>
-                        </span>
-                        <span class="text-muted text-xs block">Super admin
-                            <b class="caret"></b>
+                <div class="dropdown profile-element"> <span>
+                    </span>
+                    <a class="dropdown-toggle" href="javaScript:void(0)">
+                        <span class="clear">
+                            <span class="block m-t-xs" *ngIf="asyncUser | async; let user"> 
+                                <strong class="font-bold">{{user.adminName}}</strong><br>
+                                <span class="block m-t-xs"> 
+                                    <strong class="font-bold">{{user.name}}</strong><br>
+                                    <strong class="font-bold">{{user.fullName}}</strong>
+                                </span>
+                                <span class="text-muted text-xs block">&nbsp;</span>
+                            </span>
                         </span>
                     </a>
-                    <ul class="animated fadeInRight dropdown-menu" *dropdownMenu>
-                        <li>
-                            <a href="javaScript:void(0);">Profile</a>
-                        </li>
-                        <li>
-                            <a href="javaScript:void(0);">Contacts</a>
-                        </li>
-                        <li>
-                            <a href="javaScript:void(0);">Mailbox</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="javaScript:void(0);">Logout</a>
-                        </li>
-                    </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    <span class="fa fa-tasks login_icon"></span>
                 </div>
             </li>
 

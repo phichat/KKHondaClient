@@ -20,6 +20,7 @@ declare var toastr: any;
 export class PaymentComponent implements OnInit, AfterViewInit {
 
   user = new ModelUser();
+  asyncUser: any;
 
   contractItemModel: ContractItem[] = [];
   contractModel: Contract = new Contract();
@@ -34,7 +35,6 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     private pageloader: PageloaderService,
     private _userService: UserService
   ) {
-    this._userService.currentData.subscribe(u => this.user = u);
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -45,7 +45,13 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
     this._activatedRoute.params.subscribe(async param => {
       if (param['id']) {
-        await this._paymentService.GetByContractId(param['id']).subscribe(item => this.loadCreditPayment(item))
+        await this._paymentService.GetByContractId(param['id']).subscribe(item => this.loadCreditPayment(item));
+
+        this.asyncUser = this._userService.currentData;
+        this._userService.currentData.subscribe(u => {
+          this.user = u;
+        });
+
       };
     })
 
@@ -104,7 +110,6 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const number2Digit = document.querySelectorAll('input.number-2-digit');
-    const numberPercent = document.querySelectorAll('input.number-percent');
     Inputmask({
       'alias': 'numeric',
       'groupSeparator': ',',

@@ -6,7 +6,7 @@ export class ModelUser {
     public adminName: string;
     public branch: number;
     public id: number;
-    public menu: string;
     public name: string;
     public userType: number;
+    public fullName: string;
 };

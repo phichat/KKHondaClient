@@ -1,46 +1,55 @@
 import { Injectable } from '@angular/core';
 import { ModelUser } from '../../models/users';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { getCookie, appConfig } from '../../app.config';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
-  private user = [
-    { name: 'admin_name', value: 'Admin+001' },
-    { name: 'branch', value: '1' },
-    { name: 'id', value: '9' },
-    { name: 'menu', value: 'open' },
-    { name: 'name', value: '001' },
-    { name: 'user_type', value: '2' }
-  ];
+  private user = ['admin_name', 'branch', 'id', 'name', 'user_type'];
 
-  private dataSource = new BehaviorSubject<ModelUser>(
-    {
-      adminName: 'Admin 001',
-      branch: 1,
-      id: 9,
-      menu: 'open',
-      name: '001',
-      userType: 2
+  private url = `${appConfig.apiUrl}/Users`;
+
+
+  currentData = new BehaviorSubject<ModelUser>(null);
+  // currentData = this.dataSource.asObservable();
+
+  constructor(private http: HttpClient) {
+    if (getCookie('id')) {
+      const id = getCookie('id');
+      this.getUserById(id).then(x => this.changeData(x));
     }
-  );
-  currentData = this.dataSource.asObservable();
-
-  constructor() {
-    const expires = new Date();
-    this.user.map(item => {
-      this.setCookie(item.name, item.value);
-    });
   }
 
   changeData(data: ModelUser) {
-    this.dataSource.next(data);
+    this.currentData.next(data);
   }
 
-  private setCookie(cname, cvalue) {
-    let d = new Date();
-    d.setTime(d.getTime() + 60 * 60 * 24 * 1000);
-    const expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  signOut() {
+    this.user.map(x => this.deleteCookie(x));
+    window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
+  }
+
+  private deleteCookie(cname) {
+    var d = new Date(); //Create an date object
+    d.setTime(d.getTime() - (1000 * 60 * 60 * 24)); //Set the time to the past. 1000 milliseonds = 1 second
+    var expires = "expires=" + d.toUTCString(); //Compose the expirartion date
+    window.document.cookie = cname + "=" + "; " + expires;//Set the cookie with name and the expiration date
+
+  }
+
+  // private setCookie(cname, cvalue) {
+  //   let d = new Date();
+  //   d.setTime(d.getTime() + 60 * 60 * 24 * 1000);
+  //   const expires = "expires=" + d.toUTCString();
+  //   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  // }
+
+  async  getUserById(id: string): Promise<ModelUser> {
+    const apiURL = `${this.url}/GetUserById`;
+    const params = { id };
+
+    return await this.http.get<ModelUser>(apiURL, { params }).toPromise();
   }
 
 }  
