@@ -42,7 +42,7 @@ export class ContractCanceledComponent implements OnInit {
         this._activatedRoute.queryParams.subscribe(o => {
             if (o.contractId) {
                 this._credit.Detail(o.contractId).subscribe(p => {
-                    this.statusDropdown = p.statusDropdown.filter(i => i.value == '27' || i.value == '33');
+                    // this.statusDropdown = p.statusDropdown.filter(i => i.value == '27' || i.value == '33');
                     p.creditContractDetail.contractDate = setLocalDate(p.creditContractDetail.contractDate);
                     this.contractDetailModel = p.creditContractDetail;
                     this.bookingModel = p.booking;
@@ -54,9 +54,9 @@ export class ContractCanceledComponent implements OnInit {
     }
 
     onSubmit(f: any) {
-        if (confirm('ยืนยันการบอกเลิกสัญญาเช่าซื้อหรือไม่ ?')) {
+        if (confirm('ยืนยันการยกเลิกสัญญาเช่าซื้อหรือไม่ ?')) {
             this._credit.Termination(f).subscribe(p => {
-                toastr.success('บอกเลิกสัญญาเช่าซื้อ สำเร็จ!');
+                toastr.success('ยกเลิกสัญญาเช่าซื้อ สำเร็จ!');
                 this.router.navigate(['credit/contract-list/active']);
             }, (err: HttpErrorResponse) => {
                 toastr.error(err.statusText);

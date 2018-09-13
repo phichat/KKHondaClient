@@ -209,7 +209,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
-        this.model.remain = this.model.netPrice + this.model.interestPrice;
+        this.model.remain = (this.model.netPrice + this.model.interestPrice);
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
         const interestP = this.model.remain / this.model.instalmentEnd;

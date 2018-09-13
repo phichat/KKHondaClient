@@ -97,7 +97,10 @@
                   <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
                 </td>
                 <td class="text-center">{{item.dueDate}}</td>
-                <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
+                <td class="text-right" [ngSwitch]="item.payDate">
+                  <span *ngSwitchCase="null"></span>
+                  {{item.balanceNetPrice | number:'1.2-2'}}
+                </td>
                 <td class="text-center">{{item.taxInvoiceNo}}</td>
                 <td class="text-center">{{item.payDate}}</td>
                 <td class="text-right">{{item.payNetPrice | number:'1.2-2'}}</td>

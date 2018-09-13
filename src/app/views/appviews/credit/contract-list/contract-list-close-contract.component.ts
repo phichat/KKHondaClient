@@ -30,6 +30,7 @@ export class ContractListCloseContractComponent implements OnInit {
 
       o.map(item => {
         item.contractDate = setLocalDate(item.contractDate);
+        item.endContractDate = setLocalDate(item.endContractDate);
       })
 
       this.contractListModel = o;

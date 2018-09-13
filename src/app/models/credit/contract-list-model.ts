@@ -9,7 +9,7 @@ export class ContractListModel {
     public contractPoint: string;
     public contractGroup: string;
     public contractHire: string;
-    public contractUser: string;
+    public contractBooking: string;
     public contractGurantor1: string;
     public contractGurantor2: string;
     public createdBy: string;
@@ -19,6 +19,7 @@ export class ContractListModel {
     public statusDesc: string;
     public contractStatus: number;
     public refNo: string;
+    public endContractDate: any;
     hireFullName: string;
     hireIdCard: string;
     brand: string;
