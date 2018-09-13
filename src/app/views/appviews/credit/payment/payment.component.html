@@ -124,7 +124,9 @@
               <strong class="col-lg-8" *ngIf="asyncUser | async; let user">{{user.fullName}}</strong>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4 control-label">ช่องทางการรับชำระ :</label>
+              <label for="" class="col-lg-4 control-label">ช่องทางการรับชำระ :
+                <span class="required">*</span>
+              </label>
               <div class="col-lg-8">
                 <div class="radio radio-info radio-inline">
                   <input type="radio" id="paymentType0" value="1" required name="paymentType" [(ngModel)]="paymentModel.paymentType">
@@ -157,7 +159,9 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-lg-4 control-label">ยอดชำระ :</label>
+              <label for="" class="col-lg-4 control-label">ยอดชำระ :
+                <span class="required">*</span>
+              </label>
               <div class="col-lg-4 text-right">
                 <input (keyup)="changeDiscount()" type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice"
                   class="form-control form-control-sm number-2-digit">
@@ -170,12 +174,17 @@
                   class="form-control form-control-sm number-2-digit">
               </div>
               <div class="col-lg-4">
-                <strong>{{paymentModel.disCountRate | number:'1.2-2'}} %</strong>
+                <div class="input-group">
+                  <input type="text" name="disCountRate" value="{{paymentModel.disCountRate}}" readonly class="form-control form-control-sm number-2-digit">
+                  <span class="input-group-addon">%</span>
+                </div>
               </div>
             </div>
 
             <div class="row form-group">
-              <label for="" class="col-lg-4 control-label">ยอดชำระจริง :</label>
+              <label for="" class="col-lg-4 control-label">ยอดชำระจริง :
+                <span class="required">*</span>
+              </label>
               <div class="col-lg-4 text-right">
                 <input type="text" readonly required name="totalPrice" [(ngModel)]="paymentModel.totalPrice" class="form-control form-control-sm number-2-digit">
               </div>

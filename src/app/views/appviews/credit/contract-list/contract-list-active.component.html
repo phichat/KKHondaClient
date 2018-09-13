@@ -25,7 +25,7 @@
                         <th style="width: 150px;">สถานะสัญญา</th>
                         <th style="width: 100px;">รายละเอียด</th>
                         <th style="width: 100px;">แก้ไขสัญญา</th>
-                        <!-- <th style="width: 100px;"></th> -->
+                        <th style="width: 100px;"></th>
                         <th style="width: 100px;"></th>
                         <th style="width: 100px;">วันที่ทำสัญญา</th>
                         <th style="width: 150px;">ผู้เช่าซื้อ</th>
@@ -72,12 +72,12 @@
                                 แก้ไขค่างวด
                             </a>
                         </td>
-                        <!-- <td>
-                            <a class="btn btn-danger btn-xs" (click)="gotoCanceled(item.contractId)">
-                                <i class="fa fa-times"></i>
-                                บอกเลิกสัญญา
+                        <td>
+                            <a class="btn btn-warning btn-xs" (click)="gotoCanceled(item.contractId)">
+                                <i class="fa fa-pencil"></i>
+                                ยกเลิกรายการ
                             </a>
-                        </td> -->
+                        </td>
                         <td>{{item.contractDate}}</td>
                         <td>{{item.hireFullName}}</td>
                         <td>{{item.hireIdCard}}</td>
