@@ -82,21 +82,25 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             } else if (p.mode === 'create' && p.bookingId) {
                 this.model.bookingId = p.bookingId;
                 await this.onLoadBooking(p.bookingId);
-                await this._userService.currentData.subscribe(u => {
-                    this.model.createBy = u.id;
-                    this.contractModel.branchId = u.branch;
-                    this.contractModel.bookingId = p.bookingId;
-                    this.contractModel.createBy = u.id;
-                    this.contractModel.contractStatus = 32; // สัญญาใหม่
-                    this.model.typePayment = '0';
-                    this.model.deposit = 0;
-                    this.model.depositPrice = 0;
-                    this.model.dueDate = 5;
-                    this.model.firstPayment = setDateMyDatepicker(new Date());
-                    this.model.interest = 2;
-                    this.model.remain = 0;
-                    this.model.sellTypeId = 4;
-                    this.model.sellAcitvityId = 25;
+
+                this.contractModel.bookingId = p.bookingId;
+                this.contractModel.contractStatus = 32; // สัญญาใหม่
+                this.model.typePayment = '0';
+                this.model.deposit = 0;
+                this.model.depositPrice = 0;
+                this.model.dueDate = 5;
+                this.model.firstPayment = setDateMyDatepicker(new Date());
+                this.model.interest = 2;
+                this.model.remain = 0;
+                this.model.sellTypeId = 4;
+                this.model.sellAcitvityId = 25;
+
+                this._userService.currentData.subscribe(u => {
+                    if (u) {
+                        this.model.createBy = u.id;
+                        this.contractModel.branchId = u.branch;
+                        this.contractModel.createBy = u.id;
+                    }
                 });
             }
             await this._userService.currentData.subscribe(u => this.userModel = u);
@@ -130,7 +134,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
-    selectItemEnging(e: any){
+    selectItemEnging(e: any) {
         this.model.engineNo = e ? e.engineNo : null;
         this.model.frameNo = e ? e.frameNo : null;
     }
