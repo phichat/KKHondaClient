@@ -252,8 +252,8 @@
               <label for="" class="col-lg-5">งวดที่รับชำระ :</label>
               <div class="col-lg-7">
                 <select name="contractItemId" class="form-control form-control-sm" required ngModel>
-                  <option *ngFor="let item of contractItemModel" [value]="item.instalmentNo" [disabled]="item.payDate == null">
-                    <span *ngIf="item.contractItemId == 0">เงินดาวน์</span>
+                  <option *ngFor="let item of contractItemModel" [value]="item.contractItemId" [disabled]="item.payDate == null">
+                    <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
                     <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
                   </option>
                 </select>
