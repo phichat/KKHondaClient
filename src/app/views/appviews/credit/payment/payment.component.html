@@ -233,17 +233,17 @@
           </div>
 
           <div class="modal-body">
-            <input type="hidden" name="contractId" [(ngModel)]="contractModel.contractId">
+            <input type="hidden" name="bookingId" [(ngModel)]="contractModel.bookingId">
             <div class="row">
               <div class="col-lg-12 m-b-md">
                 <div class="checkbox checkbox-info checkbox-inline">
-                  <input type="checkbox" value="false" id="rpt1" name="receipt" ngModel>
+                  <input type="checkbox" value="receipt" id="rpt1" name="receipt" ngModel>
                   <label for="rpt1">
                     <strong>ใบเสร็จรับเงิน</strong>
                   </label>
                 </div>
                 <div class="checkbox checkbox-info checkbox-inline">
-                  <input type="checkbox" value="false" id="rpt2" name="invoice" ngModel>
+                  <input type="checkbox" value="invoice" id="rpt2" name="invoice" ngModel>
                   <label for="rpt2">
                     <strong>ใบกำกับภาษี</strong>
                   </label>
@@ -251,9 +251,9 @@
               </div>
               <label for="" class="col-lg-5">งวดที่รับชำระ :</label>
               <div class="col-lg-7">
-                <select name="instalmentNo" class="form-control form-control-sm" required ngModel>
+                <select name="contractItemId" class="form-control form-control-sm" required ngModel>
                   <option *ngFor="let item of contractItemModel" [value]="item.instalmentNo" [disabled]="item.payDate == null">
-                    <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
+                    <span *ngIf="item.contractItemId == 0">เงินดาวน์</span>
                     <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
                   </option>
                 </select>

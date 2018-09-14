@@ -179,7 +179,18 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   }
 
   onPrint(value: any) {
-    console.log(value);
+
+    if (value.invoice) {
+      window.open(`http://203.154.126.61/KK-Honda-Web/backoffice/php/print_tax_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`)
+
+    }
+
+    if (value.receive) {
+      window.open(`http://203.154.126.61/KK-Honda-Web/backoffice/php/print_receive_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`);
+    }
+    // console.log(value);
+    // http://203.154.126.61/KK-Honda-Web/backoffice/php/print_receive_3.php?booking_id=1149&contract_item_id=1056
+    // http://203.154.126.61/KK-Honda-Web/backoffice/php/print_tax_3.php?booking_id=1149&contract_item_id=1056
   }
 
   changeDiscount() {
