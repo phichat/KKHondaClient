@@ -71,7 +71,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     let dueDate: Date = firstPay;
 
                     if (i > 0) {
-                        const month = (firstPay.getMonth()) + j;
+                        const month = firstPay.getDate() > 20 ? (firstPay.getMonth() + 1) + j : firstPay.getMonth() + j;
                         const year = (firstPay.getFullYear() + j);
                         d.setDate(p.dueDate);
 

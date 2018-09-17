@@ -31,25 +31,16 @@
                                 ค้นหาหมายเลขรถ :
                             </label>
                             <div class="col-md-8">
-                                <ng-select 
-                                    [items]="engineDropdown"
-                                    [typeahead]="engineTypeahead"
-                                    [(ngModel)]="model.logReceiveId"
-                                    (change)="selectItemEnging($event)"
-                                    name="logReceiveId"
-                                    dropdownPosition="auto"
-                                    bindLabel="text"
-                                    bindValue="value"
-                                    labelForId="model"
-                                    [virtualScroll]="true"
-                                    placeholder="ค้นหาหมายเลขรถ">
+                                <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId" (change)="selectItemEnging($event)"
+                                    name="logReceiveId" dropdownPosition="auto" bindLabel="text" bindValue="value" labelForId="model"
+                                    [virtualScroll]="true" placeholder="ค้นหาหมายเลขรถ">
                                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
                                         <p class="m-b-xs !important">
                                             <strong>โมเดล: </strong>
                                             <span [ngOptionHighlight]="search">{{item.model}}</span>
                                         </p>
-                                        <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>   
-                                        <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span> 
+                                        <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
+                                        <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
                                         <hr class="hr-dashed m-t-xs m-b-xs">
                                     </ng-template>
                                 </ng-select>
@@ -114,17 +105,6 @@
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
-                                ราคาสินค้าคงเหลือ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number" readonly>
-
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
                                 รูปแบบการชำระ :
                                 <span class="required">*</span>
                             </label>
@@ -137,6 +117,45 @@
                                     <input type="radio" id="typePayment1" value=1 required [(ngModel)]="model.typePayment" name="typePayment" (change)="instalmentCalculate()">
                                     <label for="typePayment1">ชำระรายปี</label>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                การคืนเงินมัดจำ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="instalmentCalculate()">
+                                    <label for="returnDepostit0">คืนเงินมัดจำ</label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="instalmentCalculate()">
+                                    <label for="returnDepostit1">ใช้เงินจองเป็นเงินดาวน์</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                เงินมัดจำ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" readonly [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit" (keyup)="onChangeDeposit(); instalmentCalculate();"
+                                    min="0.00">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ราคาสินค้าคงเหลือ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number" readonly>
+
                             </div>
                         </div>
 
@@ -155,7 +174,7 @@
 
                         <div class="row form-group">
                             <label for="" class="col-md-4 control-label">
-                                ระยะเวลาผ่อนชำระ
+                                ระยะเวลาผ่อนชำระ :
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
@@ -164,6 +183,16 @@
                                     <span *ngIf="model.typePayment == '0'" class="input-group-addon">&nbsp;งวด</span>
                                     <span *ngIf="model.typePayment == '1'" class="input-group-addon">&nbsp;&nbsp;ปี&nbsp;&nbsp;</span>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                ความถี่ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" required class="form-control number" readonly>
                             </div>
                         </div>
 
