@@ -8,6 +8,7 @@ export class CalculateModel {
     public sellAcitvityId: number;       // กิจกรรมการขาย
     public deposit: number;              // เงินดาวน์ %
     public depositPrice: number;         // เงินดาวน์
+    public bookDeposit: number;          // เงินมัดจำ
     public instalmentEnd: number;        // จำนวนงวด
     public instalmentPriceExtVat: number;
     public instalmentPrice: number;      // ค่างวด

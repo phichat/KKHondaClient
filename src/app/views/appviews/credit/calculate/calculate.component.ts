@@ -37,13 +37,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     engineTypeahead = new EventEmitter<string>();
     engineDropdown: Array<DropdownTemplate> = new Array<DropdownTemplate>();
 
-    // engine: any[] = [
-    //     { model: 'abcdefg-1234', engineNo: 'abcdefg-1234', frameNo: 'abcdefg-1234' },
-    //     { model: 'abcdefg-5678', engineNo: 'abcdefg-5678', frameNo: 'abcdefg-5678' },
-    //     { model: 'abcdefg-9012', engineNo: 'abcdefg-9012', frameNo: 'abcdefg-9012' },
-    //     { model: 'abcdefg-3456', engineNo: 'abcdefg-3456', frameNo: 'abcdefg-3456' }
-    // ]
-
     dueDate = [
         { value: 5, text: '5 ของเดือน' },
         { value: 10, text: '10 ของเดือน' },

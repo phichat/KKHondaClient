@@ -31,25 +31,17 @@
                                 ค้นหาหมายเลขรถ :
                             </label>
                             <div class="col-md-8">
-                                <ng-select 
-                                    [items]="engineDropdown"
-                                    [typeahead]="engineTypeahead"
-                                    [(ngModel)]="model.logReceiveId"
-                                    (change)="selectItemEnging($event)"
-                                    name="logReceiveId"
-                                    dropdownPosition="auto"
-                                    bindLabel="text"
-                                    bindValue="value"
-                                    labelForId="model"
-                                    [virtualScroll]="true"
+                                <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
+                                    (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto"
+                                    bindLabel="text" bindValue="value" labelForId="model" [virtualScroll]="true"
                                     placeholder="ค้นหาหมายเลขรถ">
                                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
                                         <p class="m-b-xs !important">
                                             <strong>โมเดล: </strong>
                                             <span [ngOptionHighlight]="search">{{item.model}}</span>
                                         </p>
-                                        <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>   
-                                        <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span> 
+                                        <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
+                                        <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
                                         <hr class="hr-dashed m-t-xs m-b-xs">
                                     </ng-template>
                                 </ng-select>
@@ -61,7 +53,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control" readonly>
+                                <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control"
+                                    readonly>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -70,7 +63,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control" readonly>
+                                <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control"
+                                    readonly>
                             </div>
                         </div>
                         <hr class="hr-dashed">
@@ -81,7 +75,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice" class="form-control number" readonly>
+                                <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice"
+                                    class="form-control number" readonly>
 
                             </div>
                         </div>
@@ -93,7 +88,8 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control number" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
+                                    <input type="text" required [(ngModel)]="model.depositPrice" name="depositPrice"
+                                        class="form-control number" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
                                     <span class="input-group-addon">บาท</span>
                                 </div>
                             </div>
@@ -105,10 +101,19 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit" (keyup)="onChangeDeposit(); instalmentCalculate();"
-                                        min="0.00">
+                                    <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit"
+                                        (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00">
                                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                เงินมัดจำ :
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" required [(ngModel)]="model.bookDeposit" name="bookDeposit" class="form-control number-2-digit"
+                                    (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00" disabled>
                             </div>
                         </div>
 
@@ -118,8 +123,26 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number" readonly>
+                                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
+                                    readonly>
 
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="" class="col-md-4 control-label">
+                                การคืนเงินมัดจำ :
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="typeBookDeposoit1" value=0 required name="typeBookDeposoit" >
+                                    <label for="typeBookDeposoit1">คืนเงินมัดจำ</label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="typeBookDeposoit2" value=1 required name="typeBookDeposoit" >
+                                    <label for="typeBookDeposoit2">ใช้เงินจองเป็นค่าชำระสินค้า</label>
+                                </div>
                             </div>
                         </div>
 
@@ -130,11 +153,13 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="typePayment0" value=0 required [(ngModel)]="model.typePayment" name="typePayment" (change)="instalmentCalculate()">
+                                    <input type="radio" id="typePayment0" value=0 required [(ngModel)]="model.typePayment"
+                                        name="typePayment" (change)="instalmentCalculate()">
                                     <label for="typePayment0">ชำระรายงวด</label>
                                 </div>
                                 <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="typePayment1" value=1 required [(ngModel)]="model.typePayment" name="typePayment" (change)="instalmentCalculate()">
+                                    <input type="radio" id="typePayment1" value=1 required [(ngModel)]="model.typePayment"
+                                        name="typePayment" (change)="instalmentCalculate()">
                                     <label for="typePayment1">ชำระรายปี</label>
                                 </div>
                             </div>
@@ -147,7 +172,8 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number-2-digit" min="0.00" (keyup)="instalmentCalculate()">
+                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number-2-digit"
+                                        min="0.00" (keyup)="instalmentCalculate()">
                                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                                 </div>
                             </div>
@@ -160,7 +186,8 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input type="text" id="" class="form-control number" required [(ngModel)]="model.instalmentEnd" name="instalmentEnd" (keyup)="instalmentCalculate()">
+                                    <input type="text" id="" class="form-control number" required [(ngModel)]="model.instalmentEnd"
+                                        name="instalmentEnd" (keyup)="instalmentCalculate()">
                                     <span *ngIf="model.typePayment == '0'" class="input-group-addon">&nbsp;งวด</span>
                                     <span *ngIf="model.typePayment == '1'" class="input-group-addon">&nbsp;&nbsp;ปี&nbsp;&nbsp;</span>
                                 </div>
@@ -173,8 +200,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" [options]="myDatePickerOptions" (dateChanged)="onChangeDueDate($event)"
-                                    required></my-date-picker-th>
+                                <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" [options]="myDatePickerOptions"
+                                    (dateChanged)="onChangeDueDate($event)" required></my-date-picker-th>
                                 <!-- <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()"> -->
                             </div>
                         </div>
@@ -185,7 +212,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate" name="dueDate" (change)="instalmentCalculate()">
+                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate"
+                                    name="dueDate" (change)="instalmentCalculate()">
                                 </ng-select>
                             </div>
                         </div>
@@ -197,8 +225,8 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" (keyup)="instalmentCalculate()"
-                                        (change)="instalmentCalculate()" disabled>
+                                    <input type="text" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control number"
+                                        (keyup)="instalmentCalculate()" (change)="instalmentCalculate()" disabled>
                                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                                 </div>
                             </div>
@@ -210,7 +238,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.interestPrice" name="interestPrice" class="form-control number" readonly>
+                                <input type="text" required [(ngModel)]="model.interestPrice" name="interestPrice"
+                                    class="form-control number" readonly>
 
                             </div>
                         </div>
@@ -221,7 +250,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+                                <input type="text" required [(ngModel)]="model.remain" name="remain" class="form-control number"
+                                    readonly>
 
                             </div>
                         </div>
@@ -232,7 +262,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number" readonly>
+                                <input type="text" required [(ngModel)]="model.instalmentPrice" name="instalmentPrice"
+                                    class="form-control number" readonly>
 
                             </div>
                         </div>
@@ -256,7 +287,8 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit" readonly>
+                                <input type="text" required [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit"
+                                    readonly>
 
                             </div>
                         </div>
