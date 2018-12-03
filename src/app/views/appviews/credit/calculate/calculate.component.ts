@@ -203,7 +203,12 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.netPrice = (this.model.outStandingPrice - deposit);
 
         // จำนวนดอกเบี้ยที่ต้องชำระ
-        this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
+        if (this.model.typePayment == '0') {
+            this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
+
+        } else if (this.model.typePayment == '1') {
+            this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * (this.model.instalmentEnd * 12));
+        }
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
         this.model.remain = (this.model.netPrice + this.model.interestPrice);
