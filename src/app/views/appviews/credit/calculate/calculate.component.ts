@@ -26,6 +26,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild(ContractItemComponent) contractItem;
 
+    outStandingPriceState: number;
+    bookDepositState: number;
+
     model: CalculateModel = new CalculateModel();
     contractModel: ContractModel = new ContractModel();
     contractItemModel = new Array<ContractModel>();
@@ -87,6 +90,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.remain = 0;
                 this.model.sellTypeId = 4;
                 this.model.sellAcitvityId = 25;
+                this.model.returnDepostit = '1';
 
                 this._userService.currentData.subscribe(u => {
                     if (u) {
@@ -152,8 +156,14 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
+                console.log(p);
+
+                this.outStandingPriceState = p.outStandingPrice;
+                this.bookDepositState = p.deposit;
+
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
+                this.model.bookDeposit = p.deposit;
                 // this.model.netPrice = p.outStandingPrice;
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
@@ -170,6 +180,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.pageloader.setShowPageloader(true);
         await this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
+
                 const firstPayment = p.creditCalculate.firstPayment;
                 this.model = p.creditCalculate;
                 this.model.firstPayment = setDateMyDatepicker(new Date(firstPayment));
@@ -197,6 +208,40 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.deposit = ((deposit * 100) / this.model.outStandingPrice);
     }
 
+    onReturnDeposit() {
+        const depositPrice = currencyToFloat(this.model.depositPrice.toString());
+        this.model.bookDeposit = 0;
+        // คืนเงินมัดจำ
+        switch (this.model.returnDepostit) {
+            case '0':
+                // ถ้าคืนเงิน
+                // หักเงินจองออกจากเงินดาวน์
+                if (depositPrice > 0)
+                    this.model.depositPrice = depositPrice - this.bookDepositState;
+                // เพิ่มเงินจองเข้าไปในราคาสินค้า
+                this.model.outStandingPrice = this.outStandingPriceState + this.bookDepositState;
+                break;
+
+            case '1':
+                // กรณีไม่คืนเงินมัดจำ
+                this.model.outStandingPrice = this.outStandingPriceState;
+                this.model.bookDeposit = this.bookDepositState;
+                if (depositPrice > 0)
+                    this.model.depositPrice = depositPrice - this.bookDepositState;
+                break;
+
+            case '2':
+                // ถ้าใช้เป็นเงินดาวน์
+                // รีเซ็ต ราคาสินค้า
+                this.model.outStandingPrice = this.outStandingPriceState;
+                // เพิ่มเงินจองเข้าไปในเงินดาวน์
+                this.model.depositPrice = currencyToFloat(this.model.depositPrice.toString()) + this.bookDepositState;
+                break;
+        }
+        this.onChangeDepositPrice();
+        this.instalmentCalculate();
+    }
+
     instalmentCalculate() {
         // ราคาสินค้าคงเหลือ
         let deposit: number = currencyToFloat(this.model.depositPrice.toString());
@@ -204,9 +249,11 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // จำนวนดอกเบี้ยที่ต้องชำระ
         if (this.model.typePayment == '0') {
+            // รูปแบบการชำระ รายงวด
             this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
 
         } else if (this.model.typePayment == '1') {
+            // รูปแบบการชำระ รายปี
             this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * (this.model.instalmentEnd * 12));
         }
 

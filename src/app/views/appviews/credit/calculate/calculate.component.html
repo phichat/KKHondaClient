@@ -140,12 +140,16 @@
                             </label>
                             <div class="col-md-8">
                                 <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="instalmentCalculate()">
-                                    <label for="returnDepostit0">คืนเงินมัดจำ</label>
+                                    <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="onReturnDeposit()">
+                                    <label for="returnDepostit0">คืนเงิน</label>
                                 </div>
                                 <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="instalmentCalculate()">
-                                    <label for="returnDepostit1">ใช้เงินจองเป็นเงินดาวน์</label>
+                                    <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="onReturnDeposit()">
+                                    <label for="returnDepostit1">ไม่คืนเงิน</label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="returnDepostit2" value=2 required [(ngModel)]="model.returnDepostit" name="returnDepostit" (change)="onReturnDeposit()">
+                                    <label for="returnDepostit2">ใช้เป็นเงินดาวน์</label>
                                 </div>
                             </div>
                         </div>

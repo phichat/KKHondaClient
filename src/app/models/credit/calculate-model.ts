@@ -29,7 +29,7 @@ export class CalculateModel {
     public updateBy: number;
     public updateDate: string;
 
-    public returnDepostit: number;
+    public returnDepostit: string;
     public model: string;
     public logReceiveId: string;
     public engineNo?: string;
