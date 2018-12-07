@@ -156,15 +156,18 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
-                console.log(p);
-
                 this.outStandingPriceState = p.outStandingPrice;
-                this.bookDepositState = p.deposit;
 
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
-                this.model.bookDeposit = p.deposit;
-                // this.model.netPrice = p.outStandingPrice;
+
+                if (p.deposit > 0) {
+                    this.model.bookDeposit = p.deposit;
+                    this.model.depositPrice = p.deposit;
+                    this.bookDepositState = p.deposit;
+                    this.onChangeDepositPrice();
+                }
+
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
@@ -199,43 +202,34 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         // เงินดาวน์ (บาท)
         // มูลค่าสินค้า * เงินดาวน์(%)
         this.model.depositPrice = Math.ceil(this.model.outStandingPrice * (this.model.deposit / 100));
+
     }
 
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        let deposit: number = currencyToFloat(this.model.depositPrice.toString());
-        this.model.deposit = ((deposit * 100) / this.model.outStandingPrice);
+        this.model.deposit = ((currencyToFloat(this.model.depositPrice.toString()) * 100) / this.model.outStandingPrice);
     }
 
     onReturnDeposit() {
         const depositPrice = currencyToFloat(this.model.depositPrice.toString());
-        this.model.bookDeposit = 0;
         // คืนเงินมัดจำ
         switch (this.model.returnDepostit) {
             case '0':
                 // ถ้าคืนเงิน
                 // หักเงินจองออกจากเงินดาวน์
-                if (depositPrice > 0)
+                if (depositPrice >= 0 && depositPrice >= this.bookDepositState)
                     this.model.depositPrice = depositPrice - this.bookDepositState;
                 // เพิ่มเงินจองเข้าไปในราคาสินค้า
                 this.model.outStandingPrice = this.outStandingPriceState + this.bookDepositState;
                 break;
 
             case '1':
-                // กรณีไม่คืนเงินมัดจำ
-                this.model.outStandingPrice = this.outStandingPriceState;
-                this.model.bookDeposit = this.bookDepositState;
-                if (depositPrice > 0)
-                    this.model.depositPrice = depositPrice - this.bookDepositState;
-                break;
-
-            case '2':
                 // ถ้าใช้เป็นเงินดาวน์
                 // รีเซ็ต ราคาสินค้า
                 this.model.outStandingPrice = this.outStandingPriceState;
                 // เพิ่มเงินจองเข้าไปในเงินดาวน์
-                this.model.depositPrice = currencyToFloat(this.model.depositPrice.toString()) + this.bookDepositState;
+                this.model.depositPrice = depositPrice + this.bookDepositState;
                 break;
         }
         this.onChangeDepositPrice();
