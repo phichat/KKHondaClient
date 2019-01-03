@@ -1,364 +1,353 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-10">
-        <h2>คำนวณค่างวด</h2>
-        <ol class="breadcrumb">
-            <li>
-                <a href="/">หน้าแรก</a>
-            </li>
-            <li>
-                <a>เช่าซื้อ</a>
-            </li>
-            <li class="active">
-                <strong>คำนวณค่างวด</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-lg-2 text-right pull-right">
+  <div class="col-lg-10">
+    <h2>คำนวณค่างวด</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>
+        <a>เช่าซื้อ</a>
+      </li>
+      <li class="active">
+        <strong>คำนวณค่างวด</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
 
-    </div>
+  </div>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
-    <div class="row form-group">
-        <div class="col-md-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
-                        <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ค้นหาหมายเลขรถ :
-                            </label>
-                            <div class="col-md-8">
-                                <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
-                                    (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto"
-                                    bindLabel="text" bindValue="value" labelForId="model" [virtualScroll]="true"
-                                    placeholder="ค้นหาหมายเลขรถ">
-                                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                                        <p class="m-b-xs !important">
-                                            <strong>โมเดล: </strong>
-                                            <span [ngOptionHighlight]="search">{{item.model}}</span>
-                                        </p>
-                                        <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
-                                        <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
-                                        <hr class="hr-dashed m-t-xs m-b-xs">
-                                    </ng-template>
-                                </ng-select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                หมายเลขเครื่อง :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control"
-                                    readonly>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                หมายเลขตัวถัง :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control"
-                                    readonly>
-                            </div>
-                        </div>
-                        <hr class="hr-dashed">
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ราคาสินค้า (รวม VAT) :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice"
-                                    class="form-control number" readonly>
-
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                เงินดาวน์ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.depositPrice" name="depositPrice"
-                                        class="form-control number" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
-                                    <span class="input-group-addon">บาท</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                เงินดาวน์ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit"
-                                        (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00">
-                                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                เงินมัดจำ :
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.bookDeposit" name="bookDeposit" class="form-control number-2-digit"
-                                    (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00" disabled>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                รูปแบบการชำระ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="typePayment0" value=0 required [(ngModel)]="model.typePayment"
-                                        name="typePayment" (change)="instalmentCalculate()">
-                                    <label for="typePayment0">ชำระรายงวด</label>
-                                </div>
-                                <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="typePayment1" value=1 required [(ngModel)]="model.typePayment"
-                                        name="typePayment" (change)="instalmentCalculate()">
-                                    <label for="typePayment1">ชำระรายปี</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                การคืนเงินมัดจำ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit"
-                                        name="returnDepostit" (change)="onReturnDeposit()">
-                                    <label for="returnDepostit0">คืนเงิน</label>
-                                </div>
-                                <div class="radio radio-info radio-inline">
-                                    <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit"
-                                        name="returnDepostit" (change)="onReturnDeposit()">
-                                    <label for="returnDepostit1">ใช้เป็นเงินดาวน์</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ราคาสินค้าคงเหลือ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
-                                    readonly>
-
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                อัตราดอกเบี้ย/เดือน :<span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.interest" name="interest" class="form-control number-2-digit"
-                                        min="0.00" (keyup)="instalmentCalculate()">
-                                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ระยะเวลาผ่อนชำระ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <input type="text" id="" class="form-control number" required [(ngModel)]="model.instalmentEnd"
-                                        name="instalmentEnd" (keyup)="instalmentCalculate()">
-                                    <span *ngIf="model.typePayment == '0'" class="input-group-addon">&nbsp;งวด</span>
-                                    <span *ngIf="model.typePayment == '1'" class="input-group-addon">&nbsp;&nbsp;ปี&nbsp;&nbsp;</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ชำระงวดแรก :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" [options]="myDatePickerOptions"
-                                    (dateChanged)="onChangeDueDate($event)" required></my-date-picker-th>
-                                <!-- <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()"> -->
-                            </div>
-                        </div>
-
-                        <div class="row form-group ">
-                            <label for="" class="col-md-4 control-label">
-                                ชำระทุกวันที่ :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate"
-                                    name="dueDate" (change)="instalmentCalculate()">
-                                </ng-select>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                Vat ณ วันที่ทำสัญญา :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.nowVat" name="nowVat" class="form-control number"
-                                        (keyup)="instalmentCalculate()" (change)="instalmentCalculate()" disabled>
-                                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ดอกเบี้ย (รวม VAT) :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.interestPrice" name="interestPrice"
-                                    class="form-control number" readonly>
-
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ยอดจัด (รวม VAT) :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.remain" name="remain" class="form-control number"
-                                    readonly>
-
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                ค่างวด (รวม VAT) :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.instalmentPrice" name="instalmentPrice"
-                                    class="form-control number" readonly>
-
-                            </div>
-                        </div>
-
-                        <!-- <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                I.R.R. :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" required [(ngModel)]="model.irr" name="irr" class="form-control number-2-digit" readonly>
-                                    <span class="input-group-addon">%</span>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <div class="row form-group">
-                            <label for="" class="col-md-4 control-label">
-                                อัตราดอกเบีย/ปี :
-                                <span class="required">*</span>
-                            </label>
-                            <div class="col-md-8">
-                                <input type="text" required [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit"
-                                    readonly>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-8">
-                                <button type="submit" [disabled]="!f.valid" class="btn btn-primary pull-right">
-                                    <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก และดำเนินการต่อ
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
+  <div class="row form-group">
+    <div class="col-md-6">
+      <div class="ibox float-e-margins">
+        <div class="ibox-content">
+          <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
+            <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                ค้นหาหมายเลขรถ :
+              </label>
+              <div class="col-md-8">
+                <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
+                  (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto" bindLabel="text"
+                  bindValue="value" labelForId="model" [virtualScroll]="true" placeholder="ค้นหาหมายเลขรถ">
+                  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                    <p class="m-b-xs !important">
+                      <strong>โมเดล: </strong>
+                      <span [ngOptionHighlight]="search">{{item.model}}</span>
+                    </p>
+                    <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
+                    <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
+                    <hr class="hr-dashed m-t-xs m-b-xs">
+                  </ng-template>
+                </ng-select>
+              </div>
             </div>
-        </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                หมายเลขเครื่อง :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                หมายเลขตัวถัง :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control" readonly>
+              </div>
+            </div>
+            <hr class="hr-dashed">
 
-        <div class="col-md-6">
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                ราคาสินค้า (รวม VAT) :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice" class="form-control number"
+                  readonly>
+
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                เงินดาวน์ :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="text" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control number"
+                    (keyup)="onChangeDepositPrice(); instalmentCalculate();">
+                  <span class="input-group-addon">บาท</span>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                เงินดาวน์ :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit"
+                    (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00">
+                  <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                เงินมัดจำ :
+              </label>
+              <div class="col-md-8">
+                <input type="text" required [(ngModel)]="model.bookDeposit" name="bookDeposit" class="form-control number-2-digit"
+                  (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00" disabled>
+              </div>
+            </div>
+
+            <ng-container *ngIf="model.bookingPaymentType != 4">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">
+                  รูปแบบการชำระ :
+                  <span class="required">*</span>
+                </label>
+                <div class="col-md-8">
+                  <div class="radio radio-info radio-inline">
+                    <input type="radio" id="typePayment0" value=0 [required]="model.bookingPaymentType != 4"
+                      [(ngModel)]="model.typePayment" name="typePayment" (change)="instalmentCalculate()">
+                    <label for="typePayment0">ชำระรายงวด</label>
+                  </div>
+                  <div class="radio radio-info radio-inline">
+                    <input type="radio" id="typePayment1" value=1 [required]="model.bookingPaymentType != 4"
+                      [(ngModel)]="model.typePayment" name="typePayment" (change)="instalmentCalculate()">
+                    <label for="typePayment1">ชำระรายปี</label>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                การคืนเงินมัดจำ :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <div class="radio radio-info radio-inline">
+                  <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit" name="returnDepostit"
+                    (change)="onReturnDeposit()">
+                  <label for="returnDepostit0">คืนเงิน</label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                  <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit" name="returnDepostit"
+                    (change)="onReturnDeposit()">
+                  <label for="returnDepostit1">ใช้เป็นเงินดาวน์</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">
+                ราคาสินค้าคงเหลือ :
+                <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
+                  readonly>
+
+              </div>
+            </div>
+
+            <ng-container *ngIf="model.bookingPaymentType != 4">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">
+                  อัตราดอกเบี้ย/เดือน :<span class="required">*</span>
+                </label>
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <input type="text" [required]="model.bookingPaymentType != 4" [(ngModel)]="model.interest" name="interest"
+                      class="form-control number-2-digit" min="0.00" (keyup)="instalmentCalculate()">
+                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="row form-group">
+              <ng-container [ngSwitch]="model.bookingPaymentType">
+                <label *ngSwitchCase="4" for="" class="col-md-4 control-label">
+                  เครดิต : <span class="required">*</span>
+                </label>
+                <label *ngSwitchDefault for="" class="col-md-4 control-label">
+                  ระยะเวลาผ่อนชำระ : <span class="required">*</span>
+                </label>
+              </ng-container>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="text" id="" class="form-control number" required [(ngModel)]="model.instalmentEnd" name="instalmentEnd"
+                    (keyup)="instalmentCalculate()">
+
+                  <ng-container [ngSwitch]="model.bookingPaymentType">
+                    <ng-container *ngSwitchCase="4">
+                      <span class="input-group-addon">&nbsp;วัน&nbsp;</span>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <span *ngIf="model.typePayment == '0'" class="input-group-addon">&nbsp;งวด</span>
+                      <span *ngIf="model.typePayment == '1'" class="input-group-addon">&nbsp;&nbsp;ปี&nbsp;&nbsp;</span>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <ng-container [ngSwitch]="model.bookingPaymentType">
+                <label *ngSwitchCase="4" for="" class="col-md-4 control-label">
+                  วันที่นับเครดิต : <span class="required">*</span>
+                </label>
+                <label *ngSwitchDefault for="" class="col-md-4 control-label">
+                  ชำระงวดแรก : <span class="required">*</span>
+                </label>
+              </ng-container>
+
+              <div class="col-md-8">
+                <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" [options]="myDatePickerOptions"
+                  (dateChanged)="onChangeDueDate($event)" required></my-date-picker-th>
+                <!-- <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()"> -->
+              </div>
+            </div>
+
+            <ng-container *ngIf="model.bookingPaymentType != 4">
+              <div class="row form-group ">
+                <label for="" class="col-md-4 control-label">
+                  ชำระทุกวันที่ :
+                  <span class="required">*</span>
+                </label>
+                <div class="col-md-8">
+                  <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate"
+                    name="dueDate" (change)="instalmentCalculate()">
+                  </ng-select>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา :</label>
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input type="text" [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" readonly>
+                  <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+                </div>
+              </div>
+            </div>
+            <!-- (keyup)="instalmentCalculate()" (change)="instalmentCalculate()" -->
+            <ng-container *ngIf="model.bookingPaymentType != 4">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">ดอกเบี้ย (รวม VAT) :</label>
+                <div class="col-md-8">
+                  <input type="text" [(ngModel)]="model.interestPrice" name="interestPrice" class="form-control number"
+                    readonly>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
+              <div class="col-md-8">
+                <input type="text" [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT) :</label>
+              <div class="col-md-8">
+                <input type="text" [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number"
+                  readonly>
+              </div>
+            </div>
+
+            <ng-container *ngIf="model.bookingPaymentType != 4">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">อัตราดอกเบีย/ปี :</label>
+                <div class="col-md-8">
+                  <input type="text" [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit" readonly>
+                </div>
+              </div>
+            </ng-container>
+
             <div class="row">
-                <div class="col-sm-6 pull-right text-right">
-                    <h4 class="m-b-xs">เลขที่ใบจอง</h4>
-                    <h2 class="no-margins text-navy" style="font-weight: normal">{{bookingNo}}</h2>
-                </div>
+              <div class="col-md-4"></div>
+              <div class="col-md-8">
+                <button type="submit" [disabled]="!f.valid" class="btn btn-primary pull-right">
+                  <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก
+                </button>
+              </div>
             </div>
 
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>ข้อมูลผู้จอง</h5>
-                    <iboxtools></iboxtools>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-customer></app-ex-detail-customer>
-                </div>
-            </div>
-
-
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>ข้อมูลรถ</h5>
-                    <iboxtools></iboxtools>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-motobike></app-ex-detail-motobike>
-                </div>
-            </div>
-
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>ของแถม</h5>
-                    <iboxtools></iboxtools>
-                </div>
-                <div class="ibox-content">
-                    <div class="table-responsive">
-                        <app-ex-detail-accessory></app-ex-detail-accessory>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>รายการฟรี</h5>
-                    <iboxtools></iboxtools>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-free></app-ex-detail-free>
-                </div>
-            </div>
+          </form>
         </div>
+      </div>
     </div>
-    <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
+
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-sm-6 pull-right text-right">
+          <h4 class="m-b-xs">เลขที่ใบจอง</h4>
+          <h2 class="no-margins text-navy" style="font-weight: normal">{{bookingNo}}</h2>
+        </div>
+      </div>
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>ข้อมูลผู้จอง</h5>
+          <iboxtools></iboxtools>
+        </div>
+        <div class="ibox-content">
+          <app-ex-detail-customer></app-ex-detail-customer>
+        </div>
+      </div>
+
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>ข้อมูลรถ</h5>
+          <iboxtools></iboxtools>
+        </div>
+        <div class="ibox-content">
+          <app-ex-detail-motobike></app-ex-detail-motobike>
+        </div>
+      </div>
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>ของแถม</h5>
+          <iboxtools></iboxtools>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <app-ex-detail-accessory></app-ex-detail-accessory>
+          </div>
+        </div>
+      </div>
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>รายการฟรี</h5>
+          <iboxtools></iboxtools>
+        </div>
+        <div class="ibox-content">
+          <app-ex-detail-free></app-ex-detail-free>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
 </div>

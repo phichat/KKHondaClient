@@ -14,10 +14,10 @@ export class BookingModel {
     public genderName: string;
     public idCard: string;
     public bookingDate: any;
-    public depositType: number;
+    public bookingDepositType: number;
     public bookingId: number;
     public bookingNo: string;
-    public ptymentType: number;
+    public bookingPaymentType: number;
     public bookingStatus: number;
     public bookingType: number;
     public netPrice: number;

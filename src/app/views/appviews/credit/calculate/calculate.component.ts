@@ -86,7 +86,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.depositPrice = 0;
                 this.model.dueDate = 5;
                 this.model.firstPayment = setDateMyDatepicker(new Date());
-                this.model.interest = 2;
+                this.model.interest = 0;
                 this.model.remain = 0;
                 this.model.sellTypeId = 4;
                 this.model.sellAcitvityId = 25;
@@ -156,10 +156,12 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
             .subscribe(p => {
+                console.log(p);
                 this.outStandingPriceState = p.outStandingPrice;
 
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
+                this.model.bookingPaymentType = p.bookingPaymentType;
 
                 if (p.deposit > 0) {
                     this.model.bookDeposit = p.deposit;
@@ -193,7 +195,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
-                // this._calcService.changeData(this.model)
+                // this._calcService.changeData(this.model);
+                console.log(p.booking);
+                
             })
         this.pageloader.setShowPageloader(false);
     }
