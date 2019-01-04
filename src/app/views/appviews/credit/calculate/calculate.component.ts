@@ -6,14 +6,13 @@ import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-// import * as $ from 'jquery';
 import * as Inputmask from 'inputmask';
-import { PageloaderService } from '../../pageloader/pageloader.component';
 import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
 import { ModelUser } from '../../../../models/users';
+import { BookingModel } from 'app/models/selling';
 
 declare var toastr: any;
 
@@ -160,8 +159,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
-            .subscribe(p => {
-                console.log(p);
+            .subscribe(res => {
+                const p = <BookingModel>res.json();
+
                 this.outStandingPriceState = p.outStandingPrice;
 
                 this.bookingNo = p.bookingNo;

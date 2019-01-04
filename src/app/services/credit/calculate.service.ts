@@ -3,12 +3,13 @@ import { CalculateModel, ContractItemModel, ContractModel } from '../../models/c
 import { appConfig } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { HttpService } from 'app/core/http.service';
 
 @Injectable()
 export class CalculateService {
     private model = new CalculateModel();
     private dataSource = new BehaviorSubject<CalculateModel>(this.model);
-    private url = `${appConfig.apiUrl}/Credit/Calculates`;
+    private url = 'Credit/Calculates';
     private httpOptions = {
         headers: new HttpHeaders(
             {
@@ -18,7 +19,10 @@ export class CalculateService {
 
     currentData = this.dataSource.asObservable();
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private httpService: HttpService
+        ) { }
 
     changeData(data: CalculateModel) {
         this.dataSource.next(data)
@@ -27,8 +31,7 @@ export class CalculateService {
     GetById(calculateId: string) {
         const apiURL = `${this.url}/GetById`;
         const params = { calculateId };
-
-        return this.http.get<any>(apiURL, { params });
+        return this.httpService.get(apiURL, { params });
     }
 
     GetEngineByKeyword(bookingId: string, branchId: string, term: string) {
