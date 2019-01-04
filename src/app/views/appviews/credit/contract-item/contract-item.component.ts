@@ -44,14 +44,18 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
     ngOnInit() {
         if (this.contractItemModel.length === 0) {
             this.subDest = this._calService.currentData.subscribe(p => {
+
+                if (p.instalmentEnd == undefined || !p.instalmentEnd) return;
+
                 this.chRef.markForCheck();
 
                 this.contractItemModel = new Array<ContractItemModel>();
 
                 const vatUp = 1 + (p.nowVat / 100);
-                const instalmentEnd = p.instalmentEnd;
+                // กรณีขายเชื่อ จะเซ็ตระยะเวลาผ่อนชำระให้เป็น 1 งวด
+                const instalmentEnd = p.bookingPaymentType != 4 ? p.instalmentEnd : 1;
                 const firstPay = getDateMyDatepicker(p.firstPayment);
-                
+
                 // เงินจองถอด vat
                 const depositPriceExcVat = (this.currencyToFloat(p.depositPrice) / vatUp);
 
@@ -71,17 +75,25 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     let dueDate: Date = firstPay;
 
                     if (i > 0) {
-                        const month = firstPay.getDate() > 20 ? (firstPay.getMonth() + 1) + j : firstPay.getMonth() + j;
-                        const year = (firstPay.getFullYear() + j);
-                        d.setDate(p.dueDate);
+                        if (p.bookingPaymentType != 4) {
+                            const month = firstPay.getDate() > 20 ? (firstPay.getMonth() + 1) + j : firstPay.getMonth() + j;
+                            const year = (firstPay.getFullYear() + j);
+                            d.setDate(p.dueDate);
 
-                        if (p.typePayment == '0') {
-                            // ชำระรายงวดห
-                            d.setMonth(month);
-                        } else if (p.typePayment == '1') {
-                            // ชำระรายปี
-                            d.setFullYear(year);
+                            if (p.typePayment == '0') {
+                                // ชำระรายงวดห
+                                d.setMonth(month);
+                            } else if (p.typePayment == '1') {
+                                // ชำระรายปี
+                                d.setFullYear(year);
+                            }
+                        } else {
+                            // กรณีขายเชื่อ
+                            // เอา ระยะเวลาผ่อนชำระ(เครดิต วัน) มากำหนดวันกำหนดชำระ
+                           const __instalmentEnd = parseInt((p.instalmentEnd as any).toString());
+                           d.setDate(d.getDate() + __instalmentEnd);
                         }
+
                         dueDate = d;
                         j++;
                     }
@@ -96,7 +108,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
 
                     const remain = remainExcVat - (balance * (i == 0 ? 1 : i));
                     const remainVatPrice = (remain * vatUp) - remain;
-                    const remainNetPrice = remain + remainVatPrice;   
+                    const remainNetPrice = remain + remainVatPrice;
 
                     // เงินตั้งต้น
                     let initialPrice = 0;
@@ -138,7 +150,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
 
                     this.contractItemModel.push(item);
                 }
-                
+
                 this.setTotal();
             })
         }

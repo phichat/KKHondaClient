@@ -24,12 +24,10 @@
     <div class="col-md-6">
       <div class="ibox float-e-margins">
         <div class="ibox-content">
-          <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
+          <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit(f)">
             <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
             <div class="row form-group">
-              <label for="" class="col-md-4 control-label">
-                ค้นหาหมายเลขรถ :
-              </label>
+              <label for="" class="col-md-4 control-label">ค้นหาหมายเลขรถ :</label>
               <div class="col-md-8">
                 <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
                   (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto" bindLabel="text"
@@ -47,19 +45,13 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4 control-label">
-                หมายเลขเครื่อง :
-                <span class="required">*</span>
-              </label>
+              <label for="" class="col-md-4 control-label">หมายเลขเครื่อง : <span class="required">*</span></label>
               <div class="col-md-8">
                 <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-md-4 control-label">
-                หมายเลขตัวถัง :
-                <span class="required">*</span>
-              </label>
+              <label for="" class="col-md-4 control-label">หมายเลขตัวถัง : <span class="required">*</span></label>
               <div class="col-md-8">
                 <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control" readonly>
               </div>
@@ -67,14 +59,10 @@
             <hr class="hr-dashed">
 
             <div class="row form-group">
-              <label for="" class="col-md-4 control-label">
-                ราคาสินค้า (รวม VAT) :
-                <span class="required">*</span>
-              </label>
+              <label for="" class="col-md-4 control-label">ราคาสินค้า (รวม VAT) :</label>
               <div class="col-md-8">
                 <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice" class="form-control number"
                   readonly>
-
               </div>
             </div>
 
@@ -110,10 +98,11 @@
               </label>
               <div class="col-md-8">
                 <input type="text" required [(ngModel)]="model.bookDeposit" name="bookDeposit" class="form-control number-2-digit"
-                  (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00" disabled>
+                   min="0.00" readonly>
               </div>
             </div>
 
+            <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
             <ng-container *ngIf="model.bookingPaymentType != 4">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
@@ -144,7 +133,7 @@
                 <div class="radio radio-info radio-inline">
                   <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit" name="returnDepostit"
                     (change)="onReturnDeposit()">
-                  <label for="returnDepostit0">คืนเงิน</label>
+                  <label for="returnDepostit0">คืนเงินมัดจำ</label>
                 </div>
                 <div class="radio radio-info radio-inline">
                   <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit" name="returnDepostit"
@@ -154,22 +143,19 @@
               </div>
             </div>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">
-                ราคาสินค้าคงเหลือ :
-                <span class="required">*</span>
-              </label>
-              <div class="col-md-8">
-                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
-                  readonly>
-
-              </div>
-            </div>
-
+            <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
             <ng-container *ngIf="model.bookingPaymentType != 4">
               <div class="row form-group">
+                <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
+                <div class="col-md-8">
+                  <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
+                    readonly>
+                </div>
+              </div>
+
+              <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
-                  อัตราดอกเบี้ย/เดือน :<span class="required">*</span>
+                  อัตราดอกเบี้ย/เดือน : <span class="required">*</span>
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
@@ -221,15 +207,42 @@
               <div class="col-md-8">
                 <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" [options]="myDatePickerOptions"
                   (dateChanged)="onChangeDueDate($event)" required></my-date-picker-th>
-                <!-- <input type="date" required [(ngModel)]="model.firstPayment" name="firstPayment" class="form-control" (change)="instalmentCalculate()"> -->
               </div>
             </div>
 
+            <!-- แสดงเมื่อ ประเภทการซื้อ = ขายเชื่อ -->
+            <ng-container *ngIf="model.bookingPaymentType == 4">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">กำหนดชำระ :</label>
+                <div class="col-md-8">
+                  <input type="text" #tempDueDate class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา :</label>
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <input type="text" [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" readonly>
+                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
+                <div class="col-md-8">
+                  <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
+                    readonly>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
             <ng-container *ngIf="model.bookingPaymentType != 4">
               <div class="row form-group ">
                 <label for="" class="col-md-4 control-label">
-                  ชำระทุกวันที่ :
-                  <span class="required">*</span>
+                  ชำระทุกวันที่ : <span class="required">*</span>
                 </label>
                 <div class="col-md-8">
                   <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate"
@@ -237,19 +250,17 @@
                   </ng-select>
                 </div>
               </div>
-            </ng-container>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา :</label>
-              <div class="col-md-8">
-                <div class="input-group">
-                  <input type="text" [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" readonly>
-                  <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา :</label>
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <input type="text" [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" readonly>
+                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- (keyup)="instalmentCalculate()" (change)="instalmentCalculate()" -->
-            <ng-container *ngIf="model.bookingPaymentType != 4">
+
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ดอกเบี้ย (รวม VAT) :</label>
                 <div class="col-md-8">
@@ -257,24 +268,22 @@
                     readonly>
                 </div>
               </div>
-            </ng-container>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
-              <div class="col-md-8">
-                <input type="text" [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
+                <div class="col-md-8">
+                  <input type="text" [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+                </div>
               </div>
-            </div>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT) :</label>
-              <div class="col-md-8">
-                <input type="text" [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number"
-                  readonly>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT) :</label>
+                <div class="col-md-8">
+                  <input type="text" [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number"
+                    readonly>
+                </div>
               </div>
-            </div>
 
-            <ng-container *ngIf="model.bookingPaymentType != 4">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">อัตราดอกเบีย/ปี :</label>
                 <div class="col-md-8">

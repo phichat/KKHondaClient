@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit, EventEmitter, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalculateModel, ContractModel } from '../../../../models/credit';
@@ -9,7 +9,7 @@ import { ContractItemComponent } from '../contract-item/contract-item.component'
 // import * as $ from 'jquery';
 import * as Inputmask from 'inputmask';
 import { PageloaderService } from '../../pageloader/pageloader.component';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZero, setZeroHours, currencyToFloat } from '../../../../app.config';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
@@ -25,6 +25,7 @@ declare var toastr: any;
 export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild(ContractItemComponent) contractItem;
+    @ViewChild('tempDueDate') tempDueDate: ElementRef;
 
     outStandingPriceState: number;
     bookDepositState: number;
@@ -54,7 +55,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         private _calcService: CalculateService,
         private _userService: UserService,
         private router: Router,
-        private pageloader: PageloaderService,
+        // private pageloader: PageloaderService,
         private chRef: ChangeDetectorRef
     ) {
         toastr.options = {
@@ -84,6 +85,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.typePayment = '0';
                 this.model.deposit = 0;
                 this.model.depositPrice = 0;
+                this.model.bookDeposit = 0;
                 this.model.dueDate = 5;
                 this.model.firstPayment = setDateMyDatepicker(new Date());
                 this.model.interest = 0;
@@ -91,6 +93,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.sellTypeId = 4;
                 this.model.sellAcitvityId = 25;
                 this.model.returnDepostit = '1';
+
+                // this.model.frameNo = '0'
+                // this.model.engineNo = '0'
 
                 this._userService.currentData.subscribe(u => {
                     if (u) {
@@ -182,7 +187,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     async onLoadCaculateData(calculateId: number) {
-        this.pageloader.setShowPageloader(true);
+        // this.pageloader.setShowPageloader(true);
         await this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
 
@@ -196,10 +201,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
                 // this._calcService.changeData(this.model);
-                console.log(p.booking);
-                
+
             })
-        this.pageloader.setShowPageloader(false);
+        // this.pageloader.setShowPageloader(false);
     }
 
     onChangeDeposit() {
@@ -242,24 +246,34 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     instalmentCalculate() {
         // ราคาสินค้าคงเหลือ
-        let deposit: number = currencyToFloat(this.model.depositPrice.toString());
+        const deposit: number = currencyToFloat(this.model.depositPrice.toString());
         this.model.netPrice = (this.model.outStandingPrice - deposit);
 
+        if (this.model.bookingPaymentType == 4 && this.model.instalmentEnd != undefined) {
+            let firstPay = getDateMyDatepicker(this.model.firstPayment);
+            const __instalmentEnd = parseInt((this.model.instalmentEnd as any).toString());
+            firstPay.setDate(firstPay.getDate() + __instalmentEnd);
+            this.tempDueDate.nativeElement.value = setLocalDate(firstPay);
+        }
+
+        const __interest = this.model.interest || 0;
         // จำนวนดอกเบี้ยที่ต้องชำระ
         if (this.model.typePayment == '0') {
             // รูปแบบการชำระ รายงวด
-            this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
+            this.model.interestPrice = ((this.model.netPrice * (__interest / 100)) * this.model.instalmentEnd);
 
         } else if (this.model.typePayment == '1') {
             // รูปแบบการชำระ รายปี
-            this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * (this.model.instalmentEnd * 12));
+            this.model.interestPrice = ((this.model.netPrice * (__interest / 100)) * (this.model.instalmentEnd * 12));
         }
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
         this.model.remain = (this.model.netPrice + this.model.interestPrice);
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
-        const interestP = this.model.remain / this.model.instalmentEnd;
+        const interestP = this.model.bookingPaymentType != 4
+            ? this.model.remain / this.model.instalmentEnd
+            : this.model.remain;
         this.model.instalmentPrice = this.ceil10(interestP);
 
         // จำนวนค่าภาษีมูลค่าเพิ่ม
@@ -335,8 +349,8 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         return null;
     };
 
-    async onSubmit() {
-        this.pageloader.setShowPageloader(true);
+    async onSubmit(f: any) {
+        // this.pageloader.setShowPageloader(true);
 
         const firstPayment = getDateMyDatepicker(this.model.firstPayment);
         this.model.firstPayment = setZeroHours(firstPayment);
@@ -354,7 +368,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             await this.onRevice();
         }
 
-        this.pageloader.setShowPageloader(false);
+        // this.pageloader.setShowPageloader(false);
 
     }
 

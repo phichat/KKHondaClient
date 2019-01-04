@@ -4,14 +4,14 @@ export const appConfig = {
     // apiUrl: 'http://203.154.126.61/kk-honda-api/api',
     // reportUrl: 'http://203.154.126.61/kk-honda-report',
     apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice',
-    apiUrl: 'http://localhost:53075/api',
+    apiUrl: 'http://localhost:53076/api',
     reportUrl: 'http://localhost:58874/'
 }
 
 export const MyDatePickerOptions: IMyOptions = {
     dateFormat: 'dd / mm / yyyy',
     showClearDateBtn: false,
-    height: '30px',
+    height: '34px',
     openSelectorOnInputClick: true,
     editableDateField: false
 };
