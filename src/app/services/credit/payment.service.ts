@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { appConfig } from '../../app.config';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Payment } from 'app/models/credit/payment';
+import { HttpService } from 'app/core/http.service';
 
 @Injectable()
 export class PaymentService {
 
-  private url = `${appConfig.apiUrl}/Credit/Contract`;
+  private url = `Credit/Contract/CreditPayment`;
 
   private httpOptions = {
     headers: new HttpHeaders(
@@ -15,23 +16,26 @@ export class PaymentService {
       })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private httpService: HttpService
+    ) { }
 
   GetByContractId(id: string) {
-    const api = `${this.url}/CreditPayment/${id}`;
-    return this.http.get<Payment>(api);
+    const api = `${this.url}/${id}`;
+    return this.httpService.get(api);
   }
 
   CancelContractTerm(param: any) {
     const params = JSON.stringify(param);
-    const api = `${this.url}/CreditPayment/CancelItemPayment`;
-    return this.http.post<Payment>(api, params, this.httpOptions);
+    const api = `${this.url}/CancelItemPayment`;
+    return this.httpService.post(api, params);
   }
 
   PaymentTerm(payment: any) {
-    const api = `${this.url}/CreditPayment/PaymentTerm`;
+    const api = `${this.url}/PaymentTerm`;
     const params = JSON.stringify(payment);
-    return this.http.post<any>(api, params, this.httpOptions);
+    return this.httpService.post(api, params);
   }
 
 }

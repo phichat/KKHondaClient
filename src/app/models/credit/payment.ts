@@ -4,6 +4,7 @@ export class Payment {
     isPay: IsPay;
     isOutstanding: IsOutstanding;
     contractItem: ContractItem[];
+    statusDropdown: statusDropdown[];
 }
 
 export class PaymentFG {
@@ -13,6 +14,7 @@ export class PaymentFG {
     dueDate: any;
     payDate: any;
     payNetPrice: number;
+    fineSume: number;
     payeer: string;
     balanceNetPrice: number;
     remark: string;
@@ -22,6 +24,7 @@ export class PaymentFG {
     disCountPrice: number;
     disCountRate: number;
     totalPrice: number;
+    status: number;
 }
 
 export class Contract {
@@ -54,6 +57,11 @@ export class IsPay {
     isPayTerm: number;
 }
 
+export interface statusDropdown {
+    value: string;
+    text: string;
+}
+
 export class IsOutstanding {
     isOutstandingPrice: number;
     isOutstandingTerm: number;
@@ -73,4 +81,7 @@ export class ContractItem {
     fineSum: number;
     remark: string;
     payeer: string;
+    status: number;
+    statusDesc: string;
+    remainNetPrice: number;
 }

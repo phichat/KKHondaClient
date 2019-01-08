@@ -5,8 +5,9 @@
       <li>
         <a href="/">หน้าแรก</a>
       </li>
-      <li>
-        <a>เช่าซื้อ</a>
+      <li [ngSwitch]="model.bookingPaymentType">
+        <span *ngSwitchCase="4">ขายเชื่อ</span>
+        <span *ngSwitchDefault>เช่าซื้อ</span>
       </li>
       <li class="active">
         <strong>คำนวณค่างวด</strong>
@@ -31,12 +32,13 @@
               <div class="col-md-8">
                 <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
                   (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto" bindLabel="text"
-                  bindValue="value" labelForId="model" [virtualScroll]="true" placeholder="ค้นหาหมายเลขรถ">
+                  bindValue="value" labelForId="model" [virtualScroll]="true" placeholder="ค้นหาหมายเลขรถ" [loading]="searchEngineLoading"
+                  [loadingText]="searchEngineLoadingTxt">
                   <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                    <p class="m-b-xs !important">
+                    <!-- <p class="m-b-xs !important">
                       <strong>โมเดล: </strong>
                       <span [ngOptionHighlight]="search">{{item.model}}</span>
-                    </p>
+                    </p> -->
                     <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
                     <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
                     <hr class="hr-dashed m-t-xs m-b-xs">
@@ -87,7 +89,7 @@
               <div class="col-md-8">
                 <div class="input-group">
                   <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit"
-                    (keyup)="onChangeDeposit(); instalmentCalculate();" min="0.00">
+                    (keyup)="onChangeDeposit(); instalmentCalculate();">
                   <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                 </div>
               </div>
@@ -98,7 +100,7 @@
               </label>
               <div class="col-md-8">
                 <input type="text" required [(ngModel)]="model.bookDeposit" name="bookDeposit" class="form-control number-2-digit"
-                   min="0.00" readonly>
+                  readonly>
               </div>
             </div>
 
@@ -131,28 +133,29 @@
               </label>
               <div class="col-md-8">
                 <div class="radio radio-info radio-inline">
-                  <input type="radio" id="returnDepostit0" value=0 required [(ngModel)]="model.returnDepostit" name="returnDepostit"
+                  <input type="radio" id="returnDepostit0" value=1 required [(ngModel)]="model.returnDeposit" name="returnDeposit"
                     (change)="onReturnDeposit()">
                   <label for="returnDepostit0">คืนเงินมัดจำ</label>
                 </div>
                 <div class="radio radio-info radio-inline">
-                  <input type="radio" id="returnDepostit1" value=1 required [(ngModel)]="model.returnDepostit" name="returnDepostit"
+                  <input type="radio" id="returnDepostit1" value=0 required [(ngModel)]="model.returnDeposit" name="returnDeposit"
                     (change)="onReturnDeposit()">
                   <label for="returnDepostit1">ใช้เป็นเงินดาวน์</label>
                 </div>
               </div>
             </div>
 
+
+            <div class="row form-group">
+              <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
+              <div class="col-md-8">
+                <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
+                  readonly>
+              </div>
+            </div>
+
             <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
             <ng-container *ngIf="model.bookingPaymentType != 4">
-              <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
-                <div class="col-md-8">
-                  <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
-                    readonly>
-                </div>
-              </div>
-
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
                   อัตราดอกเบี้ย/เดือน : <span class="required">*</span>
@@ -160,7 +163,7 @@
                 <div class="col-md-8">
                   <div class="input-group">
                     <input type="text" [required]="model.bookingPaymentType != 4" [(ngModel)]="model.interest" name="interest"
-                      class="form-control number-2-digit" min="0.00" (keyup)="instalmentCalculate()">
+                      class="form-control number-2-digit" (keyup)="instalmentCalculate()">
                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                   </div>
                 </div>
@@ -230,10 +233,9 @@
               </div>
 
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
+                <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
                 <div class="col-md-8">
-                  <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
-                    readonly>
+                  <input type="text" [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
                 </div>
               </div>
             </ng-container>

@@ -35,28 +35,27 @@ export class CalculateService {
     }
 
     GetEngineByKeyword(bookingId: string, branchId: string, term: string) {
-        const apiURL = `${this.url}/GetEngineByKeyword`;
+        const apiURL = `${appConfig.apiUrl}/${this.url}/GetEngineByKeyword`;
         const params = { bookingId, branchId, term };
-
         return this.http.get<any>(apiURL, { params });
     }
 
     Create(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
         const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
         const apiURL = `${this.url}/Create`;
-        return this.http.post<any>(apiURL, params, this.httpOptions);
+        return this.httpService.post(apiURL, params);
     }
 
     Edit(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
         const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
         const apiURL = `${this.url}/Edit`;
-        return this.http.post<any>(apiURL, params, this.httpOptions);
+        return this.httpService.post(apiURL, params);
     }
 
     Revice(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
         const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
         const apiURL = `${this.url}/Revice`;
-        return this.http.post<any>(apiURL, params, this.httpOptions);
+        return this.httpService.post(apiURL, params);
     }
 
 }

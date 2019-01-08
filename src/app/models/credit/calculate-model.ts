@@ -30,7 +30,8 @@ export class CalculateModel {
     public updateDate: string;
 
     public bookingPaymentType: number;  // ประเภทการซื้อ 1=สด, 2=สินเชื่อ, 3=เช่าซื้อ, 4=ขายเชื่อ
-    public returnDepostit: string;
+    public returnDeposit: string;
+    public returnDepositPrice: number;
     public model: string;
     public logReceiveId: string;
     public engineNo?: string;

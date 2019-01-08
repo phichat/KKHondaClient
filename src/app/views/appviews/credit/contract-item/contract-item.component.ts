@@ -106,9 +106,9 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     const balanceVatPrice = (i === 0) ? depositPrice - depositPriceExcVat : p.instalmentPrice - balance;
                     const balanceNetPrice = (i === 0) ? depositPrice : p.instalmentPrice;
 
-                    const remain = remainExcVat - (balance * (i == 0 ? 1 : i));
-                    const remainVatPrice = (remain * vatUp) - remain;
-                    const remainNetPrice = remain + remainVatPrice;
+                    // const remain = remainExcVat - (balance * (i == 0 ? 1 : i));
+                    // const remainVatPrice = (remain * vatUp) - remain;
+                    // const remainNetPrice = remain + remainVatPrice;
 
                     // เงินตั้งต้น
                     let initialPrice = 0;
@@ -135,9 +135,9 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     item.balanceVatPrice = balanceVatPrice;
                     item.balanceNetPrice = (balanceNetPrice);
 
-                    item.remain = remain;
-                    item.remainVatPrice = remainVatPrice;
-                    item.remainNetPrice = remainNetPrice;
+                    item.remain = balance;
+                    item.remainVatPrice = balanceVatPrice;
+                    item.remainNetPrice = balanceNetPrice;
 
                     // เงินตั้งต้น
                     item.initialPrice = initialPrice;
@@ -185,7 +185,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
         });
 
         this.contractItemModel.map((o, i) => {
-            const preIndex = (i === 0) ? 0 : i - 1;
+            const preIndex = (i === 0) ? 0 : i - 1; 
 
             if (i == 1) {
                 // ดอกเบี้ยเงินต้นคงเหลือ

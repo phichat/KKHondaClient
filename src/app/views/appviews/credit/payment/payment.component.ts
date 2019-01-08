@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PageLoadWarpperService } from '../../../../services/common/page-load-warpper.service';
 import { setLocalDate, resetLocalDate, currencyToFloat } from 'app/app.config';
 import { PageloaderService } from '../../pageloader/pageloader.component';
 import { ModelUser } from '../../../../models/users';
 import { UserService } from '../../../../services/users';
+import { message } from 'app/app.message';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 declare var toastr: any;
 
@@ -21,6 +22,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   user = new ModelUser();
   asyncUser: any;
+  notPayment = 13; // ยังไม่ชำระ
 
   contractItemModel: ContractItem[] = [];
   contractModel: Contract = new Contract();
@@ -28,6 +30,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   isPayModel: IsPay = new IsPay();
   isOutstandingModel: IsOutstanding = new IsOutstanding();
   paymentModel: PaymentFG = new PaymentFG();
+  statusDropdown: Array<DropDownModel> = new Array<DropDownModel>();
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -45,7 +48,11 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
     this._activatedRoute.params.subscribe(async param => {
       if (param['id']) {
-        await this._paymentService.GetByContractId(param['id']).subscribe(item => this.loadCreditPayment(item));
+        await this._paymentService.GetByContractId(param['id'])
+          .subscribe(res => {
+            const x = <Payment>res.json()
+            this.loadCreditPayment(x)
+          });
 
         this.asyncUser = this._userService.currentData;
         this._userService.currentData.subscribe(u => {
@@ -63,6 +70,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.bookingModel = item.booking;
     this.isPayModel = item.isPay ? item.isPay : new IsPay();
     this.isOutstandingModel = item.isOutstanding ? item.isOutstanding : new IsOutstanding();
+    this.statusDropdown = item.statusDropdown;
+    console.log(item.statusDropdown);
+    
 
     this.instalmentCount = 0;
     this.contractItemModel = [];
@@ -82,7 +92,10 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         paymentType: res.paymentType,
         fineSum: res.fineSum,
         remark: res.remark,
-        payeer: this.user.id.toString()
+        payeer: this.user.id.toString(),
+        status: res.status,
+        statusDesc: res.statusDesc,
+        remainNetPrice: res.remainNetPrice
       })
     });
 
@@ -119,20 +132,20 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   }
 
   instalmentCount: number = 0;
-  // setFormPayment() {
-  //   this.instalmentCount = this.contractItemModel
-  //     .filter(item => item.payNetPrice == null && item.isSlect == true)
-  //     .reduce((accumulator) => {
-  //       return accumulator += 1;
-  //     }, 0)
 
-  //   let balanceNetPrice = this.contractItemModel
-  //     .filter(item => item.payNetPrice == null && item.isSlect == true)
-  //     .reduce((accumulator, current) => {
-  //       return accumulator + current.balanceNetPrice;
-  //     }, 0)
-  //   this.paymentModel.payNetPrice = balanceNetPrice;
-  // }
+  setFormPayment() {
+    this.instalmentCount = this.contractItemModel
+      .filter(item => item.status == this.notPayment && item.isSlect == true)
+      .length;
+
+    let balanceNetPrice = this.contractItemModel
+      .filter(item => item.status == this.notPayment && item.isSlect == true)
+      .reduce((accumulator, current) => {
+        return accumulator + current.balanceNetPrice;
+      }, 0)
+    this.paymentModel.payNetPrice = balanceNetPrice;
+
+  }
 
   async onSubmit(value: any) {
     if (this.paymentModel.outstanding == 0) {
@@ -169,17 +182,18 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         remark: p,
         updateBy: this.user.id.toString()
       }
-      this._paymentService.CancelContractTerm(params).subscribe(item => {
-        toastr.success('ยกเลิกรายการสำเร็จ!');
-        this.loadCreditPayment(item);
+      this._paymentService.CancelContractTerm(params).subscribe(res => {
+        const x = <Payment>res.json();
+        toastr.success(message.canceled);
+        this.loadCreditPayment(x);
       }, (err: HttpErrorResponse) => {
-        toastr.error(err.statusText);
+        toastr.error(message.error);
       })
     }
   }
 
   onPrint(value: any) {
-debugger
+
     if (value.invoice) {
       window.open(`http://203.154.126.61/KK-Honda-Web/backoffice/php/print_tax_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`)
 
