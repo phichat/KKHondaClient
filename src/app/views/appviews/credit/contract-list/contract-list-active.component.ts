@@ -27,8 +27,8 @@ export class ContractListActiveComponent implements OnInit {
 
     async ngOnInit() {
         this.pageloader.setShowPageloader(true);
-        await this.contractService.GetActive().subscribe(o => {
-
+        await this.contractService.GetActive().subscribe(res => {
+            let o = res.json();
             o.map(item => {
                 item.contractDate = setLocalDate(item.contractDate);
             })

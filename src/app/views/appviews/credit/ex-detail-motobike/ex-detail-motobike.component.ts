@@ -24,6 +24,7 @@ export class ExDetailMotobikeComponent implements OnInit {
                 this.modelBooking = o;
 
                 this.selePriceExcVat = this.modelBooking.sellPrice - this.modelBooking.vatPrice;
+                this.modelBooking.distcountP = (o.distcountB * 100) / this.selePriceExcVat;
 
                 o.bookingItem
                     .filter(i => i.itemType === 1)

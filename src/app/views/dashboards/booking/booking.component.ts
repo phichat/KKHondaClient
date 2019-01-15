@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { BookingService } from './booking.service';
-import { BookingPaymentTypeModel } from './BookingPaymentType.model';
+import { BookingPaymentTypeModel } from './bookingPaymentType.model';
 import { BookingType } from './bookingType.model';
 import * as $ from 'jquery';
 import 'datatables.net';

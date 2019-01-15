@@ -14,10 +14,10 @@ import { AppviewsModule } from './views/appviews/appviews.module';
 // App modules/components
 import { LayoutsModule } from './components/common/layouts/layouts.module';
 import { HttpClientModule } from '@angular/common/http';
-import { PageLoadWarpperService } from './services/common/page-load-warpper.service';
-import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
+// import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
 import { BookingModule } from './views/dashboards/booking/booking.module';
 import { GuardGuard } from './guards/guard.guard';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -28,10 +28,11 @@ import { GuardGuard } from './guards/guard.guard';
     FormsModule,
     HttpModule,
     HttpClientModule,
+    CoreModule,
     LayoutsModule,
     AppviewsModule,
     RouterModule.forRoot(ROUTES),
-    PageloaderModule,
+    // PageloaderModule,
     BookingModule
   ],
   providers: [

@@ -1,6 +1,6 @@
-export class DropDownModel {
-    public value: string;
-    public text: string;
+export interface DropDownModel {
+    value: string;
+    text: string;
 }
 
 export class DropdownTemplate {

@@ -1,9 +1,13 @@
+import { DropDownModel } from '../drop-down-model';
+
 export class Payment {
     contract: Contract;
     booking: Booking;
     isPay: IsPay;
     isOutstanding: IsOutstanding;
     contractItem: ContractItem[];
+    // statusDropdown: DropDownModel[];
+    bankingsDropdown: DropDownModel[];
 }
 
 export class PaymentFG {
@@ -13,6 +17,8 @@ export class PaymentFG {
     dueDate: any;
     payDate: any;
     payNetPrice: number;
+    fineSume: number;
+    fineSumeOther: number;
     payeer: string;
     balanceNetPrice: number;
     remark: string;
@@ -22,6 +28,8 @@ export class PaymentFG {
     disCountPrice: number;
     disCountRate: number;
     totalPrice: number;
+    status: number;
+    bankCode: string;
 }
 
 export class Contract {
@@ -71,6 +79,11 @@ export class ContractItem {
     payNetPrice: number; 
     paymentType: number;
     fineSum: number;
+    fineSumRemain: number;
+    fineSumeOther: number;
     remark: string;
     payeer: string;
+    status: number;
+    statusDesc: string;
+    remainNetPrice: number;
 }

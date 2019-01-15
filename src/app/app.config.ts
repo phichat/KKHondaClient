@@ -11,7 +11,9 @@ export const appConfig = {
 export const MyDatePickerOptions: IMyOptions = {
     dateFormat: 'dd / mm / yyyy',
     showClearDateBtn: false,
-    height: '30px'
+    height: '34px',
+    openSelectorOnInputClick: true,
+    editableDateField: false
 };
 
 export function resetLocalDate(date: string): string {

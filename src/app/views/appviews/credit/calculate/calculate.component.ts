@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit, EventEmitter, ElementRef, OnChanges, DoCheck } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalculateModel, ContractModel } from '../../../../models/credit';
@@ -6,14 +6,14 @@ import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-// import * as $ from 'jquery';
 import * as Inputmask from 'inputmask';
-import { PageloaderService } from '../../pageloader/pageloader.component';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZero, setZeroHours, currencyToFloat } from '../../../../app.config';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
-import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
 import { ModelUser } from '../../../../models/users';
+import { BookingModel } from 'app/models/selling';
+import { message } from 'app/app.message';
 
 declare var toastr: any;
 
@@ -22,9 +22,13 @@ declare var toastr: any;
     templateUrl: './calculate.component.html',
     styleUrls: ['./calculate.component.scss']
 })
-export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
 
     @ViewChild(ContractItemComponent) contractItem;
+    @ViewChild('tempDueDate') tempDueDate: ElementRef;
+
+    outStandingPriceState = 0;
+    bookDepositState = 0;
 
     model: CalculateModel = new CalculateModel();
     contractModel: ContractModel = new ContractModel();
@@ -36,13 +40,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     engineTypeahead = new EventEmitter<string>();
     engineDropdown: Array<DropdownTemplate> = new Array<DropdownTemplate>();
-
-    // engine: any[] = [
-    //     { model: 'abcdefg-1234', engineNo: 'abcdefg-1234', frameNo: 'abcdefg-1234' },
-    //     { model: 'abcdefg-5678', engineNo: 'abcdefg-5678', frameNo: 'abcdefg-5678' },
-    //     { model: 'abcdefg-9012', engineNo: 'abcdefg-9012', frameNo: 'abcdefg-9012' },
-    //     { model: 'abcdefg-3456', engineNo: 'abcdefg-3456', frameNo: 'abcdefg-3456' }
-    // ]
 
     dueDate = [
         { value: 5, text: '5 ของเดือน' },
@@ -58,7 +55,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         private _calcService: CalculateService,
         private _userService: UserService,
         private router: Router,
-        private pageloader: PageloaderService,
+        // private pageloader: PageloaderService,
         private chRef: ChangeDetectorRef
     ) {
         toastr.options = {
@@ -88,12 +85,18 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.typePayment = '0';
                 this.model.deposit = 0;
                 this.model.depositPrice = 0;
-                this.model.dueDate = 5;
+                this.model.bookDeposit = 0;
+                // this.model.dueDate = 5;
                 this.model.firstPayment = setDateMyDatepicker(new Date());
-                this.model.interest = 2;
+                this.model.interest = 0;
                 this.model.remain = 0;
                 this.model.sellTypeId = 4;
                 this.model.sellAcitvityId = 25;
+                this.model.returnDeposit = '0';
+                this.model.returnDepositPrice = 0;
+
+                // this.model.frameNo = '0'
+                // this.model.engineNo = '0'
 
                 this._userService.currentData.subscribe(u => {
                     if (u) {
@@ -109,8 +112,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    ngAfterViewInit() {
-
+    ngDoCheck(): void {
         const selector = document.querySelectorAll('input.number');
         const number2Digit = document.querySelectorAll('input.number-2-digit')
 
@@ -139,29 +141,52 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.frameNo = e ? e.frameNo : null;
     }
 
+    searchEngineLoading = false;
+    searchEngineLoadingTxt = '';
     searchEngine() {
         this.engineTypeahead.pipe(
+            tap(() => {
+                this.searchEngineLoading = true;
+                this.searchEngineLoadingTxt = 'รอสักครู่...'
+            }),
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._calcService.GetEngineByKeyword(this.model.bookingId.toString(), this.userModel.branch.toString(), term))
         ).subscribe(x => {
             this.chRef.markForCheck();
+            this.searchEngineLoading = false;
+            this.searchEngineLoadingTxt = '';
             this.engineDropdown = x;
             this.engineDropdown.map(item => {
                 item.text = `หมายเลขเครื่อง: ${item.engineNo}, หมายเลขตัวถัง: ${item.frameNo}`;
                 item.value = item.logId.toString();
             })
         }, () => {
+            this.searchEngineLoading = false;
+            this.searchEngineLoadingTxt = '';
             this.engineDropdown = new Array<DropdownTemplate>();
         });
     }
 
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
-            .subscribe(p => {
+            .subscribe(res => {
+                const p = <BookingModel>res.json();
+
+                this.outStandingPriceState = p.outStandingPrice;
+
                 this.bookingNo = p.bookingNo;
                 this.model.outStandingPrice = p.outStandingPrice;
-                // this.model.netPrice = p.outStandingPrice;
+                this.model.bookingPaymentType = p.bookingPaymentType;
+
+                if (p.deposit > 0) {
+                    this.model.returnDepositPrice = p.deposit;
+                    this.model.bookDeposit = p.deposit;
+                    this.model.depositPrice = p.deposit;
+                    this.bookDepositState = p.deposit;
+                    this.onChangeDepositPrice();
+                }
+
                 this.model.nowVat = p.vat;
                 this.instalmentCalculate();
                 this._bookingService.changeData(p);
@@ -174,9 +199,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     async onLoadCaculateData(calculateId: number) {
-        this.pageloader.setShowPageloader(true);
         await this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
+
                 const firstPayment = p.creditCalculate.firstPayment;
                 this.model = p.creditCalculate;
                 this.model.firstPayment = setDateMyDatepicker(new Date(firstPayment));
@@ -186,9 +211,8 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
-                // this._calcService.changeData(this.model)
+                // this._calcService.changeData(this.model);
             })
-        this.pageloader.setShowPageloader(false);
     }
 
     onChangeDeposit() {
@@ -200,23 +224,65 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        let deposit: number = currencyToFloat(this.model.depositPrice.toString());
-        this.model.deposit = ((deposit * 100) / this.model.outStandingPrice);
+        this.model.deposit = ((currencyToFloat(this.model.depositPrice.toString()) * 100) / this.model.outStandingPrice);
+    }
+
+    onReturnDeposit() {
+        const depositPrice = currencyToFloat(this.model.depositPrice.toString());
+        // คืนเงินมัดจำ
+        switch (this.model.returnDeposit) {
+            case '1':
+                // ถ้าคืนเงิน
+                // หักเงินจองออกจากเงินดาวน์
+                if (depositPrice >= 0 && depositPrice >= this.bookDepositState)
+                    this.model.depositPrice = depositPrice - this.bookDepositState;
+                // เพิ่มเงินจองเข้าไปในราคาสินค้า
+                this.model.outStandingPrice = this.outStandingPriceState + this.bookDepositState;
+                break;
+
+            case '0':
+                // ถ้าใช้เป็นเงินดาวน์
+                // รีเซ็ต ราคาสินค้า
+                this.model.outStandingPrice = this.outStandingPriceState;
+                // เพิ่มเงินจองเข้าไปในเงินดาวน์
+                this.model.depositPrice = depositPrice + this.bookDepositState;
+                break;
+        }
+        this.onChangeDepositPrice();
+        this.instalmentCalculate();
     }
 
     instalmentCalculate() {
         // ราคาสินค้าคงเหลือ
-        let deposit: number = currencyToFloat(this.model.depositPrice.toString());
+        const deposit: number = currencyToFloat(this.model.depositPrice.toString());
         this.model.netPrice = (this.model.outStandingPrice - deposit);
 
+        const __instalmentEnd = parseInt((this.model.instalmentEnd || 0 as any).toString());
+        const __interest = this.model.interest || 0;
+
+        if (this.model.bookingPaymentType == 4 && this.model.instalmentEnd != undefined) {
+            let firstPay = new Date(getDateMyDatepicker(this.model.firstPayment));
+            firstPay.setDate(firstPay.getDate() + __instalmentEnd);
+            this.tempDueDate.nativeElement.value = setLocalDate(firstPay.toISOString());
+        } 
+
         // จำนวนดอกเบี้ยที่ต้องชำระ
-        this.model.interestPrice = ((this.model.netPrice * (this.model.interest / 100)) * this.model.instalmentEnd);
+        if (this.model.typePayment == '0') {
+            // รูปแบบการชำระ รายงวด
+            this.model.interestPrice = ((this.model.netPrice * (__interest / 100)) * __instalmentEnd);
+
+        } else if (this.model.typePayment == '1') {
+            // รูปแบบการชำระ รายปี
+            this.model.interestPrice = ((this.model.netPrice * (__interest / 100)) * (__instalmentEnd * 12));
+        }
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
         this.model.remain = (this.model.netPrice + this.model.interestPrice);
 
         // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
-        const interestP = this.model.remain / this.model.instalmentEnd;
+        const interestP = this.model.bookingPaymentType != 4
+            ? this.model.remain / __instalmentEnd
+            : this.model.remain;
         this.model.instalmentPrice = this.ceil10(interestP);
 
         // จำนวนค่าภาษีมูลค่าเพิ่ม
@@ -226,10 +292,10 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.instalmentPriceExtVat = this.model.instalmentPrice - this.model.vatPrice;
 
         // คำนวณ RATE
-        this.model.irr = (this.RATE(this.model.instalmentEnd, -(this.model.instalmentPrice), this.model.netPrice) * 100);
+        this.model.irr = (this.RATE(__instalmentEnd, -(this.model.instalmentPrice), this.model.netPrice) * 100);
 
         // คำนวนอัตราดอกเบี้ยที่แท้จริงต่อปี
-        this.model.mrr = this.model.irr * this.model.instalmentEnd;
+        this.model.mrr = this.model.irr * __instalmentEnd;
 
         this._calcService.changeData(this.model);
     }
@@ -292,64 +358,61 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         return null;
     };
 
-    async onSubmit() {
-        this.pageloader.setShowPageloader(true);
-
-        const firstPayment = getDateMyDatepicker(this.model.firstPayment);
-        this.model.firstPayment = setZeroHours(firstPayment);
+    async onSubmit(f: any) {
+        let form = this.model;
+        const firstPayment = getDateMyDatepicker(form.firstPayment);
+        form.firstPayment = setZeroHours(firstPayment);
         this.contractItem.contractItemModel.map(item => {
             item.dueDate = resetLocalDate(item.dueDate);
         })
 
         if (this.mode === 'create') {
-            await this.onCreate();
+            await this.onCreate(form);
 
         } else if (this.mode === 'edit') {
-            await this.onEdit();
+            await this.onEdit(form);
 
         } else if (this.mode === 'revice') {
-            await this.onRevice();
+            await this.onRevice(form);
         }
-
-        this.pageloader.setShowPageloader(false);
-
     }
 
-    async onCreate() {
+    async onCreate(form: any) {
         await this._calcService
-            .Create(this.model, this.contractModel, this.contractItem.contractItemModel)
+            .Create(form, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
                 res => {
-                    this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: res.contractId } });
+                    const x = res.json();
+                    this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
                 },
-                (err: HttpErrorResponse) => {
-                    toastr.error(err.statusText);
+                () => {
+                    toastr.error(message.error);
+                }   
+            );
+    }
+
+    async onEdit(form: any) {
+        await this._calcService
+            .Edit(form, this.contractModel, this.contractItem.contractItemModel)
+            .subscribe(
+                () => {
+                    this.router.navigate(['credit/contract-list/active']);
+                },
+                () => {
+                    toastr.error(message.error);
                 }
             );
     }
 
-    async onEdit() {
+    async onRevice(form: any) {
         await this._calcService
-            .Edit(this.model, this.contractModel, this.contractItem.contractItemModel)
+            .Revice(form, this.contractModel, this.contractItem.contractItemModel)
             .subscribe(
-                res => {
+                () => {
                     this.router.navigate(['credit/contract-list/active']);
                 },
-                (err: HttpErrorResponse) => {
-                    toastr.error(err.statusText);
-                }
-            );
-    }
-
-    async onRevice() {
-        await this._calcService
-            .Revice(this.model, this.contractModel, this.contractItem.contractItemModel)
-            .subscribe(
-                res => {
-                    this.router.navigate(['credit/contract-list/active']);
-                },
-                (err: HttpErrorResponse) => {
-                    toastr.error(err.statusText);
+                () => {
+                    toastr.error(message.error);
                 }
             );
     }

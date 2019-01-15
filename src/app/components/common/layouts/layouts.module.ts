@@ -6,19 +6,17 @@ import {BsDropdownModule} from 'ngx-bootstrap';
 
 import {BasicLayoutComponent} from "./basicLayout.component";
 import {BlankLayoutComponent} from "./blankLayout.component";
-import {TopNavigationLayoutComponent} from "./topNavigationlayout.component";
 
 import {NavigationComponent} from "../navigation/navigation.component";
 import {FooterComponent} from "../footer/footer.component";
 import {TopNavbarComponent} from "../topnavbar/topnavbar.component";
 import {TopNavigationNavbarComponent} from "../topnavbar/topnavigationnavbar.component";
-import { PageLoadWarpperComponent } from "../page-load-warpper/page-load-warpper.component";
 import { UserService } from "../../../services/users";
+import { TopNavigationLayoutComponent } from './topNavigationLayout.component';
 
 
 @NgModule({
   declarations: [
-    PageLoadWarpperComponent,
     FooterComponent,
     BasicLayoutComponent,
     BlankLayoutComponent,

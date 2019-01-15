@@ -8,6 +8,7 @@ export class CalculateModel {
     public sellAcitvityId: number;       // กิจกรรมการขาย
     public deposit: number;              // เงินดาวน์ %
     public depositPrice: number;         // เงินดาวน์
+    public bookDeposit: number;          // เงินมัดจำ
     public instalmentEnd: number;        // จำนวนงวด
     public instalmentPriceExtVat: number;
     public instalmentPrice: number;      // ค่างวด
@@ -28,6 +29,9 @@ export class CalculateModel {
     public updateBy: number;
     public updateDate: string;
 
+    public bookingPaymentType: number;  // ประเภทการซื้อ 1=สด, 2=สินเชื่อ, 3=เช่าซื้อ, 4=ขายเชื่อ
+    public returnDeposit: string;
+    public returnDepositPrice: number;
     public model: string;
     public logReceiveId: string;
     public engineNo?: string;

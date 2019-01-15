@@ -1,19 +1,17 @@
 import { Component, OnInit, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CalculateModel, ContractModel, ContractItemModel } from '../../../../models/credit';
 import { UserService } from '../../../../services/users';
-import * as moment from 'moment';
-import { CalculateService, ContractService, ContractItemService } from '../../../../services/credit';
+import { ContractService } from '../../../../services/credit';
 import { ActivatedRoute, Router } from '@angular/router';
-import { distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators'
+import { distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators'
 import { CustomerService } from '../../../../services/customers';
 import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PageloaderService } from '../../pageloader/pageloader.component';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZero, setZeroHours, setLocalDate } from '../../../../app.config';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZeroHours, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 import { BookingModel } from '../../../../models/selling';
-
+import { message } from 'app/app.message';
 
 declare var toastr: any;
 
@@ -23,6 +21,8 @@ declare var toastr: any;
     styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit, OnDestroy {
+    tempDueDate: string;
+
     contractMateTypeahead = new EventEmitter<string>();
     contractHireTypeahead = new EventEmitter<string>();
     contractGurantor1Typeahead = new EventEmitter<string>();
@@ -44,7 +44,6 @@ export class ContractComponent implements OnInit, OnDestroy {
     contractTypeDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     zoneDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     branchDropdown: Array<DropDownModel> = new Array<DropDownModel>();
-    
 
     myDatePickerOptions = MyDatePickerOptions;
 
@@ -54,20 +53,17 @@ export class ContractComponent implements OnInit, OnDestroy {
 
     constructor(
         private _activatedRoute: ActivatedRoute,
-        private _calcService: CalculateService,
         private _userService: UserService,
         private _contractService: ContractService,
         private _customerService: CustomerService,
         private _bookingService: BookingService,
         private chRef: ChangeDetectorRef,
-        private router: Router,
-        private pageloader: PageloaderService
+        private router: Router
     ) {
         toastr.options = {
             'closeButton': true,
             'progressBar': true,
         }
-        this.myDatePickerOptions.height = '34px';
     }
 
     ngOnInit() {
@@ -79,9 +75,8 @@ export class ContractComponent implements OnInit, OnDestroy {
         this._activatedRoute.queryParams.subscribe(async p => {
             this.mode = p.mode;
             if (p.contractId) {
-                this.pageloader.setShowPageloader(true);
-                await this._contractService.getById(p.contractId).subscribe(o => {
-
+                this._contractService.getById(p.contractId).subscribe(res => {
+                    const o = res.json();
                     this.userDropdown = o.userDropdown;
                     this.contractMateDropdown = o.contractMateDropdown;
                     this.contractHireDropdown = o.contractHireDropdown;
@@ -123,7 +118,14 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this._bookingService.changeData(o.booking);
                     this.contractItemModel = o.creditContractItem;
 
+                    if (this.bookingModel.bookingPaymentType == 4) {
+                        let firstPay = new Date(getDateMyDatepicker(o.creditCalculate.firstPayment));
+                        firstPay.setDate(firstPay.getDate() + o.creditCalculate.instalmentEnd);
+                        this.tempDueDate = setLocalDate(firstPay.toISOString());
+                    }
+
                     o.creditCalculate.firstPayment = setLocalDate(o.creditCalculate.firstPayment);
+
                     this.calculateModel = o.creditCalculate;
 
                     if (p.mode === 'create') {
@@ -141,7 +143,6 @@ export class ContractComponent implements OnInit, OnDestroy {
                         });
                     }
                 });
-                this.pageloader.setShowPageloader(false);
             }
         });
     }
@@ -153,66 +154,113 @@ export class ContractComponent implements OnInit, OnDestroy {
         return int !== null ? int.toString() : null;
     }
 
+    contractMateLoading: boolean;
+    contractMateLoadingTxt: string;
     searchContractMate() {
         this.contractMateTypeahead.pipe(
+            tap(() => {
+                this.contractMateLoading = true;
+                this.contractMateLoadingTxt = message.loading;
+            }),
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._customerService.getByKey(term))
         ).subscribe(x => {
             this.chRef.markForCheck();
             this.contractMateDropdown = x;
-        }, (err) => {
+            this.contractMateUnload();
+        }, () => {
             this.contractMateDropdown = new Array<DropDownModel>();
+            this.contractMateUnload();
         });
     }
+    contractMateUnload() {
+        this.contractMateLoading = false;
+        this.contractMateLoadingTxt = '';
+    }
 
+    contractHireLoading: boolean;
+    contractHireLoadingTxt: string;
     searchcontractHire() {
         this.contractHireTypeahead.pipe(
+            tap(() => {
+                this.contractHireLoading = true;
+                this.contractHireLoadingTxt = message.loading;
+            }),
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._customerService.getByKey(term))
         ).subscribe(x => {
             this.chRef.markForCheck();
             this.contractHireDropdown = x;
-        }, (err) => {
+            this.contractHireUnload();
+        }, () => {
+            this.contractHireUnload();
             this.contractHireDropdown = new Array<DropDownModel>();
         });
     }
+    contractHireUnload() {
+        this.contractHireLoading = false;
+        this.contractHireLoadingTxt = '';
+    }
 
+    contractGurantor1Loading: boolean;
+    contractGurantor1LoadingTxt: string;
     searchContractGurantor1() {
         this.contractGurantor1Typeahead.pipe(
+            tap(() => {
+                this.contractGurantor1Loading = true;
+                this.contractGurantor1LoadingTxt = message.loading;
+            }),
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._customerService.getByKey(term))
         ).subscribe(x => {
             this.chRef.markForCheck();
             this.contractGurantor1Dropdown = x;
-        }, (err) => {
+            this.contractGurantor1Unload();
+        }, () => {
             this.contractGurantor1Dropdown = new Array<DropDownModel>();
+            this.contractGurantor1Unload();
         });
     }
-
+    
+    contractGurantor1Unload() {
+        this.contractGurantor1Loading = false;
+        this.contractGurantor1LoadingTxt = '';
+    }
+    contractGurantor2Loading: boolean;
+    contractGurantor2LoadingTxt: string;
     searchContractGurantor2() {
         this.contractGurantor2Typeahead.pipe(
+            tap(() => {
+                this.contractGurantor2Loading = true;
+                this.contractGurantor2LoadingTxt = message.loading;
+            }),
             distinctUntilChanged(),
             debounceTime(300),
             switchMap(term => this._customerService.getByKey(term))
         ).subscribe(x => {
             this.chRef.markForCheck();
             this.contractGurantor2Dropdown = x;
-        }, (err) => {
+            this.contractGurantor2Unload();
+        }, () => {
             this.contractGurantor2Dropdown = new Array<DropDownModel>();
+            this.contractGurantor2Unload();
         });
+    }
+    contractGurantor2Unload(){
+        this.contractGurantor2Loading = false;
+        this.contractGurantor2LoadingTxt = '';
     }
 
     async onSubmit() {
-        this.pageloader.setShowPageloader(true)
         const contractDate = getDateMyDatepicker(this.contractModel.contractDate);
         this.contractModel.contractDate = setZeroHours(contractDate);
-        
+
         if (this.mode === 'create') {
             await this._contractService.Create(this.contractModel, this.bookingModel).subscribe(
-                res => {
+                () => {
                     this.router.navigate(['credit/payment', this.contractModel.contractId]);
                 },
                 (err: HttpErrorResponse) => {
@@ -221,7 +269,7 @@ export class ContractComponent implements OnInit, OnDestroy {
             );
         } else if (this.mode === 'edit') {
             await this._contractService.Edit(this.contractModel, this.bookingModel).subscribe(
-                res => {
+                () => {
                     this.router.navigate(['credit/contract-list/active']);
                 },
                 (err: HttpErrorResponse) => {
@@ -229,7 +277,6 @@ export class ContractComponent implements OnInit, OnDestroy {
                 }
             );
         }
-        this.pageloader.setShowPageloader(false);
     }
 
     onChangeContractDate(event: IMyDateModel) {
