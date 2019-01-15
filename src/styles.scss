@@ -79,4 +79,31 @@ span.required {
 .ng-select-container {
     border: 1px solid #e5e6e7 !important;
 }
+
+.fixed_header{
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+    display:block;
+    width: 100%;
+    overflow: auto;
+    height: 50px;
+}
+
+.fixed_header thead tr {
+    display: block;
+}
+
+.fixed_header thead {
+    // background: black;
+    // color:#fff;
+}
+
+.fixed_header th, .fixed_header td {
+    padding: 5px;
+    width: 200px;
+}
+
   
