@@ -17,6 +17,7 @@ import { PaymentComponent } from './views/appviews/credit/payment/payment.compon
 import { ContractListCloseContractComponent } from './views/appviews/credit/contract-list/contract-list-close-contract.component';
 import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
 import { GuardGuard } from 'app/guards/guard.guard';
+import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -41,7 +42,7 @@ export const ROUTES: Routes = [
   {
     path: 'credit', component: BasicLayoutComponent,
     children: [
-      { path: 'contract', component: ContractComponent, canActivate: [GuardGuard]},
+      { path: 'contract', component: ContractComponent, canActivate: [GuardGuard] },
       { path: 'contract-canceled', component: ContractCanceledComponent, canActivate: [GuardGuard] },
       {
         path: 'contract-list',
@@ -56,6 +57,12 @@ export const ROUTES: Routes = [
       { path: 'calculate', component: CalculateComponent, canActivate: [GuardGuard] },
       { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent, canActivate: [GuardGuard] },
       { path: 'payment/:id', component: PaymentComponent, canActivate: [GuardGuard] }
+    ]
+  },
+  {
+    path: 'report', component: BasicLayoutComponent,
+    children: [
+      { path: 'booking', component: ReportBookingComponent }
     ]
   },
 

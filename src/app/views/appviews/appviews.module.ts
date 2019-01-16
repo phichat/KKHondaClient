@@ -16,13 +16,13 @@ import { StarterComponent } from './starter/starter.component';
 import { FormsModule } from '@angular/forms';
 import { CreditModule } from './credit/credit.module';
 import { CustomerService } from '../../services/customers';
+import { ReportBookingModule } from './report-booking/report-booking.module';
 
 @NgModule({
   declarations: [
     StarterViewComponent,
     LoginComponent,
     StarterComponent
-
   ],
   imports: [
     BrowserModule,
@@ -31,7 +31,8 @@ import { CustomerService } from '../../services/customers';
     PeityModule,
     SparklineModule,
     IboxtoolsModule,
-    CreditModule
+    CreditModule,
+    ReportBookingModule
   ],
   exports: [
     // IcheckDirective

@@ -1,16 +1,16 @@
-import { IMyOptions } from "mydatepicker-th";
+import { IMyOptions, IMyDateModel } from "mydatepicker-th";
 
 export const appConfig = {
-    apiUrl: 'http://203.154.126.61/kk-honda-api/api',
-    reportUrl: 'http://203.154.126.61/kk-honda-report',
+    // apiUrl: 'http://203.154.126.61/kk-honda-api/api',
+    // reportUrl: 'http://203.154.126.61/kk-honda-report',
     apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice',
-    // apiUrl: 'http://localhost:53076/api',
-    // reportUrl: 'http://localhost:58874/'
+    apiUrl: 'http://localhost:53076/api',
+    reportUrl: 'http://localhost:58874/'
 }
 
 export const MyDatePickerOptions: IMyOptions = {
     dateFormat: 'dd / mm / yyyy',
-    showClearDateBtn: false,
+    showClearDateBtn: true,
     height: '34px',
     openSelectorOnInputClick: true,
     editableDateField: false
@@ -60,15 +60,15 @@ export function setDateMyDatepicker(date: Date) {
     return { date: { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() } }
 }
 
-export function getDateMyDatepicker(date: any) {
-    if (!date)
+export function getDateMyDatepicker(date: IMyDateModel): Date {
+    if (!date && !date.date)
         return null;
 
-    if (!date.date)
-        return date;
+    // if (!date.date)
+    //     return null;
 
-    date = date.date
-    return new Date(`${date.year}-${date.month}-${date.day}`);
+    const d = date.date
+    return new Date(`${d.year}-${d.month}-${d.day}`);
 }
 
 export function setZeroHours(date: Date): string {

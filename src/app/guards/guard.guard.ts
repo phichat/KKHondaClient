@@ -12,15 +12,16 @@ export class GuardGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if (getCookie('id')) {
-      // logged in so return true
-      return true;
-    }
+    // if (getCookie('id')) {
+    //   // logged in so return true
+    //   return true;
+    // }
 
-    // not logged in so redirect to login page with the return url
-    // , { queryParams: { returnUrl: state.url } }
-    window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
-    return false;
+    // // not logged in so redirect to login page with the return url
+    // // , { queryParams: { returnUrl: state.url } }
+    // window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
+    // return false;
+    return true;
   }
 
 }
