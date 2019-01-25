@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ContractModel } from '../../models/credit';
 import { BookingModel } from '../../models/selling';
 import { HttpService } from 'app/core/http.service';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable()
 export class ContractService {
@@ -14,22 +15,22 @@ export class ContractService {
 
     GetActive() {
         const apiUrl = `${this.url}/Active`;
-        return this.httpService.get(apiUrl);
+        return this.httpService.get(apiUrl).pipe(map(x => x.json()));
     }
 
     GetCanceled() {
         const apiUrl = `${this.url}/Canceled`;
-        return this.httpService.get(apiUrl);
+        return this.httpService.get(apiUrl).pipe(map(x => x.json()));
     }
 
     GetCloseContract() {
         const apiUrl = `${this.url}/CloseContract`;
-        return this.httpService.get(apiUrl);
+        return this.httpService.get(apiUrl).pipe(map(x => x.json()));
     }
 
     GetOtherContract() {
         const apiUrl = `${this.url}/OtherContract`;
-        return this.httpService.get(apiUrl);
+        return this.httpService.get(apiUrl).pipe(map(x => x.json()));
     }
 
     getById(id: string) {
@@ -41,7 +42,7 @@ export class ContractService {
     Detail(contractId: string) {
         const apiURL = `${this.url}/Detail`;
         const params = { contractId };
-        return this.httpService.get(apiURL, { params });
+        return this.httpService.get(apiURL, { params }).pipe(map(x => x.json()));
     }
 
     Edit(creditContract: ContractModel, booking: BookingModel) {

@@ -50,7 +50,7 @@ export const ROUTES: Routes = [
         path: 'contract-list',
         children: [
           { path: 'active', component: ContractListActiveComponent, canActivate: [GuardGuard] },
-          // { path: 'canceled', component: ContractListCanceledComponent },
+          { path: 'canceled', component: ContractListCanceledComponent },
           { path: 'close-contract', component: ContractListCloseContractComponent, canActivate: [GuardGuard] },
           { path: 'other-contract', component: ContractListOtherContractComponent, canActivate: [GuardGuard] }
         ]

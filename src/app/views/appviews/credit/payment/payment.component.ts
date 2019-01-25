@@ -53,14 +53,11 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this._activatedRoute.params.subscribe(async param => {
       if (param['id']) {
         await this._paymentService.GetByContractId(param['id'])
           .subscribe((res) => {
-            const x = <Payment>res.json()
-            this.loadCreditPayment(x);
-            this.onDetectTable();
+            this.loadCreditPayment(res);
           });
 
         this.asyncUser = this._userService.currentData;
@@ -77,8 +74,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     let table: any = $('table');
 
     if ($.fn.DataTable.isDataTable('table')) {
-        this.dataTable = table.DataTable();
-        this.dataTable.destroy();
+      this.dataTable = table.DataTable();
+      this.dataTable.destroy();
     }
 
     this.chRef.detectChanges();
@@ -92,7 +89,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       info: false
     });
 
-}
+  }
 
   async loadCreditPayment(item: Payment) {
     this.contractModel = item.contract;
@@ -140,6 +137,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.branchId = this.user.branch;
     this.paymentModel.payDate = setZeroHours(new Date());
     this.paymentModel.outstanding = outstandingPrice;
+
+    this.onDetectTable();
   }
 
   ngAfterViewInit() {
@@ -172,7 +171,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.totalPrice = balanceNetPrice + fineSumRemain;
   }
 
-  async onSubmit(value: any) {
+  onSubmit(value: any) {
     if (this.paymentModel.outstanding == 0) {
       return;
     }
@@ -213,11 +212,13 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
 
-      await this._paymentService.PaymentTerm(frm).subscribe((x) => {
-        let res = x.json();
+      this._paymentService.PaymentTerm(frm).subscribe(() => {
         toastr.success('บันทึกรายการสำเร็จ!');
-        this.loadCreditPayment(res);
-        this.onDetectTable();
+        setTimeout(() => {
+          location.reload();
+        }, 800);
+        // this.loadCreditPayment(x);
+        // this.onDetectTable();
 
       }, (err: HttpErrorResponse) => {
         toastr.error(err.statusText);
@@ -232,7 +233,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   }
 
   onCancel(contractItemId: string, instalmentNo: number) {
-    const p = prompt(`ยืนยันการยกเลิกรายการรับชำระ ครั้งที่ ${instalmentNo} หรือไม่\nระบุหมายเหตุ:`);
+    const instalment = instalmentNo == 0 ? 'ค่างวด' : `ครั้งที่ ${instalmentNo}`;
+    const p = prompt(`ยืนยันการยกเลิกรายการรับชำระ ${instalment} หรือไม่\nระบุหมายเหตุ:`);
     if (p === '') {
       alert('กรุณาระบุหมายเหตุของการยกเลิก!')
     } else if (p !== '' && p !== null) {
@@ -241,10 +243,12 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         remark: p,
         updateBy: this.user.id.toString()
       }
-      this._paymentService.CancelContractTerm(params).subscribe(res => {
-        const x = <Payment>res.json();
+      this._paymentService.CancelContractTerm(params).subscribe(() => {
         toastr.success(message.canceled);
-        this.loadCreditPayment(x);
+        setTimeout(() => {
+          location.reload();
+        }, 800);
+        // this.loadCreditPayment(res);
         // this.onDetectTable();
       }, (err) => {
         toastr.error(err);

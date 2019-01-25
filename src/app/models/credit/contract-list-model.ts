@@ -1,4 +1,5 @@
 export class ContractListModel {
+    bookingPaymentType: number;
     public contractId: number;
     public calculateId: number;
     public branch: string;

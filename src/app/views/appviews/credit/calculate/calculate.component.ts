@@ -149,7 +149,7 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
                 this.searchEngineLoadingTxt = 'รอสักครู่...'
             }),
             distinctUntilChanged(),
-            debounceTime(300),
+            debounceTime(100),
             switchMap(term => this._calcService.GetEngineByKeyword(this.model.bookingId.toString(), this.userModel.branch.toString(), term))
         ).subscribe(x => {
             this.chRef.markForCheck();

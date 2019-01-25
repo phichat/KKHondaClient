@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>สัญญาเช่าซื้อ</h2>
+        <h2>รายการสัญญา</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="/">หน้าแรก</a>
             </li>
             <li>
-                <a>รายการสัญญาเช่าซื้อ</a>
+                <a>รายการสัญญา</a>
             </li>
         </ol>
     </div>
@@ -21,6 +21,7 @@
             <table class="table table-hover" cellspacing="0">
                 <thead>
                     <tr>
+                        <th style="width: 100px;">ประเภทการซื้อ</th>
                         <th style="width: 100px;">เลขที่สัญญา</th>
                         <th style="width: 150px;">สถานะสัญญา</th>
                         <th style="width: 100px;">รายละเอียด</th>
@@ -43,6 +44,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of contractListModel">
+                        <td class="text-center" [ngSwitch]="item.bookingPaymentType">
+                            <div *ngSwitchCase="3" style="margin:auto; padding:5px; color:#fff; background:#1E90FF;">เช่าซื้อ</div>
+                            <div *ngSwitchCase="4" style="margin:auto; padding:5px; color:#fff; background:#6A5ACD;">ขายเชื่อ</div>
+                        </td>
                         <td>{{item.contractNo}}</td>
                         <td [ngClass]="{'text-navy': item.contractStatus == 32, 
                         'text-warning': item.contractStatus == 31,

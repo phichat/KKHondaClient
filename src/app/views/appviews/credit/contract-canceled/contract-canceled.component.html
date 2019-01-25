@@ -19,119 +19,121 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
+    <div style="margin-bottom: 15em;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
 
 
-                    <div class="row form-group">
-                        <div class="col-md-12 pull-right text-right">
-                            <h3 class="m-b-xs">เลขที่สัญญา</h3>
-                            <h2 class="no-margins text-navy" style="font-weight: normal">
-                                {{contractDetailModel.contractNo}}
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div class="ibox none-ibox float-e-margins">
-                        <div class="ibox-content">
-                            <div class="row">
-                                <div class="col-md-6 m-b-sm">
-                                    <strong>ผู้ใช้จอง :</strong>
-                                    {{contractDetailModel.contractBooking}}
-                                </div>
-                                <div class="col-md-6 m-b-sm">
-                                    <strong>ผู้เช่าซื้อ :</strong>
-                                    {{contractDetailModel.contractHire}}
-                                </div>
-                                <div class="col-md-6 m-b-sm">
-                                    <strong>สถานะสัญญา :</strong>
-                                    <span class="text-danger">{{contractDetailModel.statusDesc}}</span>
-                                </div>
-                                <div class="col-md-6 m-b-sm">
-                                    <strong>วันที่ทำสัญญา :</strong>
-                                    {{contractDetailModel.contractDate}}
-                                </div>
+                        <div class="row form-group">
+                            <div class="col-md-12 pull-right text-right">
+                                <h3 class="m-b-xs">เลขที่สัญญา</h3>
+                                <h2 class="no-margins text-navy" style="font-weight: normal">
+                                    {{contractDetailModel.contractNo}}
+                                </h2>
                             </div>
                         </div>
-                    </div>
 
-                    <form action="" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
                         <div class="ibox none-ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h4>ยกเลิกสัญญาเช่าซื้อ</h4>
-                            </div>
                             <div class="ibox-content">
-                                <input type="hidden" name="contractId" [(ngModel)]="contractDetailModel.contractId">
-                                <input type="hidden" name="updateBy" [(ngModel)]="userId">
-                                <div class="row form-group">
-                                    <label for="" class="control-label col-md-3">
-                                        สาเหตุ :
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-9">
-                                        <textarea name="remark" ngModel cols="30" rows="4" class="form-control"
-                                            required></textarea>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้ใช้จอง :</strong>
+                                        {{contractDetailModel.contractBooking}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>ผู้เช่าซื้อ :</strong>
+                                        {{contractDetailModel.contractHire}}
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>สถานะสัญญา :</strong>
+                                        <span class="text-danger">{{contractDetailModel.statusDesc}}</span>
+                                    </div>
+                                    <div class="col-md-6 m-b-sm">
+                                        <strong>วันที่ทำสัญญา :</strong>
+                                        {{contractDetailModel.contractDate}}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="row">
-                            <div class="col-md-12 text-right">
-                                <button type="submit" [disabled]="!f.valid" class="btn btn-primary">บันทึก</button>
-                                <a [routerLink]="['/credit/contract-list/active']" class="btn btn-white">ยกเลิก</a>
+
+                        <form action="" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+                            <div class="ibox none-ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>ยกเลิกสัญญาเช่าซื้อ</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <input type="hidden" name="contractId" [(ngModel)]="contractDetailModel.contractId">
+                                    <input type="hidden" name="updateBy" [(ngModel)]="userId">
+                                    <div class="row form-group">
+                                        <label for="" class="control-label col-md-3">
+                                            สาเหตุ :
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-9">
+                                            <textarea name="remark" ngModel cols="30" rows="4" class="form-control"
+                                                required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="hr-line-dashed"></div>
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" [disabled]="!f.valid" class="btn btn-primary">บันทึก</button>
+                                    <a [routerLink]="['/credit/contract-list/active']" class="btn btn-white">ยกเลิก</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
+            <div class="col-md-6">
 
-            <div class="row form-group">
-                <div class="col-md-12 pull-right text-right">
-                    <h3 class="m-b-xs">เลขที่ใบจอง</h3>
-                    <h2 class="no-margins text-navy" style="font-weight: normal">
-                        {{bookingModel.bookingNo}}
-                    </h2>
+                <div class="row form-group">
+                    <div class="col-md-12 pull-right text-right">
+                        <h3 class="m-b-xs">เลขที่ใบจอง</h3>
+                        <h2 class="no-margins text-navy" style="font-weight: normal">
+                            {{bookingModel.bookingNo}}
+                        </h2>
+                    </div>
                 </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>ข้อมูลผู้จอง</h4>
+                <div class="ibox none-ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>ข้อมูลผู้จอง</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <app-ex-detail-customer></app-ex-detail-customer>
+                    </div>
                 </div>
-                <div class="ibox-content">
-                    <app-ex-detail-customer></app-ex-detail-customer>
+                <div class="ibox none-ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>ข้อมูลรถ</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <app-ex-detail-motobike></app-ex-detail-motobike>
+                    </div>
                 </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>ข้อมูลรถ</h4>
+                <div class="ibox none-ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>ข้อมูลของแถม</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <app-ex-detail-accessory></app-ex-detail-accessory>
+                    </div>
                 </div>
-                <div class="ibox-content">
-                    <app-ex-detail-motobike></app-ex-detail-motobike>
+                <div class="ibox none-ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>รายการฟรี</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <app-ex-detail-free></app-ex-detail-free>
+                    </div>
                 </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>ข้อมูลของแถม</h4>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-accessory></app-ex-detail-accessory>
-                </div>
-            </div>
-            <div class="ibox none-ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>รายการฟรี</h4>
-                </div>
-                <div class="ibox-content">
-                    <app-ex-detail-free></app-ex-detail-free>
-                </div>
-            </div>
 
 
+            </div>
         </div>
     </div>
 </div>
