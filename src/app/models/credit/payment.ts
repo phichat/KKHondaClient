@@ -6,7 +6,7 @@ export class Payment {
     isPay: IsPay;
     isOutstanding: IsOutstanding;
     contractItem: ContractItem[];
-    // statusDropdown: DropDownModel[];
+    statusDropdown: DropDownModel[];
     bankingsDropdown: DropDownModel[];
 }
 

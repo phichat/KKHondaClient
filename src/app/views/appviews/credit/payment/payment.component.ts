@@ -36,6 +36,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   isOutstandingModel: IsOutstanding = new IsOutstanding();
   paymentModel: PaymentFG = new PaymentFG();
   bankingsDropdown = new Array<DropDownModel>();
+  statusDropdown = new Array<DropDownModel>();
   dataTable: any;
 
   constructor(
@@ -98,6 +99,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.isPayModel = item.isPay ? item.isPay : new IsPay();
     this.isOutstandingModel = item.isOutstanding ? item.isOutstanding : new IsOutstanding();
     this.bankingsDropdown = item.bankingsDropdown;
+    // this.statusDropdown = item.statusDropdown;
 
     this.instalmentCount = 0;
     this.contractItemModel = [];
