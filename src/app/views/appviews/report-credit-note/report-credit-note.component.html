@@ -1,0 +1,100 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>รายงานการรับคืนสินค้า</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li class="active">
+                <strong>รายงานการรับคืนสินค้า</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2 text-right pull-right">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <form class="form-horizontal" action="" #fm="ngForm" (ngSubmit)="onPrint(fm)" style="margin-bottom: 15em;">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">สาขา</label>
+            <div class="col-sm-4">
+                <div class="radio radio-info">
+                    <input id="branch1" type="radio" name="branchType" value="1" [(ngModel)]="formModel.branchType">
+                    <label for="branch1">ทั้งหมด</label>
+                </div>
+                <div class="radio radio-info">
+                    <input id="branch2" type="radio" name="branchType" value="2" [(ngModel)]="formModel.branchType">
+                    <label for="branch2">สาขา</label>
+                </div>
+                <ng-select [items]="ACBranch" [hideSelected]="true" multiple="true" bindLabel="name" name="branchId"
+                    [(ngModel)]="formModel.branchId" placeholder="เลือกสาขา" [disabled]="formModel.branchType == '1'">
+                </ng-select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">ชื่อผู้จอง/ชื่อจดทะเบียน</label>
+            <div class="col-sm-8">
+                <div class="radio radio-info">
+                    <input id=cust1 type="radio" name="bookingName" value="1" checked [(ngModel)]="formModel.bookingName">
+                    <label for=cust1>ทั้งหมด</label>
+                </div>
+                <div class="radio radio-info">
+                    <input id=cust2 type="radio" name="bookingName" value="2" [(ngModel)]="formModel.bookingName">
+                    <label for=cust2>ชื่อผู้จอง</label>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <ng-select [items]="ACBookingName" bindLabel="name" bindValue="id" placeholder="เลือกชื่อผู้จอง"
+                                name="bookingNameId" [(ngModel)]="formModel.bookingNameId" [disabled]="formModel.bookingName != '2' ">
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="radio radio-info">
+                    <input id=cust3 type="radio" name="bookingName" value="3" [(ngModel)]="formModel.bookingName">
+                    <label for=cust3>ชื่อจดทะเบียน</label>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <ng-select [items]="ACBookingName" bindLabel="name" bindValue="id" placeholder="เลือกชื่อผู้จดทะเบียน"
+                                name="regisNameId" [(ngModel)]="formModel.regisNameId" [disabled]="formModel.bookingName != '3' ">
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">วันที่จอง</label>
+            <div class="col-sm-8">
+                <div class="radio radio-info">
+                    <input id=bookingDate1 type="radio" name="bookingDate" value="1" checked [(ngModel)]="formModel.bookingDate">
+                    <label for=bookingDate1>ทั้งหมด</label>
+                </div>
+                <div class="radio radio-info">
+                    <input id=bookingDate2 type="radio" name="bookingDate" value="2" [(ngModel)]="formModel.bookingDate">
+                    <label for=bookingDate2>ตั้งแต่</label>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <my-date-picker-th [options]="myDatePickerOptions" name="sDate" [(ngModel)]="formModel.sDate"
+                            [disabled]="formModel.bookingDate == '1'"></my-date-picker-th>
+                    </div>
+                    <label for="inputEmail3" class="col-md-1">ถึง</label>
+                    <div class="col-md-4">
+                        <my-date-picker-th [options]="myDatePickerOptions" name="eDate" [(ngModel)]="formModel.eDate"
+                            [disabled]="formModel.bookingDate == '1'"></my-date-picker-th>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="btnReport" type="submit" class="btn btn-success">พิมพ์</button>
+            </div>
+        </div>
+    </form>
+</div>

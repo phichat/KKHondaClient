@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { setLocalDate, resetLocalDate, currencyToFloat } from 'app/app.config';
+import { setLocalDate, resetLocalDate, currencyToFloat, setZeroHours } from 'app/app.config';
 import { PageloaderService } from '../../pageloader/pageloader.component';
 import { ModelUser } from '../../../../models/users';
 import { UserService } from '../../../../services/users';
@@ -24,6 +24,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   user = new ModelUser();
   asyncUser: any;
   notPayment = 13; // ยังไม่ชำระ
+
+  CurrencyToFloat = currencyToFloat;
 
   setLocalDate = setLocalDate
   checkSelectPaymentItem: boolean = true;
@@ -58,18 +60,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
           .subscribe((res) => {
             const x = <Payment>res.json()
             this.loadCreditPayment(x);
-
-            this.chRef.detectChanges();
-
-            const table: any = $('table');
-            this.dataTable = table.DataTable({
-              scrollX: true,
-              scrollY: '50vh',
-              scrollCollapse: true,
-              paging: false,
-              searching: false,
-              info: false
-            });
+            this.onDetectTable();
           });
 
         this.asyncUser = this._userService.currentData;
@@ -80,6 +71,28 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       };
     })
   }
+
+  onDetectTable() {
+
+    let table: any = $('table');
+
+    if ($.fn.DataTable.isDataTable('table')) {
+        this.dataTable = table.DataTable();
+        this.dataTable.destroy();
+    }
+
+    this.chRef.detectChanges();
+
+    this.dataTable = table.DataTable({
+      scrollX: true,
+      scrollY: '50vh',
+      scrollCollapse: true,
+      paging: false,
+      searching: false,
+      info: false
+    });
+
+}
 
   async loadCreditPayment(item: Payment) {
     this.contractModel = item.contract;
@@ -116,26 +129,17 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       })
     });
 
-    // let contractItem = this.contractItemModel.filter(item => item.payDate == null)[0];
     const outstandingPrice = this.contractItemModel
-      .filter(item => item.payDate == null)
       .reduce((accumulator, current) => {
-        return accumulator + (current.balanceNetPrice + current.fineSumRemain + current.fineSumeOther);
+        return accumulator + (current.remainNetPrice + current.fineSumRemain + current.fineSumeOther);
       }, 0)
 
     this.paymentModel.contractId = item.contract.contractId;
     this.paymentModel.payeer = this.user.id.toString();
     this.paymentModel.updateBy = this.user.id.toString();
     this.paymentModel.branchId = this.user.branch;
-    this.paymentModel.payDate = (new Date()).toISOString();
+    this.paymentModel.payDate = setZeroHours(new Date());
     this.paymentModel.outstanding = outstandingPrice;
-    // this.paymentModel.balanceNetPrice = 0;
-    // this.paymentModel.payNetPrice = 0;
-    // this.paymentModel.totalPrice = 0;
-    // this.paymentModel.fineSume = 0;
-    // this.paymentModel.dueDate = contractItem ? contractItem.dueDate : null;
-    // this.paymentModel.disCountPrice = 0.00;
-    // this.paymentModel.disCountRate = 0.00;
   }
 
   ngAfterViewInit() {
@@ -151,15 +155,15 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   instalmentCount: number = 0;
   setFormPayment() {
     this.instalmentCount = this.contractItemModel
-      .filter(item => item.status == this.notPayment && item.isSlect == true)
+      .filter(item => item.isSlect == true)
       .length;
 
     let fineSumRemain = 0;
     const balanceNetPrice = this.contractItemModel
-      .filter(item => item.payDate == null && item.isSlect == true)
+      .filter(item => item.isSlect == true)
       .reduce((accumulator, current) => {
         fineSumRemain += current.fineSumRemain;
-        return accumulator + (current.balanceNetPrice);
+        return accumulator + (current.remainNetPrice);
       }, 0);
 
     this.paymentModel.fineSume = fineSumRemain;
@@ -173,38 +177,51 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       return;
     }
     const frm = {
-      ContractId: this.paymentModel.contractId,
-      FineSum: currencyToFloat(this.paymentModel.fineSume.toString()),
-      FineSumOther: currencyToFloat(this.paymentModel.fineSumeOther.toString()),
-      PayNetPrice: currencyToFloat(this.paymentModel.payNetPrice.toString()),
-      DisCountPrice: currencyToFloat(this.paymentModel.disCountPrice.toString()),
-      DiscountRate: this.paymentModel.disCountRate,
-      PaymentType: this.paymentModel.paymentType,
-      BankCode: this.paymentModel.bankCode,
-      DocumentRef: this.paymentModel.documentRef,
-      Remark: this.paymentModel.remark,
-      PayDate: this.paymentModel.payDate,
-      BranchId: this.paymentModel.branchId,
-      UpdateBy: this.paymentModel.updateBy,
-      CreditContractItem: this.contractModel
+      contractId: this.paymentModel.contractId,
+      fineSum: this.paymentModel.fineSume
+        ? currencyToFloat(this.paymentModel.fineSume.toString())
+        : 0,
+      fineSumOther: this.paymentModel.fineSumeOther
+        ? currencyToFloat(this.paymentModel.fineSumeOther.toString())
+        : 0,
+      payNetPrice: this.paymentModel.payNetPrice
+        ? currencyToFloat(this.paymentModel.payNetPrice.toString())
+        : 0,
+      disCountPrice: this.paymentModel.disCountPrice
+        ? currencyToFloat(this.paymentModel.disCountPrice.toString())
+        : 0,
+      discountRate: this.paymentModel.disCountRate || 0,
+      paymentType: this.paymentModel.paymentType,
+      bankCode: this.paymentModel.bankCode || null,
+      documentRef: this.paymentModel.documentRef || null,
+      remark: this.paymentModel.remark || null,
+      payDate: this.paymentModel.payDate,
+      branchId: this.paymentModel.branchId,
+      updateBy: this.paymentModel.updateBy,
+      creditContractItem: this.contractItemModel
+        .filter(x => x.isSlect == true)
+        .map(x => {
+          return {
+            instalmentNo: x.instalmentNo,
+            contractItemId: x.contractItemId,
+            contractId: x.contractId,
+            fineSum: x.fineSum,
+            fineSumRemain: x.fineSumRemain
+          }
+        })
     }
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
 
-      this.pageloader.setShowPageloader(true);
-
-      // this.paymentModel.payDate = resetLocalDate(this.paymentModel.payDate);
-      // this.paymentModel.dueDate = resetLocalDate(this.paymentModel.dueDate);
-      this.paymentModel.payNetPrice = currencyToFloat(this.paymentModel.payNetPrice.toString());
-
-      await this._paymentService.PaymentTerm(frm).subscribe((res) => {
+      await this._paymentService.PaymentTerm(frm).subscribe((x) => {
+        let res = x.json();
         toastr.success('บันทึกรายการสำเร็จ!');
         this.loadCreditPayment(res);
+        this.onDetectTable();
+
       }, (err: HttpErrorResponse) => {
         toastr.error(err.statusText);
       })
-
-      this.pageloader.setShowPageloader(false)
     }
   }
 
@@ -228,8 +245,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         const x = <Payment>res.json();
         toastr.success(message.canceled);
         this.loadCreditPayment(x);
-      }, (err: HttpErrorResponse) => {
-        toastr.error(message.error);
+        // this.onDetectTable();
+      }, (err) => {
+        toastr.error(err);
       })
     }
   }
@@ -248,16 +266,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   changeSelectPaymentItem() {
     let select = this.contractItemModel
-      .filter(x => x.isSlect == true && x.balanceNetPrice == x.remainNetPrice);
+      .filter(x => x.isSlect == true);
     this.checkSelectPaymentItem = select.length > 0 ? false : true;
   }
-
-  // changeFineSum() {
-  //   const payNetPrice = this.paymentModel.payNetPrice ? currencyToFloat(this.paymentModel.payNetPrice.toString()) : 0;
-  //   const fineSum = this.paymentModel.fineSume ? currencyToFloat(this.paymentModel.fineSume.toString()) : 0;
-  //   const fineSumOther = this.paymentModel.fineSumeOther ? currencyToFloat(this.paymentModel.fineSumeOther.toString()) : 0;
-  //   this.paymentModel.totalPrice = payNetPrice + fineSum + fineSumOther
-  // }
 
   onCalculate() {
     const payNetPrice = this.paymentModel.payNetPrice ? currencyToFloat(this.paymentModel.payNetPrice.toString()) : 0;
@@ -267,5 +278,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
     this.paymentModel.totalPrice = (payNetPrice + fineSum + fineSumOther) - disCountPrice;
     this.paymentModel.disCountRate = (disCountPrice * 100) / payNetPrice;
+  }
+
+  getTime(d: Date): number {
+    return (new Date(d)).getTime();
   }
 }

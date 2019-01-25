@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { HttpService } from 'app/core/http.service';
+import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs/Observable';
+import { AutoCompleteModel } from 'app/models/auto-complete-model';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 @Injectable()
 export class ReportBookingService {
@@ -13,31 +17,35 @@ export class ReportBookingService {
 
   apiUrl = `Booking`
 
-  GetBranchAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetBranchAutoComplete`)
+  GetBranchAutoComplete(): Observable<DropDownModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetBranchAutoComplete`).pipe(map(x => x.json()))
   }
 
-  GetProductTypeAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetProductTypeAutoComplete`)
+  GetProductTypeAutoComplete(): Observable<DropDownModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetProductTypeAutoComplete`).pipe(map(x => x.json()))
   }
 
-  GetVersionAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetVersionAutoComplete`)
+  GetVersionAutoComplete(): Observable<DropDownModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetVersionAutoComplete`).pipe(map(x => x.json()))
   }
 
-  GetDesignAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetDesignAutoComplete`)
+  GetDesignAutoComplete(): Observable<DropDownModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetDesignAutoComplete`).pipe(map(x => x.json()))
   }
 
-  GetColorAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetColorAutoComplete`)
+  GetColorAutoComplete(): Observable<DropDownModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetColorAutoComplete`).pipe(map(x => x.json()))
   }
 
-  GetBookingNameAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetBookingNameAutoComplete`)
+  GetBookingNameAutoComplete(): Observable<AutoCompleteModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetBookingNameAutoComplete`).pipe(map(x => x.json()))
   }
 
-  GetRegisNameAutoComplete() {
-    return this.httpService.get(`${this.apiUrl}/GetRegisNameAutoComplete`)
+  GetRegisNameAutoComplete(): Observable<AutoCompleteModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetRegisNameAutoComplete`).pipe(map(x => x.json()))
+  }
+
+  GetSellNameAutoComplete(): Observable<DropDownModel[]> {
+    return this.httpService.get(`${this.apiUrl}/GetSellNameAutoComplete`).pipe(map(x => x.json()))
   }
 }

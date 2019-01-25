@@ -332,6 +332,16 @@
                             <span class="nav-label">รายงานการจองรถ</span>
                         </a>
                     </li>
+                    <li [ngClass]="{active: activeRoute('credit-note')}"> 
+                        <a [routerLink]="['/report/credit-note']">
+                            <span class="nav-label">รายงานการรับคืนสินค้า</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('sale-report')}"> 
+                        <a [routerLink]="['/report/sale-report']">
+                            <span class="nav-label">รายงานยอดขายรวม</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_bike">
                             <span class="nav-label">สต๊อกสินค้า (รถ)</span>

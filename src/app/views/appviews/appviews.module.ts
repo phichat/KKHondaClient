@@ -17,6 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { CreditModule } from './credit/credit.module';
 import { CustomerService } from '../../services/customers';
 import { ReportBookingModule } from './report-booking/report-booking.module';
+import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
+import { ReportSaleModule } from './report-sale/report-sale.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ReportBookingModule } from './report-booking/report-booking.module';
     SparklineModule,
     IboxtoolsModule,
     CreditModule,
-    ReportBookingModule
+    ReportBookingModule,
+    ReportCreditNoteModule,
+    ReportSaleModule
   ],
   exports: [
     // IcheckDirective

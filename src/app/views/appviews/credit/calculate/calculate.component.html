@@ -162,8 +162,8 @@
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
-                    <input type="text" [required]="model.bookingPaymentType != 4" [(ngModel)]="model.interest" name="interest"
-                      class="form-control number-2-digit" (keyup)="instalmentCalculate()">
+                    <input type="number" [required]="model.bookingPaymentType != 4" [(ngModel)]="model.interest" name="interest"
+                      class="form-control text-right" (keyup)="instalmentCalculate()">
                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                   </div>
                 </div>

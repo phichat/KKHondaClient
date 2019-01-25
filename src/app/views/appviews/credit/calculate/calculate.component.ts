@@ -1,5 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, AfterViewInit, EventEmitter, ElementRef, OnChanges, DoCheck } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, EventEmitter, ElementRef, DoCheck } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalculateModel, ContractModel } from '../../../../models/credit';
 import { BookingService } from '../../../../services/selling';
@@ -362,9 +361,6 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
         let form = this.model;
         const firstPayment = getDateMyDatepicker(form.firstPayment);
         form.firstPayment = setZeroHours(firstPayment);
-        this.contractItem.contractItemModel.map(item => {
-            item.dueDate = resetLocalDate(item.dueDate);
-        })
 
         if (this.mode === 'create') {
             await this.onCreate(form);

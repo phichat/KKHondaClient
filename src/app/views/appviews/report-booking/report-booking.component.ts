@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { MyDatePickerOptions, getDateMyDatepicker, setZeroHours, appConfig } from 'app/app.config';
+import {
+  MyDatePickerOptions,
+  getDateMyDatepicker,
+  setZeroHours,
+  appConfig,
+  mapDropDownnToAutoComplete,
+  mapAutoCompleteIdToString
+}
+  from 'app/app.config';
 import { ReportBookingService } from './report-booking.service';
-import { DropDownModel } from 'app/models/drop-down-model';
 import { AutoCompleteModel } from 'app/models/auto-complete-model';
 import { ReportBooking } from './report-booking.interface';
 
@@ -38,37 +45,29 @@ export class ReportBookingComponent implements OnInit {
     this.formModel.bookingReceiveDate = '1';
 
     this.s_ReportBooking.GetBookingNameAutoComplete().subscribe(x => {
-      this.ACBookingName = <AutoCompleteModel[]>x.json();
+      this.ACBookingName = x;
     });
     this.s_ReportBooking.GetRegisNameAutoComplete().subscribe(x => {
-      this.ACRegisName = <AutoCompleteModel[]>x.json();
+      this.ACRegisName = x;
     });
     this.s_ReportBooking.GetBranchAutoComplete().subscribe(x => {
-      this.ACBranch = this.mapDropDownnToAutoComplete(x.json());
+      this.ACBranch = mapDropDownnToAutoComplete(x);
     });
     this.s_ReportBooking.GetColorAutoComplete().subscribe(x => {
-      this.ACColor = this.mapDropDownnToAutoComplete(x.json());
+      this.ACColor = mapDropDownnToAutoComplete(x);
     });
     this.s_ReportBooking.GetDesignAutoComplete().subscribe(x => {
-      this.ACDesign = this.mapDropDownnToAutoComplete(x.json());
+      this.ACDesign = mapDropDownnToAutoComplete(x);
     });
     this.s_ReportBooking.GetProductTypeAutoComplete().subscribe(x => {
-      this.ACProductType = this.mapDropDownnToAutoComplete(x.json());
+      this.ACProductType = mapDropDownnToAutoComplete(x);
     });
     this.s_ReportBooking.GetVersionAutoComplete().subscribe(x => {
-      this.ACVersion = this.mapDropDownnToAutoComplete(x.json());
+      this.ACVersion = mapDropDownnToAutoComplete(x);
     });
   }
 
-  mapDropDownnToAutoComplete(dd: DropDownModel[]): AutoCompleteModel[] {
-    return dd.map(c => {
-      return { id: c.value, name: c.text };
-    })
-  }
 
-  mapArrayToString(arr: AutoCompleteModel[]): string {
-    return arr.map(x => x.id).join(',');
-  }
 
   onPrint(form: any) {
     let strParameter = "?BookingReport=true"; // page
@@ -80,15 +79,15 @@ export class ReportBookingComponent implements OnInit {
     if (fm.branchType == '1') {
       strParameter += "&branchId=0"
     } else {
-      strParameter += "&branchId=" + this.mapArrayToString(fm.branchId);
+      strParameter += "&branchId=" + mapAutoCompleteIdToString(fm.branchId);
     }
 
     //ยี่ห้อ รุ่น แบบ สี
     // fm.brandTypeId.reduce()
-    const brandTypeId = (fm.brandType == '1' ? 0 : this.mapArrayToString(fm.brandTypeId));
-    const version = (fm.brandType == '1' ? 0 : this.mapArrayToString(fm.version));
-    const design = (fm.brandType == '1' ? 0 : this.mapArrayToString(fm.design));
-    const color = (fm.brandType == '1' ? 0 : this.mapArrayToString(fm.color));
+    const brandTypeId = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
+    const version = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.version));
+    const design = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.design));
+    const color = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.color));
     strParameter += "&brandType=" + fm.brandType;
     strParameter += "&brandTypeId=" + (brandTypeId || 0);
     strParameter += "&version=" + (version || 0);

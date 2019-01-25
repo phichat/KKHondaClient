@@ -52,6 +52,7 @@ export class Booking {
     modelCode: string;
     color: string;
     price: number;
+    bookingPaymentType: number;
     depositPrice: number;
     depositIsPay: number;
     depositIsOutstanding: number;
@@ -73,8 +74,8 @@ export class ContractItem {
     contractId: number;
     taxInvoiceNo: string;
     instalmentNo: number;
-    dueDate: any;
-    payDate: any;
+    dueDate: Date;
+    payDate: Date;
     balanceNetPrice: number;
     payNetPrice: number; 
     paymentType: number;

@@ -33,7 +33,8 @@ import { CoreModule } from './core/core.module';
     AppviewsModule,
     RouterModule.forRoot(ROUTES),
     // PageloaderModule,
-    BookingModule
+    BookingModule,
+    
   ],
   providers: [
     GuardGuard,
