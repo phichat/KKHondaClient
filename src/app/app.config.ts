@@ -1,4 +1,6 @@
 import { IMyOptions, IMyDateModel } from "mydatepicker-th";
+import { DropDownModel } from './models/drop-down-model';
+import { AutoCompleteModel } from './models/auto-complete-model';
 
 export const appConfig = {
     // apiUrl: 'http://203.154.126.61/kk-honda-api/api',
@@ -61,11 +63,8 @@ export function setDateMyDatepicker(date: Date) {
 }
 
 export function getDateMyDatepicker(date: IMyDateModel): Date {
-    if (!date && !date.date)
+    if (!date || !date.date)
         return null;
-
-    // if (!date.date)
-    //     return null;
 
     const d = date.date
     return new Date(`${d.year}-${d.month}-${d.day}`);
@@ -80,7 +79,8 @@ export function setZeroHours(date: Date): string {
     return date.toISOString();
 }
 
-export function currencyToFloat(str: string) {
+export function currencyToFloat(str: any): number {
+    if (str == undefined) return 0.0;
     return parseFloat(str.replace(/,/i, ''));
 }
 
@@ -98,4 +98,14 @@ export function getCookie(cname) {
         }
     }
     return "";
+}
+
+export function mapDropDownnToAutoComplete(dd: DropDownModel[]): AutoCompleteModel[] {
+    return dd.map(c => {
+        return { id: c.value, name: c.text };
+    })
+}
+
+export function mapAutoCompleteIdToString(arr: AutoCompleteModel[]): string {
+    return arr.map(x => x.id).join(',');
 }

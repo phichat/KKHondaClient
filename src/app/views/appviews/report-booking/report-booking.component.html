@@ -94,8 +94,6 @@
           <label for=cust2>ชื่อผู้จอง</label>
           <div class="form-group">
             <div class="col-md-6">
-              <!-- <input type="text" class="form-control" id="txtBookingName">
-              <input type="hidden" name="hfBookingName" value="" /> -->
               <ng-select [items]="ACBookingName" bindLabel="name" bindValue="id" placeholder="เลือกชื่อผู้จอง" name="bookingNameId" 
               [(ngModel)]="formModel.bookingNameId" [disabled]="formModel.bookingName != '2' ">
               </ng-select>
@@ -107,8 +105,6 @@
           <label for=cust3>ชื่อจดทะเบียน</label>
           <div class="form-group">
             <div class="col-md-6">
-              <!-- <input type="text" class="form-control" id="txtRegisName">
-              <input type="hidden" name="hfRegisName" value="" /> -->
               <ng-select [items]="ACBookingName" bindLabel="name" bindValue="id" placeholder="เลือกชื่อผู้จดทะเบียน" name="regisNameId" 
               [(ngModel)]="formModel.regisNameId" [disabled]="formModel.bookingName != '3' ">
               </ng-select>

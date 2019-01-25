@@ -16,6 +16,7 @@ declare var footable: any;
 export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
 
 
+    setLocalDate = setLocalDate;
     balanchNetTotol: number;
     principalTotal: number;
     interestTotal: number;
@@ -129,7 +130,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     this._userService.currentData.subscribe(user => item.contractBranchId = user.branch);
 
                     item.instalmentNo = i;
-                    item.dueDate = setLocalDate(dueDate.toString());
+                    item.dueDate = dueDate;
                     item.vatRate = p.nowVat;
                     item.balance = (balance);
                     item.balanceVatPrice = balanceVatPrice;
@@ -160,9 +161,9 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
         if (this.contractItemModel.length > 0 && this.balanchNetTotol == 0) {
             this.chRef.markForCheck();
 
-            this.contractItemModel.map((item, i) => {
-                item.dueDate = setLocalDate(item.dueDate);
-            })
+            // this.contractItemModel.map((item, i) => {
+            //     item.dueDate = setLocalDate(item.dueDate);
+            // })
             this.setTotal();
         }
     }

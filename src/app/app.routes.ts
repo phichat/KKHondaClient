@@ -18,6 +18,8 @@ import { ContractListCloseContractComponent } from './views/appviews/credit/cont
 import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
 import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
+import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';
+import { ReportSaleComponent } from './views/appviews/report-sale/report-sale.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -62,7 +64,9 @@ export const ROUTES: Routes = [
   {
     path: 'report', component: BasicLayoutComponent,
     children: [
-      { path: 'booking', component: ReportBookingComponent }
+      { path: 'booking', component: ReportBookingComponent },
+      { path: 'credit-note', component: ReportCreditNoteComponent },
+      { path: 'sale-report', component: ReportSaleComponent }
     ]
   },
 
