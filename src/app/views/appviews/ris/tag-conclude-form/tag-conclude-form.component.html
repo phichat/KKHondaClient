@@ -76,19 +76,22 @@
                         <span class="mt-2">รอสักครู่...</span>
                     </td>
                   </tr>
-                  <tr #else_tr *ngFor="let item of TagList.controls; let i = index" [formGroupName]="i">
-                    <td>
-                      <input type="checkbox" formControlName="IS_CHECKED" [id]="i">
-                    </td>
-                    <td>{{item.get('bookingNo')?.value}}</td>
-                    <td>{{item.get('branchName')?.value}}</td>
-                    <td>{{item.get('tagNo')?.value}}</td>
-                    <td>{{item.get('branchProvince')?.value}}</td>
-                    <td>{{item.get('eno')?.value}}</td>
-                    <td>{{item.get('fno')?.value}}</td>
-                    <td>{{item.get('price1')?.value}}</td>
-                    <td>{{item.get('price2')?.value}}</td>
-                  </tr>
+                  <ng-template #else_tr>
+                      <tr *ngFor="let item of TagList.controls; let i = index" [formGroupName]="i">
+                          <td>
+                            <input type="checkbox" formControlName="IS_CHECKED" [id]="i">
+                          </td>
+                          <td>{{item.get('bookingNo')?.value}}</td>
+                          <td>{{item.get('branchName')?.value}}</td>
+                          <td>{{item.get('tagNo')?.value}}</td>
+                          <td>{{item.get('branchProvince')?.value}}</td>
+                          <td>{{item.get('eno')?.value}}</td>
+                          <td>{{item.get('fno')?.value}}</td>
+                          <td>{{item.get('price1')?.value}}</td>
+                          <td>{{item.get('price2')?.value}}</td>
+                        </tr>
+                  </ng-template>
+                 
                 </tbody>
               </table>
             </div>
