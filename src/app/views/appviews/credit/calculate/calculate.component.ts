@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, EventEmitter, ElementRef, DoCheck } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, EventEmitter, ElementRef, DoCheck, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalculateModel, ContractModel } from '../../../../models/credit';
 import { BookingService } from '../../../../services/selling';
@@ -6,7 +6,7 @@ import { UserService } from '../../../../services/users';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import * as Inputmask from 'inputmask';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, resetLocalDate, setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
+import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 import { distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
@@ -21,7 +21,26 @@ declare var toastr: any;
     templateUrl: './calculate.component.html',
     styleUrls: ['./calculate.component.scss']
 })
-export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
+export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
+    ngAfterViewInit(): void {
+        // const selector = document.querySelectorAll('input.number');
+        // const number2Digit = document.querySelectorAll('input.number-2-digit');
+
+        // Inputmask({
+        //     'alias': 'numeric',
+        //     'groupSeparator': ',',
+        //     'autoGroup': true,
+        //     'digits': 0,
+        //     'digitsOptional': false
+        // }).mask(selector);
+
+        // Inputmask({
+        //     'alias': 'numeric',
+        //     'groupSeparator': ',',
+        //     'autoGroup': true,
+        //     'digits': 2
+        // }).mask(number2Digit);
+    }
 
     @ViewChild(ContractItemComponent) contractItem;
     @ViewChild('tempDueDate') tempDueDate: ElementRef;
@@ -91,45 +110,43 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
                 this.model.remain = 0;
                 this.model.sellTypeId = 4;
                 this.model.sellAcitvityId = 25;
-                this.model.returnDeposit = '0';
+                this.model.returnDeposit = '1';
                 this.model.returnDepositPrice = 0;
 
-                // this.model.frameNo = '0'
-                // this.model.engineNo = '0'
-
-                this._userService.currentData.subscribe(u => {
-                    if (u) {
-                        this.model.createBy = u.id;
-                        this.contractModel.branchId = u.branch;
-                        this.contractModel.createBy = u.id;
-                    }
-                });
+                this._userService.currentData
+                    .subscribe(u => {
+                        this.chRef.markForCheck();
+                        if (u) {
+                            this.userModel = u;
+                            this.model.createBy = u.id;
+                            this.contractModel.branchId = u.branch;
+                            this.contractModel.createBy = u.id;
+                        }
+                    });
             }
-            await this._userService.currentData.subscribe(u => this.userModel = u);
-
             this.searchEngine();
         });
     }
 
-    ngDoCheck(): void {
-        const selector = document.querySelectorAll('input.number');
-        const number2Digit = document.querySelectorAll('input.number-2-digit')
+    // ngDoCheck(): void {
+    //     const selector = document.querySelectorAll('input.number');
+    //     const number2Digit = document.querySelectorAll('input.number-2-digit')
 
-        Inputmask({
-            'alias': 'numeric',
-            'groupSeparator': ',',
-            'autoGroup': true,
-            'digits': 0,
-            'digitsOptional': false
-        }).mask(selector);
+    //     Inputmask({
+    //         'alias': 'numeric',
+    //         'groupSeparator': ',',
+    //         'autoGroup': true,
+    //         'digits': 0,
+    //         'digitsOptional': false
+    //     }).mask(selector);
 
-        Inputmask({
-            'alias': 'numeric',
-            'groupSeparator': ',',
-            'autoGroup': true,
-            'digits': 2
-        }).mask(number2Digit);
-    }
+    //     Inputmask({
+    //         'alias': 'numeric',
+    //         'groupSeparator': ',',
+    //         'autoGroup': true,
+    //         'digits': 2
+    //     }).mask(number2Digit);
+    // }
 
     ngOnDestroy(): void {
 
@@ -178,12 +195,14 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
                 this.model.outStandingPrice = p.outStandingPrice;
                 this.model.bookingPaymentType = p.bookingPaymentType;
 
-                if (p.deposit > 0) {
+                this.model.bookDeposit = p.deposit;
+                this.bookDepositState = p.deposit;
+                if (this.model.returnDeposit == '0') {
                     this.model.returnDepositPrice = p.deposit;
-                    this.model.bookDeposit = p.deposit;
                     this.model.depositPrice = p.deposit;
-                    this.bookDepositState = p.deposit;
                     this.onChangeDepositPrice();
+                } else {
+                    this.model.netPrice = (p.outStandingPrice + p.deposit);
                 }
 
                 this.model.nowVat = p.vat;
@@ -197,8 +216,8 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
         this.instalmentCalculate();
     }
 
-    async onLoadCaculateData(calculateId: number) {
-        await this._calcService.GetById(calculateId.toString())
+    onLoadCaculateData(calculateId: number) {
+        this._calcService.GetById(calculateId.toString())
             .subscribe(p => {
 
                 const firstPayment = p.creditCalculate.firstPayment;
@@ -210,7 +229,7 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
 
                 this.bookingNo = p.booking.bookingNo;
                 this._bookingService.changeData(p.booking);
-                // this._calcService.changeData(this.model);
+                this._calcService.changeData(this.model);
             })
     }
 
@@ -236,7 +255,9 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
                 if (depositPrice >= 0 && depositPrice >= this.bookDepositState)
                     this.model.depositPrice = depositPrice - this.bookDepositState;
                 // เพิ่มเงินจองเข้าไปในราคาสินค้า
-                this.model.outStandingPrice = this.outStandingPriceState + this.bookDepositState;
+                // this.model.outStandingPrice = this.outStandingPriceState + this.bookDepositState;
+                // ราคาสินค้าคงเหลือ
+                this.model.netPrice = (this.outStandingPriceState + this.bookDepositState) - this.model.depositPrice;
                 break;
 
             case '0':
@@ -245,6 +266,9 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
                 this.model.outStandingPrice = this.outStandingPriceState;
                 // เพิ่มเงินจองเข้าไปในเงินดาวน์
                 this.model.depositPrice = depositPrice + this.bookDepositState;
+
+                // ราคาสินค้าคงเหลือ
+                this.model.netPrice = (this.model.outStandingPrice - depositPrice);
                 break;
         }
         this.onChangeDepositPrice();
@@ -252,10 +276,6 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
     }
 
     instalmentCalculate() {
-        // ราคาสินค้าคงเหลือ
-        const deposit: number = currencyToFloat(this.model.depositPrice.toString());
-        this.model.netPrice = (this.model.outStandingPrice - deposit);
-
         const __instalmentEnd = parseInt((this.model.instalmentEnd || 0 as any).toString());
         const __interest = this.model.interest || 0;
 
@@ -263,7 +283,7 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
             let firstPay = new Date(getDateMyDatepicker(this.model.firstPayment));
             firstPay.setDate(firstPay.getDate() + __instalmentEnd);
             this.tempDueDate.nativeElement.value = setLocalDate(firstPay.toISOString());
-        } 
+        }
 
         // จำนวนดอกเบี้ยที่ต้องชำระ
         if (this.model.typePayment == '0') {
@@ -383,7 +403,7 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
                 },
                 () => {
                     toastr.error(message.error);
-                }   
+                }
             );
     }
 
@@ -415,4 +435,11 @@ export class CalculateComponent implements OnInit, OnDestroy, DoCheck {
 
 }
 
+// Number.prototype.format = function(n, x) {
+//     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+//     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+// };
+interface Number {
+    padZero(length: number);
+}
 

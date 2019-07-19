@@ -28,16 +28,16 @@ export class PaymentService {
     return this.httpService.get(api).pipe(map(x => x.json()));
   }
 
-  CancelContractTerm(param: any) {
+  CancelContractTerm(param: any): Observable<Payment> {
     const params = JSON.stringify(param);
     const api = `${this.url}/CancelItemPayment`;
-    return this.httpService.post(api, params);
+    return this.httpService.post(api, params).pipe(map(x => x.json()));
   }
 
-  PaymentTerm(payment: any) {
+  PaymentTerm(payment: any): Observable<Payment> {
     const api = `${this.url}/PaymentTerm`;
     const params = JSON.stringify(payment);
-    return this.httpService.post(api, params);
+    return this.httpService.post(api, params).pipe(map(x => x.json()));
   }
 
 }

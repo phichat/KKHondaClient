@@ -1,11 +1,10 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ChangeDetectorRef, DoCheck } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import * as Inputmask from 'inputmask';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { setLocalDate, resetLocalDate, currencyToFloat, setZeroHours } from 'app/app.config';
-import { PageloaderService } from '../../pageloader/pageloader.component';
+import { setLocalDate, currencyToFloat, setZeroHours } from 'app/app.config';
 import { ModelUser } from '../../../../models/users';
 import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
@@ -17,7 +16,8 @@ declare var toastr: any;
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  styleUrls: ['./payment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentComponent implements OnInit, AfterViewInit {
 
@@ -29,12 +29,12 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   setLocalDate = setLocalDate
   checkSelectPaymentItem: boolean = true;
-  contractItemModel: ContractItem[] = [];
   contractModel: Contract = new Contract();
   bookingModel: Booking = new Booking();
   isPayModel: IsPay = new IsPay();
   isOutstandingModel: IsOutstanding = new IsOutstanding();
   paymentModel: PaymentFG = new PaymentFG();
+  contractItemModel: ContractItem[] = [];
   bankingsDropdown = new Array<DropDownModel>();
   statusDropdown = new Array<DropDownModel>();
   dataTable: any;
@@ -42,7 +42,6 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _paymentService: PaymentService,
-    private pageloader: PageloaderService,
     private chRef: ChangeDetectorRef,
     private _userService: UserService,
     private router: Router,
@@ -70,17 +69,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     })
   }
 
-  onDetectTable() {
-
+  private initDatatable(): void {
     let table: any = $('table');
-
-    if ($.fn.DataTable.isDataTable('table')) {
-      this.dataTable = table.DataTable();
-      this.dataTable.destroy();
-    }
-
-    this.chRef.detectChanges();
-
     this.dataTable = table.DataTable({
       scrollX: true,
       scrollY: '50vh',
@@ -89,10 +79,18 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       searching: false,
       info: false
     });
+  }
 
+  private reInitDatatable(): void {
+    if (this.dataTable) {
+      this.dataTable.destroy()
+      this.dataTable = null
+    }
+    setTimeout(() => this.initDatatable(), 0)
   }
 
   async loadCreditPayment(item: Payment) {
+
     this.contractModel = item.contract;
     this.contractModel.contractDate = setLocalDate(item.contract.contractDate);
     this.bookingModel = item.booking;
@@ -105,6 +103,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.contractItemModel = [];
     this.paymentModel = new PaymentFG();
 
+    this.chRef.markForCheck(); 
     await item.contractItem.map(res => {
       this.contractItemModel.push({
         isSlect: false,
@@ -128,6 +127,10 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       })
     });
 
+    setTimeout(() => {
+      this.reInitDatatable();
+    }, 500);
+
     const outstandingPrice = this.contractItemModel
       .reduce((accumulator, current) => {
         return accumulator + (current.remainNetPrice + current.fineSumRemain + current.fineSumeOther);
@@ -140,7 +143,6 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.payDate = setZeroHours(new Date());
     this.paymentModel.outstanding = outstandingPrice;
 
-    this.onDetectTable();
   }
 
   ngAfterViewInit() {
@@ -214,13 +216,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
 
-      this._paymentService.PaymentTerm(frm).subscribe(() => {
+      this._paymentService.PaymentTerm(frm).subscribe((x) => {
         toastr.success('บันทึกรายการสำเร็จ!');
-        setTimeout(() => {
-          location.reload();
-        }, 800);
-        // this.loadCreditPayment(x);
-        // this.onDetectTable();
+        setTimeout(() => location.reload(), 800);
 
       }, (err: HttpErrorResponse) => {
         toastr.error(err.statusText);
@@ -247,11 +245,10 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       }
       this._paymentService.CancelContractTerm(params).subscribe(() => {
         toastr.success(message.canceled);
-        setTimeout(() => {
-          location.reload();
-        }, 800);
-        // this.loadCreditPayment(res);
-        // this.onDetectTable();
+        // setTimeout(() => {
+        //   this.reInitDatatable();
+        // }, 500);
+        setTimeout(() => location.reload(), 800);
       }, (err) => {
         toastr.error(err);
       })

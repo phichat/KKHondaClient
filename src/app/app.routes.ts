@@ -20,6 +20,9 @@ import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';
 import { ReportSaleComponent } from './views/appviews/report-sale/report-sale.component';
+import { TagConcludeFormComponent } from './views/appviews/ris/tag-conclude-form/tag-conclude-form.component';
+import { TagClFormComponent } from './views/appviews/ris/tag-cl-form/tag-cl-form.component';
+import { TagAlFormComponent } from './views/appviews/ris/tag-al-form/tag-al-form.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -67,6 +70,14 @@ export const ROUTES: Routes = [
       { path: 'booking', component: ReportBookingComponent },
       { path: 'credit-note', component: ReportCreditNoteComponent },
       { path: 'sale-report', component: ReportSaleComponent }
+    ]
+  },
+  {
+    path: 'ris', component: BasicLayoutComponent,
+    children: [
+      { path: 'conclude-form', component: TagConcludeFormComponent },
+      { path: 'cl-form', component: TagClFormComponent },
+      { path: 'al-form', component: TagAlFormComponent }
     ]
   },
 

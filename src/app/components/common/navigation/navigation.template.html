@@ -190,7 +190,7 @@
                     <li [ngClass]="{active: activeRoute('canceled')}">
                         <a [routerLink]="['/credit/contract-list/canceled']">
                             <span class="nav-label">รายการยกเลิกสัญญา</span>
-                        </a>    
+                        </a>
                     </li>
                     <li [ngClass]="{active: activeRoute('other-contract')}">
                         <a [routerLink]="['/credit/contract-list/other-contract']">
@@ -277,7 +277,7 @@
 
                 </ul>
             </li>
-            <li>
+            <li  [ngClass]="{active: activeRoute('ris')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-file"></i>
                     <span class="nav-label">งานทะเบียน</span>
@@ -285,13 +285,28 @@
                 </a>
                 <ul class="nav nav-second-level collapse">
                     <li>
-                        <a href="{{kkHondaWeb}}/home.php?show=_group_page">
-                            <span class="nav-label">บันทึกการส่งเรื่องดำเนินการ</span>
+                        <a href="{{kkHondaWeb}}/home.php?show=_registertag_create">
+                            <span class="nav-label">บันทึกรับเรื่อง</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{kkHondaWeb}}/home.php?show=_user_list">
-                            <span class="nav-label">รายการรอการดำเนินการ</span>
+                        <a href="{{kkHondaWeb}}/home.php?show=_registertag_waiting_list">
+                            <span class="nav-label">รายการรอจดทะเบียน</span>
+                        </a>
+                    </li>
+                    <li  [ngClass]="{active: activeRoute('conclude-form')}">
+                        <a href="{{kkHondaWeb}}/home.php?show=_registertag_list">
+                            <span class="nav-label">รายการบันทึกรับเรื่อง</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('al-form')}">
+                        <a [routerLink]="['/ris/al-form']">
+                            <span class="nav-label">ยืมเงิน</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('cl-form')}">
+                        <a [routerLink]="['/ris/cl-form']">
+                            <span class="nav-label">คืนเงิน</span>
                         </a>
                     </li>
                 </ul>
@@ -322,17 +337,17 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li [ngClass]="{active: activeRoute('booking')}"> 
+                    <li [ngClass]="{active: activeRoute('booking')}">
                         <a [routerLink]="['/report/booking']">
                             <span class="nav-label">รายงานการจองรถ</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('credit-note')}"> 
+                    <li [ngClass]="{active: activeRoute('credit-note')}">
                         <a [routerLink]="['/report/credit-note']">
                             <span class="nav-label">รายงานการรับคืนสินค้า</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('sale-report')}"> 
+                    <li [ngClass]="{active: activeRoute('sale-report')}">
                         <a [routerLink]="['/report/sale-report']">
                             <span class="nav-label">รายงานยอดขายรวม</span>
                         </a>

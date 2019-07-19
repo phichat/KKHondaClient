@@ -32,6 +32,7 @@ import { CoreModule } from './core/core.module';
     LayoutsModule,
     AppviewsModule,
     RouterModule.forRoot(ROUTES),
+    
     // PageloaderModule,
     BookingModule,
     

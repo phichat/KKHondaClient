@@ -19,6 +19,7 @@ import { CustomerService } from '../../services/customers';
 import { ReportBookingModule } from './report-booking/report-booking.module';
 import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
 import { ReportSaleModule } from './report-sale/report-sale.module';
+import { RISModule } from './ris/ris.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ReportSaleModule } from './report-sale/report-sale.module';
     CreditModule,
     ReportBookingModule,
     ReportCreditNoteModule,
-    ReportSaleModule
+    ReportSaleModule,
+    RISModule
   ],
   exports: [
     // IcheckDirective
