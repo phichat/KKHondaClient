@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
+import { FormArray, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { ModelUser } from 'app/models/users';
 import { BehaviorSubject, Observable } from 'rxjs';
-
+import { message } from 'app/app.message';
+import { Router } from '@angular/router';
+declare var toastr: any;
 @Component({
   selector: 'app-tag-conclude-form',
   templateUrl: './tag-conclude-form.component.html',
@@ -16,19 +18,29 @@ export class TagConcludeFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private s_user: UserService
-  ) { }
+    private s_user: UserService,
+    private chRef: ChangeDetectorRef,
+    private router: Router,
+  ) { 
+    toastr.options = {
+      'closeButton': true,
+      'progressBar': true,
+  }
+  }
   checkedAll: boolean;
-  mUser: BehaviorSubject<ModelUser>;
-  createDate = new Date();
-  total = 0;
-  price2 = 0;
+  mUser: ModelUser;
 
   get TagList(): FormArray {
     return this.formGroup.get('TagList') as FormArray;
   }
 
   public formGroup = this.fb.group({
+    createDate: new FormControl(new Date()),
+    createBy: new FormControl(null),
+    totalPrice: new FormControl(0),
+    price1: new FormControl(0),
+    price2: new FormControl(0),
+    borrowMoney: new FormControl(0),
     TagList: this.fb.array([])
   });
 
@@ -40,12 +52,24 @@ export class TagConcludeFormComponent implements OnInit {
 
       this.TagList.valueChanges.subscribe((x: any[]) => {
         const price = x.filter(o => o.IS_CHECKED);
-        this.total = price.reduce((a, c) => a += (c.price1 + c.price2), 0);
-        this.price2 = price.reduce((a, c) => a += c.price2, 0);
+        const totalPrice = price.reduce((a, c) => a += (c.price1 + c.price2), 0);
+        const price1 = price.reduce((a, c) => a += c.price1, 0);
+        const price2 = price.reduce((a, c) => a += c.price2, 0);
+        this.formGroup.patchValue({
+          totalPrice: totalPrice, 
+          price1: price1,
+          price2: price2
+        })
       })
     });
 
-    this.mUser = this.s_user.currentData;
+    this.s_user.currentData.subscribe(x => {
+      if (!x) return;
+      this.chRef.markForCheck();
+      this.mUser = x;
+      this.formGroup.get('createBy').patchValue(x.id);
+      this.chRef.detectChanges();
+    });
 
   }
 
@@ -62,5 +86,15 @@ export class TagConcludeFormComponent implements OnInit {
       const itemFormArray = this.fb.array(itemFGs);
       fg.setControl(formControl, itemFormArray);
     }
+  }
+
+  onSubmit() {
+    let f = Object.assign({}, this.formGroup.value);
+    f.TagList = this.TagList.value.filter(x => x.IS_CHECKED);
+    console.log(f);
+    toastr.success(message.created);
+    setTimeout(() => {
+      this.router.navigate(['ris/al-form']);
+    }, 1000);
   }
 }

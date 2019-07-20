@@ -1,3 +1,170 @@
-<p>
-  tag-al-form works!
-</p>
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>บันทึกการยืมเงิน</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>บันทึกการยืมเงิน</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <div class="hr-line-dashed"></div>
+        <div class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">วันที่ทำรายการ :</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" readonly
+                  [value]="formGroup.get('createDate').value | date:'dd-MM-yyyy'" />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">ผู้ยืม (ผู้ดำเนินการ) :</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" [value]="mUser?.name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">ยอดค้างทั้งสิ้น :</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">ผู้ให้ยืม :</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" [value]="mUser?.name" readonly/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">หมายเหตุ :</label>
+              <div class="col-lg-9">
+                <textarea class="form-control" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-content">
+            <div class="table-responsive">
+              <table class="table table-stripped table-hover display nowrap">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" id="th" (change)="checkAll($event)" [checked]="checkedAll">
+                    </th>
+                    <th>เลขที่ใบส่งเรื่อง</th>
+                    <th>วันที่ส่งเรื่อง</th>
+                    <th>เงินที่ต้องส่ง</th>
+                    <th>เงินที่ต้องยืม</th>
+                    <th>เงินยืม</th>
+                    <!-- <th>หมายเหตุ</th> -->
+                  </tr>
+                </thead>
+                <tbody formArrayName="SedList">
+                  <tr *ngIf="SedList.length == 0; else else_tr;">
+                    <td colspan="9" class="text-center">
+                      <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                      <br>
+                      <span class="mt-2">รอสักครู่...</span>
+                    </td>
+                  </tr>
+                  <ng-template #else_tr>
+                    <tr *ngFor="let item of SedList.controls; let i = index" [formGroupName]="i">
+                      <td>
+                        <input type="checkbox" formControlName="IS_CHECKED" [id]="i">
+                      </td>
+                      <td>{{item.get('bookingNo')?.value}}</td>
+                      <td>{{item.get('createDate')?.value | date:'dd-MM-yyyy'}}</td>
+                      <td>{{item.get('totalPrice')?.value}}</td>
+                      <td>{{item.get('price2')?.value}}</td>
+                      <td>{{item.get('price2')?.value}}</td>
+                      <!-- <td>{{item.get('borrowMoney')?.value}}</td> -->
+                    </tr>
+                  </ng-template>
+
+                </tbody>
+              </table>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-lg-7"></div>
+              <div class="col-lg-5">
+                <div class="form-group">
+                  <label class="col-lg-6 control-label">ประเภทชำระ :</label>
+                  <div class="col-lg-6">
+
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" formControlName="typePayment" id="typePayment0" value=1>
+                      <label for="typePayment0">เงินสด</label>
+                    </div>
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" formControlName="typePayment" id="typePayment1" value=2>
+                      <label for="typePayment1">เงินโอน</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <label for="" class="col-sm-6 control-label">ธนาคาร :
+                    <span class="required" *ngIf="formGroup.get('typePayment').value == '2'">*</span>
+                  </label>
+                  <div class="col-sm-6">
+                    <ng-select [items]="bankingsDropdown" bindValue="value" bindLabel="text" name="bankCode">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <label for="" class="col-sm-6 control-label">หมายเลขอ้างอิง :</label>
+                  <div class="col-sm-6 text-right">
+                    <input type="text" name="documentRef" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-6 control-label">ยอดชำระ :</label>
+                  <div class="col-lg-6">
+                    <input type="number" class="form-control" formControlName="borrowMoney" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 text-right">
+        <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+      </div>
+    </div>
+  </form>
+</div>

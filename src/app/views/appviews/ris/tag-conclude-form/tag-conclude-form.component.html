@@ -19,7 +19,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
 
-  <form class="form-horizontal" style="margin-bottom: 15em;">
+  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
 
     <div class="ibox float-e-margins">
@@ -30,7 +30,8 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">วันที่ทำรายการ :</label>
               <div class="col-lg-9">
-                <input type="text" class="form-control" readonly [value]="createDate | date:'dd-MM-yyyy'"/>
+                <input type="text" class="form-control" readonly
+                  [value]="formGroup.get('createDate').value | date:'dd-MM-yyyy'" />
               </div>
             </div>
           </div>
@@ -38,7 +39,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">พนักงาน :</label>
               <div class="col-lg-9">
-                <input type="text" class="form-control" readonly [value]="mUser.getValue()?.name" />
+                <input type="text" class="form-control" readonly [value]="mUser?.name" />
               </div>
             </div>
           </div>
@@ -51,7 +52,7 @@
         <div class="ibox float-e-margins">
           <div class="ibox-content">
             <div class="table-responsive">
-              <table class="table table-stripped table-hover display nowrap" [formGroup]="formGroup">
+              <table class="table table-stripped table-hover display nowrap">
                 <thead>
                   <tr>
                     <th>
@@ -71,27 +72,27 @@
                 <tbody formArrayName="TagList">
                   <tr *ngIf="TagList.length == 0; else else_tr;">
                     <td colspan="9" class="text-center">
-                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                        <br>
-                        <span class="mt-2">รอสักครู่...</span>
+                      <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                      <br>
+                      <span class="mt-2">รอสักครู่...</span>
                     </td>
                   </tr>
                   <ng-template #else_tr>
-                      <tr *ngFor="let item of TagList.controls; let i = index" [formGroupName]="i">
-                          <td>
-                            <input type="checkbox" formControlName="IS_CHECKED" [id]="i">
-                          </td>
-                          <td>{{item.get('bookingNo')?.value}}</td>
-                          <td>{{item.get('branchName')?.value}}</td>
-                          <td>{{item.get('tagNo')?.value}}</td>
-                          <td>{{item.get('branchProvince')?.value}}</td>
-                          <td>{{item.get('eno')?.value}}</td>
-                          <td>{{item.get('fno')?.value}}</td>
-                          <td>{{item.get('price1')?.value}}</td>
-                          <td>{{item.get('price2')?.value}}</td>
-                        </tr>
+                    <tr *ngFor="let item of TagList.controls; let i = index" [formGroupName]="i">
+                      <td>
+                        <input type="checkbox" formControlName="IS_CHECKED" [id]="i">
+                      </td>
+                      <td>{{item.get('bookingNo')?.value}}</td>
+                      <td>{{item.get('branchName')?.value}}</td>
+                      <td>{{item.get('tagNo')?.value}}</td>
+                      <td>{{item.get('branchProvince')?.value}}</td>
+                      <td>{{item.get('eno')?.value}}</td>
+                      <td>{{item.get('fno')?.value}}</td>
+                      <td>{{item.get('price1')?.value}}</td>
+                      <td>{{item.get('price2')?.value}}</td>
+                    </tr>
                   </ng-template>
-                 
+
                 </tbody>
               </table>
             </div>
@@ -102,19 +103,19 @@
                 <div class="form-group">
                   <label class="col-lg-6 control-label">ยอดรวม :</label>
                   <div class="col-lg-6">
-                    <input type="text" class="form-control" readonly [value]="total" />
+                    <input type="text" class="form-control" readonly formControlName="totalPrice" />
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-lg-6 control-label">จำนวนเงินที่ต้องยืม :</label>
                   <div class="col-lg-6">
-                    <input type="text" class="form-control" readonly [value]="price2" />
+                    <input type="text" class="form-control" readonly formControlName="price2" />
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-lg-6 control-label">จำนวนเงินยืม :</label>
                   <div class="col-lg-6">
-                    <input type="number" class="form-control" />
+                    <input type="number" class="form-control" formControlName="borrowMoney"/>
                   </div>
                 </div>
               </div>
@@ -124,5 +125,10 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-lg-12 text-right">
+        <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+      </div>
+    </div>
   </form>
 </div>
