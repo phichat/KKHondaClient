@@ -6,9 +6,6 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
-import { Observable } from 'rxjs';
-import { combineLatest } from 'rxjs/operators';
-
 declare var toastr: any;
 @Component({
   selector: 'app-tag-al-form',

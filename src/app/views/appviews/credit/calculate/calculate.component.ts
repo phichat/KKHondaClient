@@ -266,7 +266,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.outStandingPrice = this.outStandingPriceState;
                 // เพิ่มเงินจองเข้าไปในเงินดาวน์
                 this.model.depositPrice = depositPrice + this.bookDepositState;
-
                 // ราคาสินค้าคงเหลือ
                 this.model.netPrice = (this.model.outStandingPrice - depositPrice);
                 break;
@@ -276,6 +275,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     instalmentCalculate() {
+        // const deposit: number = currencyToFloat(this.model.depositPrice.toString());
+        // this.model.netPrice = (this.model.outStandingPrice - deposit);
+
         const __instalmentEnd = parseInt((this.model.instalmentEnd || 0 as any).toString());
         const __interest = this.model.interest || 0;
 
