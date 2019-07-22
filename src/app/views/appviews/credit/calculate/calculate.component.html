@@ -32,8 +32,8 @@
                 <div class="col-md-8">
                   <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
                     (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto" bindLabel="text"
-                    bindValue="value" labelForId="model" [virtualScroll]="true" placeholder="ค้นหาหมายเลขรถ" [loading]="searchEngineLoading"
-                    [loadingText]="searchEngineLoadingTxt">
+                    bindValue="value" labelForId="model" [virtualScroll]="true" placeholder="ค้นหาหมายเลขรถ"
+                    [loading]="searchEngineLoading" [loadingText]="searchEngineLoadingTxt">
                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
                       <!-- <p class="m-b-xs !important">
                       <strong>โมเดล: </strong>
@@ -64,8 +64,7 @@
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ราคาสินค้า (รวม VAT) :</label>
                 <div class="col-md-8">
-                  <input type="text" required [(ngModel)]="model.outStandingPrice" name="outStandingPrice" class="form-control number"
-                    readonly>
+                  <span class="form-control disabled">{{model.outStandingPrice | number:'1.0-0'}}</span>
                 </div>
               </div>
 
@@ -76,8 +75,8 @@
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
-                    <input type="text" required [(ngModel)]="model.depositPrice" name="depositPrice" class="form-control number"
-                      (change)="onChangeDepositPrice(); instalmentCalculate(); onReturnDeposit();">
+                    <input type="text" required [(ngModel)]="model.depositPrice" name="depositPrice"
+                      class="form-control number" (keyup)="onChangeDepositPrice(); instalmentCalculate();">
                     <span class="input-group-addon">บาท</span>
                   </div>
                 </div>
@@ -89,8 +88,8 @@
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
-                    <input type="text" required [(ngModel)]="model.deposit" name="deposit" class="form-control number-2-digit"
-                      (change)="onChangeDeposit(); instalmentCalculate(); onReturnDeposit();">
+                    <input type="text" required [(ngModel)]="model.deposit" name="deposit"
+                      class="form-control number-2-digit" (keyup)="onChangeDeposit(); instalmentCalculate();">
                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                   </div>
                 </div>
@@ -100,8 +99,7 @@
                   เงินมัดจำ :
                 </label>
                 <div class="col-md-8">
-                  <input type="text" required [(ngModel)]="model.bookDeposit" name="bookDeposit" class="form-control number-2-digit"
-                    readonly>
+                  <span class="form-control disabled">{{model.bookDeposit | number:'1.0-0'}}</span>
                 </div>
               </div>
 
@@ -134,24 +132,22 @@
                 </label>
                 <div class="col-md-8">
                   <div class="radio radio-info radio-inline">
-                    <input type="radio" id="returnDepostit0" value=1 required [(ngModel)]="model.returnDeposit" name="returnDeposit"
-                      (change)="onReturnDeposit()">
+                    <input type="radio" id="returnDepostit0" value=1 required [(ngModel)]="model.returnDeposit"
+                      name="returnDeposit" (change)="onReturnDeposit()">
                     <label for="returnDepostit0">คืนเงินมัดจำ</label>
                   </div>
                   <div class="radio radio-info radio-inline">
-                    <input type="radio" id="returnDepostit1" value=0 required [(ngModel)]="model.returnDeposit" name="returnDeposit"
-                      (change)="onReturnDeposit()">
+                    <input type="radio" id="returnDepostit1" value=0 required [(ngModel)]="model.returnDeposit"
+                      name="returnDeposit" (change)="onReturnDeposit()">
                     <label for="returnDepostit1">ใช้เป็นเงินดาวน์</label>
                   </div>
                 </div>
               </div>
 
-
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
                 <div class="col-md-8">
-                  <input type="text" required [(ngModel)]="model.netPrice" name="netPrice" class="form-control number"
-                    readonly>
+                  <span class="form-control disabled">{{model.netPrice | number: '1.0-0'}}</span>
                 </div>
               </div>
 
@@ -163,8 +159,8 @@
                   </label>
                   <div class="col-md-8">
                     <div class="input-group">
-                      <input type="number" [required]="model.bookingPaymentType != 4" [(ngModel)]="model.interest" name="interest"
-                        class="form-control text-right" (keyup)="instalmentCalculate()">
+                      <input type="number" [required]="model.bookingPaymentType != 4" [(ngModel)]="model.interest"
+                        name="interest" class="form-control" (keyup)="instalmentCalculate()">
                       <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                     </div>
                   </div>
@@ -182,7 +178,7 @@
                 </ng-container>
                 <div class="col-md-8">
                   <div class="input-group">
-                    <input type="text" id="" class="form-control number" required [(ngModel)]="model.instalmentEnd"
+                    <input type="text" id="" class="form-control" required [(ngModel)]="model.instalmentEnd"
                       name="instalmentEnd" (keyup)="instalmentCalculate()">
 
                     <ng-container [ngSwitch]="model.bookingPaymentType">
@@ -191,7 +187,8 @@
                       </ng-container>
                       <ng-container *ngSwitchDefault>
                         <span *ngIf="model.typePayment == '0'" class="input-group-addon">&nbsp;งวด</span>
-                        <span *ngIf="model.typePayment == '1'" class="input-group-addon">&nbsp;&nbsp;ปี&nbsp;&nbsp;</span>
+                        <span *ngIf="model.typePayment == '1'"
+                          class="input-group-addon">&nbsp;&nbsp;ปี&nbsp;&nbsp;</span>
                       </ng-container>
                     </ng-container>
                   </div>
@@ -209,8 +206,9 @@
                 </ng-container>
 
                 <div class="col-md-8">
-                  <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment" [options]="myDatePickerOptions"
-                    (dateChanged)="onChangeDueDate($event)" required></my-date-picker-th>
+                  <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment"
+                    [options]="myDatePickerOptions" (dateChanged)="onChangeDueDate($event)" required>
+                  </my-date-picker-th>
                 </div>
               </div>
 
@@ -236,7 +234,7 @@
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
                   <div class="col-md-8">
-                    <input type="text" [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+                    <span class="form-control disabled">{{model.remain | number: '1.0-0'}}</span>
                   </div>
                 </div>
               </ng-container>
@@ -267,23 +265,22 @@
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">ดอกเบี้ย (รวม VAT) :</label>
                   <div class="col-md-8">
-                    <input type="text" [(ngModel)]="model.interestPrice" name="interestPrice" class="form-control number"
-                      readonly>
+                    <input type="text" [(ngModel)]="model.interestPrice" name="interestPrice"
+                      class="form-control number" readonly>
                   </div>
                 </div>
 
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
                   <div class="col-md-8">
-                    <input type="text" [(ngModel)]="model.remain" name="remain" class="form-control number" readonly>
+                    <span class="form-control disabled">{{model.remain | number: '1.0-0'}}</span>
                   </div>
                 </div>
 
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT) :</label>
                   <div class="col-md-8">
-                    <input type="text" [(ngModel)]="model.instalmentPrice" name="instalmentPrice" class="form-control number"
-                      readonly>
+                    <span class="form-control disabled">{{model.instalmentPrice | number: '1.0-0'}}</span>
                   </div>
                 </div>
 
@@ -291,14 +288,10 @@
                   <label for="" class="col-md-4 control-label">อัตราดอกเบีย/ปี :</label>
                   <div class="col-md-8">
                     <div class="input-group">
-                      <input type="text" [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit"
-                        readonly>
+                        <span class="form-control disabled">{{model.mrr | number: '1.2-2'}}</span>
                       <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                     </div>
                   </div>
-                  <!-- <div class="col-md-8">
-                    <input type="text" [(ngModel)]="model.mrr" name="mrr" class="form-control number-2-digit" readonly>
-                  </div> -->
                 </div>
               </ng-container>
 

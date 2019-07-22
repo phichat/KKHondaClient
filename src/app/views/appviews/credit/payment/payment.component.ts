@@ -1,10 +1,8 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import * as Inputmask from 'inputmask';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
-import { HttpErrorResponse } from '@angular/common/http';
-import { setLocalDate, currencyToFloat, setZeroHours } from 'app/app.config';
+import { setLocalDate, currencyToFloat, setZeroHours, MyDatePickerOptions, getDateMyDatepicker } from 'app/app.config';
 import { ModelUser } from '../../../../models/users';
 import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
@@ -19,13 +17,14 @@ declare var toastr: any;
   styleUrls: ['./payment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaymentComponent implements OnInit, AfterViewInit {
+export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   user = new ModelUser();
   asyncUser: any;
   notPayment = 13; // ยังไม่ชำระ
 
   CurrencyToFloat = currencyToFloat;
+  myDatePickerOptions = MyDatePickerOptions;
 
   setLocalDate = setLocalDate
   checkSelectPaymentItem: boolean = true;
@@ -55,7 +54,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this._activatedRoute.params.subscribe(async param => {
       if (param['id']) {
-        await this._paymentService.GetByContractId(param['id'])
+        this._paymentService.GetByContractId(param['id'])
           .subscribe((res) => {
             this.loadCreditPayment(res);
           });
@@ -69,28 +68,35 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     })
   }
 
-  private initDatatable(): void {
-    let table: any = $('table');
-    this.dataTable = table.DataTable({
-      scrollX: true,
-      scrollY: '50vh',
-      scrollCollapse: true,
-      paging: false,
-      searching: false,
-      info: false
-    });
+  ngOnDestroy(): void {
+    this.destroyDatatable();
   }
 
-  private reInitDatatable(): void {
+  destroyDatatable() {
     if (this.dataTable) {
       this.dataTable.destroy()
       this.dataTable = null
     }
+  }
+
+  private initDatatable(): void {
+    let table: any = $('table');
+    this.dataTable = table.DataTable({
+      scrollX: true,
+      // scrollY: '50vh',
+      scrollCollapse: true,
+      // paging: false,
+      // searching: false,
+      // info: false
+    });
+  }
+
+  private reInitDatatable(): void {
+    this.destroyDatatable();
     setTimeout(() => this.initDatatable(), 0)
   }
 
-  async loadCreditPayment(item: Payment) {
-
+  loadCreditPayment(item: Payment) {
     this.contractModel = item.contract;
     this.contractModel.contractDate = setLocalDate(item.contract.contractDate);
     this.bookingModel = item.booking;
@@ -103,8 +109,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.contractItemModel = [];
     this.paymentModel = new PaymentFG();
 
-    this.chRef.markForCheck(); 
-    await item.contractItem.map(res => {
+    item.contractItem.map(res => {
       this.contractItemModel.push({
         isSlect: false,
         taxInvoiceNo: res.taxInvoiceNo,
@@ -127,9 +132,11 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       })
     });
 
-    setTimeout(() => {
-      this.reInitDatatable();
-    }, 500);
+    this.chRef.markForCheck();
+
+    // setTimeout(() => {
+    //   this.reInitDatatable();
+    // }, 500);
 
     const outstandingPrice = this.contractItemModel
       .reduce((accumulator, current) => {
@@ -143,16 +150,11 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.payDate = setZeroHours(new Date());
     this.paymentModel.outstanding = outstandingPrice;
 
+    this.reInitDatatable();
+    this.chRef.detectChanges();
   }
 
   ngAfterViewInit() {
-    const number2Digit = document.querySelectorAll('input.number-2-digit');
-    Inputmask({
-      'alias': 'numeric',
-      'groupSeparator': ',',
-      'autoGroup': true,
-      'digits': 2
-    }).mask(number2Digit);
   }
 
   instalmentCount: number = 0;
@@ -173,56 +175,36 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     this.paymentModel.balanceNetPrice = balanceNetPrice;
     this.paymentModel.payNetPrice = balanceNetPrice;
     this.paymentModel.totalPrice = balanceNetPrice + fineSumRemain;
+    this.paymentModel.payDate = { myDate: null };
   }
 
   onSubmit(value: any) {
-    if (this.paymentModel.outstanding == 0) {
-      return;
-    }
-    const frm = {
-      contractId: this.paymentModel.contractId,
-      fineSum: this.paymentModel.fineSume
-        ? currencyToFloat(this.paymentModel.fineSume.toString())
-        : 0,
-      fineSumOther: this.paymentModel.fineSumeOther
-        ? currencyToFloat(this.paymentModel.fineSumeOther.toString())
-        : 0,
-      payNetPrice: this.paymentModel.payNetPrice
-        ? currencyToFloat(this.paymentModel.payNetPrice.toString())
-        : 0,
-      disCountPrice: this.paymentModel.disCountPrice
-        ? currencyToFloat(this.paymentModel.disCountPrice.toString())
-        : 0,
-      discountRate: this.paymentModel.disCountRate || 0,
-      paymentType: this.paymentModel.paymentType,
-      bankCode: this.paymentModel.bankCode || null,
-      documentRef: this.paymentModel.documentRef || null,
-      remark: this.paymentModel.remark || null,
-      payDate: this.paymentModel.payDate,
-      branchId: this.paymentModel.branchId,
-      updateBy: this.paymentModel.updateBy,
-      creditContractItem: this.contractItemModel
-        .filter(x => x.isSlect == true)
-        .map(x => {
-          return {
-            instalmentNo: x.instalmentNo,
-            contractItemId: x.contractItemId,
-            contractId: x.contractId,
-            fineSum: x.fineSum,
-            fineSumRemain: x.fineSumRemain
-          }
-        })
-    }
+    let f = Object.assign({}, this.paymentModel) as PaymentFG;
+    if (f.outstanding == 0) return;
+
+    f.payDate = getDateMyDatepicker(f.payDate).toISOString();
+    const creditContractItem = this.contractItemModel
+      .filter(x => x.isSlect == true)
+      .map(x => {
+        return {
+          instalmentNo: x.instalmentNo,
+          contractItemId: x.contractItemId,
+          contractId: x.contractId,
+          fineSum: x.fineSum,
+          fineSumRemain: x.fineSumRemain
+        }
+      });
+
+    const frm = { ...f, creditContractItem };
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
-
       this._paymentService.PaymentTerm(frm).subscribe((x) => {
-        toastr.success('บันทึกรายการสำเร็จ!');
-        setTimeout(() => location.reload(), 800);
+        toastr.success(message.canceled);
 
-      }, (err: HttpErrorResponse) => {
-        toastr.error(err.statusText);
-      })
+        this.loadCreditPayment(x);
+      }, () => {
+        toastr.error(message.failed);
+      });
     }
   }
 

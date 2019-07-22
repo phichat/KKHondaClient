@@ -243,6 +243,9 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
         this.model.deposit = ((currencyToFloat(this.model.depositPrice.toString()) * 100) / this.model.outStandingPrice);
+        const depositPrice = currencyToFloat(this.model.depositPrice.toString());
+        const priceOutDeposit = (this.outStandingPriceState + this.bookDepositState);
+        this.model.netPrice = priceOutDeposit - depositPrice;
     }
 
     onReturnDeposit() {
@@ -257,7 +260,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 // เพิ่มเงินจองเข้าไปในราคาสินค้า
                 // this.model.outStandingPrice = this.outStandingPriceState + this.bookDepositState;
                 // ราคาสินค้าคงเหลือ
-                this.model.netPrice = (this.outStandingPriceState + this.bookDepositState) - this.model.depositPrice;
+                // this.model.netPrice = (this.outStandingPriceState + this.bookDepositState) - this.model.depositPrice;
                 break;
 
             case '0':
@@ -267,7 +270,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 // เพิ่มเงินจองเข้าไปในเงินดาวน์
                 this.model.depositPrice = depositPrice + this.bookDepositState;
                 // ราคาสินค้าคงเหลือ
-                this.model.netPrice = (this.model.outStandingPrice - depositPrice);
+                // this.model.netPrice = (this.model.outStandingPrice - depositPrice);
                 break;
         }
         this.onChangeDepositPrice();
@@ -275,8 +278,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     instalmentCalculate() {
-        // const deposit: number = currencyToFloat(this.model.depositPrice.toString());
-        // this.model.netPrice = (this.model.outStandingPrice - deposit);
 
         const __instalmentEnd = parseInt((this.model.instalmentEnd || 0 as any).toString());
         const __interest = this.model.interest || 0;
@@ -435,13 +436,8 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             );
     }
 
+    currencyFormat = function (n, x) {
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+        return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+    };
 }
-
-// Number.prototype.format = function(n, x) {
-//     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-//     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-// };
-interface Number {
-    padZero(length: number);
-}
-

@@ -7,103 +7,116 @@
 // ICheck
 // @import "../node_modules/icheck/skins/square/green";
 span.required {
-    color:red !important;
+  color: red !important;
 }
+
 .form-control.ng-invalid.ng-touched:not(:focus) {
-   border-color: red !important;
+  border-color: red !important;
+}
+
+.form-control.disabled {
+  background-color: #eee;
+  opacity: 1;
 }
 
 .line-dashed {
+  border-style: dashed dashed none;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  border-color: #ddd;
+  background-color: transparent;
+}
+
+.hr-dashed {
+  border-top: 1px dashed rgba(0, 0, 0, 0.14) !important
+}
+
+.none-ibox {
+  margin-bottom: unset;
+
+  .ibox-title {
+    border-style: unset;
+    min-height: unset;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: transparent;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-bottom: 5px;
+    }
+  }
+
+  .ibox-tools a {
+    color: teal !important;
+  }
+
+  .ibox-content {
     border-style: dashed dashed none;
     padding-right: 0px;
     padding-bottom: 0px;
     border-color: #ddd;
     background-color: transparent;
-}
-
-.hr-dashed {
-    border-top: 1px dashed rgba(0, 0, 0, 0.14) !important
-}
-
-.none-ibox {
-    margin-bottom: unset;
-    .ibox-title {
-        border-style: unset;
-        min-height: unset;
-        padding-left: 0px;
-        padding-right:  0px; 
-        background-color: transparent;      
-        
-       h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 5px;
-        }
-    }
-
-    .ibox-tools a{
-        color: teal !important;
-    }
-
-    .ibox-content {
-        border-style: dashed dashed none;
-        padding-right: 0px;
-        padding-bottom: 0px;
-        border-color: #ddd;
-        background-color: transparent; 
-    }
+  }
 }
 
 .form-group-md {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .form-horizontal .radio {
-    padding-top: unset !important;
+  padding-top: unset !important;
 }
 
-.mydp {    
+.mydp {
+  border-radius: unset !important;
+  border: 1px solid #e5e6e7 !important;
+
+  input {
+    width: 98% !important;
+  }
+
+  input,
+  table * {
+    font-family: "open sans", "Helvetica Neue";
+  }
+
+  .btnpicker {
     border-radius: unset !important;
-    border: 1px solid #e5e6e7 !important;
-
-    input {
-        width: 98% !important;
-    }
-
-    input, table * {
-        font-family: "open sans", "Helvetica Neue";
-    }
-    .btnpicker {
-         border-radius: unset !important;
-    }
+  }
 }
 
 .ng-select-container {
-    border: 1px solid #e5e6e7 !important;
+  border: 1px solid #e5e6e7 !important;
 }
 
-.fixed_header{
-    table-layout: fixed;
-    border-collapse: collapse;
+.fixed_header {
+  table-layout: fixed;
+  border-collapse: collapse;
 }
 
-.fixed_header tbody{
-    display:block;
-    width: 100%;
-    overflow: auto;
-    height: 50px;
+.fixed_header tbody {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  height: 50px;
 }
 
 .fixed_header thead tr {
-    display: block;
+  display: block;
 }
 
 .fixed_header thead {
-    // background: black;
-    // color:#fff;
+  // background: black;
+  // color:#fff;
 }
 
-.fixed_header th, .fixed_header td {
-    padding: 5px;
-    width: 200px;
+.fixed_header th,
+.fixed_header td {
+  padding: 5px;
+  width: 200px;
 }
-
-  

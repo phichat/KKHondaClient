@@ -53,7 +53,8 @@
   </div>
   <div class="row form-group">
     <label for="price" class="col-sm-2 control-label">เงินดาวน์ : </label>
-    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2'}} บาท</strong>
+    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2'}}
+      บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">เงินดาวน์ชำระแล้ว : </label>
     <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(bookingModel.depositIsPay || 0) | number:'1.2-2'}} บาท
     </strong>
@@ -100,14 +101,15 @@
               <tr *ngFor="let item of contractItemModel;">
                 <td class="text-center" [ngSwitch]="item.status" [attr.data-order]="item.instalmentNo">
                   <ng-container *ngSwitchCase="11">
-                    <a href="javascript:void(0);" class="btn btn-danger btn-xs" (click)="onCancel(item.contractItemId, item.instalmentNo)">
+                    <a href="javascript:void(0);" class="btn btn-danger btn-xs"
+                      (click)="onCancel(item.contractItemId, item.instalmentNo)">
                       <i class="fa fa-times"></i> ยกเลิก
                     </a>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
                     <div class="checkbox checkbox-info checkbox-inline">
-                      <input (change)="setFormPayment(); changeSelectPaymentItem();" type="checkbox" id="select{{item.instalmentNo}}"
-                        name="isSelect" [(ngModel)]="item.isSlect">
+                      <input (change)="setFormPayment(); changeSelectPaymentItem();" type="checkbox"
+                        id="select{{item.instalmentNo}}" name="isSelect" [(ngModel)]="item.isSlect">
                       <label for="select{{item.instalmentNo}}"></label>
                     </div>
                   </ng-container>
@@ -120,15 +122,18 @@
                 <td class="text-right" [attr.data-order]="item.balanceNetPrice">{{item.balanceNetPrice |
                   number:'1.2-2'}}</td>
                 <td class="text-right" [attr.data-order]="item.fineSum">{{item.fineSum | number:'1.2-2'}}</td>
-                <td class="text-right" [attr.data-order]="item.fineSumRemain">{{item.fineSumRemain | number:'1.2-2'}}</td>
-                <td class="text-right" [attr.data-order]="item.fineSumeOther">{{item.fineSumeOther | number:'1.2-2'}}</td>
-                <td class="text-right" [attr.data-order]="(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther)">
+                <td class="text-right" [attr.data-order]="item.fineSumRemain">{{item.fineSumRemain | number:'1.2-2'}}
+                </td>
+                <td class="text-right" [attr.data-order]="item.fineSumeOther">{{item.fineSumeOther | number:'1.2-2'}}
+                </td>
+                <td class="text-right"
+                  [attr.data-order]="(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther)">
                   {{(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther) | number:'1.2-2'}}
                 </td>
                 <td class="text-center" [ngSwitch]="item.status">
-                    <span *ngSwitchCase="11" class="text-navy">{{item.statusDesc}}</span>
-                    <span *ngSwitchCase="12" class="text-warning">{{item.statusDesc}}</span>
-                    <span *ngSwitchCase="13" class="text-danger">{{item.statusDesc}}</span>
+                  <span *ngSwitchCase="11" class="text-navy">{{item.statusDesc}}</span>
+                  <span *ngSwitchCase="12" class="text-warning">{{item.statusDesc}}</span>
+                  <span *ngSwitchCase="13" class="text-danger">{{item.statusDesc}}</span>
                 </td>
                 <td class="text-center">{{item.taxInvoiceNo}}</td>
                 <td class="text-center" [attr.data-order]="getTime(item.payDate)">{{setLocalDate(item.payDate)}}</td>
@@ -140,70 +145,62 @@
 
       <div class="hr-line-dashed"></div>
 
-      <div class="row form-group">
-        <label for="" class="col-md-2 col-sm-2 control-label">วันที่รับชำระ :</label>
-        <strong class="col-md-2 col-sm-3">{{setLocalDate(paymentModel.payDate)}}</strong>
-        <label for="" class="col-md-1 col-sm-2 text-right">จำนวน :</label>
-        <strong class="col-md-1">{{instalmentCount}} งวด</strong>
-      </div>
-
-      <div class="row form-group">
-        <label for="" class="col-md-2 col-sm-2 control-label">ผู้รับเงิน :</label>
-        <strong class="col-md-2 col-sm-3" *ngIf="asyncUser | async; let user">{{user.fullName}}</strong>
-      </div>
-
       <form class="form-horizontal" autocomplete="off" action="" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
         <div class="row form-group">
+
           <div class="col-md-6">
             <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">ยอดคงค้าง :</label>
-              <div class="col-sm-8 text-right">
-                <input type="text" name="outstanding" [(ngModel)]="paymentModel.outstanding" readonly class="form-control form-control-sm number-2-digit"
-                  placeholder="0.00">
+              <label for="" class="col-sm-4 control-label">ผู้รับเงิน :</label>
+              <div class="col-sm-8">
+                <span class="form-control disabled" *ngIf="asyncUser | async; let user">{{user.fullName}}</span>
               </div>
             </div>
 
-            <!-- <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">ยอดชำระขั้นต่ำ :</label>
-              <div class="col-sm-8 text-right">
-                <input type="text" name="balanceNetPrice" [(ngModel)]="paymentModel.balanceNetPrice" readonly class="form-control form-control-sm number-2-digit">
+            <div class="row form-group">
+              <label for="" class="col-sm-4 control-label">ยอดคงค้าง :</label>
+              <div class="col-sm-8">
+                <span class="form-control disabled">{{paymentModel.outstanding | number:'1.2-2'}}</span>
               </div>
-            </div> -->
+            </div>
 
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">ค่าปรับล่าช้า :</label>
-              <div class="col-sm-8 text-right">
-                <input readonly type="text" name="fineSume" [(ngModel)]="paymentModel.fineSume" class="form-control form-control-sm number-2-digit"
-                  placeholder="0.00">
+              <div class="col-sm-8">
+                <span class="form-control disabled">{{paymentModel.fineSume | number:'1.2-2'}}</span>
+                <!-- <input readonly type="text" name="fineSume" [(ngModel)]="paymentModel.fineSume"
+                  class="form-control form-control-sm number-2-digit" placeholder="0.00"> -->
               </div>
             </div>
 
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">ค่าปรับอื่นๆ :</label>
-              <div class="col-sm-8 text-right">
-                <input (keyup)="onCalculate();" type="text" name="fineSumeOther" [(ngModel)]="paymentModel.fineSumeOther"
-                  class="form-control form-control-sm number-2-digit" [disabled]="checkSelectPaymentItem" placeholder="0.00">
+              <div class="col-sm-8">
+                <input (keyup)="onCalculate();" type="text" name="fineSumeOther"
+                  [(ngModel)]="paymentModel.fineSumeOther" class="form-control form-control-sm number-2-digit"
+                  [disabled]="checkSelectPaymentItem" placeholder="0.00">
               </div>
             </div>
 
             <div class="row form-group">
               <label for="" class="col-md-4 control-label">ค่างวด : <span class="required">*</span></label>
-              <div class="col-md-8 text-right">
-                <input (keyup)="onCalculate();" type="text" required name="payNetPrice" [(ngModel)]="paymentModel.payNetPrice"
-                  class="form-control form-control-sm number-2-digit" [disabled]="checkSelectPaymentItem" placeholder="0.00">
+              <div class="col-md-8">
+                <input (keyup)="onCalculate();" type="text" required name="payNetPrice"
+                  [(ngModel)]="paymentModel.payNetPrice" class="form-control form-control-sm number-2-digit"
+                  [disabled]="checkSelectPaymentItem" placeholder="0.00">
               </div>
             </div>
 
             <div class="row form-group">
               <label for="" class="col-md-4 control-label">ส่วนลด :</label>
-              <div class="col-md-4 text-right">
-                <input (keyup)="onCalculate();" type="text" name="disCountPrice" [(ngModel)]="paymentModel.disCountPrice"
-                  class="form-control form-control-sm number-2-digit" [disabled]="checkSelectPaymentItem" placeholder="0.00">
+              <div class="col-md-4">
+                <input (keyup)="onCalculate();" type="text" name="disCountPrice"
+                  [(ngModel)]="paymentModel.disCountPrice" class="form-control form-control-sm number-2-digit"
+                  [disabled]="checkSelectPaymentItem" placeholder="0.00">
               </div>
               <div class="col-md-4">
                 <div class="input-group">
-                  <input type="text" name="disCountRate" value="{{paymentModel.disCountRate}}" readonly class="form-control form-control-sm number-2-digit"
-                    placeholder="0.00">
+                  <input type="text" name="disCountRate" value="{{paymentModel.disCountRate}}" readonly
+                    class="form-control form-control-sm number-2-digit" placeholder="0.00">
                   <span class="input-group-addon">%</span>
                 </div>
               </div>
@@ -213,23 +210,32 @@
               <label for="" class="col-md-4 control-label">ยอดชำระจริง :
                 <span class="required">*</span>
               </label>
-              <div class="col-md-8 text-right">
-                <input type="text" readonly name="totalPrice" [(ngModel)]="paymentModel.totalPrice" class="form-control form-control-sm number-2-digit"
-                  placeholder="0.00">
+              <div class="col-md-8">
+                <span class="form-control disabled">{{paymentModel.totalPrice | number:'1.2-2'}}</span>
+                <!-- <input type="text" readonly name="totalPrice" [(ngModel)]="paymentModel.totalPrice"
+                  class="form-control form-control-sm number-2-digit" placeholder="0.00"> -->
               </div>
             </div>
           </div>
 
           <div class="col-md-6">
-            <!-- <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">สถานะการชำระ :
+            <div class="row form-group">
+              <label for="" class="col-sm-4 control-label">จำนวน :</label>
+              <div class="col-sm-8">
+                <span class="form-control disabled">{{instalmentCount}} งวด</span>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-sm-4 control-label">วันที่รับชำระ :
                 <span class="required">*</span>
               </label>
               <div class="col-sm-8">
-                <ng-select required [items]="statusDropdown" bindValue="value" bindLabel="text" [(ngModel)]="paymentModel.status"
-                  name="status" [disabled]="checkSelectPaymentItem"></ng-select>
+                <my-date-picker-th [(ngModel)]="paymentModel.payDate" name="payDate" [options]="myDatePickerOptions"
+                  required></my-date-picker-th>
               </div>
-            </div> -->
+            </div>
+
 
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">ช่องทางการรับชำระ :
@@ -237,20 +243,23 @@
               </label>
               <div class="col-sm-8">
                 <div class="radio radio-info radio-inline">
-                  <input type="radio" id="paymentType0" value="1" name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <input type="radio" id="paymentType0" value="1" name="paymentType"
+                    [(ngModel)]="paymentModel.paymentType">
                   <label for="paymentType0">เงินสด</label>
                 </div>
                 <div class="radio radio-info radio-inline">
-                  <input type="radio" id="paymentType1" value="2" name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <input type="radio" id="paymentType1" value="2" name="paymentType"
+                    [(ngModel)]="paymentModel.paymentType">
                   <label for="paymentType1">โอน</label>
                 </div>
                 <div class="radio radio-info radio-inline">
-                  <input type="radio" id="paymentType2" value="3" name="paymentType" [(ngModel)]="paymentModel.paymentType">
+                  <input type="radio" id="paymentType2" value="3" name="paymentType"
+                    [(ngModel)]="paymentModel.paymentType">
                   <label for="paymentType2">เช็ค</label>
                 </div>
                 <div class="radio radio-info radio-inline">
-                  <input type="radio" id="paymentType3" value="4" required name="paymentType" [(ngModel)]="paymentModel.paymentType"
-                    disabled="{{checkSelectPaymentItem}}">
+                  <input type="radio" id="paymentType3" value="4" required name="paymentType"
+                    [(ngModel)]="paymentModel.paymentType" disabled="{{checkSelectPaymentItem}}">
                   <label for="paymentType3">บัตรเครดิต</label>
                 </div>
               </div>
@@ -263,23 +272,24 @@
               </label>
               <div class="col-sm-8">
                 <ng-select [required]="paymentModel.paymentType != 1" [items]="bankingsDropdown" bindValue="value"
-                  bindLabel="text" [(ngModel)]="paymentModel.bankCode" name="bankCode" [disabled]="checkSelectPaymentItem"></ng-select>
+                  bindLabel="text" [(ngModel)]="paymentModel.bankCode" name="bankCode"
+                  [disabled]="checkSelectPaymentItem"></ng-select>
               </div>
             </div>
             <!-- </ng-container> -->
 
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">เอกสารอ้างอิง :</label>
-              <div class="col-sm-8 text-right">
-                <input type="text" name="documentRef" [(ngModel)]="paymentModel.documentRef" class="form-control form-control-sm"
-                  [disabled]="checkSelectPaymentItem">
+              <div class="col-sm-8">
+                <input type="text" name="documentRef" [(ngModel)]="paymentModel.documentRef"
+                  class="form-control form-control-sm" [disabled]="checkSelectPaymentItem">
               </div>
             </div>
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">บันทึกเพิ่มเติม :
                 <span class="required" *ngIf="CurrencyToFloat(paymentModel.fineSumeOther) > 0">*</span>
               </label>
-              <div class="col-sm-8 text-right">
+              <div class="col-sm-8">
                 <textarea class="form-control form-control-sm" name="remark" [(ngModel)]="paymentModel.remark" rows="3"
                   [disabled]="checkSelectPaymentItem" [required]="CurrencyToFloat(paymentModel.fineSumeOther) > 0"
                   [ngClass]="{'ng-touched': CurrencyToFloat(paymentModel.fineSumeOther) > 0}"></textarea>
@@ -292,7 +302,8 @@
 
         <div class="row form-group text-right">
           <div class="col-sm-12">
-            <button type="submit" class="btn btn-primary" [disabled]="f.invalid || checkSelectPaymentItem">บันทึก</button>
+            <button type="submit" class="btn btn-primary"
+              [disabled]="f.invalid || checkSelectPaymentItem">บันทึก</button>
             <button type="button" class="btn" (click)="onCanclePayment()">ยกเลิก</button>
           </div>
         </div>
@@ -335,7 +346,8 @@
               <label for="" class="col-lg-5">งวดที่รับชำระ :</label>
               <div class="col-lg-7">
                 <select name="contractItemId" class="form-control form-control-sm" required ngModel>
-                  <option *ngFor="let item of contractItemModel" [value]="item.contractItemId" [disabled]="item.payDate == null">
+                  <option *ngFor="let item of contractItemModel" [value]="item.contractItemId"
+                    [disabled]="item.payDate == null">
                     <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
                     <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
                   </option>

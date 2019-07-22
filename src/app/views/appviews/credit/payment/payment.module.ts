@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageLoadWarpperService } from '../../../../services/common/page-load-warpper.service';
 import { RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { MyDatePickerTHModule } from 'mydatepicker-th';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    NgSelectModule
+    NgSelectModule,
+    MyDatePickerTHModule
   ],
   declarations: [PaymentComponent],
   providers: [
