@@ -1,31 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription, Subject, Observable } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { LoaderState } from './loader-state';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-loader',
     templateUrl: './loader.component.html',
     styleUrls: ['./loader.component.scss']
 })
-export class LoaderComponent implements OnInit, OnDestroy {
+export class LoaderComponent implements OnInit {
 
-    show = false;
-
-    private subscription: Subscription;
-
+    show: Observable<boolean>;
+  
     constructor(
-        private loaderService: LoaderService
+      private loaderService: LoaderService
     ) { }
-
+  
     ngOnInit() {
-        this.subscription = this.loaderService.loaderState
-            .subscribe((state: LoaderState) => {
-                this.show = state.show;
-            });
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+      this.show = this.loaderService.loaderState.pipe(map(x => x.show));
     }
 }

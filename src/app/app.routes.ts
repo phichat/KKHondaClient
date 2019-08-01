@@ -23,6 +23,10 @@ import { ReportSaleComponent } from './views/appviews/report-sale/report-sale.co
 import { TagConcludeFormComponent } from './views/appviews/ris/tag-conclude-form/tag-conclude-form.component';
 import { TagClFormComponent } from './views/appviews/ris/tag-cl-form/tag-cl-form.component';
 import { TagAlFormComponent } from './views/appviews/ris/tag-al-form/tag-al-form.component';
+import { TagAlListComponent } from './views/appviews/ris/tag-al-list/tag-al-list.component';
+import { TagClListComponent } from './views/appviews/ris/tag-cl-list/tag-cl-list.component';
+import { TagConcludeListComponent } from './views/appviews/ris/tag-conclude-list/tag-conclude-list.component';
+import { TagConcludeFormDetailComponent } from './views/appviews/ris/tag-conclude-form/tag-conclude-form-detail.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -75,9 +79,13 @@ export const ROUTES: Routes = [
   {
     path: 'ris', component: BasicLayoutComponent,
     children: [
-      { path: 'conclude-form', component: TagConcludeFormComponent },
-      { path: 'cl-form', component: TagClFormComponent },
-      { path: 'al-form', component: TagAlFormComponent }
+      { path: 'conclude-list', component: TagConcludeListComponent },
+      { path: 'conclude-form-create', component: TagConcludeFormComponent },
+      { path: 'conclude-form-detail/:code', component: TagConcludeFormDetailComponent },
+      { path: 'al-list', component: TagAlListComponent },
+      { path: 'al-form-create', component: TagAlFormComponent },
+      { path: 'cl-list', component: TagClListComponent },
+      { path: 'cl-form-create', component: TagClFormComponent }
     ]
   },
 

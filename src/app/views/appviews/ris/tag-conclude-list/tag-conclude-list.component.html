@@ -1,0 +1,84 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-sm-6">
+    <h2>สรุปส่งเรื่องดำเนินการ</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>รายการสรุปส่งเรื่องดำเนินการ</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-sm-6 text-right">
+    <h3>&nbsp;</h3>
+    <a class="btn btn-primary" [routerLink]="['/ris/conclude-form-create']">
+      <i class="fa fa-paper-plane-o"></i> สรุปส่งเรื่องดำเนินการ
+    </a>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <thead>
+          <tr>
+            <th class="text-center">ลำดับ</th>
+            <th></th>
+            <th>เลขที่ใบส่งเรื่อง</th>
+            <th>วันที่ส่งเรื่อง</th>
+            <th>ผู้ดำเนินการ</th>
+            <th>สถานะ</th>
+            <th class="text-right">เงินที่ต้องส่ง</th>
+            <th class="text-right">เงินที่ต้องยืม</th>
+            <th class="text-right">เงินยืม</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="SedList.length == 0; else else_tr;">
+            <td colspan="7" class="text-center">
+              <div [ngSwitch]="loading">
+                <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                <div *ngSwitchDefault>
+                  <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                  <br>
+                  <span class="mt-2">รอสักครู่...</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <ng-template #else_tr>
+            <tr *ngFor="let item of SedList; let i = index">
+              <td class="text-center" [attr.data-order]="i">{{i+1}}</td>
+              <td class="text-center">
+                <a class="btn btn-info btn-xs" [routerLink]="['/ris/conclude-form-detail', item.sedNo]">
+                  <i class="fa fa-pencil"></i>
+                  รายละเอียด
+                </a>
+              </td>
+              <td>{{item.sedNo}}</td>
+              <td [attr.data-order]="item.sedId">
+                {{displayLocalDate(item.createDate)}}
+              </td>
+              <td>{{item.createName}}</td>
+              <td [ngClass]="{'text-danger': item.status == SedStatus.Cancel}">{{item.statusDesc}}</td>
+              <td class="text-right" [attr.data-order]="item.price1">
+                {{item.price1 | number:'1.2-2'}}
+              </td>
+              <td class="text-right" [attr.data-order]="item.price2">
+                {{item.price2 | number:'1.2-2'}}
+              </td>
+              <td class="text-right" [attr.data-order]="item.borrowMoney">
+                {{item.borrowMoney | number:'1.2-2'}}
+              </td>
+            </tr>
+          </ng-template>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

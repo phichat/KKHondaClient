@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { ModelUser } from 'app/models/users';
 import { FormArray, FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +6,12 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
+import { TagClConfig } from './tag-cl.config';
+import * as $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs';
+import { LoaderService } from 'app/core/loader/loader.service';
+import { finalize } from 'rxjs/operators';
 
 declare var toastr: any;
 @Component({
@@ -13,14 +19,16 @@ declare var toastr: any;
   templateUrl: './tag-cl-form.component.html',
   styleUrls: ['./tag-cl-form.component.scss']
 })
-export class TagClFormComponent implements OnInit {
+export class TagClFormComponent extends TagClConfig implements OnInit {
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private s_user: UserService,
-    private chRef: ChangeDetectorRef
+    private chRef: ChangeDetectorRef,
+    private s_loader: LoaderService
   ) {
+    super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -30,8 +38,28 @@ export class TagClFormComponent implements OnInit {
   mUser: ModelUser;
   bankingsDropdown = new Array<DropDownModel>();
 
+  @ViewChild("receivePrice") inputReceivePrice: ElementRef;
+
   ngOnInit() {
-    const carList = `${appConfig.apiUrl}/Ris/CarRegisList`;
+    this.formGroup = this.fb.group({
+      clNo: new FormControl(null),
+      alNo: new FormControl(null),
+      revNo: new FormControl(null),
+      refundId: new FormControl(null),
+      refundName: new FormControl(null),
+      balancePrice: new FormControl(null),
+      receivePrice: new FormControl(null),
+      netPrice: new FormControl(null),
+      bankCode: new FormControl(null),
+      documentRef: new FormControl(null),
+      paymentType: new FormControl(null),
+      branchId: new FormControl(null),
+      createDate: new FormControl(null),
+      createBy: new FormControl(null),
+      remark: new FormControl(null),
+      AlList: this.fb.array([])
+    });
+
     const bank = `${appConfig.apiUrl}/Bank/DropDown`;
     this.http.get(bank).subscribe((x: any[]) => {
       this.chRef.markForCheck();
@@ -39,49 +67,55 @@ export class TagClFormComponent implements OnInit {
       this.chRef.detectChanges();
     });
 
-    this.http.get(carList).subscribe((x: any[]) => {
-      const res = x.reduce((a, c) =>
-        [
-          ...a,
-          {
-            ...c, IS_CHECKED: false, bookingNo: c.bookingNo.replace('CON', 'AL')
-          }
-        ], []);
-      this.setItemFormArray(res, this.formGroup, 'AlList');
+    this.loadingAlList();
 
-      // this.AlList.valueChanges.subscribe((x: any[]) => {
-      //   const price = x.filter(o => o.IS_CHECKED);
-      //   const totalPrice = price.reduce((a, c) => a += (c.price1 + c.price2), 0);
-      //   const price1 = price.reduce((a, c) => a += c.price1, 0);
-      //   const price2 = price.reduce((a, c) => a += c.price2, 0);
-      //   this.formGroup.patchValue({
-      //     totalPrice: totalPrice, 
-      //     price1: price1,
-      //     price2: price2
-      //   })
-      // })
+    this.s_user.currentData.subscribe(x => {
+      if (!x) return;
+      this.chRef.markForCheck();
+      this.mUser = x;
+      this.chRef.detectChanges();
     });
   }
 
-  get AlList(): FormArray {
-    return this.formGroup.get('AlList') as FormArray;
+  loadingAlList() {
+    const carList = `${appConfig.apiUrl}/Ris/Al/NormalList`;
+    this.http.get(carList).subscribe((x: any[]) => {
+      if (!x.length) { this.loading = 1; return }
+      const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false }], []);
+      this.setItemFormArray(res, this.formGroup, 'AlList');
+      this.chRef.markForCheck();
+
+      this.AlList.valueChanges.subscribe((x: any[]) => {
+        const rec = x.find(o => o.IS_CHECKED);
+        this.balancePriceState = rec ? rec.balancePrice : null;
+        this.formGroup.patchValue({
+          alNo: rec ? rec.alNo : null,
+          refundId: rec ? rec.createBy : null,
+          refundName: rec ? rec.createName : null,
+          balancePrice: this.balancePriceState,
+          receivePrice: this.balancePriceState,
+          netPrice: rec ? rec.netPrice : null,
+          createDate: new Date(),
+          createBy: this.mUser.id,
+          branchId: this.mUser.branch,
+          paymentType: '1'
+        });
+        this.onChangeReceivePrice(this.balancePriceState);
+      });
+
+      this.reInitDatatable();
+    }, () => this.loading = 2);
   }
 
-  public formGroup = this.fb.group({
-    typePayment: new FormControl('1'),
-    createDate: new FormControl(new Date()),
-    createBy: new FormControl(null),
-    totalPrice: new FormControl(0),
-    price1: new FormControl(0),
-    price2: new FormControl(0),
-    borrowMoney: new FormControl(0),
-    AlList: this.fb.array([])
-  });
-
-  checkAll(e: Event) {
-    const checkbox = e.target as HTMLInputElement;
-    for (let index = 0; index < this.AlList.value.length; index++) {
-      this.AlList.at(index).get('IS_CHECKED').patchValue(checkbox.checked);
+  checkingRecord(i: number) {
+    for (let index = 0; index < this.AlList.length; index++) {
+      if (index == i) {
+        const val = this.AlList.at(index).get('IS_CHECKED').value;
+        this.AlList.at(index).get('IS_CHECKED').patchValue(!val);
+        if (!val == true) this.inputReceivePrice.nativeElement.focus();
+      } else {
+        this.AlList.at(index).get('IS_CHECKED').patchValue(false);
+      }
     }
   }
 
@@ -93,9 +127,68 @@ export class TagClFormComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  onChangeReceivePrice(value: number) {
+    let price = this.balancePriceState - value;
+    this.formGroup.get('balancePrice').patchValue(price);
+  }
 
-    toastr.success(message.created);
+  onSubmit() {
+    let f = { ...this.formGroup.value };
+    f = {
+      clNo: f.clNo,
+      alNo: f.alNo,
+      refundId: f.refundId,
+      refundName: f.refundName,
+      balancePrice: f.balancePrice,
+      receivePrice: f.receivePrice,
+      netPrice: f.netPrice,
+      bankCode: f.bankCode,
+      documentRef: f.documentRef,
+      paymentType: f.paymentType,
+      branchId: f.branchId,
+      createDate: (f.createDate as Date).toISOString(),
+      createBy: f.createBy,
+      remark: f.remark,
+    }
+
+    this.s_loader.showLoader();
+    const url = `${appConfig.apiUrl}/Ris/Cl`;
+    this.http.post(url, f).pipe(
+      finalize(() => this.s_loader.onEnd())
+    ).subscribe(() => {
+      toastr.success(message.created);
+      this.formGroup.reset();
+      this.loadingAlList();
+    }, () => toastr.error(message.failed));
+
+  }
+
+  private initDatatable(): void {
+    let table: any = $('table');
+    this.dataTable = table.DataTable({
+      "scrollX": true,
+      "columns": [
+        null,
+        { "orderable": false },
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    });
+  }
+
+  private reInitDatatable(): void {
+    this.destroyDatatable()
+    setTimeout(() => this.initDatatable(), 0)
+  }
+
+  private destroyDatatable() {
+    if (this.dataTable) {
+      this.dataTable.destroy();
+      this.dataTable = null;
+    }
   }
 
 }

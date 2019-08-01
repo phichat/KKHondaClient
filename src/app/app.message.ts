@@ -5,5 +5,6 @@ export const message = {
     updated: 'แก้ไขข้อมูลสำเร็จ!',
     deleted: 'ลบข้อมูลสำเร็จ!',
     canceled: 'ยกเลิกรายการสำเร็จ!',
-    loading: 'รอสักครู่...'
+    loading: 'รอสักครู่...',
+    noRecord: 'ไม่พบข้อมูล'
 }

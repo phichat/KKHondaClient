@@ -1,36 +1,64 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ModelUser } from 'app/models/users';
-import { FormArray, FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
+import { TagAlConfig } from './tag-al.config';
+import * as $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs';
+import { LoaderService } from 'app/core/loader/loader.service';
+import { finalize } from 'rxjs/operators';
 declare var toastr: any;
+
 @Component({
   selector: 'app-tag-al-form',
   templateUrl: './tag-al-form.component.html',
   styleUrls: ['./tag-al-form.component.scss']
 })
-export class TagAlFormComponent implements OnInit {
+export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.destroyDatatable();
+  }
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private s_user: UserService,
-    private chRef: ChangeDetectorRef
+    private chRef: ChangeDetectorRef,
+    private s_loader: LoaderService
   ) {
+    super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
   }
-  checkedAll: boolean;
-  mUser: ModelUser;
-  bankingsDropdown = new Array<DropDownModel>();
+
+  @ViewChild("paymentPrice") inputPaymentPrice: ElementRef;
 
   ngOnInit() {
-    const carList = `${appConfig.apiUrl}/Ris/CarRegisList`;
+    this.formGroup = this.fb.group({
+      alNo: new FormControl(null),
+      sedNo: new FormControl(null),
+      borrowerId: new FormControl(null),
+      borrowerName: new FormControl(null),
+      sendingPrice: new FormControl(null),
+      remainPrice: new FormControl(null),
+      price2Remain: new FormControl(null),
+      paymentPrice: new FormControl(null),
+      price2: new FormControl(null),
+      bankCode: new FormControl(null),
+      documentRef: new FormControl(null),
+      paymentType: new FormControl(null),
+      branchId: new FormControl(null),
+      createDate: new FormControl(null),
+      createBy: new FormControl(null),
+      remark: new FormControl(null),
+      SedList: this.fb.array([])
+    });
+
     const bank = `${appConfig.apiUrl}/Bank/DropDown`;
     this.http.get(bank).subscribe((x: any[]) => {
       this.chRef.markForCheck();
@@ -38,51 +66,78 @@ export class TagAlFormComponent implements OnInit {
       this.chRef.detectChanges();
     });
 
-    this.http.get(carList).subscribe((x: any[]) => {
-      const res = x.reduce((a, c) =>
-        [
-          ...a,
-          {
-            ...c, IS_CHECKED: false, bookingNo: c.bookingNo.replace('CON', 'SED')
-          }
-        ], []);
-      this.setItemFormArray(res, this.formGroup, 'SedList');
+    this.loadingSedList();
 
-      // this.SedList.valueChanges.subscribe((x: any[]) => {
-      //   const price = x.filter(o => o.IS_CHECKED);
-      //   const totalPrice = price.reduce((a, c) => a += (c.price1 + c.price2), 0);
-      //   const price1 = price.reduce((a, c) => a += c.price1, 0);
-      //   const price2 = price.reduce((a, c) => a += c.price2, 0);
-      //   this.formGroup.patchValue({
-      //     totalPrice: totalPrice, 
-      //     price1: price1,
-      //     price2: price2
-      //   })
-      // })
+    this.s_user.currentData.subscribe(x => {
+      if (!x) return;
+      this.chRef.markForCheck();
+      this.mUser = x;
+      this.chRef.detectChanges();
     });
   }
 
-  get SedList(): FormArray {
-    return this.formGroup.get('SedList') as FormArray;
+  loadingSedList() {
+    const sedList = `${appConfig.apiUrl}/Ris/Sed/NormalList`;
+
+    this.http.get(sedList).subscribe((x: any[]) => {
+      if (!x.length) {
+        this.loading = 1;
+        return;
+      };
+      const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false, conList: "" }], []);
+      this.setItemFormArray(res, this.formGroup, 'SedList');
+      this.chRef.markForCheck();
+
+      this.SedList.valueChanges.subscribe((x: any[]) => {
+        const rec = x.find(o => o.IS_CHECKED);
+        this.price2RemainState = rec ? rec.price2Remain : null;
+        this.formGroup.patchValue({
+          sedNo: rec ? rec.sedNo : null,
+          borrowerId: rec ? rec.createBy : null,
+          borrowerName: rec ? rec.createName : null,
+          paymentPrice: this.price2RemainState,
+          price2: rec ? rec.price2 : null,
+          createDate: new Date(),
+          createBy: this.mUser.id,
+          branchId: this.mUser.branch,
+          paymentType: '1'
+        });
+        this.onChangePaymentPrice(this.inputPaymentPrice.nativeElement.value);
+      })
+
+      this.reInitDatatable();
+    }, () => {
+      this.loading = 2;
+    });
   }
 
-  public formGroup = this.fb.group({
-    typePayment: new FormControl('1'),
-    createDate: new FormControl(new Date()),
-    createBy: new FormControl(null),
-    totalPrice: new FormControl(0),
-    price1: new FormControl(0),
-    price2: new FormControl(0),
-    borrowMoney: new FormControl(0),
-    SedList: this.fb.array([])
-  });
-
-  checkAll(e: Event) {
-    const checkbox = e.target as HTMLInputElement;
-    for (let index = 0; index < this.SedList.value.length; index++) {
-      this.SedList.at(index).get('IS_CHECKED').patchValue(checkbox.checked);
+  checkingRecord(i: number) {
+    for (let index = 0; index < this.SedList.length; index++) {
+      if (index == i) {
+        const val = this.SedList.at(index).get('IS_CHECKED').value;
+        this.SedList.at(index).get('IS_CHECKED').patchValue(!val);
+        if (!val == true) this.inputPaymentPrice.nativeElement.focus();
+      } else {
+        this.SedList.at(index).get('IS_CHECKED').patchValue(false);
+      }
     }
   }
+
+  onChangePaymentPrice(value: number) {
+    let price = this.price2RemainState - value;
+    // this.formGroup.get('price2').value - value;
+    this.formGroup.get('price2Remain').patchValue(price);
+  }
+
+  // togglePaymentType(value: number) {
+  //   if (value == 1) {
+  //     this.formGroup.get('bankCode').disable;
+  //     this.formGroup.get('documentRef').disable;
+  //   } else {
+  //     this.formGroup.get('bankCode').enable;
+  //     this.formGroup.get('documentRef').enable;
+  //   }
+  // }
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
     if (array !== undefined && array.length) {
@@ -93,7 +148,57 @@ export class TagAlFormComponent implements OnInit {
   }
 
   onSubmit() {
+    let f = { ...this.formGroup.value };
+    f = {
+      alNo: f.alNo,
+      sedNo: f.sedNo,
+      price2Remain: f.price2Remain,
+      paymentPrice: f.paymentPrice,
+      bankCode: f.bankCode,
+      documentRef: f.documentRef,
+      paymentType: f.paymentType,
+      branchId: f.branchId,
+      createDate: (f.createDate as Date).toISOString(),
+      createBy: f.createBy,
+      remark: f.remark
+    }
 
-    toastr.success(message.created);
+    this.s_loader.showLoader();
+    const url = `${appConfig.apiUrl}/Ris/Al`;
+    this.http.post(url, f).pipe(
+      finalize(() => this.s_loader.onEnd())
+    ).subscribe(() => {
+      toastr.success(message.created);
+      this.formGroup.reset();
+      this.loadingSedList();
+    }, () => toastr.error(message.failed));
+  }
+
+  private initDatatable(): void {
+    let table: any = $('table');
+    this.dataTable = table.DataTable({
+      "scrollX": true,
+      "columns": [
+        null,
+        { "orderable": false },
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    });
+  }
+
+  private reInitDatatable(): void {
+    this.destroyDatatable()
+    setTimeout(() => this.initDatatable(), 0)
+  }
+
+  private destroyDatatable() {
+    if (this.dataTable) {
+      this.dataTable.destroy();
+      this.dataTable = null;
+    }
   }
 }

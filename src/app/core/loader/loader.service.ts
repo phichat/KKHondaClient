@@ -7,19 +7,28 @@ import { Subject } from 'rxjs/internal/Subject';
 })
 export class LoaderService {
   private loaderSubject = new Subject<LoaderState>();
-  // private loaderSubject = new BehaviorSubject<Boolean>(false);
 
   loaderState = this.loaderSubject.asObservable();
 
   constructor() { }
 
   show() {
-    // this.loaderSubject.next(true);
-      this.loaderSubject.next(<LoaderState>{show: true});
+    this.loaderSubject.next(<LoaderState>{ show: true });
   }
 
   hide() {
-    // this.loaderSubject.next(false);
-      this.loaderSubject.next(<LoaderState>{show: false});
+    this.loaderSubject.next(<LoaderState>{ show: false });
+  }
+
+  public onEnd(): void {
+    this.hideLoader();
+  }
+
+  public showLoader(): void {
+    this.show();
+  }
+
+  public hideLoader(): void {
+    this.hide();
   }
 }

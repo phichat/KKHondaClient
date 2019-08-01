@@ -7,6 +7,14 @@ export class  PageloaderService {
 
   constructor() { }
 
+  public showLoading() {
+    this.setShowPageloader(true);
+  }
+
+  public endLoading() {
+    this.setShowPageloader(false);
+  }
+
   setShowPageloader(status: boolean) {
       setTimeout(() => this.showPageloader.next(status), 0);
   }

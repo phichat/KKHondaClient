@@ -1,0 +1,86 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>บันทึกการคืนเงิน</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>รายการบันทึกการคืนเงิน</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+    <a [routerLink]="['/ris/cl-form-create']" class="btn btn-primary">
+      <i class="fa fa-paper-plane-o"></i> บันทึกการคืนเงิน
+    </a>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <form class="form-horizontal" style="margin-bottom: 15em;">
+        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+          <thead>
+            <tr>
+              <th class="text-center">ลำดับ</th>
+              <th></th>
+              <th>เลขที่ใบยืม</th>
+              <th>เลขที่ใบคืน</th>
+              <th>วันที่คืน</th>
+              <th>สถานะ</th>
+              <th class="text-right">เงินยืมคงเหลือ</th>
+              <th class="text-right">เงินคืน</th>
+              <!-- <th class="text-right">จำนวนเงินยืม</th> -->
+              <th>ผู้ดำเนินการ (คืนเงิน)</th>
+              <th>ผู้รับคืน</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="clList.length == 0; else else_tr;">
+              <td colspan="10" class="text-center">
+                <div [ngSwitch]="loading">
+                  <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                  <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                  <div *ngSwitchDefault>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <br>
+                    <span class="mt-2">รอสักครู่...</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <ng-template #else_tr>
+              <tr *ngFor="let item of clList; let i = index">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">
+                  <a class="btn btn-info btn-xs" [routerLink]="['/ris/cl-form-detail', item.clNo]">
+                    <i class="fa fa-pencil"></i>
+                    รายละเอียด
+                  </a>
+                </td>
+                <td>{{item.alNo}}</td>
+                <td>{{item.clNo}}</td>
+                <td>{{displayLocalDate(item.createDate)}}</td>
+                <td>{{item.statusDesc}}</td>
+                <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
+                <td class="text-right">{{item.receivePrice | number:'1.2-2'}}</td>
+                <!-- <td class="text-right">{{item.netPrice | number:'1.2-2'}}</td> -->
+                <td>{{item.refundName}}</td>
+                <td>{{item.createName}}</td>
+              </tr>
+            </ng-template>
+
+          </tbody>
+        </table>
+
+      </form>
+    </div>
+  </div>
+
+</div>

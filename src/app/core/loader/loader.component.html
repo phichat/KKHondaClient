@@ -1,6 +1,6 @@
 <!-- <div id="pageloader" class="pageloader" [ngClass]="{'is-active': show}"> -->
 <!-- <span class="title">Pageloader</span> -->
-<div class="page-loader-wrapper" *ngIf="show">
+<div class="page-loader-wrapper" *ngIf="show | async">
   <div class="loader">
     <div class="sk-spinner sk-spinner-cube-grid">
       <div class="sk-cube"></div>

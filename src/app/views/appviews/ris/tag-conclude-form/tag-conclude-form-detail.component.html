@@ -28,6 +28,12 @@
         <div class="row">
           <div class="col-xs-6 col-lg-6">
             <div class="form-group">
+              <label class="col-lg-4 control-label">เลขที่ใบส่งเรื่อง</label>
+              <div class="col-lg-8">
+                <span class="form-control disabled">{{formGroup.get('sedNo').value}}</span>
+              </div>
+            </div>
+            <div class="form-group">
               <label class="col-lg-4 control-label">วันที่ทำรายการ</label>
               <div class="col-lg-8">
                 <span class="form-control disabled">
@@ -40,8 +46,13 @@
             <div class="form-group">
               <label class="col-lg-4 control-label">ผู้ดำเนินการ (ส่งเรื่อง)</label>
               <div class="col-lg-8">
-                <span class="form-control disabled">{{mUser?.name}}</span>
-                <!-- <input type="text" class="form-control" readonly [value]="" /> -->
+                <span class="form-control disabled">{{formGroup.get('createName').value}}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-4 control-label">สถานะ</label>
+              <div class="col-lg-8">
+                <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
               </div>
             </div>
           </div>
@@ -59,7 +70,7 @@
                   <th>ลำดับ</th>
                   <th>
                     <div class="checkbox checkbox-primary">
-                      <input type="checkbox" id="select" (change)="checkAll($event)" [checked]="checkedAll">
+                      <input type="checkbox" id="select" [checked]="checkedAll" disabled>
                       <label for="select"></label>
                     </div>
                   </th>
@@ -94,10 +105,9 @@
                     <td class="text-center" [attr.data-order]="i">{{i+1}}</td>
                     <td [attr.data-order]="i">
                       <div class="checkbox checkbox-primary">
-                        <input type="checkbox" id="select{{i}}" formControlName="IS_CHECKED">
+                        <input type="checkbox" id="select{{i}}" formControlName="IS_CHECKED" disabled>
                         <label for="select{{i}}"></label>
                       </div>
-                      <!-- <input type="checkbox" formControlName="IS_CHECKED" [id]="i"> -->
                     </td>
                     <td [attr.data-order]="i">{{item.get('bookingNo')?.value}}</td>
                     <td [attr.data-order]="i">{{displayLocalDate(item.get('createDate').value)}}</td>
@@ -136,13 +146,10 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-lg-6 control-label is-required">จำนวนเงินยืม</label>
+                  <label class="col-lg-6 control-label">จำนวนเงินยืม</label>
                   <div class="col-lg-6">
-                    <input type="number" class="form-control" formControlName="borrowMoney" #borrowMoney /><br>
-                    <div *ngIf="borrowMoney.value > formGroup.get('price2').value" class="alert alert-danger"
-                      role="alert">
-                      "เงินยืม" ต้องไม่มากกว่า "เงินที่ต้องยืม"
-                    </div>
+                    <span class="form-control disabled">
+                      {{formGroup.get('borrowMoney').value | number:'1.2-2'}}</span>
                   </div>
                 </div>
               </div>
@@ -154,10 +161,11 @@
 
     <div class="row">
       <div class="col-lg-12 text-right">
-        <button class="btn btn-success" type="submit"
-          [disabled]="ConListIsSelect.length == 0 || formGroup.invalid || borrowMoney.value > formGroup.get('price2').value">
-          บันทึกรายการ
-        </button>
+        <ng-container *ngIf="formGroup.get('status').value == SedStatus.Normal">
+          <button class="btn btn-danger" type="submit">
+            ยกเลิกรายการ
+          </button>
+        </ng-container>
       </div>
     </div>
   </form>

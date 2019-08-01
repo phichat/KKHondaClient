@@ -10,6 +10,23 @@ span.required {
   color: red !important;
 }
 
+.form-horizontal .checkbox {
+  padding-top: unset !important;
+}
+
+.control-label::after {
+  content: ':';
+  position: absolute;
+  right: 6px;
+}
+
+.control-label.is-required::before {
+  content: '*';
+  position: absolute;
+  right: -8px;
+  color: red;
+}
+
 .form-control.ng-invalid.ng-touched:not(:focus) {
   border-color: red !important;
 }
