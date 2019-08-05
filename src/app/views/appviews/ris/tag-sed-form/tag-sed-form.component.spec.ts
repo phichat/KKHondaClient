@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagConcludeFormComponent } from './tag-conclude-form.component';
+import { TagSedFormComponent } from './tag-sed-form.component';
 
-describe('TagConcludeFormComponent', () => {
-  let component: TagConcludeFormComponent;
-  let fixture: ComponentFixture<TagConcludeFormComponent>;
+describe('TagSedFormComponent', () => {
+  let component: TagSedFormComponent;
+  let fixture: ComponentFixture<TagSedFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagConcludeFormComponent ]
+      declarations: [ TagSedFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagConcludeFormComponent);
+    fixture = TestBed.createComponent(TagSedFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

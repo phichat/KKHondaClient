@@ -20,13 +20,15 @@ import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';
 import { ReportSaleComponent } from './views/appviews/report-sale/report-sale.component';
-import { TagConcludeFormComponent } from './views/appviews/ris/tag-conclude-form/tag-conclude-form.component';
+import { TagSedFormComponent } from './views/appviews/ris/tag-sed-form/tag-sed-form.component';
 import { TagClFormComponent } from './views/appviews/ris/tag-cl-form/tag-cl-form.component';
 import { TagAlFormComponent } from './views/appviews/ris/tag-al-form/tag-al-form.component';
 import { TagAlListComponent } from './views/appviews/ris/tag-al-list/tag-al-list.component';
 import { TagClListComponent } from './views/appviews/ris/tag-cl-list/tag-cl-list.component';
-import { TagConcludeListComponent } from './views/appviews/ris/tag-conclude-list/tag-conclude-list.component';
-import { TagConcludeFormDetailComponent } from './views/appviews/ris/tag-conclude-form/tag-conclude-form-detail.component';
+import { TagSedListComponent } from './views/appviews/ris/tag-sed-list/tag-sed-list.component';
+import { TagSedFormDetailComponent } from './views/appviews/ris/tag-sed-form/tag-sed-form-detail.component';
+import { TagAlFormDetailComponent } from './views/appviews/ris/tag-al-form/tag-al-form-detail.component';
+import { TagClFormDetailComponent } from './views/appviews/ris/tag-cl-form/tag-cl-form-detail.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -79,13 +81,15 @@ export const ROUTES: Routes = [
   {
     path: 'ris', component: BasicLayoutComponent,
     children: [
-      { path: 'conclude-list', component: TagConcludeListComponent },
-      { path: 'conclude-form-create', component: TagConcludeFormComponent },
-      { path: 'conclude-form-detail/:code', component: TagConcludeFormDetailComponent },
+      { path: 'sed-list', component: TagSedListComponent },
+      { path: 'sed-form-create', component: TagSedFormComponent },
+      { path: 'sed-form-detail/:code', component: TagSedFormDetailComponent },
       { path: 'al-list', component: TagAlListComponent },
       { path: 'al-form-create', component: TagAlFormComponent },
+      { path: 'al-form-detail/:code', component: TagAlFormDetailComponent },
       { path: 'cl-list', component: TagClListComponent },
-      { path: 'cl-form-create', component: TagClFormComponent }
+      { path: 'cl-form-create', component: TagClFormComponent },
+      { path: 'cl-form-detail/:code', component: TagClFormDetailComponent }
     ]
   },
 

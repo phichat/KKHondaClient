@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagSedListComponent } from './tag-sed-list.component';
+import { TagClearMoneyListComponent } from './tag-clear-money-list.component';
 
-describe('TagSedListComponent', () => {
-  let component: TagSedListComponent;
-  let fixture: ComponentFixture<TagSedListComponent>;
+describe('TagClearMoneyListComponent', () => {
+  let component: TagClearMoneyListComponent;
+  let fixture: ComponentFixture<TagClearMoneyListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagSedListComponent ]
+      declarations: [ TagClearMoneyListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagSedListComponent);
+    fixture = TestBed.createComponent(TagClearMoneyListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

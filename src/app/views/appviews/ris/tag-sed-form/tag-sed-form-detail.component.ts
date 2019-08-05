@@ -3,20 +3,21 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TagConcludeConfig } from './tag-conclude.config';
+import { TagSedConfig } from './tag-sed.config';
 import 'datatables.net';
 import 'datatables.net-bs';
 import { mergeMap, tap, mapTo, finalize } from 'rxjs/operators';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { message } from 'app/app.message';
 import { UserService } from 'app/services/users';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 declare var toastr: any;
 @Component({
-  selector: 'app-tag-conclude-form-detail',
-  templateUrl: './tag-conclude-form-detail.component.html'
+  selector: 'app-tag-sed-form-detail',
+  templateUrl: './tag-sed-form-detail.component.html'
 })
-export class TagConcludeFormDetailComponent extends TagConcludeConfig implements OnInit, AfterViewInit {
+export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, AfterViewInit {
 
   ngOnDestroy(): void {
     this.destroyDatatable();
@@ -50,12 +51,16 @@ export class TagConcludeFormDetailComponent extends TagConcludeConfig implements
       price1: new FormControl(0),
       price2: new FormControl(0),
       price2Remain: new FormControl(0),
-      borrowMoney: new FormControl(null, Validators.required),
+      borrowMoney: new FormControl(null),
       status: new FormControl(0),
       statusDesc: new FormControl(null),
       conList: this.fb.array([]),
-      sedNo: new FormControl(null)
+      sedNo: new FormControl(null),
+      reason: new FormControl(null, Validators.required)
     });
+
+    const url = `${appConfig.apiUrl}/Reason/DropDown`;
+    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
   }
 
   ngAfterViewInit(): void {
@@ -86,7 +91,8 @@ export class TagConcludeFormDetailComponent extends TagConcludeConfig implements
             borrowMoney: x.borrowMoney,
             status: x.status,
             statusDesc: x.statusDesc,
-            sedNo: x.sedNo
+            sedNo: x.sedNo,
+            reason: x.reason
           })
           const conNoList = x['conNoList'];
           const res = conNoList.reduce((a, c) => [...a, { ...c, IS_CHECKED: true }], []);
@@ -121,15 +127,18 @@ export class TagConcludeFormDetailComponent extends TagConcludeConfig implements
 
   onSubmit() {
     if (confirm('ยืนยันการยกเลิกส่งเรื่องดำเนินการ หรือไม่?')) {
-      let f = { ...this.formGroup.value };
-      f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
+      let f = { 
+        sedNo: this.formGroup.get('sedNo').value,
+        reason: this.formGroup.get('reason').value
+     };
+      // f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
       const url = `${appConfig.apiUrl}/Ris/Sed/Cancel`;
       this.s_loader.showLoader();
       this.http.post(url, f).pipe(
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {
         toastr.success(message.created);
-        this.router.navigate(['ris/conclude-list']);
+        this.router.navigate(['ris/sed-list']);
       }, () => toastr.error(message.failed));
     }
   }

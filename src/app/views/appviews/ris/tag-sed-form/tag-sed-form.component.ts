@@ -5,7 +5,7 @@ import { appConfig, setLocalDate } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { Router } from '@angular/router';
-import { TagConcludeConfig } from './tag-conclude.config';
+import { TagSedConfig } from './tag-sed.config';
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
@@ -14,11 +14,11 @@ import { LoaderService } from 'app/core/loader/loader.service';
 
 declare var toastr: any;
 @Component({
-  selector: 'app-tag-conclude-form',
-  templateUrl: './tag-conclude-form.component.html',
-  styleUrls: ['./tag-conclude-form.component.scss']
+  selector: 'app-tag-sed-form',
+  templateUrl: './tag-sed-form.component.html',
+  styleUrls: ['./tag-sed-form.component.scss']
 })
-export class TagConcludeFormComponent extends TagConcludeConfig implements OnInit {
+export class TagSedFormComponent extends TagSedConfig implements OnInit {
 
   ngOnDestroy(): void {
     this.destroyDatatable();

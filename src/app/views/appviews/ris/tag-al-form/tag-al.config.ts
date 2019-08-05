@@ -2,7 +2,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { ModelUser } from 'app/models/users';
 import { setLocalDate } from 'app/app.config';
 import { DropDownModel } from 'app/models/drop-down-model';
-import { LoadingEntities } from 'app/entities/loading.entities';
+import { AlStatus } from 'app/entities/ris.entities';
 
 export class TagAlConfig {
     get SedList(): FormArray {
@@ -15,11 +15,13 @@ export class TagAlConfig {
 
     public displayLocalDate = setLocalDate;
     public bankingsDropdown: DropDownModel[];
+    public reasonDropdown: DropDownModel[];
     public checkedAll: boolean;
     public mUser: ModelUser;
     public formGroup: FormGroup;
     public dataTable: any;
     public loading: number;
+    public AlStatus = AlStatus;
     
     public outStandingBalanceState: number;
     public borrowMoneyState: number;

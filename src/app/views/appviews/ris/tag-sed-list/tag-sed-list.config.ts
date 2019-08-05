@@ -2,7 +2,7 @@
 import { setLocalDate } from 'app/app.config';
 import { SedStatus } from 'app/entities/ris.entities';
 
-export class TagConcludeListConfig {
+export class TagSedListConfig {
 
     public displayLocalDate = setLocalDate;
     public dataTable: any;

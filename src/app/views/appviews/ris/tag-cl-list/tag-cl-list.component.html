@@ -30,6 +30,7 @@
             <tr>
               <th class="text-center">ลำดับ</th>
               <th></th>
+              <th>ใบส่งเรื่อง</th>
               <th>เลขที่ใบยืม</th>
               <th>เลขที่ใบคืน</th>
               <th>วันที่คืน</th>
@@ -64,10 +65,14 @@
                     รายละเอียด
                   </a>
                 </td>
+                <td>{{item.sedNo}}</td>
                 <td>{{item.alNo}}</td>
                 <td>{{item.clNo}}</td>
                 <td>{{displayLocalDate(item.createDate)}}</td>
-                <td>{{item.statusDesc}}</td>
+                <td [ngClass]="{
+                  'text-danger': item.status == ClStatus.Cancel,
+                  'text-navy': item.status == ClStatus.Normal
+                }">{{item.statusDesc}}</td>
                 <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
                 <td class="text-right">{{item.receivePrice | number:'1.2-2'}}</td>
                 <!-- <td class="text-right">{{item.netPrice | number:'1.2-2'}}</td> -->

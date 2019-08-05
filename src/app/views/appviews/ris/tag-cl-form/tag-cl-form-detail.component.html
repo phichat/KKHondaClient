@@ -1,0 +1,215 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>บันทึกการคืนเงิน</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>บันทึกการคืนเงิน</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <div class="hr-line-dashed"></div>
+        <div class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">วันที่ทำรายการ</label>
+              <div class="col-lg-9">
+                <span class="form-control disabled">{{displayLocalDate(formGroup.get('createDate').value)}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">เลขที่ใบคืน</label>
+              <div class="col-lg-9">
+                <span class="form-control disabled">{{formGroup.get('clNo').value}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">ผู้คืน (ผู้ดำเนินการ)</label>
+              <div class="col-lg-9">
+                <span class="form-control disabled">{{formGroup.get('refundName').value}}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">ยอดค้างทั้งสิ้น</label>
+              <div class="col-lg-9">
+                <span class="form-control disabled">{{formGroup.get('balancePrice').value | number:'1.2-2'}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">ผู้รับคืน</label>
+              <div class="col-lg-9">
+                <span class="form-control disabled">{{formGroup.get('createName').value}}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">สถานะ</label>
+              <div class="col-lg-9">
+                <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">หมายเหตุ</label>
+              <div class="col-lg-9">
+                <textarea class="form-control" rows="1" formControlName="remark"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-content">
+            <div class="table-responsive">
+              <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th class="text-center">ลำดับ</th>
+                    <th></th>
+                    <th>เลขที่ใบยืม</th>
+                    <th>วันที่ยืม</th>
+                    <th class="text-right">เงินยืมคงเหลือ</th>
+                    <th class="text-right">เงินคืน</th>
+                    <th class="text-right">จำนวนเงินยืม</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="AlList">
+                  <tr *ngIf="AlList.length == 0; else else_tr;">
+                    <td colspan="7" class="text-center">
+                      <div [ngSwitch]="loading">
+                        <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                        <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                        <div *ngSwitchDefault>
+                          <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                          <br>
+                          <span class="mt-2">รอสักครู่...</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <ng-template #else_tr>
+                    <tr *ngFor="let item of AlList.controls; let i = index" [formGroupName]="i">
+                      <td class="text-center">{{i+1}}</td>
+                      <td class="text-center">
+                        <div class="checkbox checkbox-primary">
+                          <input type="checkbox" id="select{{i}}" formControlName="IS_CHECKED" disabled>
+                          <label for="select{{i}}"></label>
+                        </div>
+                      </td>
+                      <td>{{item.get('alNo').value}}</td>
+                      <td>{{displayLocalDate(item.get('createDate').value)}}</td>
+                      <td class="text-right">{{item.get('balancePrice')?.value | number:'1.2-2'}}</td>
+                      <td class="text-right">{{item.get('receivePrice')?.value | number:'1.2-2'}}</td>
+                      <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+                    </tr>
+                  </ng-template>
+
+                </tbody>
+              </table>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-lg-5"></div>
+              <div class="col-lg-7">
+                <div class="form-group">
+                  <label class="col-lg-6 control-label">ประเภทชำระ</label>
+                  <div class="col-lg-6">
+
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" formControlName="paymentType" id="paymentType0" value=1 disabled>
+                      <label for="paymentType0">เงินสด</label>
+                    </div>
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" formControlName="paymentType" id="paymentType1" value=2 disabled>
+                      <label for="paymentType1">เงินโอน</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <label for="" class="col-sm-6 control-label">
+                    ธนาคาร
+                  </label>
+                  <div class="col-sm-6">
+                    <span class="form-control disabled">
+                      {{formGroup.get('bankName').value}}
+                    </span>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <label for="" class="col-sm-6 control-label">
+                    หมายเลขอ้างอิง
+                  </label>
+                  <div class="col-sm-6 text-right">
+                    <span class="form-control disabled">
+                      {{formGroup.get('documentRef').value}}
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-6 control-label">ยอดรับคืนเงิน</label>
+                  <div class="col-lg-6">
+                    <span class="form-control disabled">
+                      {{formGroup.get('receivePrice').value | number:'1.2-2'}}
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <ng-container *ngIf="formGroup.get('status').value == ClStatus.Normal; else elseReason">
+                    <label class="col-lg-6 control-label is-required">สาเหตุในการยกเลิก</label>
+                    <div class="col-lg-6">
+                      <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
+                        formControlName="reason">
+                      </ng-select>
+                    </div>
+                  </ng-container>
+                  <ng-template #elseReason>
+                    <label class="col-lg-6 control-label">สาเหตุในการยกเลิก</label>
+                    <div class="col-lg-6">
+                      <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 text-right">
+        <ng-container *ngIf="formGroup.get('status').value == ClStatus.Normal">
+          <button class="btn btn-danger" type="submit" [disabled]="formGroup.invalid">
+            ยกเลิกงาน
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+</div>

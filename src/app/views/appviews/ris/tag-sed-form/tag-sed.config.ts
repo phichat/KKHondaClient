@@ -3,8 +3,9 @@ import { ModelUser } from 'app/models/users';
 import { setLocalDate } from 'app/app.config';
 import * as $ from 'jquery';
 import { SedStatus } from 'app/entities/ris.entities';
+import { DropDownModel } from 'app/models/drop-down-model';
 
-export class TagConcludeConfig {
+export class TagSedConfig {
     get ConList(): FormArray {
         return this.formGroup.get('conList') as FormArray;
     }
@@ -19,6 +20,7 @@ export class TagConcludeConfig {
     public formGroup: FormGroup;
     public dataTable: any;
     public loading: number;
+    public reasonDropdown: DropDownModel[];
 
     public SedStatus = SedStatus;
 

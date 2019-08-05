@@ -65,7 +65,11 @@
                 <td>{{item.get('sedNo').value}}</td>
                 <td>{{item.get('alNo').value}}</td>
                 <td>{{displayLocalDate(item.get('createDate').value)}}</td>
-                <td>{{item.get('statusDesc').value}}</td>
+                <td [ngClass]="{
+                  'text-danger': item.get('status').value == AlStatus.Cancel,
+                  'text-navy': item.get('status').value == AlStatus.Normal,
+                  'text-muted': item.get('status').value == AlStatus.CashBack
+                }">{{item.get('statusDesc').value}}</td>
                 <td class="text-right">{{item.get('price2Remain')?.value | number:'1.2-2'}}</td>
                 <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
               </tr>
