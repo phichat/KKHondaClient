@@ -1,10 +1,10 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { ModelUser } from 'app/models/users';
-import { setLocalDate } from 'app/app.config';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { AlStatus } from 'app/entities/ris.entities';
+import { RisConfig } from '../ris.config';
 
-export class TagAlConfig {
+export class TagAlConfig extends RisConfig {
     get SedList(): FormArray {
         return this.formGroup.get('SedList') as FormArray;
     }
@@ -13,13 +13,11 @@ export class TagAlConfig {
         return this.SedList.value.filter(x => x.IS_CHECKED);
     }
 
-    public displayLocalDate = setLocalDate;
     public bankingsDropdown: DropDownModel[];
     public reasonDropdown: DropDownModel[];
     public checkedAll: boolean;
     public mUser: ModelUser;
     public formGroup: FormGroup;
-    public dataTable: any;
     public loading: number;
     public AlStatus = AlStatus;
     

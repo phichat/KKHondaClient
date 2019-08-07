@@ -1,15 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { ModelUser } from 'app/models/users';
-import { FormArray, FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
-import * as $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, mapTo } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -152,33 +149,4 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
     }, () => toastr.error(message.failed));
 
   }
-
-  private initDatatable(): void {
-    let table: any = $('table');
-    this.dataTable = table.DataTable({
-      "scrollX": true,
-      "columns": [
-        null,
-        { "orderable": false },
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    });
-  }
-
-  private reInitDatatable(): void {
-    this.destroyDatatable()
-    setTimeout(() => this.initDatatable(), 0)
-  }
-
-  private destroyDatatable() {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-      this.dataTable = null;
-    }
-  }
-
 }

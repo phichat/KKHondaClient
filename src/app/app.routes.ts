@@ -29,6 +29,10 @@ import { TagSedListComponent } from './views/appviews/ris/tag-sed-list/tag-sed-l
 import { TagSedFormDetailComponent } from './views/appviews/ris/tag-sed-form/tag-sed-form-detail.component';
 import { TagAlFormDetailComponent } from './views/appviews/ris/tag-al-form/tag-al-form-detail.component';
 import { TagClFormDetailComponent } from './views/appviews/ris/tag-cl-form/tag-cl-form-detail.component';
+import { TagConListComponent } from './views/appviews/ris/tag-con-list/tag-con-list.component';
+import { TagConFormComponent } from './views/appviews/ris/tag-con-form/tag-con-form.component';
+import { TagConFormDetailComponent } from './views/appviews/ris/tag-con-form/tag-con-form-detail.component';
+import { TagBookWaitingListComponent } from './views/appviews/ris/tag-book-waiting-list/tag-book-waiting-list.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -81,6 +85,11 @@ export const ROUTES: Routes = [
   {
     path: 'ris', component: BasicLayoutComponent,
     children: [
+      { path: 'waiting-tag-list', component: TagBookWaitingListComponent },
+      { path: 'con-list', component: TagConListComponent },
+      { path: 'con-form-create', component: TagConFormComponent },
+      { path: 'con-form-create/:code', component: TagConFormComponent },
+      { path: 'con-form-detail/:code', component: TagConFormDetailComponent },
       { path: 'sed-list', component: TagSedListComponent },
       { path: 'sed-form-create', component: TagSedFormComponent },
       { path: 'sed-form-detail/:code', component: TagSedFormDetailComponent },

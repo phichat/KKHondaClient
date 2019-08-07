@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagWaitBookListComponent } from './tag-wait-book-list.component';
+import { TagConListComponent } from './tag-con-list.component';
 
-describe('TagWaitBookListComponent', () => {
-  let component: TagWaitBookListComponent;
-  let fixture: ComponentFixture<TagWaitBookListComponent>;
+describe('TagConListComponent', () => {
+  let component: TagConListComponent;
+  let fixture: ComponentFixture<TagConListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagWaitBookListComponent ]
+      declarations: [ TagConListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagWaitBookListComponent);
+    fixture = TestBed.createComponent(TagConListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

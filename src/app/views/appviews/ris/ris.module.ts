@@ -11,7 +11,7 @@ import { TagAlListComponent } from './tag-al-list/tag-al-list.component';
 import { TagClListComponent } from './tag-cl-list/tag-cl-list.component';
 import { ListAlComponent } from './tag-clear-money/list-al.component';
 import { ListDocComponent } from './tag-clear-money/list-doc.component';
-import { ListItemComponent } from './tag-clear-money/list-item.component';
+import { ListItemComponent as MoneyListItem } from './tag-clear-money/list-item.component';
 import { ListItemDetailComponent } from './tag-clear-money/list-item-detail.component';
 import { TagSedListComponent } from './tag-sed-list/tag-sed-list.component';
 import { TagSedFormDetailComponent } from './tag-sed-form/tag-sed-form-detail.component';
@@ -19,9 +19,13 @@ import { TagAlFormDetailComponent } from './tag-al-form/tag-al-form-detail.compo
 import { TagClFormDetailComponent } from './tag-cl-form/tag-cl-form-detail.component';
 import { TagHistoryCarComponent } from './tag-history-car/tag-history-car.component';
 import { TagConFormComponent } from './tag-con-form/tag-con-form.component';
-import { TagConFormListComponent } from './tag-con-form-list/tag-con-form-list.component';
+import { TagConFormEditComponent } from './tag-con-form/tag-con-form-edit.component';
+import { TagConListComponent } from './tag-con-list/tag-con-list.component';
 import { TagClearMoneyListComponent } from './tag-clear-money-list/tag-clear-money-list.component';
-import { TagWaitBookListComponent } from './tag-wait-book-list/tag-wait-book-list.component';
+import { TagBookWaitingListComponent } from './tag-book-waiting-list/tag-book-waiting-list.component';
+import { TagConFormDetailComponent } from './tag-con-form/tag-con-form-detail.component';
+import { ListItemComponent as TagConFormListItem } from './tag-con-form/list-item.component';
+import { MyDatePickerTHModule } from 'mydatepicker-th';
 
 @NgModule({
   declarations: [
@@ -36,13 +40,16 @@ import { TagWaitBookListComponent } from './tag-wait-book-list/tag-wait-book-lis
     TagClListComponent,
     ListAlComponent,
     ListDocComponent,
-    ListItemComponent,
+    MoneyListItem,
     ListItemDetailComponent,
     TagHistoryCarComponent,
     TagConFormComponent,
-    TagConFormListComponent,
+    TagConFormEditComponent,
+    TagConFormDetailComponent,
+    TagConListComponent,
+    TagConFormListItem,
     TagClearMoneyListComponent,
-    TagWaitBookListComponent
+    TagBookWaitingListComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +57,8 @@ import { TagWaitBookListComponent } from './tag-wait-book-list/tag-wait-book-lis
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
+    MyDatePickerTHModule
   ]
 })
 export class RISModule { }

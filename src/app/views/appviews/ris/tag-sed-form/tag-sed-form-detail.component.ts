@@ -4,8 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TagSedConfig } from './tag-sed.config';
-import 'datatables.net';
-import 'datatables.net-bs';
 import { mergeMap, tap, mapTo, finalize } from 'rxjs/operators';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { message } from 'app/app.message';

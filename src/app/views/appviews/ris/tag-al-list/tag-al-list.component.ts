@@ -3,9 +3,6 @@ import { TagAlListConfig } from './tag-al-list.config';
 import { appConfig } from 'app/app.config';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import * as $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs';
 
 @Component({
   selector: 'app-tag-al-list',
@@ -53,34 +50,6 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
       const itemFGs = array.map(item => this.fb.group(item));
       const itemFormArray = this.fb.array(itemFGs);
       fg.setControl(formControl, itemFormArray);
-    }
-  }
-
-  private initDatatable(): void {
-    let table: any = $('table');
-    this.dataTable = table.DataTable({
-      "scrollX": true,
-      // "columns": [
-      //   null,
-      //   { "orderable": false },
-      //   null,
-      //   null,
-      //   null,
-      //   null,
-      //   null
-      // ]
-    });
-  }
-
-  private reInitDatatable(): void {
-    this.destroyDatatable()
-    setTimeout(() => this.initDatatable(), 0)
-  }
-
-  private destroyDatatable() {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-      this.dataTable = null;
     }
   }
 

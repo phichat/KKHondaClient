@@ -5,9 +5,6 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { appConfig } from 'app/app.config';
 import { TagAlConfig } from './tag-al.config';
-import * as $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
 declare var toastr: any;
@@ -172,33 +169,5 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       this.formGroup.reset();
       this.loadingSedList();
     }, () => toastr.error(message.failed));
-  }
-
-  private initDatatable(): void {
-    let table: any = $('table');
-    this.dataTable = table.DataTable({
-      "scrollX": true,
-      "columns": [
-        null,
-        { "orderable": false },
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    });
-  }
-
-  private reInitDatatable(): void {
-    this.destroyDatatable()
-    setTimeout(() => this.initDatatable(), 0)
-  }
-
-  private destroyDatatable() {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-      this.dataTable = null;
-    }
   }
 }

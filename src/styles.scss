@@ -4,8 +4,32 @@
 
 @import "assets/styles/style";
 
-// ICheck
-// @import "../node_modules/icheck/skins/square/green";
+$fontSize: 14px;
+$fontColor: #676a6c;
+
+.payment-type {
+  margin: auto;
+  padding: 5px;
+  color: #fff;
+}
+
+.cash {
+  background-color: #32CD32;
+}
+
+.leasing {
+  background-color: #FF1493;
+}
+
+.hier-purchase {
+  background-color: #1E90FF;
+}
+
+.credit {
+  background-color: #6A5ACD;
+}
+
+
 span.required {
   color: red !important;
 }
@@ -105,10 +129,20 @@ span.required {
   .btnpicker {
     border-radius: unset !important;
   }
+  .mydpicon {
+    color: $fontColor !important;
+  }
+
 }
 
-.ng-select-container {
-  border: 1px solid #e5e6e7 !important;
+
+.ng-select {
+  font-size: 14px !important;
+
+  .ng-select-container {
+    border: 1px solid #e5e6e7 !important;
+    color: #555 !important;
+  }
 }
 
 .fixed_header {

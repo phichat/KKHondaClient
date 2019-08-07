@@ -69,39 +69,41 @@
 
       <br>
 
-      <!-- <div class="ibox-content"> -->
-      <!-- <h3>รายละเอียด</h3>
-        <div class="hr-line-dashed"></div> -->
+      <div class="ibox-content">
+        <h3>รายละเอียด</h3>
+        <div class="hr-line-dashed"></div>
 
-      <app-list-item [BookingId]="$BookingId" [Car]="$Car" (TagListItem)="TagListItem$.next($event)"
-        (TagHistory)="TagHistory$.next($event)">
-      </app-list-item>
+        <!-- <app-list-item [bookingId]="bookingId" (Output)="ListItem$.next($event)"></app-list-item> -->
 
-      <table class="table invoice-total m-t-sm">
-        <tbody>
-          <tr>
-            <td><strong>ยอดรวมเงินนำฝาก :</strong></td>
-            <td>{{formGroup.get('price1').value | number:'1.2-2'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ยอดรวมภาษี :</strong></td>
-            <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ยอดรวมเงินที่ต้องยืม :</strong></td>
-            <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ยอดรวมทั้งหมด :</strong></td>
-            <td>{{formGroup.get('totalPrice').value | number:'1.2-2'}}</td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="hr-line-dashed"></div>
 
-      <div class="text-right m-t-md">
-        <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+        <table class="table invoice-total">
+          <tbody>
+            <tr>
+              <td><strong>ยอดรวมเงินนำฝาก :</strong></td>
+              <td>{{formGroup.get('price1').value | number:'1.2-2'}}</td>
+            </tr>
+            <tr>
+              <td><strong>ยอดรวมภาษี :</strong></td>
+              <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
+            </tr>
+            <tr>
+              <td><strong>ยอดรวมเงินที่ต้องยืม :</strong></td>
+              <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+            </tr>
+            <tr>
+              <td><strong>ยอดรวมทั้งหมด :</strong></td>
+              <td>{{formGroup.get('totalPrice').value | number:'1.2-2'}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="hr-line-dashed"></div>
+
+        <div class="text-right">
+          <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+        </div>
       </div>
-      <!-- </div> -->
 
     </form>
   </div>

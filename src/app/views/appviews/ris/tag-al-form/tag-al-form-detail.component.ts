@@ -5,9 +5,6 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { appConfig } from 'app/app.config';
 import { TagAlConfig } from './tag-al.config';
-import * as $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, mapTo } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -159,33 +156,5 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
       toastr.success(message.created);
       this.router.navigate(['ris/al-list']);
     }, () => toastr.error(message.failed));
-  }
-
-  private initDatatable(): void {
-    let table: any = $('table');
-    this.dataTable = table.DataTable({
-      "scrollX": true,
-      "columns": [
-        null,
-        { "orderable": false },
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    });
-  }
-
-  private reInitDatatable(): void {
-    this.destroyDatatable()
-    setTimeout(() => this.initDatatable(), 0)
-  }
-
-  private destroyDatatable() {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-      this.dataTable = null;
-    }
   }
 }

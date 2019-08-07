@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { appConfig } from 'app/app.config';
+import { TagBookWaitingListListConfig } from './tag-book-waiting-list.config';
 import { HttpClient } from '@angular/common/http';
-import { TagClListConfig } from './tag-cl-list.config';
-
+import { appConfig } from 'app/app.config';
 
 @Component({
-  selector: 'app-tag-cl-list',
-  templateUrl: './tag-cl-list.component.html',
-  styleUrls: ['./tag-cl-list.component.scss']
+  selector: 'app-tag-book-waiting-list',
+  templateUrl: './tag-book-waiting-list.component.html',
+  styleUrls: ['./tag-book-waiting-list.component.scss']
 })
-export class TagClListComponent extends TagClListConfig implements OnInit, OnDestroy {
+export class TagBookWaitingListComponent extends TagBookWaitingListListConfig implements OnInit, OnDestroy {
   
   ngOnDestroy(): void {
     this.destroyDatatable();
@@ -22,14 +21,14 @@ export class TagClListComponent extends TagClListConfig implements OnInit, OnDes
   }
 
   ngOnInit() {
-    const sedList = `${appConfig.apiUrl}/Ris/Cl/All`;
+    const sedList = `${appConfig.apiUrl}/Ris/WaitingTag`;
 
     this.http.get(sedList).subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
         return;
       };
-      this.clList = x;
+      this.waitingList = x;
       this.reInitDatatable();
     }, () => {
       this.loading = 2;

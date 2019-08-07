@@ -1,14 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { appConfig, setLocalDate } from 'app/app.config';
+import { appConfig } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { Router } from '@angular/router';
 import { TagSedConfig } from './tag-sed.config';
-import * as $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'app/core/loader/loader.service';
 

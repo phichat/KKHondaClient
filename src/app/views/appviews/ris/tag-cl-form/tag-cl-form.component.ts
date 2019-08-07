@@ -7,9 +7,6 @@ import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
-import * as $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-bs';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
 
@@ -161,34 +158,6 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       this.loadingAlList();
     }, () => toastr.error(message.failed));
 
-  }
-
-  private initDatatable(): void {
-    let table: any = $('table');
-    this.dataTable = table.DataTable({
-      "scrollX": true,
-      "columns": [
-        null,
-        { "orderable": false },
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    });
-  }
-
-  private reInitDatatable(): void {
-    this.destroyDatatable()
-    setTimeout(() => this.initDatatable(), 0)
-  }
-
-  private destroyDatatable() {
-    if (this.dataTable) {
-      this.dataTable.destroy();
-      this.dataTable = null;
-    }
   }
 
 }
