@@ -27,3 +27,7 @@ export enum ClStatus {
     Cancel = 0,
     Normal = 1
 }
+
+export enum RisLocalStoreage {
+    TrashCarRegisListItem = "Trash_CarRegisListItem"
+}

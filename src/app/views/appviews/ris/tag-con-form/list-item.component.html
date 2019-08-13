@@ -14,100 +14,103 @@
   <div class="tab-content">
     <div id="tab-1" class="tab-pane active">
       <div class="panel-body">
-        <section [formGroup]="formExpenses">
-          <table class="table table-form-expenses">
-            <thead>
-              <tr>
-                <th width="45%">รายการ</th>
-                <th class="text-center" width="15%">เงินรับฝาก</th>
-                <th class="text-center" width="15%">คิดภาษี</th>
-                <th class="text-center" width="15%">เงินที่ต้องยืม</th>
-                <th class="text-center" width="10%">จัดการ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="expenses.length == 0; else else_tr;">
-                <td colspan="10" class="text-center">
-                  <div [ngSwitch]="loading">
-                    <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
-                    <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
-                    <div *ngSwitchDefault>
-                      <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                      <br>
-                      <span class="mt-2">รอสักครู่...</span>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              <ng-template #else_tr>
-                <tr>
-                  <td>
-                    <ng-select [items]="expenses" bindLabel="expensesDescription" bindValue="expensesDescription"
-                      groupBy="expensesTypeDesc" (change)="onSelectExpenses($event)" formControlName="expItem">
-                      <ng-template ng-optgroup-tmp let-item="item">
-                        <strong>{{item.expensesTypeDesc}}</strong>
-                      </ng-template>
-                      <ng-template ng-option-tmp let-item="item">
-                        {{item.expensesDescription}}
-                      </ng-template>
-                    </ng-select>
-                  </td>
-                  <td>
-                    <input type="number" min="0" step="0.01" formControlName="expPrice1" class="form-control">
-                  </td>
-                  <td>
-                    <div class="checkbox checkbox-primary">
-                      <input type="checkbox" id="isVat1" formControlName="expIsVat" (change)="onExpensesCalVat()">
-                      <label for="isVat1" style="width: 100%;">
-                        <span
-                          class="form-control disabled">{{formExpenses.get('expVatPrice1').value | number:'1.2-2'}}</span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <input type="number" min="0" step="0.01" formControlName="expPrice2" class="form-control">
-                  </td>
-                  <td class="text-center">
-                    <button class="btn btn-xs btn-outline btn-primary" type="button"
-                      [disabled]="!formExpenses.get('expItem').value" (click)="onAddExpItem()">
-                      <i class="fa fa-plus"></i>
-                      เพิ่มรายการ
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input type="text" class="form-control" formControlName="otItem" placeholder="รายการอื่นๆ">
-                  </td>
-                  <td>
-                    <input type="number" min="0" step="0.01" formControlName="otPrice1" class="form-control">
-                  </td>
-                  <td>
-                    <div class="checkbox checkbox-primary">
-                      <input type="checkbox" id="isVat2" formControlName="otIsVat" (change)="onOtherCalVat()">
-                      <label for="isVat2" style="width: 100%;">
-                        <span
-                          class="form-control disabled">{{formExpenses.get('otVatPrice1').value | number:'1.2-2'}}</span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <input type="number" min="0" step="0.01" formControlName="otPrice2" class="form-control">
-                  </td>
-                  <td class="text-center">
-                    <button class="btn btn-xs btn-outline btn-primary" type="button"
-                      [disabled]="!formExpenses.get('otItem').value" (click)="onAddOtItem()">
-                      <i class="fa fa-plus"></i>
-                      เพิ่มรายการ
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-            </tbody>
-          </table>
-        </section>
-
-        <div class="hr-line-dashed"></div>
+        <ng-container *ngIf="Mode != ActionMode.Detail">
+          <ng-container *ngIf="(BookingStatus | async) == ConStatus.Received || (BookingStatus | async) == null">
+            <section [formGroup]="formExpenses">
+              <table class="table table-form-expenses">
+                <thead>
+                  <tr>
+                    <th width="45%">รายการ</th>
+                    <th class="text-center" width="15%">เงินรับฝาก</th>
+                    <th class="text-center" width="15%">คิดภาษี</th>
+                    <th class="text-center" width="15%">เงินที่ต้องยืม</th>
+                    <th class="text-center" width="10%">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="expenses.length == 0; else else_tr;">
+                    <td colspan="10" class="text-center">
+                      <div [ngSwitch]="loading">
+                        <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                        <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                        <div *ngSwitchDefault>
+                          <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                          <br>
+                          <span class="mt-2">รอสักครู่...</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <ng-template #else_tr>
+                    <tr>
+                      <td>
+                        <ng-select [items]="expenses" bindLabel="expensesDescription" bindValue="expensesDescription"
+                          groupBy="expensesTypeDesc" (change)="onSelectExpenses($event)" formControlName="expItem">
+                          <ng-template ng-optgroup-tmp let-item="item">
+                            <strong>{{item.expensesTypeDesc}}</strong>
+                          </ng-template>
+                          <ng-template ng-option-tmp let-item="item">
+                            {{item.expensesDescription}}
+                          </ng-template>
+                        </ng-select>
+                      </td>
+                      <td>
+                        <input type="number" min="0" step="0.01" formControlName="expPrice1" class="form-control">
+                      </td>
+                      <td>
+                        <div class="checkbox checkbox-primary">
+                          <input type="checkbox" id="isVat1" formControlName="expIsVat" (change)="onExpensesCalVat()">
+                          <label for="isVat1" style="width: 100%;">
+                            <span
+                              class="form-control disabled">{{formExpenses.get('expVatPrice1').value | number:'1.2-2'}}</span>
+                          </label>
+                        </div>
+                      </td>
+                      <td>
+                        <input type="number" min="0" step="0.01" formControlName="expPrice2" class="form-control">
+                      </td>
+                      <td class="text-center">
+                        <button class="btn btn-xs btn-outline btn-primary" type="button"
+                          [disabled]="!formExpenses.get('expItem').value" (click)="onAddExpItem()">
+                          <i class="fa fa-plus"></i>
+                          เพิ่มรายการ
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input type="text" class="form-control" formControlName="otItem" placeholder="รายการอื่นๆ">
+                      </td>
+                      <td>
+                        <input type="number" min="0" step="0.01" formControlName="otPrice1" class="form-control">
+                      </td>
+                      <td>
+                        <div class="checkbox checkbox-primary">
+                          <input type="checkbox" id="isVat2" formControlName="otIsVat" (change)="onOtherCalVat()">
+                          <label for="isVat2" style="width: 100%;">
+                            <span
+                              class="form-control disabled">{{formExpenses.get('otVatPrice1').value | number:'1.2-2'}}</span>
+                          </label>
+                        </div>
+                      </td>
+                      <td>
+                        <input type="number" min="0" step="0.01" formControlName="otPrice2" class="form-control">
+                      </td>
+                      <td class="text-center">
+                        <button class="btn btn-xs btn-outline btn-primary" type="button"
+                          [disabled]="!formExpenses.get('otItem').value" (click)="onAddOtItem()">
+                          <i class="fa fa-plus"></i>
+                          เพิ่มรายการ
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </section>
+            <div class="hr-line-dashed"></div>
+          </ng-container>
+        </ng-container>
 
         <section [formGroup]="formGroup">
           <table class="table table-bordered">
@@ -144,7 +147,8 @@
                   <input type="number" min="0" step="0.01" formControlName="itemPrice2" class="form-control">
                 </td>
                 <td style="vertical-align: middle;">
-                  <a href="javaScript:void(0);" class="text-muted" type="button" (click)="onRemoveListItem(i)">
+                  <a *ngIf="Mode != ActionMode.Detail" href="javaScript:void(0);" class="text-muted" type="button"
+                    (click)="onRemoveListItem(i)">
                     <i class="fa fa-trash"></i> ลบรายการ</a>
                 </td>
               </tr>
@@ -171,19 +175,21 @@
                   <div class="row m-b-sm">
                     <label class="col-md-5 control-label">เลขทะเบียน</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="tagNo">
+                      <input type="text" class="form-control" formControlName="tagNo" [readOnly]="IsTagItem">
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">วันจดทะเบียน</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagRegis"></my-date-picker-th>
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagRegis"
+                        [disabled]="IsTagItem"></my-date-picker-th>
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">วันจดทะเบียน</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagExpire">
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagExpire"
+                        [disabled]="IsTagItem">
                       </my-date-picker-th>
                     </div>
                   </div>
@@ -193,38 +199,41 @@
                   <div class="row m-b-sm">
                     <label class="col-md-5 control-label">กรมธรรม์ พ.ร.บ.</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="prbNo">
+                      <input type="text" class="form-control" formControlName="prbNo" [readOnly]="IsActItem">
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">บริษัท</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="prbCompany">
+                      <input type="text" class="form-control" formControlName="prbCompany" [readOnly]="IsActItem">
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">วันทำ พ.ร.บ.</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbRegis"></my-date-picker-th>
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbRegis"
+                        [disabled]="IsActItem"></my-date-picker-th>
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">พ.ร.บ. หมดอายุ</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbExpire">
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbExpire"
+                        [disabled]="IsActItem">
                       </my-date-picker-th>
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">เลขที่ใบอนุญาต</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="commitNo">
+                      <input type="text" class="form-control" formControlName="commitNo" [readOnly]="IsActItem">
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">ใบอนุญาตหมดอายุ</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="commitExpire">
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="commitExpire"
+                        [disabled]="IsActItem">
                       </my-date-picker-th>
                     </div>
                   </div>
@@ -234,25 +243,27 @@
                   <div class="row m-b-sm">
                     <label class="col-md-5 control-label">กรมธรรม์ประกัน</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="warNo">
+                      <input type="text" class="form-control" formControlName="warNo" [readOnly]="IsWarItem">
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">บริษัทประกัน</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="warCompany">
+                      <input type="text" class="form-control" formControlName="warCompany" [readOnly]="IsWarItem">
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">วันทำประกัน</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="warRegis"></my-date-picker-th>
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="warRegis"
+                        [disabled]="IsWarItem"></my-date-picker-th>
                     </div>
                   </div>
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">ประกันหมดอายุ</label>
                     <div class="col-md-7">
-                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="warExpire">
+                      <my-date-picker-th [options]="myDatePickerOptions" formControlName="warExpire"
+                        [disabled]="IsWarItem">
                       </my-date-picker-th>
                     </div>
                   </div>

@@ -93,6 +93,10 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
             reason: x.reason
           })
           const conNoList = x['conNoList'];
+          if (conNoList.length == 0) {
+            this.loading = 1;
+            return;
+          }
           const res = conNoList.reduce((a, c) => [...a, { ...c, IS_CHECKED: true }], []);
           this.checkedAll = true;
           this.setItemFormArray(res, this.formGroup, 'conList');
@@ -124,11 +128,11 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
   }
 
   onSubmit() {
-    if (confirm('ยืนยันการยกเลิกส่งเรื่องดำเนินการ หรือไม่?')) {
-      let f = { 
+    if (confirm('ยืนยันการยกเลิก "ส่งเรื่องดำเนินการ" หรือไม่?')) {
+      let f = {
         sedNo: this.formGroup.get('sedNo').value,
         reason: this.formGroup.get('reason').value
-     };
+      };
       // f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
       const url = `${appConfig.apiUrl}/Ris/Sed/Cancel`;
       this.s_loader.showLoader();

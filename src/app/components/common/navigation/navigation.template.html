@@ -279,7 +279,7 @@
             </li>
             <li [ngClass]="{active: activeRoute('ris')}">
                 <a href="javaScript:void(0);">
-                    <i class="fa fa-file"></i>
+                    <i class="fa fa-tags"></i>
                     <span class="nav-label">งานทะเบียน</span>
                     <span class="fa arrow"></span>
                 </a>
@@ -292,6 +292,7 @@
                     <li [ngClass]="{'active': 
                     activeRoute('con-list') || 
                     activeRoute('con-form-create') ||
+                    activeRoute('con-form-edit') ||
                     activeRoute('con-form-detail')}">
                         <a [routerLink]="['/ris/con-list']">
                             <span class="nav-label">บันทึกรับเรื่อง</span>

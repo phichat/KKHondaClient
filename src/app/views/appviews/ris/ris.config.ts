@@ -1,14 +1,20 @@
-import { setLocalDate, appConfig, MyDatePickerOptions } from 'app/app.config';
+import { setLocalDate, appConfig, MyDatePickerOptions, setDateMyDatepicker } from 'app/app.config';
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
+import { ActionMode } from 'app/entities/general.entities';
+import { ConStatus, RisLocalStoreage as LS } from 'app/entities/ris.entities';
 
 export class RisConfig {
 
   public displayLocalDate = setLocalDate;
   public dataTable: any;
-  myDatePickerOptions = MyDatePickerOptions;
-  public apiURL = `${appConfig.apiUrl}/Ris`;
+  public ActionMode = ActionMode;
+  public myDatePickerOptions = MyDatePickerOptions;
+  public setDateMyDatepicker = setDateMyDatepicker;
+  public risUrl = `${appConfig.apiUrl}/Ris`;
+  public ConStatus = ConStatus;
+
 
   public initDatatable(): void {
     let table: any = $('table');

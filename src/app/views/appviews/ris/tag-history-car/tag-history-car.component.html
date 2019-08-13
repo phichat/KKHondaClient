@@ -1,3 +1,468 @@
-<p>
-  tag-history-car works!
-</p>
+<form class="" [formGroup]="formGroup">
+
+  <div class="tabs-container">
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a data-toggle="tab" href="#tab-his-1">ประวัติรถ</a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#tab-his-2">ผู้ถือกรรมสิทธิ์</a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#tab-his-3">ผู้ติดต่อ</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div id="tab-his-1" class="tab-pane active">
+        <div class="panel-body">
+          <section>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">เลขทะเบียน</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="tagNo" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">จังหวัด</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="province"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ประเภท</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="catName"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ยี่ห้อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="brandName"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">รุ่น</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="modelName"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">สี</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="colorName"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">หมายเลขเครื่อง</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="eNo" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">หมายเลขตัวถัง</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="fNo" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr-line-dashed"></div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">วันจดทะเบียน</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagRegis" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ทะเบียนหมดอายุ</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagExpire" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr-line-dashed"></div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">กรมธรรม์ พ.ร.บ.</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="prbNo" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">บริษัท</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="prbCompany" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">วันทำ พ.ร.บ.</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbRegis" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">พ.ร.บ. หมดอายุ</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbExpire" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">เลขที่ใบอนุญาต</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="commitNo"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ใบอนุญาตหมดอายุ</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="commitExpire" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr-line-dashed"></div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">กรมธรรม์ประกัน</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="warNo" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">บริษัทประกัน</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="warCompany"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">วันทำประกัน</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="warRegis" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ประกันหมดอายุ</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="warExpire" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div id="tab-his-2" class="tab-pane">
+        <div class="panel-body">
+          <div class="row form-group">
+            <div class="col-xs-6 col-lg-6">
+              <div class="form-group">
+                <label class="col-md-4 control-label">ประเภทบุคคล</label>
+                <div class="col-md-8">
+                  <div class="radio radio-info radio-inline">
+                    <input type="radio" id="entityType1" value="1" formControlName="entityType" [disabled]="">
+                    <label for="entityType1">นิติบุคล</label>
+                  </div>
+                  <div class="radio radio-info radio-inline">
+                    <input type="radio" id="entityType2" value="2" formControlName="entityType" [disabled]="">
+                    <label for="entityType2">บุคคลธรรมดา</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hr-line-dashed"></div>
+
+          <section *ngIf="formGroup.get('entityType').value == '1'">
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เลขประจำตัวผู้เสียภาษี</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="ownershipIdcard" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">ชื่อสถานที่ประกอบการ</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="ownershipName" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เบอร์ติดต่อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="ownershipCustomerPhone"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">อีเมลล์</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="ownershipCustomerEmail"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ที่อยู่</label>
+                  <div class="col-md-8">
+                    <textarea class="form-control" row form-groups="5" formControlName="ownershipFulladdress"
+                      [disabled]=""></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section *ngIf="formGroup.get('entityType').value == '2'">
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">คำนำหน้าชื่อ</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="ownershipCustomerPrename" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เพศ</label>
+                  <div class="col-md-8">
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" id="sexM" value="M" formControlName="ownershipCustomerSex" [disabled]="">
+                      <label for="sexM">ชาย</label>
+                    </div>
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" id="sexF" value="F" formControlName="ownershipCustomerSex" [disabled]="">
+                      <label for="sexF">หญิง</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ชื่อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="ownershipName"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">นามสกุล</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="ownershipSurname"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ชื่อเล่น</label>
+                  <div class="col-md-8"><input type="text" class="form-control"
+                      formControlName="ownershipCustomerNickname" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">บัตรประชาชน</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="ownershipIdcard" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เบอร์ติดต่อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="ownershipCustomerPhone"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">อีเมลล์</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="ownershipCustomerEmail"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">วันเกิด</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="ownershipBirthday"
+                      [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ที่อยู่</label>
+                  <div class="col-md-8">
+                    <textarea class="form-control" row form-groups="5" formControlName="ownershipFulladdress"
+                      [disabled]=""></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div id="tab-his-3" class="tab-pane">
+        <div class="panel-body">
+          <section>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">คำนำหน้าชื่อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control"
+                      formControlName="contractCustomerPrename" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เพศ</label>
+                  <div class="col-md-8">
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" id="sexM1" value="M" formControlName="contractCustomerSex" [disabled]="">
+                      <label for="sexM1">ชาย</label>
+                    </div>
+                    <div class="radio radio-info radio-inline">
+                      <input type="radio" id="sexF1" value="F" formControlName="contractCustomerSex" [disabled]="">
+                      <label for="sexF1">หญิง</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ชื่อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="contractCustomerName"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">นามสกุล</label>
+                  <div class="col-md-8"><input type="text" class="form-control"
+                      formControlName="contractCustomerSurname" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ชื่อเล่น</label>
+                  <div class="col-md-8"><input type="text" class="form-control"
+                      formControlName="contractCustomerNickname" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">บัตรประชาชน</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="contractIdcard"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เบอร์ติดต่อ</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="contractCustomerPhone" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">อีเมลล์</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="contractCustomerEmail"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">วันเกิด</label>
+                  <div class="col-md-8">
+                    <my-date-picker-th [options]="myDatePickerOptions" formControlName="contractBirthday" [disabled]="">
+                    </my-date-picker-th>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ที่อยู่</label>
+                  <div class="col-md-8">
+                    <textarea class="form-control" row form-groups="5" formControlName="contractFulladdress"
+                      [disabled]=""></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</form>

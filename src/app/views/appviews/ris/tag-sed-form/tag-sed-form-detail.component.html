@@ -86,7 +86,7 @@
               </thead>
               <tbody formArrayName="conList">
                 <tr *ngIf="ConList.length == 0 && !noRecord; else else_tr;">
-                  <td colspan="10" class="text-center">
+                  <td colspan="11" class="text-center">
                     <div [ngSwitch]="loading">
                       <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
                       <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>

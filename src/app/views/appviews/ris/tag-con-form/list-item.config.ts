@@ -2,20 +2,38 @@ import { TagConFormConfig } from './tag-con-form.config';
 import { FormGroup, FormArray } from '@angular/forms';
 import { Output, Input, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ActionMode } from 'app/entities/general.entities';
 
 export class ListItemConfig extends TagConFormConfig {
-    public formGroup:FormGroup;
+    public formGroup: FormGroup;
     public formCarHistory: FormGroup;
     public formExpenses: FormGroup;
     public expenses: any[] = [];
     public loading: number;
-    
+
     get CarRegisListItem(): FormArray {
         return this.formGroup.get('carRegisListItem') as FormArray;
     }
 
-    @Input() BookingId: number; 
-    @Input() Car: BehaviorSubject<any>;
+    public _IsTagItem: boolean = true;
+    get IsTagItem(): boolean {
+        return this._IsTagItem;
+    }
+
+    public _IsActItem: boolean = true;
+    get IsActItem(): boolean {
+        return this._IsActItem;
+    }
+
+    public _IsWarItem: boolean = true;
+    get IsWarItem(): boolean {
+        return this._IsWarItem;
+    }
+
+    @Input() BookingId?: BehaviorSubject<number>;
+    @Input() BookingStatus?: BehaviorSubject<number>;
+    @Input() Car?: BehaviorSubject<any>;
+    @Input() Mode: ActionMode;
     @Output() TagListItem = new EventEmitter<any[]>();
     @Output() TagHistory = new EventEmitter<any[]>();
 }

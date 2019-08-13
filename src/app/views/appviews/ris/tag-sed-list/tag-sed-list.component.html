@@ -54,8 +54,8 @@
             <tr *ngFor="let item of SedList; let i = index">
               <td class="text-center" [attr.data-order]="i">{{i+1}}</td>
               <td class="text-center">
-                <a class="btn btn-info btn-xs" [routerLink]="['/ris/sed-form-detail', item.sedNo]">
-                  <i class="fa fa-pencil"></i>
+                <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/sed-form-detail', item.sedNo]">
+                  <i class="fa fa-info-circle"></i>
                   รายละเอียด
                 </a>
               </td>

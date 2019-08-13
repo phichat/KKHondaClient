@@ -33,6 +33,7 @@ import { TagConListComponent } from './views/appviews/ris/tag-con-list/tag-con-l
 import { TagConFormComponent } from './views/appviews/ris/tag-con-form/tag-con-form.component';
 import { TagConFormDetailComponent } from './views/appviews/ris/tag-con-form/tag-con-form-detail.component';
 import { TagBookWaitingListComponent } from './views/appviews/ris/tag-book-waiting-list/tag-book-waiting-list.component';
+import { TagConFormEditComponent } from './views/appviews/ris/tag-con-form/tag-con-form-edit.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -89,6 +90,7 @@ export const ROUTES: Routes = [
       { path: 'con-list', component: TagConListComponent },
       { path: 'con-form-create', component: TagConFormComponent },
       { path: 'con-form-create/:code', component: TagConFormComponent },
+      { path: 'con-form-edit/:code', component: TagConFormEditComponent },
       { path: 'con-form-detail/:code', component: TagConFormDetailComponent },
       { path: 'sed-list', component: TagSedListComponent },
       { path: 'sed-form-create', component: TagSedFormComponent },

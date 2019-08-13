@@ -55,7 +55,7 @@ export function setZero(num: number) {
 
 export function setDateMyDatepicker(date: Date) {
     if (!date)
-        return null;
+        return { myDate: null };
 
     date = new Date(date);
     return { date: { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() } }

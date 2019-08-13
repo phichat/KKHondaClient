@@ -29,9 +29,9 @@
           <thead>
             <tr>
               <th class="text-center">ลำดับ</th>
-              <th>สถานะ</th>
               <th></th>
               <th>เลขที่ใบรับเรื่อง</th>
+              <th>สถานะ</th>
               <th>สาขา</th>
               <th>เลขทะเบียน</th>
               <th>จังหวัด</th>
@@ -60,18 +60,23 @@
             <ng-template #else_tr>
               <tr *ngFor="let item of conList; let i = index">
                 <td [attr.data-order]="i" class="text-center">{{i+1}}</td>
-                <td [ngClass]="{
-                    'text-danger': item.status == ConStatus.Cancel,
-                    'text-navy': item.status == ConStatus.Received,
-                    'text-muted': item.status != ConStatus.Cancel && ConStatus.Received
-                  }">{{item.statusDesc}}</td>
                 <td class="text-center">
-                  <a class="btn btn-info btn-xs" [routerLink]="['/ris/con-form-detail', item.bookingNo]">
+                  <button class="btn btn-xs" [ngClass]="{'btn-info': item.bookingStatus != ConStatus.Cancel}" [routerLink]="['/ris/con-form-edit', item.bookingNo]"
+                    [disabled]="item.bookingStatus == ConStatus.Cancel">
                     <i class="fa fa-pencil"></i>
+                    แก้ไข
+                  </button>&nbsp;
+                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/con-form-detail', item.bookingNo]">
+                    <i class="fa fa-info-circle"></i>
                     รายละเอียด
                   </a>
                 </td>
                 <td [attr.data-order]="item.bookingId">{{item.bookingNo}}</td>
+                <td [ngClass]="{
+                    'text-danger': item.bookingStatus == ConStatus.Cancel,
+                    'text-navy': item.bookingStatus == ConStatus.Received,
+                    'text-muted': item.bookingStatus != ConStatus.Cancel && item.bookingStatus != ConStatus.Received
+                  }">{{item.statusDesc}}</td>
                 <td>{{item.branchName}}</td>
                 <td>{{item.tagNo}}</td>
                 <td>{{item.branchProvince}}</td>

@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
 import { HttpClient } from '@angular/common/http';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { appConfig, getDateMyDatepicker } from 'app/app.config';
-import { finalize } from 'rxjs/operators';
+import { finalize, mergeMap, tap, map } from 'rxjs/operators';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
+import { message } from 'app/app.message';
+import { combineLatest } from 'rxjs';
+declare var toastr: any;
 
 @Component({
   selector: 'app-tag-con-form',
@@ -25,25 +27,30 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     private s_loader: LoaderService,
     private chRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
-    private s_user: UserService
+    private s_user: UserService,
+    private router: Router
   ) {
     super()
+    toastr.options = {
+      'closeButton': true,
+      'progressBar': true,
+    }
   }
 
   ngOnInit() {
-    this.s_loader.showLoader();
+    // this.s_loader.showLoader();
 
     this.formGroup = this.fb.group({
       bookingNo: new FormControl(null),
-      bookingStatus: new FormControl(null),
+      bookingStatus: new FormControl(1),
       createDate: new FormControl(new Date()),
       createBy: new FormControl(null),
       updateDate: new FormControl(null),
       updateBy: new FormControl(null),
       branchId: new FormControl(null),
       reasonCode: new FormControl(null),
-      eNo: new FormControl(null),
-      fNo: new FormControl(null),
+      eNo: new FormControl(null, Validators.required),
+      fNo: new FormControl(null, Validators.required),
       price1: new FormControl(null),
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
@@ -52,10 +59,11 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
 
     this.TagListItem$.subscribe(x => {
       this.chRef.markForCheck();
+      if (!x) return;
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
       const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
-      const totalPrice = price1 + price2;
       const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
+      const totalPrice = price1 + vatPrice1 + price2;
       this.formGroup.patchValue({
         price1: price1,
         price2: price2,
@@ -65,47 +73,59 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       this.chRef.detectChanges();
     });
 
-    this.activeRoute.params.subscribe(x => {
-      if (x['code']) {
-        const url = `${this.apiURL}/GetCarBySellNo`;
-        const params = { sellNo: x['code'] }
-        this.http.get(url, { params })
-          .pipe(
-            finalize(() => this.s_loader.onEnd())
-          ).subscribe((o: any) => {
-            this.chRef.markForCheck();
-            if (!o) return;
-            this.$Car.next(o);
-            this.formGroup.patchValue({
-              eNo: o.eNo,
-              fNo: o.fNo,
-            })
-            this.chRef.detectChanges();
-          })
-      }
-    })
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.mUser = x;
-      this.formGroup.patchValue({
-        createBy: x.id,
-        branchId: x.branch
-      });
-      this.chRef.detectChanges();
-    });
+    this.activeRoute.params
+      .pipe(
+        tap(() => this.s_loader.showLoader()),
+        mergeMap(x => {
+          const url = `${this.risUrl}/GetCarBySellNo`;
+          const params = { sellNo: x['code'] }
+          return combineLatest(
+            this.http.get(url, { params }),
+            this.s_user.currentData
+          ).pipe(
+            map(o => { return { car: o[0] as any, currentUser: o[1] } })
+          )
+        })
+      ).subscribe(x => {
+        this.chRef.markForCheck();
+        this.$Car.next(x.car);
+        this.mUser = x.currentUser;
+        this.formGroup.patchValue({
+          ...x.car,
+          branchId: x.currentUser.branch,
+          createBy: x.currentUser.id
+        });
+        this.s_loader.onEnd()
+        this.chRef.detectChanges();
+      })
   }
 
   onSubmit() {
-    
-    let f = { ...this.formGroup.value, tagHistory: this.TagHistory$.value };
-    f = {
-      ...f,
-      createDate: (f.createDate as Date).toISOString(),
-      ListItem: this.TagListItem$.value
+    let f = { ...this.formGroup.value };
+    let his = {
+      ...this.TagHistory$.value,
+      carId: 0,
+      branchId: f.branchId,
+      eNo: f.eNo,
+      fNo: f.fNo
     };
-    console.log(f);
+    let listItem = this.TagListItem$.value;
+    listItem = listItem.reduce((a, c) => [...a, { ...c, runId: 0, bookingId: 0 }], []);
 
+    const form = {
+      tagRegis: { ...f, bookingId: 0, createDate: (f.createDate as Date).toISOString() },
+      tagHistory: his,
+      tagListItem: listItem
+    };
+
+    this.s_loader.showLoader();
+    const url = `${this.risUrl}`;
+    this.http.post(url, form)
+      .pipe(
+        finalize(() => this.s_loader.onEnd())
+      ).subscribe(() => {
+        toastr.success(message.created);
+        this.router.navigate(['ris/con-form-create']);
+      }, () => toastr.error(message.failed));
   }
 }
