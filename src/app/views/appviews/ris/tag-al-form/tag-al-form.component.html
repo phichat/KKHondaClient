@@ -86,6 +86,7 @@
                   <th>เงินที่ต้องส่ง</th>
                   <th>เงินที่ต้องยืม</th>
                   <th>เงินยืม</th>
+                  <th>หมายเหตุ</th>
                 </tr>
               </thead>
               <tbody formArrayName="SedList">
@@ -125,6 +126,7 @@
                     <td class="text-right" [attr.data-order]="item.get('borrowMoney').value">
                       {{item.get('borrowMoney').value | number:'1.2-2'}}
                     </td>
+                    <td>{{item.get('remark')?.value}}</td>
                   </tr>
                 </ng-template>
 

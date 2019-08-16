@@ -54,7 +54,8 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       price1: new FormControl(null),
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
-      totalPrice: new FormControl(null)
+      totalPrice: new FormControl(null),
+      remark: new FormControl(null)
     });
 
     this.activeRoute.params.pipe(
@@ -91,11 +92,13 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     this.TagListItem$.subscribe(x => {
       this.chRef.markForCheck();
       if (!x) return;
+      const remark = x.reduce((a, c) => [...a, c.itemName], []).join(', ')
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
       const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
       const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
       const totalPrice = price1 + vatPrice1 + price2;
       this.formGroup.patchValue({
+        remark: remark,
         price1: price1,
         price2: price2,
         vatPrice1: vatPrice1,

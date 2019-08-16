@@ -45,6 +45,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       eNo: new FormControl(null),
       fNo: new FormControl(null),
       tagNo: new FormControl(null),
+      province: new FormControl(null),
       branchId: new FormControl(null),
       tagRegis: new FormControl({ myDate: null }),
       tagExpire: new FormControl({ myDate: null }),

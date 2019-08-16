@@ -60,11 +60,19 @@
         </div>
         <div class="row form-group">
           <div class="col-sm-6">
+            <label class="col-lg-4 control-label">หมายเหตุ</label>
+            <div class="col-lg-8">
+              <span class="form-control disabled">{{formGroup.get('remark').value}}</span>
+            </div>
+          </div>
+          <div class="col-sm-6">
             <label class="col-lg-4 control-label">สถานะ</label>
             <div class="col-lg-8">
               <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
             </div>
           </div>
+        </div>
+        <div class="row form-group">
           <div class="col-sm-6">
             <ng-container *ngIf="formGroup.get('bookingStatus').value == ConStatus.Received; else elseReason">
               <label class="col-lg-4 control-label is-required">สาเหตุในการยกเลิก</label>
@@ -79,6 +87,8 @@
                 <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
               </div>
             </ng-template>
+          </div>
+          <div class="col-sm-6">
           </div>
         </div>
         <div class="row form-group">
@@ -141,9 +151,7 @@
             แก้ไข
           </button>​</div>
         <div class="col-sm-6 text-right">
-          <button class="btn btn-danger" type="button"
-            [disabled]="formGroup.invalid"
-            (click)="cancel()">
+          <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">
             ยกเลิกรายการ
           </button>
         </div>

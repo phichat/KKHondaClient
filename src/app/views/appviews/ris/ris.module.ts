@@ -9,10 +9,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TagAlListComponent } from './tag-al-list/tag-al-list.component';
 import { TagClListComponent } from './tag-cl-list/tag-cl-list.component';
-import { ListAlComponent } from './tag-clear-money/list-al.component';
+import { ListAlItemComponent } from './tag-clear-money/list-al-item.component';
 import { ListDocComponent } from './tag-clear-money/list-doc.component';
-import { ListItemComponent as MoneyListItem } from './tag-clear-money/list-item.component';
-import { ListItemDetailComponent } from './tag-clear-money/list-item-detail.component';
+import { ListConItemComponent } from './tag-clear-money/list-con-item.component';
+import { ListConItemDetailComponent } from './tag-clear-money/list-con-item-detail.component';
 import { TagSedListComponent } from './tag-sed-list/tag-sed-list.component';
 import { TagSedFormDetailComponent } from './tag-sed-form/tag-sed-form-detail.component';
 import { TagAlFormDetailComponent } from './tag-al-form/tag-al-form-detail.component';
@@ -26,6 +26,8 @@ import { TagBookWaitingListComponent } from './tag-book-waiting-list/tag-book-wa
 import { TagConFormDetailComponent } from './tag-con-form/tag-con-form-detail.component';
 import { ListItemComponent as TagConFormListItem } from './tag-con-form/list-item.component';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
+import { ClearMoneyCreateComponent } from './tag-clear-money/clear-money-create.component';
+import { ClearMoneyDetailComponent } from './tag-clear-money/clear-money-detail.component';
 
 @NgModule({
   declarations: [
@@ -38,10 +40,6 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
     TagClFormComponent,
     TagClFormDetailComponent,
     TagClListComponent,
-    ListAlComponent,
-    ListDocComponent,
-    MoneyListItem,
-    ListItemDetailComponent,
     TagHistoryCarComponent,
     TagConFormComponent,
     TagConFormEditComponent,
@@ -49,7 +47,13 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
     TagConListComponent,
     TagConFormListItem,
     TagClearMoneyListComponent,
-    TagBookWaitingListComponent
+    TagBookWaitingListComponent,
+    ClearMoneyCreateComponent,
+    ClearMoneyDetailComponent,
+    ListAlItemComponent,
+    ListConItemComponent,
+    ListConItemDetailComponent,
+    ListDocComponent,
   ],
   imports: [
     CommonModule,

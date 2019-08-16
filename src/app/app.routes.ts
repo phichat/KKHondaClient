@@ -34,6 +34,9 @@ import { TagConFormComponent } from './views/appviews/ris/tag-con-form/tag-con-f
 import { TagConFormDetailComponent } from './views/appviews/ris/tag-con-form/tag-con-form-detail.component';
 import { TagBookWaitingListComponent } from './views/appviews/ris/tag-book-waiting-list/tag-book-waiting-list.component';
 import { TagConFormEditComponent } from './views/appviews/ris/tag-con-form/tag-con-form-edit.component';
+import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money-list/tag-clear-money-list.component';
+import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
+import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -100,7 +103,10 @@ export const ROUTES: Routes = [
       { path: 'al-form-detail/:code', component: TagAlFormDetailComponent },
       { path: 'cl-list', component: TagClListComponent },
       { path: 'cl-form-create', component: TagClFormComponent },
-      { path: 'cl-form-detail/:code', component: TagClFormDetailComponent }
+      { path: 'cl-form-detail/:code', component: TagClFormDetailComponent },
+      { path: 'clear-money-list', component: TagClearMoneyListComponent },
+      { path: 'clear-money-create', component: ClearMoneyCreateComponent },
+      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent }
     ]
   },
 

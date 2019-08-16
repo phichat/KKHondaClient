@@ -1,0 +1,60 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>เลือก</th>
+            <th></th>
+            <th></th>
+            <th>หมายเลขตัวถัง</th>
+            <th>เลขทะเบียน</th>
+            <th>จังหวัด</th>
+            <th>วันที่จดทะเบียน</th>
+            <th>เงินรับฝากคงเหลือ</th>
+            <th>ตัดยอดเงินรับฝาก</th>
+            <th>เลขที่ใบรับเรื่อง</th>
+            <th>เลขที่ใบส่งเรื่อง</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="ConList.length == 0; else else_conItem;">
+            <td colspan="11" class="text-center">
+                <div [ngSwitch]="loading">
+                    <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                    <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                    <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <span class="mt-2">รอสักครู่...</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <ng-template #else_conItem>
+            <tr *ngFor="let item of ConList; let i=index;">
+                <td style="vertical-align: middle;" class="text-center">
+                    <div class="radio radio-info radio-inline">
+                        <input type="radio" id="conItemSelect{{i}}" name="conItemSelect">
+                        <label for="conItemSelect{{i}}" style="padding-left: 0px;"></label>
+                    </div>
+                </td>
+                <td class="text-center" style="vertical-align: middle;">
+                    <span class="text-navy">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </span>
+                </td>
+                <td class="text-center" style="vertical-align: middle;">
+                    <span class="text-navy">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </span>
+                </td>
+                <td style="vertical-align: middle;">{{item.fNo}}</td>
+                <td style="vertical-align: middle;">{{item.tagNo}}</td>
+                <td style="vertical-align: middle;">{{item.province}}</td>
+                <td style="vertical-align: middle;">{{displayLocalDate(item.tagRegis)}}</td>
+                <td class="text-right" style="vertical-align: middle;">{{item.price1 + item.vatPrice1 | number:'1.2-2'}}</td>
+                <td class="text-right" style="vertical-align: middle;">{{item.price2 | number:'1.2-2'}}</td>
+                <td style="vertical-align: middle;">{{item.conNo}}</td>
+                <td style="vertical-align: middle;">{{item.sedNo}}</td>
+            </tr>
+        </ng-template>
+    </tbody>
+</table>

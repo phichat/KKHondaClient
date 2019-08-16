@@ -295,7 +295,7 @@
                     activeRoute('con-form-edit') ||
                     activeRoute('con-form-detail')}">
                         <a [routerLink]="['/ris/con-list']">
-                            <span class="nav-label">บันทึกรับเรื่อง</span>
+                            <span class="nav-label">รับเรื่องดำเนินการ</span>
                         </a>
                     </li>
                     <li [ngClass]="{'active': 
@@ -320,6 +320,14 @@
                         activeRoute('cl-form-detail')}">
                         <a [routerLink]="['/ris/cl-list']">
                             <span class="nav-label">บันทึกการคืนเงิน</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: 
+                        activeRoute('clear-money-list') ||
+                        activeRoute('clear-money-create') ||
+                        activeRoute('clear-money-detail')}">
+                        <a [routerLink]="['/ris/clear-money-list']">
+                            <span class="nav-label">รับคืนเรื่องจากการดำเนินการ</span>
                         </a>
                     </li>
                 </ul>

@@ -45,51 +45,23 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
       branchId: new FormControl(null),
       totalPrice: new FormControl(0),
       price1: new FormControl(0),
+      vatPrice1: new FormControl(0),
+      netPrice1: new FormControl(0),
       price2: new FormControl(0),
       price2Remain: new FormControl(0),
       borrowMoney: new FormControl(null, Validators.required),
       status: new FormControl(0),
       conList: this.fb.array([]),
-      sedNo: new FormControl(null)
+      sedNo: new FormControl(null),
+      remark: new FormControl(null),
     });
 
-    const apiURL = `${appConfig.apiUrl}/Ris/CarRegisReceive`;
-    this.http.get(apiURL).subscribe((x: any[]) => {
-      if (x.length == 0) {
-        this.loading = 1;
-        return;
-      }
-      const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false }], []);
-      this.setItemFormArray(res, this.formGroup, 'conList');
-      this.chRef.markForCheck();
-
-      this.ConList.valueChanges.subscribe((x: any[]) => {
-        const price = x.filter(o => o.IS_CHECKED);
-        const totalPrice = price.reduce((a, c) => a += (c.price1 + c.price2), 0);
-        const price1 = price.reduce((a, c) => a += c.price1, 0);
-        const price2 = price.reduce((a, c) => a += c.price2, 0);
-        this.formGroup.patchValue({
-          totalPrice: totalPrice,
-          price1: price1,
-          price2: price2,
-          price2Remain: price2,
-          borrowMoney: price2
-        });
-      });
-
-      this.reInitDatatable();
-    }, () => {
-      this.loading = 2;
-    });
+    this.loadingConList();
 
     this.s_user.currentData.subscribe(x => {
       if (!x) return;
       this.chRef.markForCheck();
       this.mUser = x;
-      this.formGroup.patchValue({
-        createBy: x.id,
-        branchId: x.branch
-      });
       this.chRef.detectChanges();
     });
 
@@ -100,6 +72,50 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
     for (let index = 0; index < this.ConList.value.length; index++) {
       this.ConList.at(index).get('IS_CHECKED').patchValue(checkbox.checked);
     }
+  }
+
+  loadingConList() {
+
+    const apiURL = `${appConfig.apiUrl}/Ris/CarRegisReceive`;
+
+    this.http.get(apiURL).subscribe((x: any[]) => {
+      if (x.length == 0) {
+        this.loading = 1;
+        while (this.ConList.length) {
+          this.ConList.removeAt(0);
+        }
+        return;
+      }
+      const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false }], []);
+      this.setItemFormArray(res, this.formGroup, 'conList');
+      this.chRef.markForCheck();
+
+      this.ConList.valueChanges.subscribe((x: any[]) => {
+        const price = x.filter(o => o.IS_CHECKED);
+        const totalPrice = price.reduce((a, c) => a += (c.price1 + c.vatPrice1 + c.price2), 0);
+        const price1 = price.reduce((a, c) => a += c.price1, 0);
+        const vatPrice1 = price.reduce((a, c) => a += c.vatPrice1, 0);
+        const netPrice1 = price1 + vatPrice1;
+        const price2 = price.reduce((a, c) => a += c.price2, 0);
+        this.formGroup.patchValue({
+          totalPrice: totalPrice,
+          price1: price1,
+          price2: price2,
+          vatPrice1: vatPrice1,
+          netPrice1: netPrice1,
+          price2Remain: price2,
+          borrowMoney: price2,
+          createBy: this.mUser.id,
+          createDate: new Date(),
+          branchId: this.mUser.branch,
+          status: 0
+        });
+      });
+
+      this.reInitDatatable();
+    }, () => {
+      this.loading = 2;
+    });
   }
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
@@ -114,13 +130,19 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
     let f = { ...this.formGroup.value };
     f.createDate = (<Date>f.createDate).toISOString();
     f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
+
+    // console.log(f);
+
     this.s_loader.showLoader();
     const url = `${appConfig.apiUrl}/Ris/Sed`;
     this.http.post(url, f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);
-      this.router.navigate(['ris/al-form-create']);
+      this.formGroup.reset();
+
+      this.loadingConList();
+
     }, () => toastr.error(message.failed));
 
   }

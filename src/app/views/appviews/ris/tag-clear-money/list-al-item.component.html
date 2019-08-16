@@ -1,0 +1,35 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>เลขที่ใบยืม</th>
+            <th>วันที่ยืม</th>
+            <th>จำนวนเงินยืม</th>
+            <th>เงินยืมคงเหลือ</th>
+            <th>ยอดหักเงินยืม</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="AlList.length == 0; else else_alItem;">
+            <td colspan="5" class="text-center">
+                <div [ngSwitch]="loading">
+                    <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                    <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                    <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <span class="mt-2">รอสักครู่...</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <ng-template #else_alItem>
+            <tr *ngFor="let item of AlList;">
+                <td>{{item.alNo}}</td>
+                <td>{{item.createDate}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </ng-template>
+    </tbody>
+</table>

@@ -79,6 +79,8 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     this.http.get(sedList).subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
+        while (this.SedList.length)
+          this.SedList.removeAt(0);
         return;
       };
       const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false, conList: "" }], []);

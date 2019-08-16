@@ -37,7 +37,7 @@
               <th>จังหวัด</th>
               <th>หมายเลขตัวถัง</th>
               <th>หมายเลขเครื่อง</th>
-              <th class="text-right">เงินรับฝาก</th>
+              <th class="text-right">เงินรับฝากรวมภาษี</th>
               <th class="text-right">เงินที่ต้องยืม</th>
               <th class="text-right">ยอดรวม</th>
               <th>หมายเหตุ</th>
@@ -82,7 +82,7 @@
                 <td>{{item.branchProvince}}</td>
                 <td>{{item.eNo}}</td>
                 <td>{{item.fNo}}</td>
-                <td [attr.data-order]="item.price1" class="text-right">{{item.price1 | number:'1.2-2'}}</td>
+                <td [attr.data-order]="item.price1" class="text-right">{{item.price1 + item.vatPrice1 | number:'1.2-2'}}</td>
                 <td [attr.data-order]="item.price2" class="text-right">{{item.price2 | number:'1.2-2'}}</td>
                 <td [attr.data-order]="item.totalPrice" class="text-right">{{item.totalPrice | number:'1.2-2'}}</td>
                 <td>{{item.remark}}</td>

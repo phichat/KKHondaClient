@@ -47,6 +47,7 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
       branchId: new FormControl(null),
       totalPrice: new FormControl(0),
       price1: new FormControl(0),
+      vatPrice1: new FormControl(0),
       price2: new FormControl(0),
       price2Remain: new FormControl(0),
       borrowMoney: new FormControl(null),
@@ -54,7 +55,8 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
       statusDesc: new FormControl(null),
       conList: this.fb.array([]),
       sedNo: new FormControl(null),
-      reason: new FormControl(null, Validators.required)
+      reason: new FormControl(null, Validators.required),
+      remark: new FormControl(null)
     });
 
     const url = `${appConfig.apiUrl}/Reason/DropDown`;
@@ -84,13 +86,15 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
             branchId: x.branchId,
             totalPrice: x.totalPrice,
             price1: x.price1,
+            vatPrice1: x.vatPrice1,
             price2: x.price2,
             price2Remain: x.price2Remain,
             borrowMoney: x.borrowMoney,
             status: x.status,
             statusDesc: x.statusDesc,
             sedNo: x.sedNo,
-            reason: x.reason
+            reason: x.reason,
+            remark: x.remark
           })
           const conNoList = x['conNoList'];
           if (conNoList.length == 0) {

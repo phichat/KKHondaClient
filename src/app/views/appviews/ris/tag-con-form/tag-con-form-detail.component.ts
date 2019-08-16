@@ -55,7 +55,8 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
       totalPrice: new FormControl(null),
-      reason: new FormControl(null, Validators.required)
+      reason: new FormControl(null, Validators.required),
+      remark: new FormControl(null)
     })
 
     this.activeRoute.params.pipe(

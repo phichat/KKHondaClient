@@ -1,0 +1,101 @@
+<section class="tabs-container">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a data-toggle="tab" href="#tab-clear-money-receive-1">รายการเรื่องย่อยที่รับคืน</a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#tab-clear-money-receive-2">เอกสาร/สิ่งที่รับคืน</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div id="tab-clear-money-receive-1" class="tab-pane active">
+      <div class="panel-body" style="max-height: 200px;">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 30%">รายการรับเรื่อง</th>
+              <th class="text-center">เสร็จ</th>
+              <th class="text-center">คืน</th>
+              <th class="text-center">ค้าง</th>
+              <th class="text-center" style="width: 10%">ค่าดำเนินการ</th>
+              <th class="text-center" style="width: 10%">เงินรับฝาก</th>
+              <th class="text-center" style="width: 20%">วันที่ในใบเสร็จขนส่ง</th>
+              <th style="width: 20%">หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="vertical-align: middle;"></td>
+              <td style="vertical-align: middle;" class="text-center">
+                <div class="radio radio-info radio-inline" style="min-height: unset !important;">
+                  <input type="radio" id="isSuccess1" name="isSuccess">
+                  <label for="isSuccess1"></label>
+                </div>
+              </td>
+              <td style="vertical-align: middle;" class="text-center">
+                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
+                    <input type="radio" id="isSuccess2" name="isSuccess">
+                    <label for="isSuccess2"></label>
+                  </div>
+              </td>
+              <td style="vertical-align: middle;" class="text-center">
+                <!-- <div class="checkbox checkbox-primary" style="min-height: unset !important;">
+                  <input type="checkbox" id="isOwe">
+                  <label for="isOwe"></label>
+                </div> -->
+
+                <div class="radio radio-info radio-inline" style="min-height: unset !important;">
+                    <input type="radio" id="isSuccess3" name="isSuccess">
+                    <label for="isSuccess3"></label>
+                  </div>
+              </td>
+              <td style="vertical-align: middle;" class="text-center"></td>
+              <td style="vertical-align: middle;" class="text-center"></td>
+              <td style="vertical-align: middle;" class="text-center">
+                <my-date-picker-th [options]="myDatePickerOptions">
+                </my-date-picker-th>
+              </td>
+              <td style="vertical-align: middle;">
+                <textarea rows="1" class="form-control"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="tab-clear-money-receive-2" class="tab-pane">
+      <div class="panel-body" style="max-height: 200px;">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 50%">รายการ</th>
+              <th class="text-center">รับ</th>
+              <th class="text-center">ส่ง</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="vertical-align: middle;"></td>
+              <td style="vertical-align: middle;" class="text-center">
+                <div class="checkbox checkbox-primary">
+                  <input type="checkbox" id="1">
+                  <label for="1"></label>
+                </div>
+              </td>
+              <td style="vertical-align: middle;" class="text-center">
+                <div class="checkbox checkbox-primary">
+                  <input type="checkbox" id="2">
+                  <label for="2"></label>
+                </div>
+              </td>
+              <td style="vertical-align: middle;">
+                <textarea rows="1" class="form-control"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

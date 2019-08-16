@@ -26,14 +26,14 @@
         <div class="row">
           <div class="col-xs-6 col-lg-6">
             <div class="form-group">
-              <label class="col-lg-4 control-label">เลขที่ใบส่งเรื่อง</label>
-              <div class="col-lg-8">
+              <label class="col-md-4 control-label">เลขที่ใบส่งเรื่อง</label>
+              <div class="col-md-8">
                 <span class="form-control disabled">{{formGroup.get('sedNo').value}}</span>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-4 control-label">วันที่ทำรายการ</label>
-              <div class="col-lg-8">
+              <label class="col-md-4 control-label">วันที่ทำรายการ</label>
+              <div class="col-md-8">
                 <span class="form-control disabled">
                   {{displayLocalDate(formGroup.get('createDate').value)}}
                 </span>
@@ -42,16 +42,44 @@
           </div>
           <div class="col-xs-6 col-lg-6">
             <div class="form-group">
-              <label class="col-lg-4 control-label">ผู้ดำเนินการ (ส่งเรื่อง)</label>
-              <div class="col-lg-8">
+              <label class="col-md-4 control-label">ผู้ดำเนินการ (ส่งเรื่อง)</label>
+              <div class="col-md-8">
                 <span class="form-control disabled">{{formGroup.get('createName').value}}</span>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-4 control-label">สถานะ</label>
-              <div class="col-lg-8">
+              <label class="col-md-4 control-label">สถานะ</label>
+              <div class="col-md-8">
                 <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
+                <textarea formControlName="remark" disabled rows="2" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <ng-container *ngIf="formGroup.get('status').value == SedStatus.Normal; else elseReason">
+                <label class="col-md-4 control-label is-required">สาเหตุในการยกเลิก</label>
+                <div class="col-md-8">
+                  <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
+                    formControlName="reason">
+                  </ng-select>
+                </div>
+              </ng-container>
+              <ng-template #elseReason>
+                <label class="col-md-4 control-label">สาเหตุในการยกเลิก</label>
+                <div class="col-md-8">
+                  <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
+                </div>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -62,7 +90,7 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <table class="table table-stripped table-hover display nowrap">
+            <table class="table table-stripped table-hover display nowrap" width="100%">
               <thead>
                 <tr>
                   <th>ลำดับ</th>
@@ -78,15 +106,15 @@
                   <th>เลขทะเบียน</th>
                   <th>จังหวัด</th>
                   <th>หมายเลขตัวถัง</th>
-                  <th>หมายเลขเครื่อง</th>
                   <th>เงินรับฝาก</th>
+                  <th>ภาษี</th>
                   <th>เงินที่ต้องยืม</th>
-                  <!-- <th>หมายเหตุ</th> -->
+                  <th>หมายเหตุ</th>
                 </tr>
               </thead>
               <tbody formArrayName="conList">
                 <tr *ngIf="ConList.length == 0 && !noRecord; else else_tr;">
-                  <td colspan="11" class="text-center">
+                  <td colspan="12" class="text-center">
                     <div [ngSwitch]="loading">
                       <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
                       <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
@@ -112,14 +140,17 @@
                     <td>{{item.get('branchName')?.value}}</td>
                     <td>{{item.get('tagNo')?.value}}</td>
                     <td>{{item.get('branchProvince')?.value}}</td>
-                    <td>{{item.get('eNo')?.value}}</td>
                     <td>{{item.get('fNo')?.value}}</td>
                     <td class="text-right" [attr.data-order]="item.get('price1')?.value">
                       {{item.get('price1')?.value | number:'1.2-2'}}
                     </td>
+                    <td class="text-right" [attr.data-order]="item.get('vatPrice1')?.value">
+                      {{item.get('vatPrice1')?.value | number:'1.2-2'}}
+                    </td>
                     <td class="text-right" [attr.data-order]="item.get('price2')?.value">
                       {{item.get('price2')?.value | number:'1.2-2'}}
                     </td>
+                    <td>{{item.get('remark').value}}</td>
                   </tr>
                 </ng-template>
 
@@ -130,10 +161,17 @@
               <div class="col-lg-5"></div>
               <div class="col-lg-7">
                 <div class="form-group">
-                  <label class="col-lg-6 control-label">ยอดรวม</label>
+                  <label class="col-lg-6 control-label">ยอดรวมเงินรับฝาก</label>
                   <div class="col-lg-6">
                     <span class="form-control disabled">
                       {{formGroup.get('price1').value | number:'1.2-2'}}</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-6 control-label">ยอดรวมภาษี</label>
+                  <div class="col-lg-6">
+                    <span class="form-control disabled">
+                      {{formGroup.get('vatPrice1').value | number:'1.2-2'}}</span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -149,22 +187,6 @@
                     <span class="form-control disabled">
                       {{formGroup.get('borrowMoney').value | number:'1.2-2'}}</span>
                   </div>
-                </div>
-                <div class="form-group">
-                  <ng-container *ngIf="formGroup.get('status').value == SedStatus.Normal; else elseReason">
-                    <label class="col-lg-6 control-label is-required">สาเหตุในการยกเลิก</label>
-                    <div class="col-lg-6">
-                      <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
-                        formControlName="reason">
-                      </ng-select>
-                    </div>
-                  </ng-container>
-                  <ng-template #elseReason>
-                    <label class="col-lg-6 control-label">สาเหตุในการยกเลิก</label>
-                    <div class="col-lg-6">
-                        <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
-                    </div>
-                  </ng-template>
                 </div>
               </div>
             </div>

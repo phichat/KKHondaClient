@@ -58,13 +58,18 @@
 
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-lg-3 control-label">หมายเหตุ</label>
+              <div class="col-lg-9">
+                <textarea formControlName="remark" rows="1" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-lg-3 control-label">สถานะ</label>
               <div class="col-lg-9">
                 <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
               </div>
             </div>
-          </div>
-          <div class="col-xs-6 col-lg-6">
           </div>
         </div>
 
