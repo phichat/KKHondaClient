@@ -103,7 +103,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
           price2: price2,
           vatPrice1: vatPrice1,
           netPrice1: netPrice1,
-          price2Remain: price2,
+          // price2Remain: price2,
           borrowMoney: price2,
           createBy: this.mUser.id,
           createDate: new Date(),
@@ -129,6 +129,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
   onSubmit() {
     let f = { ...this.formGroup.value };
     f.createDate = (<Date>f.createDate).toISOString();
+    f.price2Remain = f.borrowMoney;
     f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
 
     // console.log(f);

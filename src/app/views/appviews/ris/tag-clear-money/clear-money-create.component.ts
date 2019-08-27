@@ -1,13 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { FormControl, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
-import { message } from 'app/app.message';
-import { appConfig } from 'app/app.config';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { finalize, tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
 import { of } from 'rxjs';
+import { ISedRes } from 'app/interfaces/ris';
+import { ClearMoneyService } from './clear-money.service';
 declare var toastr: any;
 
 @Component({
@@ -25,7 +25,8 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_cloarMoney: ClearMoneyService
   ) {
     super();
     toastr.options = {
@@ -55,18 +56,20 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
   }
 
   onSubmit() {
-
+    console.log(this.s_cloarMoney.ClearMoney);
+    console.log(this.s_cloarMoney.ListAl);
+    console.log(this.s_cloarMoney.ListCon);
+    console.log(this.s_cloarMoney.ListConItem);
+    console.log(this.s_cloarMoney.ListConItemDoc);
   }
 
-  selectItemSed(e: any) {
+  selectItemSed(e: ISedRes) {
     this.formGroup.patchValue({
       sedCreateBy: e.createBy,
       sedCreateName: e.createName,
       sedNo: e.sedNo
     });
-
-    this.$ConListNo.next(e.conList);
-    this.$SedNo.next(e.sedNo);
+    this.$SedItem.next(e);
   }
 
 
@@ -80,10 +83,10 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       distinctUntilChanged(),
       switchMap(term =>
         term
-          ? this.http.get<any[]>(`${this.risUrl}/Sed/GetByTermSedNo`, { params: { term } })
+          ? this.http.get<ISedRes[]>(`${this.risUrl}/Sed/GetByTermSedNo`, { params: { term } })
           : of([])
       )
-    ).subscribe(x => {
+    ).subscribe((x: ISedRes[]) => {
       this.chRef.markForCheck();
       this.searchSedLoading = false;
       this.searchSedLoadingTxt = '';

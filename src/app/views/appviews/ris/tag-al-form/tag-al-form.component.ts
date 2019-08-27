@@ -94,7 +94,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
           sedNo: rec ? rec.sedNo : null,
           borrowerId: rec ? rec.createBy : null,
           borrowerName: rec ? rec.createName : null,
-          paymentPrice: this.price2RemainState,
+          paymentPrice: rec ? rec.price2Remain : null,
           price2: rec ? rec.price2 : null,
           createDate: new Date(),
           createBy: this.mUser.id,

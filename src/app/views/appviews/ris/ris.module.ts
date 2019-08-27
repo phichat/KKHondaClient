@@ -10,7 +10,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TagAlListComponent } from './tag-al-list/tag-al-list.component';
 import { TagClListComponent } from './tag-cl-list/tag-cl-list.component';
 import { ListAlItemComponent } from './tag-clear-money/list-al-item.component';
-import { ListDocComponent } from './tag-clear-money/list-doc.component';
 import { ListConItemComponent } from './tag-clear-money/list-con-item.component';
 import { ListConItemDetailComponent } from './tag-clear-money/list-con-item-detail.component';
 import { TagSedListComponent } from './tag-sed-list/tag-sed-list.component';
@@ -28,6 +27,7 @@ import { ListItemComponent as TagConFormListItem } from './tag-con-form/list-ite
 import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { ClearMoneyCreateComponent } from './tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './tag-clear-money/clear-money-detail.component';
+import { ClearMoneyService } from './tag-clear-money/clear-money.service';
 
 @NgModule({
   declarations: [
@@ -52,8 +52,7 @@ import { ClearMoneyDetailComponent } from './tag-clear-money/clear-money-detail.
     ClearMoneyDetailComponent,
     ListAlItemComponent,
     ListConItemComponent,
-    ListConItemDetailComponent,
-    ListDocComponent,
+    ListConItemDetailComponent
   ],
   imports: [
     CommonModule,
@@ -63,6 +62,9 @@ import { ClearMoneyDetailComponent } from './tag-clear-money/clear-money-detail.
     ReactiveFormsModule,
     NgSelectModule,
     MyDatePickerTHModule
+  ],
+  providers: [
+    ClearMoneyService
   ]
 })
 export class RISModule { }

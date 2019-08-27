@@ -12,7 +12,7 @@ export const appConfig = {
 export const MyDatePickerOptions: IMyOptions = {
     dateFormat: 'dd / mm / yyyy',
     showClearDateBtn: true,
-    height: '34px',
+    height: '32px',
     openSelectorOnInputClick: true,
     editableDateField: false
 };

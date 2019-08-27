@@ -1,4 +1,4 @@
-<section class="tabs-container">
+<section class="tabs-container" [formGroup]="formGroup">
   <ul class="nav nav-tabs">
     <li class="active">
       <a data-toggle="tab" href="#tab-clear-money-receive-1">รายการเรื่องย่อยที่รับคืน</a>
@@ -9,7 +9,7 @@
   </ul>
   <div class="tab-content">
     <div id="tab-clear-money-receive-1" class="tab-pane active">
-      <div class="panel-body" style="max-height: 200px;">
+      <div class="panel-body">
         <table class="table table-striped">
           <thead>
             <tr>
@@ -17,84 +17,153 @@
               <th class="text-center">เสร็จ</th>
               <th class="text-center">คืน</th>
               <th class="text-center">ค้าง</th>
-              <th class="text-center" style="width: 10%">ค่าดำเนินการ</th>
               <th class="text-center" style="width: 10%">เงินรับฝาก</th>
+              <th class="text-center" style="width: 10%">เงินที่ต้องยืม</th>
               <th class="text-center" style="width: 20%">วันที่ในใบเสร็จขนส่ง</th>
               <th style="width: 20%">หมายเหตุ</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;" class="text-center">
-                <div class="radio radio-info radio-inline" style="min-height: unset !important;">
-                  <input type="radio" id="isSuccess1" name="isSuccess">
-                  <label for="isSuccess1"></label>
+          <tbody formArrayName="ConListItem">
+            <tr *ngIf="ConListItem.length == 0; else else_tr;">
+              <td colspan="8" class="text-center">
+                <div [ngSwitch]="loading">
+                  <div *ngSwitchCase="LoadEnt.noRecord">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>ไม่มีข้อมูล</p>
+                  </div>
+                  <div *ngSwitchCase="LoadEnt.error">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>มีบางอย่างผิดพลาด</p>
+                  </div>
+                  <div *ngSwitchDefault>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <br>
+                    <p>รอสักครู่...</p>
+                  </div>
                 </div>
               </td>
-              <td style="vertical-align: middle;" class="text-center">
-                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
-                    <input type="radio" id="isSuccess2" name="isSuccess">
-                    <label for="isSuccess2"></label>
-                  </div>
-              </td>
-              <td style="vertical-align: middle;" class="text-center">
-                <!-- <div class="checkbox checkbox-primary" style="min-height: unset !important;">
-                  <input type="checkbox" id="isOwe">
-                  <label for="isOwe"></label>
-                </div> -->
-
-                <div class="radio radio-info radio-inline" style="min-height: unset !important;">
-                    <input type="radio" id="isSuccess3" name="isSuccess">
-                    <label for="isSuccess3"></label>
-                  </div>
-              </td>
-              <td style="vertical-align: middle;" class="text-center"></td>
-              <td style="vertical-align: middle;" class="text-center"></td>
-              <td style="vertical-align: middle;" class="text-center">
-                <my-date-picker-th [options]="myDatePickerOptions">
-                </my-date-picker-th>
-              </td>
-              <td style="vertical-align: middle;">
-                <textarea rows="1" class="form-control"></textarea>
-              </td>
             </tr>
+            <ng-template #else_tr>
+              <tr *ngFor="let item of ConListItem.controls; let i = index" [formGroupName]="i">
+                <td style="vertical-align: middle;">
+                  {{item.get('itemName').value}}
+                </td>
+                <td style="vertical-align: middle;">
+                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
+                    <input type="radio" id="istate1{{i}}" formControlName="state" value="1">
+                    <label for="isState1{{i}}"></label>
+                  </div>
+                </td>
+                <td style="vertical-align: middle;">
+                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
+                    <input type="radio" id="isState2{{i}}" formControlName="state" value="2">
+                    <label for="isState2{{i}}"></label>
+                  </div>
+                </td>
+                <td style="vertical-align: middle;">
+                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
+                    <input type="radio" id="isState3{{i}}" formControlName="state" value="3">
+                    <label for="isState3{{i}}"></label>
+                  </div>
+                </td>
+                <td style="vertical-align: middle;" class="text-center">
+                  {{item.get('itemPrice1').value | number:'1.2-2'}}
+                </td>
+                <td style="vertical-align: middle;" class="text-center">
+                  {{item.get('itemPrice2').value | number:'1.2-2'}}
+                </td>
+                <td style="vertical-align: middle;" class="text-center">
+                  <my-date-picker-th [options]="myDatePickerOptions" formControlName="dateReceipt">
+                  </my-date-picker-th>
+                </td>
+                <td style="vertical-align: middle;">
+                  <input type="text" class="form-control" formControlName="remark">
+                </td>
+              </tr>
+            </ng-template>
           </tbody>
         </table>
       </div>
     </div>
     <div id="tab-clear-money-receive-2" class="tab-pane">
-      <div class="panel-body" style="max-height: 200px;">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th style="width: 50%">รายการ</th>
-              <th class="text-center">รับ</th>
-              <th class="text-center">ส่ง</th>
-              <th>หมายเหตุ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="vertical-align: middle;"></td>
-              <td style="vertical-align: middle;" class="text-center">
-                <div class="checkbox checkbox-primary">
-                  <input type="checkbox" id="1">
-                  <label for="1"></label>
-                </div>
-              </td>
-              <td style="vertical-align: middle;" class="text-center">
-                <div class="checkbox checkbox-primary">
-                  <input type="checkbox" id="2">
-                  <label for="2"></label>
-                </div>
-              </td>
-              <td style="vertical-align: middle;">
-                <textarea rows="1" class="form-control"></textarea>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-striped ">
+            <thead>
+              <tr>
+                <th style="width: 20%">รายการ</th>
+                <th class="text-center">รับ</th>
+                <th style="width: 12%" class="text-center">วันที่รับ</th>
+                <th style="width: 18%" class="text-center">ผู้รับ</th>
+                <th class="text-center">ส่ง</th>
+                <th style="width: 12%" class="text-center">วันที่ส่ง</th>
+                <th style="width: 18%" class="text-center">ผู้ส่ง</th>
+                <th style="width: 20%">หมายเหตุ</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="ConListItemDoc">
+              <tr *ngIf="ConListItemDoc.length == 0; else else_tr1;">
+                <td colspan="8" class="text-center">
+                  <div [ngSwitch]="loading">
+                    <div *ngSwitchCase="LoadEnt.noRecord">
+                      <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                      <br>
+                      <p>ไม่มีข้อมูล</p>
+                    </div>
+                    <div *ngSwitchCase="LoadEnt.error">
+                      <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                      <br>
+                      <p>มีบางอย่างผิดพลาด</p>
+                    </div>
+                    <div *ngSwitchDefault>
+                      <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                      <br>
+                      <p>รอสักครู่...</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <ng-template #else_tr1>
+                <tr *ngFor="let doc of ConListItemDoc.controls; let i = index;" [formGroupName]="i">
+                  <td style="vertical-align: middle;">
+                    {{doc.get('sendBackName')?.value}}
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <div class="checkbox checkbox-primary">
+                      <input type="checkbox" id="receive_doc{{i}}" formControlName="isReceive"
+                        (change)="onReceiveDoc(i, $event)">
+                      <label for="receive_doc{{i}}"></label>
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    {{displayLocalDate(doc.get('receiveDate')?.value)}}
+                  </td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    {{doc.get('receiveName')?.value}}
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <div class="checkbox checkbox-primary">
+                      <input type="checkbox" id="send_doc{{i}}" formControlName="isSend"
+                        (change)="onSendDoc(i, $event)">
+                      <label for="send_doc{{i}}"></label>
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    {{displayLocalDate(doc.get('sendDate')?.value)}}
+                  </td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    {{doc.get('sendName')?.value}}
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <input class="form-control" formControlName="remark">
+                  </td>
+                </tr>
+              </ng-template>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

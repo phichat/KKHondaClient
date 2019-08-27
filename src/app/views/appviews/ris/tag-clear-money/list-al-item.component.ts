@@ -3,6 +3,7 @@ import { ListAlItemConfig } from './list-al-item.config';
 import { mergeMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
+import { IAlRes } from 'app/interfaces/ris';
 
 @Component({
     selector: 'app-list-al-item-component',
@@ -17,14 +18,14 @@ export class ListAlItemComponent extends ListAlItemConfig implements OnInit {
     }
 
     ngOnInit(): void {
-        this.$SedNo.pipe(
+        this.$SedItem.pipe(
             tap(() => this.loading = 0),
             mergeMap(x => {
                 if (x == null) return of([]);
-                const params = { sedNo: x };
-                return this.http.get<any[]>(`${this.risUrl}/Al/GetBySedNo`, { params });
+                const params = { sedNo: x.sedNo };
+                return this.http.get<IAlRes[]>(`${this.risUrl}/Al/GetBySedNo`, { params });
             })
-        ).subscribe(x => {
+        ).subscribe((x:IAlRes[]) => {
             this.AlList = x;
             this.loading = 1;
         }, () => this.loading = 2);

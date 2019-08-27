@@ -120,11 +120,11 @@
                     <td class="text-right" [attr.data-order]="item.get('price1').value">
                       {{item.get('price1').value | number:'1.2-2'}}
                     </td>
+                    <td class="text-right" [attr.data-order]="item.get('price2').value">
+                      {{item.get('price2').value | number:'1.2-2'}}
+                    </td>
                     <td class="text-right" [attr.data-order]="item.get('price2Remain').value">
                       {{item.get('price2Remain').value | number:'1.2-2'}}
-                    </td>
-                    <td class="text-right" [attr.data-order]="item.get('borrowMoney').value">
-                      {{item.get('borrowMoney').value | number:'1.2-2'}}
                     </td>
                     <td>{{item.get('remark')?.value}}</td>
                   </tr>

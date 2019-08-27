@@ -6,6 +6,8 @@ import { EventEmitter } from '@angular/core';
 import { SedStatus } from 'app/entities/ris.entities';
 import { BehaviorSubject } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
+import { ISedRes } from 'app/interfaces/ris';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 export class ClearMoneyConfig extends RisConfig {
     public formGroup: FormGroup;
@@ -22,6 +24,6 @@ export class ClearMoneyConfig extends RisConfig {
     public TagListItem$ = new BehaviorSubject<any[]>([]);
     public TagHistory$ = new BehaviorSubject<any>(null);
 
-    public $ConListNo = new BehaviorSubject<string>(null);
-    public $SedNo = new BehaviorSubject<string>(null);
+    public $SedItem = new BehaviorSubject<ISedRes>(null);
+    public $ConNo = new BehaviorSubject<string>(null);
 }
