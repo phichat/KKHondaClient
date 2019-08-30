@@ -52,6 +52,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       eNo: new FormControl(null, Validators.required),
       fNo: new FormControl(null, Validators.required),
       price1: new FormControl(null),
+      cutBalance: new FormControl(null),
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
       totalPrice: new FormControl(null)
@@ -66,6 +67,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       const totalPrice = price1 + vatPrice1 + price2;
       this.formGroup.patchValue({
         price1: price1,
+        cutBalance: price1 + vatPrice1,
         price2: price2,
         vatPrice1: vatPrice1,
         totalPrice: totalPrice

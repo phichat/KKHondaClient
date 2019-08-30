@@ -105,11 +105,11 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
                 this.addFreeItem(item);
               }
               if (o.freeAct == 1) {
-                const item = this.expenses.find(x => x.expensesCode == 'EXP10002');
+                const item = this.expenses.find(x => x.expensesCode == 'EXP10003');
                 this.addFreeItem(item);
               }
               if (o.freeWarranty == 1) {
-                const item = this.expenses.find(x => x.expensesCode == 'EXP10005');
+                const item = this.expenses.find(x => x.expensesCode == 'EXP10004');
                 this.addFreeItem(item);
               }
 
@@ -252,6 +252,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     this.formExpenses.patchValue({
       expitemCode: item.expensesCode,
       expPrice1: item.expensesAmount,
+      expPrice2: item.expensesAmount
     });
   }
 
@@ -292,9 +293,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
   emitValue(value: any[]) {
     const obj = [...value];
-    this._IsTagItem = obj.filter(x => x.itemCode == 'EXP10001' || 'EXP10003').length ? false : true;
-    this._IsActItem = obj.filter(x => x.itemCode == 'EXP10002').length ? false : true;
-    this._IsWarItem = obj.filter(x => x.itemCode == 'EXP10005').length ? false : true;
+    this._IsTagItem = obj.filter(x => x.itemCode == 'EXP10001' || 'EXP10002').length ? false : true;
+    this._IsActItem = obj.filter(x => x.itemCode == 'EXP10003').length ? false : true;
+    this._IsWarItem = obj.filter(x => x.itemCode == 'EXP10004').length ? false : true;
 
     this.TagListItem.emit(obj)
   }

@@ -1,8 +1,9 @@
-<table class="table table-bordered">
+<table class="table table-bordered" [formGroup]="formGroup">
     <thead>
         <tr>
             <th>เลือก</th>
-            <th></th>
+            <th style="width: 5%;"></th>
+            <th style="width: 5%;"></th>
             <th>หมายเลขตัวถัง</th>
             <th>เลขทะเบียน</th>
             <th>จังหวัด</th>
@@ -13,7 +14,7 @@
             <th>เลขที่ใบส่งเรื่อง</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody formArrayName="ConList">
         <tr *ngIf="ConList.length == 0; else else_conItem;">
             <td colspan="11" class="text-center">
                 <div [ngSwitch]="loading">
@@ -36,28 +37,41 @@
             </td>
         </tr>
         <ng-template #else_conItem>
-            <tr *ngFor="let item of ConList; let i=index;">
+            <tr *ngFor="let item of ConList.controls; let i=index;" [formGroupName]="i">
                 <td style="vertical-align: middle;" class="text-center">
                     <div class="radio radio-info radio-inline">
                         <input type="radio" id="conItemSelect{{i}}" name="conItemSelect"
-                            (change)="selectCon(item.bookingNo)">
+                            (change)="selectCon(item.get('bookingNo').value)">
                         <label for="conItemSelect{{i}}" style="padding-left: 0px;"></label>
                     </div>
                 </td>
                 <td class="text-center" style="vertical-align: middle;">
-                    <span class="text-navy">
+                    <span *ngIf="item.get('state1').value != null" class="text-navy">
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </span>
                 </td>
-                <td style="vertical-align: middle;">{{item.fNo}}</td>
-                <td style="vertical-align: middle;">{{item.tagNo}}</td>
-                <td style="vertical-align: middle;">{{item.province}}</td>
-                <td style="vertical-align: middle;">{{displayLocalDate(item.tagRegis)}}</td>
-                <td class="text-right" style="vertical-align: middle;">{{item.price1 + item.vatPrice1 | number:'1.2-2'}}
+                <td class="text-center" style="vertical-align: middle;">
+                    <div [ngSwitch]="item.get('state2').value">
+                        <div *ngSwitchCase="1" class="text-navy">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </div>
+                        <div *ngSwitchCase="2" class="text-danger">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                        <div *ngSwitchDefault></div>
+                    </div>
                 </td>
-                <td class="text-right" style="vertical-align: middle;">{{item.price2 | number:'1.2-2'}}</td>
-                <td style="vertical-align: middle;">{{item.bookingNo}}</td>
-                <td style="vertical-align: middle;">{{item.sedNo}}</td>
+                <td style="vertical-align: middle;">{{item.get('fNo').value}}</td>
+                <td style="vertical-align: middle;">{{item.get('tagNo').value}}</td>
+                <td style="vertical-align: middle;">{{item.get('province').value}}</td>
+                <td style="vertical-align: middle;">{{displayLocalDate(item.get('tagRegis').value)}}</td>
+                <td class="text-right" style="vertical-align: middle;">
+                    {{item.get('price1').value + item.get('vatPrice1').value | number:'1.2-2'}}
+                </td>
+                <td class="text-right" style="vertical-align: middle;">
+                    {{item.get('cutBalance').value | number:'1.2-2'}}</td>
+                <td style="vertical-align: middle;">{{item.get('bookingNo').value}}</td>
+                <td style="vertical-align: middle;">{{item.get('sedNo').value}}</td>
             </tr>
         </ng-template>
     </tbody>

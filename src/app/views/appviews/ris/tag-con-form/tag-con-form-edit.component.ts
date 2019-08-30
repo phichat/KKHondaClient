@@ -100,6 +100,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       this.formGroup.patchValue({
         remark: remark,
         price1: price1,
+        cutBalance: price1 + vatPrice1,
         price2: price2,
         vatPrice1: vatPrice1,
         totalPrice: totalPrice

@@ -6,7 +6,7 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
 import { of } from 'rxjs';
-import { ISedRes } from 'app/interfaces/ris';
+import { ISedRes, IConItemOutput } from 'app/interfaces/ris';
 import { ClearMoneyService } from './clear-money.service';
 declare var toastr: any;
 
@@ -64,12 +64,14 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
   }
 
   selectItemSed(e: ISedRes) {
+    this.$SedItem.next(e);
+    if (!e) return;
     this.formGroup.patchValue({
       sedCreateBy: e.createBy,
       sedCreateName: e.createName,
       sedNo: e.sedNo
     });
-    this.$SedItem.next(e);
+    
   }
 
 
@@ -100,5 +102,9 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       this.searchSedLoadingTxt = '';
       this.sedDropDown = [];
     });
+  }
+
+  ConItem_Output(event: IConItemOutput) {
+    this.$ConItemOutput.next(event);
   }
 }

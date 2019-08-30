@@ -53,6 +53,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       fNo: new FormControl(null, Validators.required),
       price1: new FormControl(null),
       vatPrice1: new FormControl(null),
+      cutBalance: new FormControl(null),
       price2: new FormControl(null),
       totalPrice: new FormControl(null),
       reason: new FormControl(null, Validators.required),

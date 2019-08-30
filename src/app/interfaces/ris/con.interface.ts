@@ -2,10 +2,12 @@ export interface ICon {
     bookingId: number;
     bookingNo: string;
     bookingStatus: number;
+    state: number;
     eNo: string;
     fNo: string;
     price1?: number;
     vatPrice1?: number;
+    cutBalance?: number;
     price2?: number;
     totalPrice?: number;
     createBy?: number;

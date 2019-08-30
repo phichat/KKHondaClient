@@ -1,13 +1,12 @@
 
 import { RisConfig } from '../ris.config';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ModelUser } from 'app/models/users';
 import { EventEmitter } from '@angular/core';
 import { SedStatus } from 'app/entities/ris.entities';
 import { BehaviorSubject } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
-import { ISedRes } from 'app/interfaces/ris';
-import { DropDownModel } from 'app/models/drop-down-model';
+import { ISedRes, IConItemOutput } from 'app/interfaces/ris';
 
 export class ClearMoneyConfig extends RisConfig {
     public formGroup: FormGroup;
@@ -25,5 +24,6 @@ export class ClearMoneyConfig extends RisConfig {
     public TagHistory$ = new BehaviorSubject<any>(null);
 
     public $SedItem = new BehaviorSubject<ISedRes>(null);
+    public $ConItemOutput = new BehaviorSubject<IConItemOutput>(null);
     public $ConNo = new BehaviorSubject<string>(null);
 }

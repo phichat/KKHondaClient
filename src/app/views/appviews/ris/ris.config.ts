@@ -4,9 +4,11 @@ import 'datatables.net';
 import 'datatables.net-bs';
 import { ActionMode } from 'app/entities/general.entities';
 import { ConStatus, RisLocalStoreage as LS } from 'app/entities/ris.entities';
+import { LoadingEntities } from 'app/entities/loading.entities';
 
 export class RisConfig {
 
+  public LoadEnt = LoadingEntities;
   public displayLocalDate = setLocalDate;
   public dataTable: any;
   public ActionMode = ActionMode;

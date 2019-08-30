@@ -20,6 +20,8 @@ export class ClearMoneyService {
         return this.clearMoneyBehaviorSubject.getValue();
     }
 
+    public clearListConBehaviorSubject = () => this.listConBehaviorSubject.next([]);
+
     public setListConBehaviorSubject(value: IConRes[]) {
         const item = [...this.listConBehaviorSubject.getValue(), ...value]
         this.listConBehaviorSubject.next(item)
@@ -27,6 +29,8 @@ export class ClearMoneyService {
     get ListCon(): IConRes[] {
         return this.listConBehaviorSubject.getValue();
     }
+
+    public clearListConItemBehaviorSubject = () => this.listConItemBehaviorSubject.next([]);
 
     public setListConItemBehaviorSubject(value: IConItemRes[]) {
         if (!value.length) return;
@@ -57,6 +61,8 @@ export class ClearMoneyService {
     get ListAl(): IAlRes[] {
         return this.listAlBehaviorSubject.getValue();
     }
+
+    public clearListConItemDocBehaviorSubject = () => this.listConItemDocBehaviorSubject.next([]);
 
     public setListConItemDocBehaviorSubject(value: IConItemDocRes[]) {
         if (!value.length) return;

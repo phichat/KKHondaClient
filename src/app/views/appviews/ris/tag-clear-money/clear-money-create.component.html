@@ -111,7 +111,8 @@
           <div class="tab-content">
             <div id="tab-clear-money-1" class="tab-pane active">
               <div class="panel-body" style="max-height: 240px;">
-                <app-list-con-item-component [$SedItem]="$SedItem" ($ConNoOutPut)="$ConNo.next($event)"></app-list-con-item-component>
+                <app-list-con-item-component [$SedItem]="$SedItem" [$ConItemOutput]="$ConItemOutput" ($ConNoOutPut)="$ConNo.next($event)" >
+                </app-list-con-item-component>
               </div>
             </div>
             <div id="tab-clear-money-2" class="tab-pane">
@@ -124,9 +125,8 @@
 
         <div class="hr-line-dashed"></div>
         <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
-        <app-list-con-item-detail-component [$ConNo]="$ConNo"></app-list-con-item-detail-component>
-
-
+        <app-list-con-item-detail-component [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
+        </app-list-con-item-detail-component>
       </div>
     </div>
 
