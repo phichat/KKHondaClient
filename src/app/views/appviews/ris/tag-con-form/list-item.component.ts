@@ -199,6 +199,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       itemPrice2: 0,
       itemIsVat: false,
       itemVatPrice1: 0,
+      itemCutBalance: item.itemCutBalance,
       itemPriceTotal: item.expensesAmount
     });
     this.CarRegisListItem.push(fg);
@@ -233,9 +234,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       runId: 0,
       itemName: exp.otItem,
       itemPrice1: exp.otPrice1,
-      itemPrice2: exp.otPrice2,
       itemIsVat: exp.otIsVat,
       itemVatPrice1: exp.otVatPrice1,
+      itemPrice2: exp.otPrice2,
       itemPriceTotal: exp.otPrice1 + exp.otVatPrice1 + exp.otPrice2
     })
     this.CarRegisListItem.push(fg);
@@ -250,9 +251,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
   onSelectExpenses(item: any) {
     this.formExpenses.patchValue({
-      expitemCode: item.expensesCode,
-      expPrice1: item.expensesAmount,
-      expPrice2: item.expensesAmount
+      expitemCode: item ? item.expensesCode : null,
+      expPrice1: item ? item.expensesAmount : null,
+      expPrice2: item ? item.expensesAmount : null
     });
   }
 
@@ -292,7 +293,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   }
 
   emitValue(value: any[]) {
-    const obj = [...value];
+    const obj = [...value].reduce((a, c) =>
+      [...a, { ...c, itemCutBalance: c.itemPrice1 + c.itemVatPrice1 }],
+      []);
     this._IsTagItem = obj.filter(x => x.itemCode == 'EXP10001' || 'EXP10002').length ? false : true;
     this._IsActItem = obj.filter(x => x.itemCode == 'EXP10003').length ? false : true;
     this._IsWarItem = obj.filter(x => x.itemCode == 'EXP10004').length ? false : true;

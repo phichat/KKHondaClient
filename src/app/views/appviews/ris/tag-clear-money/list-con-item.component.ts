@@ -1,10 +1,11 @@
-import { OnInit, Component } from '@angular/core';
+import { OnInit, Component, ChangeDetectorRef } from '@angular/core';
 import { ListConItemConfig } from './list-con-item.config';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap, tap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { IConRes } from 'app/interfaces/ris';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ClearMoneyService } from './clear-money.service';
 
 @Component({
   selector: 'app-list-con-item-component',
@@ -14,7 +15,9 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private chRef: ChangeDetectorRef,
+    private s_clearMoney: ClearMoneyService
   ) {
     super();
     this.formGroup = this.fb.group({
@@ -26,6 +29,7 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
     this.$SedItem.pipe(
       tap(() => {
         this.loading = this.LoadEnt.loading;
+        this.destroyDatatable();
         while (this.ConList.length) this.ConList.removeAt(0);
       }),
       mergeMap(x => {
@@ -37,15 +41,20 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
           );
       })
     ).subscribe((x: IConRes[]) => {
-      if (!x.length) { 
-        this.loading = this.LoadEnt.noRecord; 
-        this.$ConNoOutPut.next(null);
-        return; 
+      if (!x.length) {
+        this.loading = this.LoadEnt.noRecord;
+        this.ConNoOutPut$.next(null);
+        return;
       }
       this.setItemFormArray(x, this.formGroup, 'ConList');
+      this.emitValue(x);
+      this.formChange();
+      this.reInitDatatable();
+      this.chRef.markForCheck();
+
     }, () => this.loading = this.LoadEnt.error);
 
-    this.$ConItemOutput.subscribe(x => {
+    this.$ConItemInput.subscribe(x => {
       if (x == null || this.ConList.length == 0) return;
       const conList = this.ConList.value as IConRes[];
       const i = conList.findIndex(o => o.bookingNo == x.conNo);
@@ -58,7 +67,18 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
   }
 
   selectCon(conNo: string) {
-    this.$ConNoOutPut.next(conNo);
+    this.ConNoOutPut$.next(conNo);
+  }
+
+  private formChange() {
+    this.ConList.valueChanges.subscribe((x: IConRes[]) => {
+      this.emitValue(x);
+    })
+  }
+
+  private emitValue(x: IConRes[]) {
+    const obj = [...x];
+    this.ConResOutput$.emit(obj);
   }
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
@@ -68,5 +88,6 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
       fg.setControl(formControl, itemFormArray);
     }
   }
+
 }
 

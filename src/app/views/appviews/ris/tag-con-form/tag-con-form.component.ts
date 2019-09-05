@@ -120,6 +120,8 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       tagListItem: listItem
     };
 
+    // console.log(form);
+
     this.s_loader.showLoader();
     const url = `${this.risUrl}`;
     this.http.post(url, form)

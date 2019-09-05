@@ -36,7 +36,13 @@ export class ListAlItemComponent extends ListAlItemConfig implements OnInit {
                 return;
             };
             this.AlList = x;
+            this.emitValue(x);
             // this.s_clearMoney.setListAlBehaviorSubject(x);
         }, () => this.loading = this.LoadEnt.error);
+    }
+
+    private emitValue(x: IAlRes[]) {
+        const obj = [...x];
+        this.AlOutput$.emit(obj);
     }
 }

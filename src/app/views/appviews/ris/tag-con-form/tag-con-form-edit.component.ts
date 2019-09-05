@@ -124,7 +124,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       tagListItem,
       trashTagListItem
     };
-
+    
     this.s_loader.showLoader();
     const url = `${this.risUrl}/Update`;
     this.http.post(url, form)

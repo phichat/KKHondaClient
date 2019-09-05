@@ -38,8 +38,6 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
       const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false, conList: "" }], []);
       this.setItemFormArray(res, this.formGroup, 'SedList');
       this.chRef.markForCheck();
-
-      this.reInitDatatable();
     }, () => {
       this.loading = 2;
     });

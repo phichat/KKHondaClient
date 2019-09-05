@@ -42,10 +42,10 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
 
   private searchDataWithBookingNo() {
     this.$ConNo.pipe(
-      tap(() => {
+      tap((x) => {
         this.loading = this.LoadEnt.loading;
-        this.ClearConListItem();
-        this.ClearConListItemDoc();
+        this.ClearConListItem(x);
+        this.ClearConListItemDoc(x);
       }),
       mergeMap(x => {
         if (!x) return of(null as ICarRegisItemRes);
@@ -114,11 +114,11 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
       this.s_clearMoney.setListConItemBehaviorSubject(x);
       const state1 = x.filter(o => o.state != null).length ? 1 : null;
       const cutBalance = x.reduce((a, c) => {
-        if (c.state == 1) {
-          a += c.itemCutBalance;
-        } else if (c.state == 2 || c.state == 3) {
-          if (a > 0) a -= c.itemCutBalance;
-        }
+        // if (c.state == 2 || c.state == 3) {
+        //   // if (a > 0) a -= c.itemCutBalance;
+        // } else {
+        if (c.state != 2 && c.state != 3) a += c.itemCutBalance;
+        // }
         return a;
       }, 0);
 
@@ -145,13 +145,14 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     })
   }
 
-  private ClearConListItemDoc() {
+  private ClearConListItemDoc(conNo: string) {
     while (this.ConListItemDoc.length) this.ConListItemDoc.removeAt(0);
-    this.s_clearMoney.clearListConItemDocBehaviorSubject();
+    if (!conNo) this.s_clearMoney.clearListConItemDocBehaviorSubject();
   }
 
-  private ClearConListItem() {
+  private ClearConListItem(conNo: string) {
     while (this.ConListItem.length) this.ConListItem.removeAt(0);
-    this.s_clearMoney.clearListConItemBehaviorSubject();
+    if (!conNo) this.s_clearMoney.clearListConItemBehaviorSubject();
   }
+
 }

@@ -1,4 +1,4 @@
-<table class="table table-bordered" [formGroup]="formGroup">
+<table id="listConItem" class="table table-bordered nowrap" [formGroup]="formGroup">
     <thead>
         <tr>
             <th>เลือก</th>
@@ -10,13 +10,14 @@
             <th>วันที่จดทะเบียน</th>
             <th>เงินรับฝากคงเหลือ</th>
             <th>ตัดยอดเงินรับฝาก</th>
+            <th>ค่าดำเนินการ</th>
             <th>เลขที่ใบรับเรื่อง</th>
             <th>เลขที่ใบส่งเรื่อง</th>
         </tr>
     </thead>
     <tbody formArrayName="ConList">
         <tr *ngIf="ConList.length == 0; else else_conItem;">
-            <td colspan="11" class="text-center">
+            <td colspan="12" class="text-center">
                 <div [ngSwitch]="loading">
                     <div *ngSwitchCase="1">
                         <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -64,12 +65,18 @@
                 <td style="vertical-align: middle;">{{item.get('fNo').value}}</td>
                 <td style="vertical-align: middle;">{{item.get('tagNo').value}}</td>
                 <td style="vertical-align: middle;">{{item.get('province').value}}</td>
-                <td style="vertical-align: middle;">{{displayLocalDate(item.get('tagRegis').value)}}</td>
+                <td style="vertical-align: middle;">
+                    {{displayLocalDate(item.get('tagRegis').value)}}
+                </td>
                 <td class="text-right" style="vertical-align: middle;">
                     {{item.get('price1').value + item.get('vatPrice1').value | number:'1.2-2'}}
                 </td>
                 <td class="text-right" style="vertical-align: middle;">
-                    {{item.get('cutBalance').value | number:'1.2-2'}}</td>
+                    {{item.get('cutBalance').value | number:'1.2-2'}}
+                </td>
+                <td class="text-right" style="vertical-align: middle;">
+                    {{item.get('price2').value | number:'1.2-2'}}
+                </td>
                 <td style="vertical-align: middle;">{{item.get('bookingNo').value}}</td>
                 <td style="vertical-align: middle;">{{item.get('sedNo').value}}</td>
             </tr>

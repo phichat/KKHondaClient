@@ -6,7 +6,7 @@ import { EventEmitter } from '@angular/core';
 import { SedStatus } from 'app/entities/ris.entities';
 import { BehaviorSubject } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
-import { ISedRes, IConItemOutput } from 'app/interfaces/ris';
+import { ISedRes, IConItemOutput, IConRes, IAlRes } from 'app/interfaces/ris';
 
 export class ClearMoneyConfig extends RisConfig {
     public formGroup: FormGroup;
@@ -26,4 +26,6 @@ export class ClearMoneyConfig extends RisConfig {
     public $SedItem = new BehaviorSubject<ISedRes>(null);
     public $ConItemOutput = new BehaviorSubject<IConItemOutput>(null);
     public $ConNo = new BehaviorSubject<string>(null);
+    public ConResOutput$ = new BehaviorSubject<IConRes[]>([]);
+    public AlOutput$ = new BehaviorSubject<IAlRes[]>([]);
 }

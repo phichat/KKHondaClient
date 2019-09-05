@@ -110,14 +110,15 @@
           </ul>
           <div class="tab-content">
             <div id="tab-clear-money-1" class="tab-pane active">
-              <div class="panel-body" style="max-height: 240px;">
-                <app-list-con-item-component [$SedItem]="$SedItem" [$ConItemOutput]="$ConItemOutput" ($ConNoOutPut)="$ConNo.next($event)" >
+              <div class="panel-body">
+                <app-list-con-item-component [$SedItem]="$SedItem" [$ConItemInput]="$ConItemOutput"
+                  (ConNoOutPut$)="$ConNo.next($event)" (ConResOutput$)="ConResOutput$.next($event)">
                 </app-list-con-item-component>
               </div>
             </div>
             <div id="tab-clear-money-2" class="tab-pane">
-              <div class="panel-body" style="max-height: 240px;">
-                <app-list-al-item-component [$SedItem]="$SedItem"></app-list-al-item-component>
+              <div class="panel-body">
+                <app-list-al-item-component [$SedItem]="$SedItem" (AlOutput$)="AlOutput$.next($event)"></app-list-al-item-component>
               </div>
             </div>
           </div>
@@ -127,6 +128,65 @@
         <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
         <app-list-con-item-detail-component [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
         </app-list-con-item-detail-component>
+
+        <div class="hr-line-dashed"></div>
+
+        <div class="row form-group">
+          <div class="col-md-3">
+            <h3>รวม {{ConResOutput$.value.length}} รายการ</h3>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">ตัดยอดเงินรับฝาก</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="totalCutBalance">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">หัก ค่าดำเนินการ</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="alBalancePrice">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">คิดเป็น รายได้</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="totalIncom">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3"></div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">เงินยืมคงเหลือ</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="alBalancePrice">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">หักเงินยืม</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="alBalancePrice">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">ค่าใช่จ่าย</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="expenses">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3"></div>
+          <div class="col-md-3"></div>
+          <div class="col-md-3">
+            <label class="col-md-6 control-label">ค้างจ่าย</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+
       </div>
     </div>
 

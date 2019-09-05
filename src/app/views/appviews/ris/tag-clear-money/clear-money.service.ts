@@ -20,15 +20,15 @@ export class ClearMoneyService {
         return this.clearMoneyBehaviorSubject.getValue();
     }
 
-    public clearListConBehaviorSubject = () => this.listConBehaviorSubject.next([]);
+    // public clearListConBehaviorSubject = () => this.listConBehaviorSubject.next([]);
 
-    public setListConBehaviorSubject(value: IConRes[]) {
-        const item = [...this.listConBehaviorSubject.getValue(), ...value]
-        this.listConBehaviorSubject.next(item)
-    };
-    get ListCon(): IConRes[] {
-        return this.listConBehaviorSubject.getValue();
-    }
+    // public setListConBehaviorSubject(value: IConRes[]) {
+    //     const item = [...this.listConBehaviorSubject.getValue(), ...value]
+    //     this.listConBehaviorSubject.next(item)
+    // };
+    // get ListCon(): IConRes[] {
+    //     return this.listConBehaviorSubject.getValue();
+    // }
 
     public clearListConItemBehaviorSubject = () => this.listConItemBehaviorSubject.next([]);
 
