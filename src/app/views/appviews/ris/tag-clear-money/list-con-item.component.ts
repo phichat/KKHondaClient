@@ -67,7 +67,8 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
   }
 
   selectCon(conNo: string) {
-    this.ConNoOutPut$.next(conNo);
+    if (conNo != this.ConNoOutPut$.value)
+      this.ConNoOutPut$.next(conNo);
   }
 
   private formChange() {

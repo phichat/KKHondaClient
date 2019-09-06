@@ -21,7 +21,7 @@ export class ListConItemConfig extends RisConfig {
   public initDatatable(): void {
     let table: any = $('#listConItem');
     this.dataTable = table.DataTable({
-      scrollX: true
+      scrollX: true,
     });
   }
 

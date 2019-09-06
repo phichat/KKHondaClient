@@ -6,7 +6,7 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
 import { of } from 'rxjs';
-import { ISedRes, IConItemOutput, IConRes, IAlRes } from 'app/interfaces/ris';
+import { ISedRes, IConItemOutput, IConRes, IAlRes, IConItemRes, IConItemDocRes } from 'app/interfaces/ris';
 import { ClearMoneyService } from './clear-money.service';
 declare var toastr: any;
 
@@ -46,9 +46,11 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       totalCutBalance: new FormControl(null),
       totalPrice2: new FormControl(null),
       totalIncom: new FormControl(null),
-      alBalancePrice: new FormControl(null),
+      clBalancePrice: new FormControl(null),
+      clReceivePrice: new FormControl(null),
       alPaymentPrice: new FormControl(null),
-      expenses: new FormControl(null)
+      expenses: new FormControl(null),
+      accruedExpense: new FormControl(null)
     });
 
     this.searchSed();
@@ -60,32 +62,46 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       this.chRef.detectChanges();
     });
 
-    this.formGroup.get('totalCutBalance').valueChanges.subscribe((cutBalance: number) => {
-      const balance = this.formGroup.get('alBalancePrice').value as number;
-      const expenses = this.calExpenses(balance, cutBalance);
-      const totalIncom = this.calIncom(balance, cutBalance);
+    this.formGroup.get('totalCutBalance').valueChanges.subscribe((cutBalance: string) => {
+      const balance = this.formGroup.get('clBalancePrice').value;
+      const expenses = this.calExpenses(parseFloat(balance), parseFloat(cutBalance));
+      const totalIncom = this.calIncom(parseFloat(balance), parseFloat(cutBalance));
+
       this.formGroup.patchValue({
         expenses: expenses.toFixed(2),
         totalIncom: totalIncom.toFixed(2)
       });
     });
 
-    this.formGroup.get('alBalancePrice').valueChanges.subscribe((balance: number) => {
-      const cutBalance = this.formGroup.get('totalCutBalance').value as number;
-      const totalIncom = this.calIncom(balance, cutBalance);
+    this.formGroup.get('clBalancePrice').valueChanges.subscribe((balance: string) => {
+      const cutBalance = this.formGroup.get('totalCutBalance').value;
+      const totalIncom = this.calIncom(parseFloat(balance), parseFloat(cutBalance));
       this.formGroup.patchValue({
         totalIncom: totalIncom.toFixed(2)
       });
     })
 
+    this.formGroup.get('clReceivePrice').valueChanges.subscribe((receive: string) => {
+      // const balance = this.formGroup.get('clBalancePrice').value;
+      const totalPrice2 = this.formGroup.get('totalPrice2').value;
+      const receivePrice = this.clReceivePriceState == parseFloat(receive)
+        ? parseFloat(receive)
+        : this.clReceivePriceState + parseFloat(receive);
+
+      const accruedExpense = parseFloat(totalPrice2) - (receivePrice);
+      this.formGroup.patchValue({
+        accruedExpense: accruedExpense.toFixed(2)
+      })
+    });
+
     this.ConResOutput$
       .subscribe((x: IConRes[]) => {
         this.chRef.markForCheck();
-        // const balance = this.formGroup.get('alBalancePrice').value as number;
         const cutBalance = x.reduce((a, c) => a += c.cutBalance, 0);
-        // const totalIncom = this.calIncom(balance, cutBalance);
+        const price2 = x.reduce((a, c) => a += c.price2, 0);
         this.formGroup.patchValue({
           totalCutBalance: cutBalance.toFixed(2),
+          totalPrice2: price2.toFixed(2)
         });
         this.chRef.detectChanges();
       });
@@ -95,8 +111,12 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       const balance = x.reduce((a, c) => a += c.balancePrice, 0);
       const cutBalance = this.formGroup.get('totalCutBalance').value;
       const expenses = this.calExpenses(balance, cutBalance);
+      const receive = x.reduce((a, c) => a += c.receivePrice, 0);
+      this.clReceivePriceState = receive;
       this.formGroup.patchValue({
-        alBalancePrice: balance.toFixed(2),
+        clBalancePrice: balance.toFixed(2),
+        clReceivePrice: receive.toFixed(2),
+        accruedExpense: balance.toFixed(2),
         expenses: expenses.toFixed(2)
       });
       this.chRef.detectChanges();
@@ -111,16 +131,39 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
 
   onSubmit() {
     const listCon = this.ConResOutput$.value.filter(x => x.state1 != null);
-    let listConItem = [];
-    let listItemDoc = [];
+    let listConItem: IConItemRes[] = [];
+    let listItemDoc: IConItemDocRes[] = [];
     listCon.forEach(x => {
       const conItem = this.s_cloarMoney.ListConItem
-        .filter(o => o.state != null && o.bookingNo == x.bookingNo);
+        .filter(o => o.bookingNo == x.bookingNo);
       const itemDoc = this.s_cloarMoney.ListConItemDoc
         .filter(o => o.bookingNo == x.bookingNo);
       listConItem = [...listConItem, ...conItem];
       listItemDoc = [...listItemDoc, ...itemDoc];
     });
+
+    if (!listConItem.length) {
+      alert('กรุณาตรวจสอบข้อมูลรับเรื่องย่อย และระบุข้อมูลให้ครบถ่วน!');
+      return;
+    }
+
+    const listConNullItem = listConItem
+      .filter(x => x.state == null)
+      .map(x => x.bookingNo);
+    let conNoUnique = listConNullItem.filter((v, i) => listConNullItem.indexOf(v) === i)
+    if (conNoUnique.length) {
+      alert(`กรุณา ระบุข้อมูลรับเรื่องย่อย ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nให้ครบถ่วน!`);
+      return;
+    }
+
+    const listNullItemDoc = listItemDoc
+      .filter(x => !x.isReceive)
+      .map(x => x.bookingNo);
+    conNoUnique = listNullItemDoc.filter((v, i) => listNullItemDoc.indexOf(v) === i);
+    if (conNoUnique.length) {
+      if (!confirm(`เอกสาร/สิ่งที่รับคืน ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nยังระบุข้อมูลการรับไม่ครบ คุณต้องการบันทึกข้อมูลหรือไม่?`))
+        return
+    }
 
     console.log(listCon);
     console.log(listConItem);
@@ -135,7 +178,6 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       sedCreateName: e.createName,
       sedNo: e.sedNo
     });
-
   }
 
 

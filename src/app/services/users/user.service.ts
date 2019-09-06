@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { ModelUser } from '../../models/users';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { getCookie, appConfig } from '../../app.config';
@@ -25,13 +25,22 @@ export class UserService {
   // currentData = this.dataSource.asObservable();
 
   constructor(private http: HttpClient) {
-    this.__user.map(async x => {
-      await this.setCookie(x.name, x.value);
-    })
+
+    if (isDevMode()) {
+      this.__user.map(async x => {
+        await this.setCookie(x.name, x.value);
+      })
+    }
 
     if (getCookie('id')) {
       const id = getCookie('id');
-      this.getUserById(id).then(x => this.changeData(x));
+      this.getUserById(id).then(x => {
+        if (x == null) {
+          this.signOut();
+          return;
+        }
+        this.changeData(x)
+      });
     }
   }
 

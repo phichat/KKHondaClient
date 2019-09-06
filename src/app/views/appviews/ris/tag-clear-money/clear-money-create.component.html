@@ -138,19 +138,19 @@
           <div class="col-md-3">
             <label class="col-md-6 control-label">ตัดยอดเงินรับฝาก</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalCutBalance">
+              <input type="text" class="form-control" formControlName="totalCutBalance" readonly>
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">หัก ค่าดำเนินการ</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="alBalancePrice">
+              <input type="text" class="form-control" formControlName="clBalancePrice" readonly>
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">คิดเป็น รายได้</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalIncom">
+              <input type="text" class="form-control" formControlName="totalIncom" readonly>
             </div>
           </div>
         </div>
@@ -159,19 +159,19 @@
           <div class="col-md-3">
             <label class="col-md-6 control-label">เงินยืมคงเหลือ</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="alBalancePrice">
+              <input type="text" class="form-control" formControlName="clBalancePrice" readonly>
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">หักเงินยืม</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="alBalancePrice">
+              <input type="text" class="form-control" formControlName="clReceivePrice">
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">ค่าใช่จ่าย</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="expenses">
+              <input type="text" class="form-control" formControlName="expenses" readonly>
             </div>
           </div>
         </div>
@@ -181,7 +181,7 @@
           <div class="col-md-3">
             <label class="col-md-6 control-label">ค้างจ่าย</label>
             <div class="col-md-6">
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" formControlName="accruedExpense" readonly>
             </div>
           </div>
           <div class="col-md-3"></div>

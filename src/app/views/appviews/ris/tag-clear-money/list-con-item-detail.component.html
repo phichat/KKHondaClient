@@ -49,23 +49,14 @@
                 <td style="vertical-align: middle;">
                   {{item.get('itemName').value}}
                 </td>
-                <td style="vertical-align: middle;">
-                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
-                    <input type="radio" id="istate1{{i}}" formControlName="state" value="1">
-                    <label for="isState1{{i}}"></label>
-                  </div>
+                <td class="text-center" style="vertical-align: middle;">
+                  <input type="radio" id="istate1{{i}}" formControlName="state" value="1">
                 </td>
-                <td style="vertical-align: middle;">
-                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
-                    <input type="radio" id="isState2{{i}}" formControlName="state" value="2">
-                    <label for="isState2{{i}}"></label>
-                  </div>
+                <td class="text-center" style="vertical-align: middle;">
+                  <input type="radio" id="isState2{{i}}" formControlName="state" value="2">
                 </td>
-                <td style="vertical-align: middle;">
-                  <div class="radio radio-info radio-inline" style="min-height: unset !important;">
-                    <input type="radio" id="isState3{{i}}" formControlName="state" value="3">
-                    <label for="isState3{{i}}"></label>
-                  </div>
+                <td class="text-center" style="vertical-align: middle;">
+                  <input type="radio" id="isState3{{i}}" formControlName="state" value="3">
                 </td>
                 <td style="vertical-align: middle;" class="text-center">
                   {{item.get('itemPrice1').value + item.get('itemVatPrice1').value | number:'1.2-2'}}
@@ -126,12 +117,9 @@
                   <td style="vertical-align: middle;">
                     {{doc.get('sendBackName')?.value}}
                   </td>
-                  <td style="vertical-align: middle;">
-                    <div class="checkbox checkbox-primary">
-                      <input type="checkbox" id="receive_doc{{i}}" formControlName="isReceive"
-                        (change)="onReceiveDoc(i, $event)">
-                      <label for="receive_doc{{i}}"></label>
-                    </div>
+                  <td class="text-center" style="vertical-align: middle;">
+                    <input type="checkbox" id="receive_doc{{i}}" formControlName="isReceive"
+                      (change)="onReceiveDoc(i, $event)">
                   </td>
                   <td style="vertical-align: middle;" class="text-center">
                     {{displayLocalDate(doc.get('receiveDate')?.value)}}
@@ -139,12 +127,8 @@
                   <td style="vertical-align: middle;" class="text-center">
                     {{doc.get('receiveName')?.value}}
                   </td>
-                  <td style="vertical-align: middle;">
-                    <div class="checkbox checkbox-primary">
-                      <input type="checkbox" id="send_doc{{i}}" formControlName="isSend"
-                        (change)="onSendDoc(i, $event)">
-                      <label for="send_doc{{i}}"></label>
-                    </div>
+                  <td class="text-center" style="vertical-align: middle;">
+                    <input type="checkbox" id="send_doc{{i}}" formControlName="isSend" (change)="onSendDoc(i, $event)">
                   </td>
                   <td style="vertical-align: middle;" class="text-center">
                     {{displayLocalDate(doc.get('sendDate')?.value)}}

@@ -61,22 +61,22 @@ export const ROUTES: Routes = [
   {
     path: 'credit', component: BasicLayoutComponent,
     children: [
-      { path: 'contract', component: ContractComponent, canActivate: [GuardGuard] },
-      { path: 'contract-canceled', component: ContractCanceledComponent, canActivate: [GuardGuard] },
+      { path: 'contract', component: ContractComponent },
+      { path: 'contract-canceled', component: ContractCanceledComponent },
       {
         path: 'contract-list',
         children: [
-          { path: 'active', component: ContractListActiveComponent, canActivate: [GuardGuard] },
+          { path: 'active', component: ContractListActiveComponent },
           { path: 'canceled', component: ContractListCanceledComponent },
-          { path: 'close-contract', component: ContractListCloseContractComponent, canActivate: [GuardGuard] },
-          { path: 'other-contract', component: ContractListOtherContractComponent, canActivate: [GuardGuard] }
+          { path: 'close-contract', component: ContractListCloseContractComponent },
+          { path: 'other-contract', component: ContractListOtherContractComponent }
         ]
       },
-      { path: 'detail', component: ContractDetailComponent, canActivate: [GuardGuard] },
-      { path: 'calculate', component: CalculateComponent, canActivate: [GuardGuard] },
-      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent, canActivate: [GuardGuard] },
-      { path: 'payment/:id', component: PaymentComponent, canActivate: [GuardGuard] }
-    ]
+      { path: 'detail', component: ContractDetailComponent },
+      { path: 'calculate', component: CalculateComponent },
+      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent },
+      { path: 'payment/:id', component: PaymentComponent }
+    ], canActivate: [GuardGuard]
   },
   {
     path: 'report', component: BasicLayoutComponent,
@@ -84,7 +84,7 @@ export const ROUTES: Routes = [
       { path: 'booking', component: ReportBookingComponent },
       { path: 'credit-note', component: ReportCreditNoteComponent },
       { path: 'sale-report', component: ReportSaleComponent }
-    ]
+    ], canActivate: [GuardGuard]
   },
   {
     path: 'ris', component: BasicLayoutComponent,
@@ -107,7 +107,7 @@ export const ROUTES: Routes = [
       { path: 'clear-money-list', component: TagClearMoneyListComponent },
       { path: 'clear-money-create', component: ClearMoneyCreateComponent },
       { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent }
-    ]
+    ], canActivate: [GuardGuard]
   },
 
   // Handle all other routes

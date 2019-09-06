@@ -13,6 +13,8 @@ export class ClearMoneyConfig extends RisConfig {
     public loading: number;
     public mUser: ModelUser;
 
+    public clReceivePriceState: number;
+
     public sedDropDown: any[];
     public searchTypeahead = new EventEmitter<string>();
     public searchSedLoading: boolean;
