@@ -6,28 +6,34 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FootableDirective } from '../../../directives/footable.directive';
 import { CalculateComponent } from './calculate/calculate.component';
 import { ContractComponent } from './contract/contract.component';
-import { KeeperComponent } from './keeper/keeper.component';
-import { ContractStatusComponent } from './contract-status/contract-status.component';
-import { ContractFieldComponent } from './contract-field/contract-field.component';
-import { CustomersModule } from '../customers/customers.module';
-import { ProductsModule } from '../products/products.module';
 import { UserService } from '../../../services/users';
 import { SellActivityService } from '../../../services/sell-activity';
 import { CalculateListComponent } from './calculate-list/calculate-list.component';
-import { ContractListComponent } from './contract-list/contract-list.component';
-import { ContractFieldListComponent } from './contract-field-list/contract-field-list.component';
-import { ContractStatusListComponent } from './contract-status-list/contract-status-list.component';
-import { KeeperListComponent } from './keeper-list/keeper-list.component';
-import { IboxtoolsComponent } from '../../../components/common/iboxtools/iboxtools.component';
+import { ContractListActiveComponent } from './contract-list/contract-list-active.component';
 import { IboxtoolsModule } from '../../../components/common/iboxtools/iboxtools.module';
 import { ContractItemComponent } from './contract-item/contract-item.component';
 import { ExDetailCustomerComponent } from './ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from './ex-detail-motobike/ex-detail-motobike.component';
 import { ExDetailAccessoryComponent } from './ex-detail-accessory/ex-detail-accessory.component';
-import { CalculateService, ContractItemService, ContractService } from '../../../services/credit';
+import { CalculateService, ContractItemService, ContractService, RptSummayCloseContractService } from '../../../services/credit';
+import { ContractListCanceledComponent } from './contract-list/contract-list-canceled.component';
+import { ContractDetailComponent } from './contract-detail/contract-detail.component';
+import { ContractCanceledComponent } from './contract-canceled/contract-canceled.component';
+import { ExDetailFreeComponent } from './ex-detail-free/ex-detail-free.component';
+import { RptCutOffSaleModule } from './rpt-cut-off-sale/rpt-cut-off-sale.module';
+import { RptDelayedInterestModule } from './rpt-delayed-interest/rpt-delayed-interest.module';
+import { RptDiscountTermModule } from './rpt-discount-term/rpt-discount-term.module';
+import { RptOutstandingModule } from './rpt-outstanding/rpt-outstanding.module';
+import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-history.module';
+import { PageloaderModule } from '../pageloader/pageloader.module';
+import { PageloaderService } from '../pageloader/pageloader.component';
+import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
+import { PaymentModule } from './payment/payment.module';
+import { MyDatePickerTHModule } from 'mydatepicker-th';
+import { ContractListCloseContractComponent } from './contract-list/contract-list-close-contract.component';
+import { ContractListOtherContractComponent } from './contract-list/contract-list-other-contract.component';
 
 @NgModule({
   imports: [
@@ -37,24 +43,33 @@ import { CalculateService, ContractItemService, ContractService } from '../../..
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
-    IboxtoolsModule
+    MyDatePickerTHModule,
+    IboxtoolsModule,
+    RptCutOffSaleModule,
+    RptDelayedInterestModule,
+    RptDiscountTermModule,
+    RptOutstandingModule,
+    RptPaymentHistoryModule,
+    PageloaderModule,
+    PaymentModule
   ],
   declarations: [
     CreditComponent,
     CalculateComponent,
     ContractComponent,
-    KeeperComponent,
-    ContractStatusComponent,
-    ContractFieldComponent,
     CalculateListComponent,
-    ContractListComponent,
-    ContractFieldListComponent,
-    ContractStatusListComponent,
-    KeeperListComponent,
+    ContractListActiveComponent,
     ContractItemComponent,
     ExDetailCustomerComponent,
     ExDetailMotobikeComponent,
-    ExDetailAccessoryComponent
+    ExDetailAccessoryComponent,
+    ContractListCanceledComponent,
+    ContractDetailComponent,
+    ContractCanceledComponent,
+    ExDetailFreeComponent,
+    RptSummaryCloseContractComponent,
+    ContractListCloseContractComponent,
+    ContractListOtherContractComponent
   ],
   providers: [
     SellActivityService,
@@ -63,7 +78,9 @@ import { CalculateService, ContractItemService, ContractService } from '../../..
     UserService,
     CalculateService,
     ContractItemService,
-    ContractService
+    ContractService,
+    PageloaderService,
+    RptSummayCloseContractService
   ]
 })
 export class CreditModule { }

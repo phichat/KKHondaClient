@@ -1,76 +1,49 @@
 <div class="row">
-  <div class="col-sm-6 m-b-sm">
-      <strong>หมวดหมู่ : </strong>
-      {{modelMotobike.catName}}
-  </div>
-  <div class="col-sm-6 m-b-sm">
-      <strong>กลุ่ม/ประเภท : </strong>
-      {{modelMotobike.typeName}}
-  </div>
-  <div class="col-sm-6 m-b-sm">
-      <strong>ยี่ห้อ : </strong>
-      {{modelMotobike.brandName}}
-  </div>
-  <div class="col-sm-6 m-b-sm">
-      <strong>โมเดล : </strong>
-      {{modelMotobike.modelCode}}
-  </div>
-  <div class="col-sm-6 m-b-sm">
-      <strong>สี :</strong>
-      {{modelMotobike.colorName}}
-  </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>หมวดหมู่ : </strong>
+        {{modelMotobike.catName}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>กลุ่ม/ประเภท : </strong>
+        {{modelMotobike.typeName}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ยี่ห้อ : </strong>
+        {{modelMotobike.brandName}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>โมเดล : </strong>
+        {{modelMotobike.modelCode}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>สี :</strong>
+        {{modelMotobike.colorName}}
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-6">
-      <ul class="list-group clear-list m-b-xs">
-          <li class="list-group-item fist-item">
-              <strong class="pull-right">
-                  {{modelBooking.sellPrice | number:'1.2-2'}}
-              </strong>
-              <strong>ราคาขายก่อนภาษี :</strong>
-          </li>
-          <li class="list-group-item">
-              <strong class="pull-right">
-                  {{modelBooking.distcountPPrice | number:'1.2-2'}} ({{modelBooking.distcountP | number}}%)
-              </strong>
-              <strong>ส่วนลด :</strong>
-          </li>
-          <!-- <li class="list-group-item">
-              <strong class="pull-right">
-                  {{modelBooking.distcountB | number:'1.2-2'}}
-              </strong>
-              <strong>รวมส่วนลด :</strong>
-          </li> -->
-          <li class="list-group-item">
-              <strong class="pull-right">
-                  {{modelBooking.vatPrice | number:'1.2-2'}} ({{modelBooking.vat | number}}%)
-              </strong>
-              <strong>ภาษี :</strong>
-
-          </li>
-          <li class="list-group-item">
-              <strong class="pull-right">
-                  {{modelBooking.netPrice | number:'1.2-2'}}
-              </strong>
-              <strong>รวมราคาขาย :</strong>
-          </li>
-      </ul>
-  </div>
-  <div class="col-sm-6">
-      <ul class="list-group clear-list m-b-xs">
-          <li class="list-group-item fist-item">
-              <strong class="pull-right">
-                  {{modelBooking.deposit | number:'1.2-2'}}
-              </strong>
-              <strong>เงินมัดจำ :</strong>
-          </li>
-          <li class="list-group-item">
-              <strong class="pull-right">
-                  {{modelBooking.outStandingPrice | number:'1.2-2'}}
-              </strong>
-              <strong>ยอดคงค้าง :</strong>
-          </li>
-      </ul>
-  </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ราคาขายก่อนภาษี :</strong>
+        {{selePriceExcVat | number:'1.2-2'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ส่วนลด :</strong>
+        {{modelBooking.distcountB | number:'1.2-2'}} ({{modelBooking.distcountP | number:'1.2-2'}}%)
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ภาษี :</strong>
+        {{modelBooking.vatPrice | number:'1.2-2'}} ({{modelBooking.vat | number}}%)
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>เงินมัดจำ :</strong>
+        {{modelBooking.deposit | number:'1.2-2'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>รวมราคาขาย :</strong>
+        {{modelBooking.netPrice | number:'1.2-2'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ยอดคงค้าง :</strong>
+        {{modelBooking.outStandingPrice | number:'1.2-2'}}
+    </div>
 </div>

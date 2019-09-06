@@ -12,8 +12,9 @@ declare var jQuery: any;
 })
 export class BasicLayoutComponent implements OnInit {
 
-  public ngOnInit(): any {
+  ngOnInit() {
     detectBody();
+    
   }
 
   public onResize() {

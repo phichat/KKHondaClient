@@ -2,11 +2,11 @@
 <div class="row">
     <div class="col-sm-6 m-b-sm">
         <strong>วันที่จอง :</strong>
-        {{modelBooking.bookingDate | date:'dd-MM-yyyy'}}
+        {{modelBooking.bookingDate}}
     </div>
     <div class="col-sm-6 m-b-sm">
         <strong>วันที่รับรถ :</strong>
-        {{modelBooking.receiveDate | date:'dd-MM-yyyy'}}
+        {{modelBooking.receiveDate}}
     </div>
     <div class="col-sm-6 m-b-sm">
         <strong>รหัสลูกค้า :</strong>
@@ -27,10 +27,6 @@
     <div class="col-sm-6 m-b-sm">
         <strong>เบอร์ติดต่อ :</strong>
         {{modelBooking.contractNo}}
-    </div>
-    <div class="col-sm-6 m-b-sm">
-        <strong>อีเมล์ :</strong>
-        {{modelBooking.email}}
     </div>
     <div class="col-sm-12 m-b-sm">
         <strong>ที่อยู่ :</strong>

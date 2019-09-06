@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from '../../app.config';
-import { CustomerDropdownModel } from '../../models/customers';
+import { DropDownModel } from '../../models/drop-down-model';
 
 @Injectable()
 export class CustomerService {
@@ -18,6 +18,6 @@ export class CustomerService {
     getByKey(term: string) {
         const apiURL = `${this.url}/Customer/GetByKey`;
         const params = { term };
-        return this.http.get<CustomerDropdownModel[]>(apiURL, { params })
+        return this.http.get<DropDownModel[]>(apiURL, { params })
     }
 }

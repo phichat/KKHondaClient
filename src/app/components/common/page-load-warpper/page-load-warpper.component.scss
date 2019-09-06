@@ -1,0 +1,27 @@
+.page-loader-wrapper {
+    z-index: 1000;
+    position: fixed;
+    top: 50px;
+    left: unset;
+    bottom: 0;
+    right: 0;
+    // width: 100%;
+    width: 100%;
+    height: 100%; 
+    background: #eee;
+    overflow: hidden;
+    text-align: center; 
+
+    .loader {
+        position: relative;
+        top: calc(50% - 30px); 
+    }
+    
+    p {
+        font-size: 13px;
+        margin-top: 10px;
+        font-weight: bold;
+        color: #444; 
+    }
+}
+  

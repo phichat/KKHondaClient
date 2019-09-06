@@ -13,25 +13,30 @@ export class BookingModel {
     public genderCode: number;
     public genderName: string;
     public idCard: string;
-    public bookingDate: Date;
-    public depositType: number;
+    public bookingDate: any;
+    public bookingDepositType: number;
     public bookingId: number;
     public bookingNo: string;
-    public ptymentType: number;
+    public bookingPaymentType: number;
     public bookingStatus: number;
     public bookingType: number;
     public netPrice: number;
     public nickName: string;
     public outStandingPrice: number;
-    public receiveDate: Date;
+    public receiveDate: any;
     public remark: string;
     public sellPrice: number;
     public totalDiscount: number;
     public vat: number;
     public vatPrice: number;
-    public freeAct: number;
-    public freeTag: number;
-    public freeWarranty: number;
+    public freeAct: boolean;
+    public freeTag: boolean;
+    public freeWarranty: boolean;
     public bookingItem: Array<BookingItemModel>;
+
+    public cusSellName: string;
+    public cusTaxNo: string;
+    public cusTaxBranch: string;
+    public sellRemark: string;
 }
 

@@ -1,0 +1,109 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายการบันทึกรับเรื่อง</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>รายการบันทึกรับเรื่อง</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+    <a [routerLink]="['/ris/con-form-create']" class="btn btn-primary">
+      <i class="fa fa-paper-plane-o"></i> บันทึกรับเรื่อง
+    </a>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <form class="form-horizontal" style="margin-bottom: 15em;">
+        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+          <thead>
+            <tr>
+              <th class="text-center">ลำดับ</th>
+              <th></th>
+              <th>เลขที่ใบรับเรื่อง</th>
+              <th>สถานะ</th>
+              <th>สาขา</th>
+              <th>เลขทะเบียน</th>
+              <th>จังหวัด</th>
+              <th>หมายเลขตัวถัง</th>
+              <th>หมายเลขเครื่อง</th>
+              <th class="text-right">เงินรับฝากรวมภาษี</th>
+              <th class="text-right">เงินที่ต้องยืม</th>
+              <th class="text-right">ยอดรวม</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="conList.length == 0; else else_tr;">
+              <td colspan="13" class="text-center">
+                <div [ngSwitch]="loading">
+                  <div *ngSwitchCase="1">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>ไม่มีข้อมูล</p>
+                  </div>
+                  <div *ngSwitchCase="2">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>มีบางอย่างผิดพลาด</p>
+                  </div>
+                  <div *ngSwitchDefault>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <br>
+                    <p>รอสักครู่...</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <ng-template #else_tr>
+              <tr *ngFor="let item of conList; let i = index">
+                <td [attr.data-order]="i" class="text-center">{{i+1}}</td>
+                <td class="text-center">
+                  <button class="btn btn-xs" [ngClass]="{'btn-info': item.bookingStatus != ConStatus.Cancel}"
+                    [routerLink]="['/ris/con-form-edit', item.bookingNo]"
+                    [disabled]="item.bookingStatus == ConStatus.Cancel">
+                    <i class="fa fa-pencil"></i>
+                    แก้ไข
+                  </button>&nbsp;
+                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/con-form-detail', item.bookingNo]">
+                    <i class="fa fa-info-circle"></i>
+                    รายละเอียด
+                  </a>
+                </td>
+                <td [attr.data-order]="item.bookingId">{{item.bookingNo}}</td>
+                <td [ngClass]="{
+                    'text-danger': item.bookingStatus == ConStatus.Cancel,
+                    'text-navy': item.bookingStatus == ConStatus.Received,
+                    'text-muted': item.bookingStatus != ConStatus.Cancel && item.bookingStatus != ConStatus.Received
+                  }">{{item.statusDesc}}</td>
+                <td>{{item.branchName}}</td>
+                <td>{{item.tagNo}}</td>
+                <td>{{item.branchProvince}}</td>
+                <td>{{item.eNo}}</td>
+                <td>{{item.fNo}}</td>
+                <td [attr.data-order]="item.price1" class="text-right">{{item.price1 + item.vatPrice1 | number:'1.2-2'}}
+                </td>
+                <td [attr.data-order]="item.price2" class="text-right">{{item.price2 | number:'1.2-2'}}</td>
+                <td [attr.data-order]="item.totalPrice" class="text-right">{{item.totalPrice | number:'1.2-2'}}</td>
+                <td>{{item.remark}}</td>
+              </tr>
+            </ng-template>
+
+          </tbody>
+        </table>
+
+      </form>
+    </div>
+  </div>
+
+</div>

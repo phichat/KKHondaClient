@@ -1,0 +1,83 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>บันทึกการยืมเงิน</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>รายการบันทึกการยืมเงิน</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+    <a [routerLink]="['/ris/al-form-create']" class="btn btn-primary">
+      <i class="fa fa-paper-plane-o"></i> บันทึกการยืมเงิน
+    </a>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup">
+        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+          <thead>
+            <tr>
+              <th class="text-center">ลำดับ</th>
+              <th></th>
+              <th>เลขที่ใบส่งเรื่อง</th>
+              <th>เลขที่ใบยืม</th>
+              <th>วันที่ยืม</th>
+              <th>สถานะ</th>
+              <!-- <th class="text-right">เงินที่ต้องส่ง</th> -->
+              <th class="text-right">เงินที่ต้องยืม</th>
+              <th class="text-right">เงินยืม</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="SedList">
+            <tr *ngIf="SedList.length == 0; else else_tr;">
+              <td colspan="8" class="text-center">
+                <div [ngSwitch]="loading">
+                  <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                  <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                  <div *ngSwitchDefault>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <br>
+                    <span class="mt-2">รอสักครู่...</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <ng-template #else_tr>
+              <tr *ngFor="let item of SedList.controls; let i = index" [formGroupName]="i">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/al-form-detail', item.get('alNo').value]">
+                    <i class="fa fa-info-circle"></i>
+                    รายละเอียด
+                  </button>
+                </td>
+                <td>{{item.get('sedNo').value}}</td>
+                <td>{{item.get('alNo').value}}</td>
+                <td>{{displayLocalDate(item.get('createDate').value)}}</td>
+                <td [ngClass]="{
+                  'text-danger': item.get('status').value == AlStatus.Cancel,
+                  'text-navy': item.get('status').value == AlStatus.Normal,
+                  'text-muted': item.get('status').value == AlStatus.CashBack
+                }">{{item.get('statusDesc').value}}</td>
+                <td class="text-right">{{item.get('price2Remain')?.value | number:'1.2-2'}}</td>
+                <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+              </tr>
+            </ng-template>
+
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+
+</div>

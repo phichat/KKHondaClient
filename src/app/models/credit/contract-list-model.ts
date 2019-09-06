@@ -1,0 +1,31 @@
+export class ContractListModel {
+    bookingPaymentType: number;
+    public contractId: number;
+    public calculateId: number;
+    public branch: string;
+    public contractNo: string;
+    public contractType: string;
+    public contractDate: any;
+    public areaPayment: string;
+    public contractPoint: string;
+    public contractGroup: string;
+    public contractHire: string;
+    public contractBooking: string;
+    public contractGurantor1: string;
+    public contractGurantor2: string;
+    public createdBy: string;
+    public checkedBy: string;
+    public approvedBy: string;
+    public keeperBy: string;
+    public statusDesc: string;
+    public contractStatus: number;
+    public refNo: string;
+    public endContractDate: any;
+    hireFullName: string;
+    hireIdCard: string;
+    brand: string;
+    color: string;
+    model: string;
+    engineNo: string;
+    frameNo: string;
+}

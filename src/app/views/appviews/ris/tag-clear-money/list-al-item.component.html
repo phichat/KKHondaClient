@@ -1,0 +1,43 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-center">เลขที่ใบยืม</th>
+            <th class="text-center">วันที่ยืม</th>
+            <th class="text-center">จำนวนเงินยืม</th>
+            <th class="text-center">เงินยืมคงเหลือ</th>
+            <th class="text-center">ยอดหักเงินยืม</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="AlList.length == 0; else else_alItem;">
+            <td colspan="5" class="text-center">
+                <div [ngSwitch]="loading">
+                    <div *ngSwitchCase="1">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>ไม่มีข้อมูล</p>
+                    </div>
+                    <div *ngSwitchCase="2">
+                        <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>มีบางอย่างผิดพลาด</p>
+                    </div>
+                    <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <p>รอสักครู่...</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <ng-template #else_alItem>
+            <tr *ngFor="let item of AlList;">
+                <td class="text-center">{{item.alNo}}</td>
+                <td class="text-center">{{displayLocalDate(item.createDate)}}</td>
+                <td class="text-right">{{item.netPrice | number:'1.2-2'}}</td>
+                <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
+                <td class="text-right">{{item.receivePrice | number:'1.2-2'}}</td>
+            </tr>
+        </ng-template>
+    </tbody>
+</table>

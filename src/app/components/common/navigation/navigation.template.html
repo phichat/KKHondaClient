@@ -2,99 +2,431 @@
     <div class="sidebar-collapse">
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
-                <div class="profile-element" dropdown>
-                    <!-- <img alt="image" class="img-circle" src="assets/images/profile_small.jpg"> -->
-                    <a dropdownToggle>
-                        <span class="block m-t-xs">
-                            <strong class="font-bold">Super Admin</strong>
-                        </span>
-                        <span class="text-muted text-xs block">Super admin
-                            <b class="caret"></b>
+                <div class="dropdown profile-element"> <span>
+                    </span>
+                    <a class="dropdown-toggle" href="javaScript:void(0)">
+                        <span class="clear">
+                            <span class="block m-t-xs" *ngIf="asyncUser | async; let user">
+                                <strong class="font-bold">{{user.adminName}}</strong><br>
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">{{user.name}}</strong><br>
+                                    <strong class="font-bold">{{user.fullName}}</strong>
+                                </span>
+                                <span class="text-muted text-xs block">&nbsp;</span>
+                            </span>
                         </span>
                     </a>
-                    <ul class="animated fadeInRight dropdown-menu" *dropdownMenu>
-                        <li>
-                            <a href="#">Profile</a>
-                        </li>
-                        <li>
-                            <a href="#">Contacts</a>
-                        </li>
-                        <li>
-                            <a href="#">Mailbox</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">Logout</a>
-                        </li>
-                    </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    <span class="fa fa-tasks login_icon"></span>
                 </div>
             </li>
-            <li [ngClass]="{active: activeRoute('credit')}">
+
+            <li [ngClass]="{active: activeRoute('dashboards')}">
                 <a href="#">
-                    <i class="fa fa-th-large"></i>
-                    <span class="nav-label">เช่าซื้อ</span>
+                    <i class="fa fa-signal"></i>
+                    <span class="nav-label">Dashboards</span>
                     <span class="fa arrow"></span>
                 </a>
-                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('credit')}">
-                    <!-- <li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/calculate-list']">
-                            <span class="nav-label">คำนวนณค่างวด</span>
-                        </a>
-                    </li> -->
-                    <li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/contract-list']">
-                        <span class="nav-label">สัญญาเช่าซื้อ</span>
+                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('dashboards')}">
+                    <li [ngClass]="{active: activeRoute('booking')}">
+                        <a [routerLink]="['/dashboards/booking']">งานขาย</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-cog"></i>
+                    <span class="nav-label">ตั้งค่าสาขา</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_finance_list">
+                            <span class="nav-label">จัดการบริษัทไฟแนนซ์</span>
                         </a>
                     </li>
-                    <!--<li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/keeper']">
-                        <span class="nav-label">เปลี่ยนผู้ดูแล</span>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_warehouse_list">
+                            <span class="nav-label">จัดการคลังสินค้า</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/contract-status']">
-                        <span class="nav-label">สอบถามข้อมูลสัญญา</span>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_warehousel_list">
+                            <span class="nav-label">จัดการตำแหน่งคลังสินค้า</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('credit')}">
-                        <a [routerLink]="['/credit/contract-field']">
-                        <span class="nav-label">เปลี่ยนเขตสัญญา</span>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_campaign_list">
+                            <span class="nav-label">แคมเปญ</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-cubes"></i>
+                    <span class="nav-label">คลังสินค้า</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_stockm_list">
+                            <span class="nav-label">รายการสินค้าในคลัง (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_stockp_list">
+                            <span class="nav-label">รายการสินค้าในคลัง (อะไหล่)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_receive_dos_import">
+                            <span class="nav-label">บันทึกรายการรับสินค้าจาก DOS/DCS (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_pending_receivem_list">
+                            <span class="nav-label">รายการรอรับเข้าคลัง (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_pending_receivep_list">
+                            <span class="nav-label">รายการรอรับเข้าคลัง (อะไหล่)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_pending_wd_list">
+                            <span class="nav-label">รายการรอเบิกสินค้า</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_cyclecount_action_list">
+                            <span class="nav-label">ตรวจนับสินค้า</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_cyclecountc_list">
+                            <span class="nav-label">ตรวจนับสต๊อกสินค้า (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_cyclecount_list">
+                            <span class="nav-label">ตรวจนับสต๊อกสินค้า (อะไหล่)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-cubes"></i>
+                    <span class="nav-label">ตรวจสอบสินค้า</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_checkm_list">
+                            <span class="nav-label">ตรวจสอบสินค้า (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_checkp_list">
+                            <span class="nav-label">ตรวจสอบสินค้า (อะไหล่)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-user"></i>
+                    <span class="nav-label">สมาชิก</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_member_list">
+                            <span class="nav-label">จัดการสมาชิก</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li [ngClass]="{active: activeRoute('credit')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-file"></i>
+                    <span class="nav-label">งานขาย</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_booking">
+                            <span class="nav-label">จองรถ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_booking_list">
+                            <span class="nav-label">รายการจองรถ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_booking_list_cancel">
+                            <span class="nav-label">รายการยกเลิกใบจอง</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_sell_list">
+                            <span class="nav-label">รายการขายรถ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('active')}">
+                        <a [routerLink]="['/credit/contract-list/active']">
+                            <span class="nav-label">รายการสัญญา</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('close-contract')}">
+                        <a [routerLink]="['/credit/contract-list/close-contract']">
+                            <span class="nav-label">รายการปิดสัญญา</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('canceled')}">
+                        <a [routerLink]="['/credit/contract-list/canceled']">
+                            <span class="nav-label">รายการยกเลิกสัญญา</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('other-contract')}">
+                        <a [routerLink]="['/credit/contract-list/other-contract']">
+                            <span class="nav-label">รายการสัญญา อื่นๆ</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-file"></i>
+                    <span class="nav-label">งานขายอะไหล่</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_part_booking">
+                            <span class="nav-label">ขายอะไหล่</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_part_booking_list">
+                            <span class="nav-label">รายการขายอะไหล่</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_part_turn">
+                            <span class="nav-label">คืนสินค้า</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_part_turn_list">
+                            <span class="nav-label">รายการคืนสินค้า</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-file"></i>
+                    <span class="nav-label">โอนสินค้าต่างสาขา</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_borrow_list">
+                            <span class="nav-label">รายการขอโอน</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_nborrow_list">
+                            <span class="nav-label">รายการที่มีการขอโอน</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-file"></i>
+                    <span class="nav-label">ศูนย์บริการ</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_service_check">
+                            <span class="nav-label">ประเมินรายการซ่อม</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_service_check_list">
+                            <span class="nav-label">รายการประเมินรายการซ่อม</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_service_take">
+                            <span class="nav-label">เช็คระยะและ อื่นๆ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_service_sell_list">
+                            <span class="nav-label">รายการซ่อม</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <li [ngClass]="{active: activeRoute('ris')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-tags"></i>
+                    <span class="nav-label">งานทะเบียน</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{'active': activeRoute('waiting-tag-list')}">
+                        <a [routerLink]="['/ris/waiting-tag-list']">
+                            <span class="nav-label">รายการรอจดทะเบียน</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': 
+                    activeRoute('con-list') || 
+                    activeRoute('con-form-create') ||
+                    activeRoute('con-form-edit') ||
+                    activeRoute('con-form-detail')}">
+                        <a [routerLink]="['/ris/con-list']">
+                            <span class="nav-label">รับเรื่องดำเนินการ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': 
+                    activeRoute('sed-list') || 
+                    activeRoute('sed-form-create') ||
+                    activeRoute('sed-form-detail')}">
+                        <a [routerLink]="['/ris/sed-list']">
+                            <span class="nav-label">สรุปส่งเรื่องดำเนินการ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': 
+                    activeRoute('al-list') || 
+                    activeRoute('al-form-create') || 
+                    activeRoute('al-form-detail')}">
+                        <a [routerLink]="['/ris/al-list']">
+                            <span class="nav-label">บันทึกการยืมเงิน</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: 
+                        activeRoute('cl-list') || 
+                        activeRoute('cl-form-create') || 
+                        activeRoute('cl-form-detail')}">
+                        <a [routerLink]="['/ris/cl-list']">
+                            <span class="nav-label">บันทึกการคืนเงิน</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: 
+                        activeRoute('clear-money-list') ||
+                        activeRoute('clear-money-create') ||
+                        activeRoute('clear-money-detail')}">
+                        <a [routerLink]="['/ris/clear-money-list']">
+                            <span class="nav-label">รับคืนเรื่องจากการดำเนินการ</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-users"></i>
+                    <span class="nav-label">ผู้ใช้งานระบบ</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_group_page">
+                            <span class="nav-label">กลุ่มผู้ใช้งาน</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_user_list">
+                            <span class="nav-label">ผู้ใช้งาน</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li [ngClass]="{active: activeRoute('report')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-file-o"></i>
+                    <span class="nav-label">รายงาน</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{active: activeRoute('booking')}">
+                        <a [routerLink]="['/report/booking']">
+                            <span class="nav-label">รายงานการจองรถ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('credit-note')}">
+                        <a [routerLink]="['/report/credit-note']">
+                            <span class="nav-label">รายงานการรับคืนสินค้า</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('sale-report')}">
+                        <a [routerLink]="['/report/sale-report']">
+                            <span class="nav-label">รายงานยอดขายรวม</span>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_bike">
+                            <span class="nav-label">สต๊อกสินค้า (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_parts">
+                            <span class="nav-label">สต๊อกสินค้า (อะไหล่)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_receive">
+                            <span class="nav-label">รายการแจ้งรับสินค้า (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_receivep">
+                            <span class="nav-label">รายการแจ้งรับสินค้า (อะไหล่)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_stockreceive_m">
+                            <span class="nav-label">รายงานการบันทึกรับสินค้าเข้าคลัง (รถ)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_stockreceive_p">
+                            <span class="nav-label">รายงานการบันทึกรับสินค้าเข้าคลัง (อะไหล่)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_booking">
+                            <span class="nav-label">รายงานจอง</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_booking_cancel">
+                            <span class="nav-label">รายงานยกเลิกจอง</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{kkHondaWeb}}/home.php?show=_report_sell_m">
+                            <span class="nav-label">รายงานการขายรถ</span>
                         </a>
                     </li> -->
                 </ul>
             </li>
-            <!-- <li [ngClass]="{active: activeRoute('accounting-finance')}">
-                <a href="#">
-                    <i class="fa fa-th-large"></i>
-                    <span class="nav-label">บัญชีและการเงิน</span>
-                    <span class="fa arrow"></span>
+            <li>
+                <a href="javaScript:void(0);" (click)="signOut();">
+                    <i class="fa fa-sign-out"></i>
+                    <span class="nav-label">ออกจากระบบ</span>
                 </a>
-                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('accounting-finance')}">
-                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
-                        <a [routerLink]="['/accounting-finance/']">
-                            <span class="nav-label">รับชำระเงินงวดเดียว/ดาวน์</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
-                        <a [routerLink]="['/accounting-finance/']">
-                            <span class="nav-label">รับชำระเงินหลายงวด/ปิดสัญญา</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
-                        <a [routerLink]="['/accounting-finance/']">
-                            <span class="nav-label">รับชำระเงินประกันสัญญา</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('accounting-finance')}">
-                        <a [routerLink]="['/accounting-finance/']">
-                            <span class="nav-label">บันทึกรายละเอียดเช็ค</span>
-                        </a>
-                    </li>
-                </ul>
-            </li> -->
+            </li>
+
         </ul>
 
     </div>

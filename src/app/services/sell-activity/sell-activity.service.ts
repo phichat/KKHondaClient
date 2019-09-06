@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from '../../app.config';
-import { SellActivityModel } from 'app/models/sell-activity';
+import { SellActivityModel } from '../../models/sell-activity';
 
 @Injectable()
 export class SellActivityService {

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { CalculateModel, ContractItemModel } from '../../models/credit';
+import { CalculateModel, ContractItemModel, ContractModel } from '../../models/credit';
 import { appConfig } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { HttpService } from 'app/core/http.service';
 
 @Injectable()
 export class CalculateService {
     private model = new CalculateModel();
     private dataSource = new BehaviorSubject<CalculateModel>(this.model);
-    private url = `${appConfig.apiUrl}/Credit`;
+    private url = 'Credit/Calculates';
     private httpOptions = {
         headers: new HttpHeaders(
             {
@@ -18,17 +19,43 @@ export class CalculateService {
 
     currentData = this.dataSource.asObservable();
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private httpService: HttpService
+        ) { }
 
     changeData(data: CalculateModel) {
         this.dataSource.next(data)
     }
 
-    Add(creditCalculate: CalculateModel, creditContactItem: ContractItemModel) {
-        const apiURL = `${this.url}/Calculates`;
-        const params = JSON.stringify({ creditCalculate, creditContactItem });
+    GetById(calculateId: string) {
+        const apiURL = `${this.url}/GetById`;
+        const params = { calculateId };
+        return this.httpService.get(apiURL, { params });
+    }
 
-        return this.http.post<any>(apiURL, params , this.httpOptions);
+    GetEngineByKeyword(bookingId: string, branchId: string, term: string) {
+        const apiURL = `${appConfig.apiUrl}/${this.url}/GetEngineByKeyword`;
+        const params = { bookingId, branchId, term };
+        return this.http.get<any>(apiURL, { params });
+    }
+
+    Create(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
+        const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
+        const apiURL = `${this.url}/Create`;
+        return this.httpService.post(apiURL, params);
+    }
+
+    Edit(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
+        const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
+        const apiURL = `${this.url}/Edit`;
+        return this.httpService.post(apiURL, params);
+    }
+
+    Revice(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
+        const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
+        const apiURL = `${this.url}/Revice`;
+        return this.httpService.post(apiURL, params);
     }
 
 }

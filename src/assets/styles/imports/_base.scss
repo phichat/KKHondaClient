@@ -80,6 +80,10 @@ a:hover, a:focus {
   border-right: 1px solid $border-color;
 }
 
+.b-l {
+  border-left: 1px solid $border-color;
+}
+
 .hr-line-dashed {
   border-top: 1px dashed $border-color;
   color: #ffffff;

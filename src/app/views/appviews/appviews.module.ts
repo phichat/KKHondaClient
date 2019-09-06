@@ -11,25 +11,21 @@ import { LoginComponent } from './login.component';
 
 import { PeityModule } from '../../components/charts/peity';
 import { SparklineModule } from '../../components/charts/sparkline';
-import { HomeComponent } from './home/home.component';
 import { StarterComponent } from './starter/starter.component';
 
-// Directives
-import { IcheckDirective } from '../../directives/icheck.directive';
-import { FootableDirective } from '../../directives/footable.directive';
-
 import { FormsModule } from '@angular/forms';
-import { SellingModule } from './selling/selling.module';
 import { CreditModule } from './credit/credit.module';
 import { CustomerService } from '../../services/customers';
+import { ReportBookingModule } from './report-booking/report-booking.module';
+import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
+import { ReportSaleModule } from './report-sale/report-sale.module';
+import { RISModule } from './ris/ris.module';
 
 @NgModule({
   declarations: [
     StarterViewComponent,
     LoginComponent,
-    HomeComponent,
     StarterComponent
-
   ],
   imports: [
     BrowserModule,
@@ -38,7 +34,11 @@ import { CustomerService } from '../../services/customers';
     PeityModule,
     SparklineModule,
     IboxtoolsModule,
-    CreditModule
+    CreditModule,
+    ReportBookingModule,
+    ReportCreditNoteModule,
+    ReportSaleModule,
+    RISModule
   ],
   exports: [
     // IcheckDirective

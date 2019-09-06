@@ -14,6 +14,10 @@ import { AppviewsModule } from './views/appviews/appviews.module';
 // App modules/components
 import { LayoutsModule } from './components/common/layouts/layouts.module';
 import { HttpClientModule } from '@angular/common/http';
+// import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
+import { BookingModule } from './views/dashboards/booking/booking.module';
+import { GuardGuard } from './guards/guard.guard';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -24,13 +28,18 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     HttpModule,
     HttpClientModule,
+    CoreModule,
     LayoutsModule,
     AppviewsModule,
     RouterModule.forRoot(ROUTES),
+    
+    // PageloaderModule,
+    BookingModule,
+    
   ],
   providers: [
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
-
+    GuardGuard,
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BookingListInterface } from '../../../../interfaces/sellings';
-import { BookingListModel } from 'app/models/selling';
+import { BookingListModel } from '../../../../models/selling';
 import { BookingService } from '../../../../services/selling';
 
 import * as $ from 'jquery';

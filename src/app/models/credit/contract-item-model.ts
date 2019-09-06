@@ -3,7 +3,9 @@ export class ContractItemModel {
     public contractId: number;
     public contractBranchId: number;
     public instalmentNo: number;
-    public dueDate: Date;
+    public instalmentNoText: string;
+    public refNo: string;
+    public dueDate: any;
     public vatRate: number;
     public balance: number;
     public balanceVatPrice: number;
@@ -21,15 +23,23 @@ export class ContractItemModel {
     public statusText: string;
     public interestInstalment: number;
     public interestRemainAccount: number;
+    public goodsPrice: number;
     public goodsPriceRemain: number;
     public instalmentPrice: number;
     public remain: number;
     public remainVatPrice: number;
     public remainNetPrice: number;
+    public remainInterest: number;
     public delayDueDate: number;
     public createBy: number;
     public createDate: Date;
     public updateBy: number;
-    public updateDate: Date
+    public updateDate: Date;
+
+    public initialPrice: number;
+    public principal: number;
+    public principalRemain: number;
+    public interestPrincipalRemain: number;
+    public discountInterest: number;
 }
 

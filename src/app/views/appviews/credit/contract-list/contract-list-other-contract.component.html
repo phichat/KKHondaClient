@@ -1,0 +1,74 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายการสัญญาอื่นๆ</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>
+        <a>รายการสัญญาอื่นๆ</a>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <table class="table table-hover" cellspacing="0">
+        <thead>
+          <tr>
+            <th style="width: 100px;">เลขที่สัญญา</th>
+            <th style="width: 150px;">สถานะสัญญา</th>
+            <th style="width: 100px;">รายละเอียด</th>
+            <th style="width: 100px;">แก้ไขสัญญา</th>
+            <th style="width: 100px;">วันที่ทำสัญญา</th>
+            <th style="width: 150px;">ผู้เช่าซื้อ</th>
+            <th style="width: 150px;">เลขบัตรประชาชน</th>
+            <th style="width: 100px;">กลุ่มสัญญา</th>
+            <th style="width: 150px;">ประเภทสัญญา</th>
+            <th style="width: 150px;">จุดทำสัญญา</th>
+            <th style="width: 150px;">เขตการเก็บเงิน</th>
+            <th style="width: 150px;">ยี่ห้อรถ</th>
+            <th style="width: 150px;">สีรถ</th>
+            <th style="width: 150px;">รุ่นรถ</th>
+            <th style="width: 150px;">เลขเครื่อง</th>
+            <th style="width: 150px;">เลขโครง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of contractListModel">
+            <td>{{item.contractNo}}</td>
+            <td class="text-danger">{{item.statusDesc}}</td>
+            <td>
+              <a class="btn btn-info btn-xs" (click)="gotoDetail(item.contractId)">
+                <i class="fa fa-file-text-o"></i>
+                รายละเอียด</a>
+            </td>
+            <td>
+              <a (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
+                <i class="fa fa-pencil"></i>
+                แก้ไขสัญญา
+              </a>
+            </td>
+            <td>{{item.contractDate}}</td>
+            <td>{{item.hireFullName}}</td>
+            <td>{{item.hireIdCard}}</td>
+            <td>{{item.contractGroup}}</td>
+            <td>{{item.contractType}}</td>
+            <td>{{item.contractPoint}}</td>
+            <td>{{item.areaPayment}}</td>
+            <td>{{item.brand}}</td>
+            <td>{{item.color}}</td>
+            <td>{{item.model}}</td>
+            <td>{{item.engineNo}}</td>
+            <td>{{item.frameNo}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

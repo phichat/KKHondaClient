@@ -1,0 +1,101 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รอจดทะเบียน</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>งานทะเบียน</li>
+      <li class="active">
+        <strong>รายการรอจดทะเบียน</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <thead>
+          <tr>
+            <th class="text-center">ลำดับ</th>
+            <th>ประเภทการซื้อ</th>
+            <th>เลขที่ใบขาย</th>
+            <th>เลขที่ใบจอง</th>
+            <th>รับเรื่องจดทะเบียน</th>
+            <th>ชื่อจดทะเบียน</th>
+            <th>ผู้จอง</th>
+            <th>บัตรประชาชน</th>
+            <th>เบอร์ติดต่อ</th>
+            <th>หมายเลขเครื่อง</th>
+            <th>หมายเลขตัวถัง</th>
+            <th>มูลค่าสินค้า</th>
+            <th>วันที่ทำรายการ</th>
+            <th>ผู้ที่ทำรายการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="waitingList.length == 0; else else_tr;">
+            <td colspan="14" class="text-center">
+              <div [ngSwitch]="loading">
+                <div *ngSwitchCase="1">
+                  <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                  <br>
+                  <p>ไม่มีข้อมูล</p>
+                </div>
+                <div *ngSwitchCase="2">
+                  <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                  <br>
+                  <p>มีบางอย่างผิดพลาด</p>
+                </div>
+                <div *ngSwitchDefault>
+                  <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                  <br>
+                  <p>รอสักครู่...</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <ng-template #else_tr>
+            <tr *ngFor="let item of waitingList; let i = index">
+              <td class="text-center" [attr.data-order]="i">{{i+1}}</td>
+              <td class="text-center">
+                <div class="payment-type" [ngClass]="{
+                'cash': item.bookingPaymentType == BookingPaymentType.Cash,
+                'leasing': item.bookingPaymentType == BookingPaymentType.Leasing,
+                'hier-purchase': item.bookingPaymentType == BookingPaymentType.HierPurchase,
+                'credit': item.bookingPaymentType == BookingPaymentType.Credit
+              }">
+                  {{item.paymentTypeDesc}}
+                </div>
+              </td>
+              <td>{{item.sellNo}}</td>
+              <td>{{item.bookingNo}}</td>
+              <td>
+                <a class="btn btn-info btn-xs" [routerLink]="['/ris/con-form-create', item.sellNo]">
+                  <i class="fa fa-pencil"></i> บันทึกรับเรื่อง
+                </a>
+              </td>
+              <td>{{item.regisName}}</td>
+              <td>{{item.bookTitleName}}{{item.bookFName}} {{item.bookSName}}</td>
+              <td>{{item.bookIdCard}}</td>
+              <td>{{item.bookContractNo}}</td>
+              <td>{{item.eNo}}</td>
+              <td>{{item.fNo}}</td>
+              <td [attr.data-order]="item.bookNetPrice" class="text-right">{{item.bookNetPrice | number:'1.2-2'}}</td>
+              <td [attr.data-order]="i">
+                {{displayLocalDate(item.sellDate)}}
+              </td>
+              <td>{{item.sellName}}</td>
+            </tr>
+          </ng-template>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
