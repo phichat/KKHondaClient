@@ -2,11 +2,11 @@ export interface IConItemDoc {
     bookingNo: string;
     sendBackCode: string;
     isReceive: string;
-    receiveDate: string;
+    receiveDate: any;
     receiveBy: string;
     isSend?: boolean;
     sendBy?: number;
-    sendDate?: Date;
+    sendDate?: any;
 }
 
 export interface IConItemDocRes {
@@ -14,11 +14,11 @@ export interface IConItemDocRes {
     sendBackCode: string;
     sendBackName: string;
     isReceive: string;
-    receiveDate: string;
+    receiveDate: any;
     receiveBy: string;
     receiveName: string;
     isSend?: boolean;
     sendBy?: number;
     sendName: string;
-    sendDate?: Date;
+    sendDate?: any;
 }

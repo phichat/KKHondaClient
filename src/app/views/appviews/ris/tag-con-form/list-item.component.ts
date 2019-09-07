@@ -2,7 +2,7 @@ import { OnInit, Component, ChangeDetectorRef, ChangeDetectionStrategy, OnDestro
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormControl, FormControlName, Validators } from '@angular/forms';
 import { ListItemConfig } from './list-item.config';
-import { getDateMyDatepicker } from 'app/app.config';
+import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
 import { mergeMap, merge, map } from 'rxjs/operators';
 import { combineLatest, of } from 'rxjs';
 import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
@@ -315,13 +315,13 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
     obj = {
       ...obj,
-      tagRegis: tagRegis ? tagRegis.toISOString() : null,
-      tagExpire: tagExpire ? tagExpire.toISOString() : null,
-      prbRegis: prbRegis ? prbRegis.toISOString() : null,
-      prbExpire: prbExpire ? prbExpire.toISOString() : null,
-      commitExpire: commitExpire ? commitExpire.toISOString() : null,
-      warRegis: warRegis ? warRegis.toISOString() : null,
-      warExpire: warExpire ? warExpire.toISOString() : null
+      tagRegis: tagRegis ? setZeroHours(tagRegis) : null,
+      tagExpire: tagExpire ? setZeroHours(tagExpire) : null,
+      prbRegis: prbRegis ? setZeroHours(prbRegis) : null,
+      prbExpire: prbExpire ? setZeroHours(prbExpire) : null,
+      commitExpire: commitExpire ? setZeroHours(commitExpire) : null,
+      warRegis: warRegis ? setZeroHours(warRegis) : null,
+      warExpire: warExpire ? setZeroHours(warExpire) : null
     }
     this.TagHistory.emit(obj);
   }
