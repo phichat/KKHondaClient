@@ -9,8 +9,8 @@ export interface IConItemRes {
     itemCutBalance: number;
     itemPrice2: number;
     itemPriceTotal: number;
-    state?: number;
-    dateReceipt?: Date;
+    state?: string | number;
+    dateReceipt?: any;
     remark: string;
 }
 

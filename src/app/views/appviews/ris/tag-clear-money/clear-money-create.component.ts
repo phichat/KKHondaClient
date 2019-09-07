@@ -3,11 +3,13 @@ import { FormControl, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime, switchMap, finalize } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
 import { of } from 'rxjs';
 import { ISedRes, IConItemOutput, IConRes, IAlRes, IConItemRes, IConItemDocRes } from 'app/interfaces/ris';
 import { ClearMoneyService } from './clear-money.service';
+import { message } from 'app/app.message';
+import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
 declare var toastr: any;
 
 @Component({
@@ -43,14 +45,18 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       sedCreateName: new FormControl(null),
       sedNo: new FormControl(null),
       remark: new FormControl(null),
+      branchId: new FormControl(null),
+      totalPrice1: new FormControl(null),
+      totalVatPrice1: new FormControl(null),
+      totalNetPrice: new FormControl(null),
       totalCutBalance: new FormControl(null),
       totalPrice2: new FormControl(null),
-      totalIncom: new FormControl(null),
-      clBalancePrice: new FormControl(null),
-      clReceivePrice: new FormControl(null),
-      alPaymentPrice: new FormControl(null),
-      expenses: new FormControl(null),
-      accruedExpense: new FormControl(null)
+      totalIncome: new FormControl(null),
+      totalClBalancePrice: new FormControl(null),
+      totalClReceivePrice: new FormControl(null),
+      totalExpenses: new FormControl(null),
+      totalAccruedExpense: new FormControl(null),
+      status: new FormControl(1)
     });
 
     this.searchSed();
@@ -59,38 +65,41 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       if (!x) return;
       this.chRef.markForCheck();
       this.mUser = x;
+      this.formGroup.patchValue({
+        createBy: x.id,
+        branchId: x.branch
+      })
       this.chRef.detectChanges();
     });
 
     this.formGroup.get('totalCutBalance').valueChanges.subscribe((cutBalance: string) => {
-      const balance = this.formGroup.get('clBalancePrice').value;
-      const expenses = this.calExpenses(parseFloat(balance), parseFloat(cutBalance));
-      const totalIncom = this.calIncom(parseFloat(balance), parseFloat(cutBalance));
+      const balance = this.formGroup.get('totalClBalancePrice').value;
+      const totalExpenses = this.calExpenses(parseFloat(balance), parseFloat(cutBalance));
+      const totalIncome = this.calIncom(parseFloat(balance), parseFloat(cutBalance));
 
       this.formGroup.patchValue({
-        expenses: expenses.toFixed(2),
-        totalIncom: totalIncom.toFixed(2)
+        totalExpenses: totalExpenses.toFixed(2),
+        totalIncome: totalIncome.toFixed(2)
       });
     });
 
-    this.formGroup.get('clBalancePrice').valueChanges.subscribe((balance: string) => {
+    this.formGroup.get('totalClBalancePrice').valueChanges.subscribe((balance: string) => {
       const cutBalance = this.formGroup.get('totalCutBalance').value;
-      const totalIncom = this.calIncom(parseFloat(balance), parseFloat(cutBalance));
+      const totalIncome = this.calIncom(parseFloat(balance), parseFloat(cutBalance));
       this.formGroup.patchValue({
-        totalIncom: totalIncom.toFixed(2)
+        totalIncome: totalIncome.toFixed(2)
       });
     })
 
-    this.formGroup.get('clReceivePrice').valueChanges.subscribe((receive: string) => {
-      // const balance = this.formGroup.get('clBalancePrice').value;
+    this.formGroup.get('totalClReceivePrice').valueChanges.subscribe((receive: string) => {
+      // const balance = this.formGroup.get('totalClBalancePrice').value;
       const totalPrice2 = this.formGroup.get('totalPrice2').value;
-      const receivePrice = this.clReceivePriceState == parseFloat(receive)
+      let receivePrice = this.clReceivePriceState == parseFloat(receive)
         ? parseFloat(receive)
-        : this.clReceivePriceState + parseFloat(receive);
-
-      const accruedExpense = parseFloat(totalPrice2) - (receivePrice);
+        : this.clReceivePriceState + (parseFloat(receive) || 0);
+      const totalAccruedExpense = parseFloat(totalPrice2) - (receivePrice);
       this.formGroup.patchValue({
-        accruedExpense: accruedExpense.toFixed(2)
+        totalAccruedExpense: totalAccruedExpense.toFixed(2)
       })
     });
 
@@ -98,8 +107,14 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       .subscribe((x: IConRes[]) => {
         this.chRef.markForCheck();
         const cutBalance = x.reduce((a, c) => a += c.cutBalance, 0);
+        const price1 = x.reduce((a, c) => a += c.price1, 0);
+        const vatPrice1 = x.reduce((a, c) => a += c.vatPrice1, 0);
         const price2 = x.reduce((a, c) => a += c.price2, 0);
+        const netPrice = x.reduce((a, c) => a += (c.price1 + c.vatPrice1), 0);
         this.formGroup.patchValue({
+          totalPrice1: price1,
+          totalVatPrice1: vatPrice1,
+          totalNetPrice: netPrice,
           totalCutBalance: cutBalance.toFixed(2),
           totalPrice2: price2.toFixed(2)
         });
@@ -110,14 +125,14 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       this.chRef.markForCheck();
       const balance = x.reduce((a, c) => a += c.balancePrice, 0);
       const cutBalance = this.formGroup.get('totalCutBalance').value;
-      const expenses = this.calExpenses(balance, cutBalance);
+      const totalExpenses = this.calExpenses(balance, cutBalance);
       const receive = x.reduce((a, c) => a += c.receivePrice, 0);
       this.clReceivePriceState = receive;
       this.formGroup.patchValue({
-        clBalancePrice: balance.toFixed(2),
-        clReceivePrice: receive.toFixed(2),
-        accruedExpense: balance.toFixed(2),
-        expenses: expenses.toFixed(2)
+        totalClBalancePrice: balance.toFixed(2),
+        totalClReceivePrice: receive.toFixed(2),
+        totalAccruedExpense: balance.toFixed(2),
+        totalExpenses: totalExpenses.toFixed(2)
       });
       this.chRef.detectChanges();
     })
@@ -143,7 +158,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     });
 
     if (!listConItem.length) {
-      alert('กรุณาตรวจสอบข้อมูลรับเรื่องย่อย และระบุข้อมูลให้ครบถ่วน!');
+      alert('กรุณาตรวจสอบข้อมูล "รับเรื่องย่อย" และระบุข้อมูลให้ครบถ่วน!');
       return;
     }
 
@@ -152,7 +167,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       .map(x => x.bookingNo);
     let conNoUnique = listConNullItem.filter((v, i) => listConNullItem.indexOf(v) === i)
     if (conNoUnique.length) {
-      alert(`กรุณา ระบุข้อมูลรับเรื่องย่อย ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nให้ครบถ่วน!`);
+      alert(`กรุณา ระบุข้อมูล "รับเรื่องย่อย" ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nให้ครบถ่วน!`);
       return;
     }
 
@@ -161,13 +176,39 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       .map(x => x.bookingNo);
     conNoUnique = listNullItemDoc.filter((v, i) => listNullItemDoc.indexOf(v) === i);
     if (conNoUnique.length) {
-      if (!confirm(`เอกสาร/สิ่งที่รับคืน ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nยังระบุข้อมูลการรับไม่ครบ คุณต้องการบันทึกข้อมูลหรือไม่?`))
+      if (!confirm(`"เอกสาร/สิ่งที่รับคืน" ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nยังระบุข้อมูลการ "รับเอกสาร" ไม่ครบ คุณต้องการบันทึกข้อมูลหรือไม่?`))
         return
     }
 
-    console.log(listCon);
-    console.log(listConItem);
-    console.log(listItemDoc);
+    this.s_loader.showLoader();
+    const url = `${this.risUrl}/REV`;
+    listItemDoc = listItemDoc
+      .filter(x => x.isReceive != null)
+      .map(x => {
+        const obj = { ...x };
+        obj.sendDate = setZeroHours(obj.sendDate);
+        obj.receiveDate = setZeroHours(obj.receiveDate);
+        return obj;
+      });
+    listConItem = listConItem.map(o => {
+      const obj = { ...o };
+      obj.dateReceipt = setZeroHours(getDateMyDatepicker(obj.dateReceipt as any));
+      return obj;
+    })
+    const f = {
+      tagRev: this.formGroup.value,
+      tagConList: listCon,
+      tagConListItem: listConItem,
+      tagListItemDoc: listItemDoc
+    }
+    this.http.post(url, f).pipe(
+      finalize(() => this.s_loader.onEnd())
+    ).subscribe(() => {
+      toastr.success(message.created);
+    }, () => toastr.error(message.failed));
+    // console.log(listCon);
+    // console.log(listConItem);
+    // console.log(listItemDoc.filter(x => x.isReceive != null));
   }
 
   selectItemSed(e: ISedRes) {

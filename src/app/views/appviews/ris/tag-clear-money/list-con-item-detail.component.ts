@@ -68,7 +68,12 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         this.loading = this.LoadEnt.noRecord;
         return;
       };
-      const listConItem = x.carRegisListItemRes;
+      const listConItem = x.carRegisListItemRes
+      .map(o => {
+        const obj = o;
+        obj.state = obj.state != null ? obj.state.toString() : null;
+        return obj;
+      });
       this.setItemFormArray(listConItem, this.formGroup, 'ConListItem');
       this.ConListItemValueChange(listConItem);
 
@@ -114,12 +119,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
       this.s_clearMoney.setListConItemBehaviorSubject(x);
       const state1 = x.filter(o => o.state != null).length ? 1 : null;
       const cutBalance = x.reduce((a, c) => {
-        // if (c.state == 2 || c.state == 3) {
-        //   // if (a > 0) a -= c.itemCutBalance;
-        // } else {
-        if (c.state != 2 && c.state != 3) a += c.itemCutBalance;
-        // }
-        return a;
+        return (c.state != 2 && c.state != 3) ? a += c.itemCutBalance : a;
       }, 0);
 
       let state2 = null;
