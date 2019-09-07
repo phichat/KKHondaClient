@@ -69,11 +69,12 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         return;
       };
       const listConItem = x.carRegisListItemRes
-      .map(o => {
-        const obj = o;
-        obj.state = obj.state != null ? obj.state.toString() : null;
-        return obj;
-      });
+        .map(o => {
+          const obj = { ...o };
+          obj.dateReceipt = obj.dateReceipt != null ? this.setDateMyDatepicker(obj.dateReceipt) : null;
+          obj.state = obj.state != null ? obj.state.toString() : null;
+          return obj;
+        });
       this.setItemFormArray(listConItem, this.formGroup, 'ConListItem');
       this.ConListItemValueChange(listConItem);
 
