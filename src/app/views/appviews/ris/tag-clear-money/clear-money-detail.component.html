@@ -17,7 +17,169 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <!-- <form class="form-horizontal" style="margin-bottom: 15em;" #form="ngForm" autocomplete="off" [formGroup]="formGroup"
+    <form class="form-horizontal" style="margin-bottom: 15em;" #form="ngForm" autocomplete="off" [formGroup]="formGroup"
         (ngSubmit)="onSubmit()">
-    </form> -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-md-3 control-label required">อ้างอิงใบส่งเรื่อง</label>
+                        <div class="col-md-9">
+                            <span class="form-control disabled">
+                                {{formGroup.get('sedNo').value}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-md-3 control-label">ผู้ดำเนินการ</label>
+                        <div class="col-md-9">
+                            <span class="form-control disabled">
+                                {{formGroup.get('sedCreateName').value}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-md-3 control-label">วันที่ทำรายการ</label>
+                        <div class="col-md-9">
+                            <span class="form-control disabled">
+                                {{displayLocalDate(formGroup.get('createDate').value)}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-md-3 control-label required">ผู้รับเรื่องคืน</label>
+                        <div class="col-md-9">
+                            <span class="form-control disabled">
+                                {{formGroup.get('createName').value}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-md-3 control-label">หมายเหตุ</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" rows="1" formControlName="remark" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+
+                <section class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#tab-clear-money-1">รายการรถ</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#tab-clear-money-2">รายการเงินยืม</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-clear-money-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <app-list-con-item-component [$SedItem]="$SedItem" [$ConItemInput]="$ConItemOutput"
+                                    (ConNoOutPut$)="$ConNo.next($event)" (ConResOutput$)="ConResOutput$.next($event)">
+                                </app-list-con-item-component>
+                            </div>
+                        </div>
+                        <div id="tab-clear-money-2" class="tab-pane">
+                            <div class="panel-body">
+                                <app-list-al-item-component [$SedItem]="$SedItem" (AlOutput$)="AlOutput$.next($event)">
+                                </app-list-al-item-component>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="hr-line-dashed"></div>
+                <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
+                <app-list-con-item-detail-component [$Mode]="ActionMode.Detail" [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
+                </app-list-con-item-detail-component>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <h3>รวม {{ConResOutput$.value.length}} รายการ</h3>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">ตัดยอดเงินรับฝาก</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalCutBalance" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">หัก ค่าดำเนินการ</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalClBalancePrice" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">คิดเป็น รายได้</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalIncome" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">เงินยืมคงเหลือ</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalClBalancePrice" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">หักเงินยืม</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalClReceivePrice" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">ค่าใช่จ่าย</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalExpenses" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <label class="col-md-6 control-label">ค้างจ่าย</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" formControlName="totalAccruedExpense" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row m-t-md">
+            <!-- *ngIf="formGroup.get('bookingStatus').value != ConStatus.Cancel" -->
+            <div class="col-sm-6">
+                <!-- [routerLink]="['/ris/con-form-edit', code]" -->
+                <button type="button" class="btn btn-info btn-outline">
+                    <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                    แก้ไข
+                </button>​</div>
+            <div class="col-sm-6 text-right">
+                <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid">
+                    ยกเลิกรายการ
+                </button>
+            </div>
+
+        </div>
+    </form>
 </div>

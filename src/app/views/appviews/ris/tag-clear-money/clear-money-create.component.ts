@@ -51,6 +51,8 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       updateDate: new FormControl(null),
       sedCreateBy: new FormControl(null),
       sedCreateName: new FormControl(null),
+      revId: new FormControl(null),
+      revNo: new FormControl(null),
       sedNo: new FormControl(null),
       remark: new FormControl(null),
       branchId: new FormControl(null),
@@ -70,18 +72,16 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     this.activeRoute.params
       .pipe(
         mergeMap((x) => {
-          return combineLatest(of(x), this.s_user.currentData)
-            .pipe(
-              map(o => {
-                return {
-                  params: o[0],
-                  curretUser: o[1]
-                };
-              })
-            );
+          return combineLatest(of(x), this.s_user.currentData).pipe(
+            map(o => {
+              return {
+                params: o[0],
+                curretUser: o[1]
+              };
+            })
+          );
         })
-      )
-      .subscribe(x => {
+      ).subscribe(x => {
         this.chRef.markForCheck();
         if (x.curretUser == null) return;
         this.mode = x.params.mode;

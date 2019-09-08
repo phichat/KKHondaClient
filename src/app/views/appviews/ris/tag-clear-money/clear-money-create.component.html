@@ -134,7 +134,7 @@
 
         <div class="hr-line-dashed"></div>
         <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
-        <app-list-con-item-detail-component [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
+        <app-list-con-item-detail-component [$Mode]="mode" [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
         </app-list-con-item-detail-component>
 
         <div class="hr-line-dashed"></div>

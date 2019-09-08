@@ -1,12 +1,13 @@
 import { OnInit, Component, ChangeDetectorRef } from '@angular/core';
 import { ListConItemDetailConfig } from './list-con-item-detail.config';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap, tap, delay } from 'rxjs/operators';
 import { ICarRegisItemRes, IConItemRes } from 'app/interfaces/ris';
 import { of } from 'rxjs';
 import { UserService } from 'app/services/users/user.service';
 import { ClearMoneyService } from './clear-money.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-list-con-item-detail-component',
@@ -17,6 +18,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private activeRoute: ActivatedRoute,
     private chRef: ChangeDetectorRef,
     private s_user: UserService,
     private s_clearMoney: ClearMoneyService
@@ -68,12 +70,17 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         this.loading = this.LoadEnt.noRecord;
         return;
       };
+      
       const listConItem = x.carRegisListItemRes
         .map(o => {
-          o.dateReceipt = o.dateReceipt != null ? this.setDateMyDatepicker(o.dateReceipt) : null;
+          if (o.dateReceipt != null) {
+            o.dateReceipt = o.dateReceipt.date ? o.dateReceipt.date : this.setDateMyDatepicker(o.dateReceipt);
+          } 
           o.state = o.state != null ? o.state.toString() : null;
           return o;
         });
+      console.log(listConItem);
+      
       this.setItemFormArray(listConItem, this.formGroup, 'ConListItem');
       this.ConListItemValueChange(listConItem);
 
@@ -86,7 +93,17 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
     if (array !== undefined && array.length) {
-      const itemFGs = array.map(item => this.fb.group(item));
+      const itemFGs = array.map(item => {
+        if (this.$Mode == this.ActionMode.Detail) {
+          let i = {};
+          for (const key in item) {
+            item[key] = new FormControl({ value: item[key], disabled: true });
+            i = { ...i, [key]: item[key] };
+          }
+          return this.fb.group(i);
+        }
+        return this.fb.group(item);
+      });
       const itemFormArray = this.fb.array(itemFGs);
       fg.setControl(formControl, itemFormArray);
     }
