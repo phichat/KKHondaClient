@@ -22,13 +22,13 @@ export class TagClearMoneyListComponent extends TagClearMoneyListConfig implemen
 
   ngOnInit() {
 
-    const apiURL = `${this.risUrl}/Sed/All`;
+    const apiURL = `${this.risUrl}/Rev/All`;
     this.http.get(apiURL).subscribe((x: any[]) => {
       if (x.length == 0) {
         this.loading = 1;
         return;
       }
-      this.SedList = x.filter(x => x.status != SedStatus.Cancel);
+      this.RevList = x;
 
       this.reInitDatatable();
     }, () => {

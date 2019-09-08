@@ -13,7 +13,7 @@
   </div>
   <div class="col-lg-2 text-right pull-right">
     <h3>&nbsp;</h3>
-    <a [routerLink]="['/ris/clear-money-create']" class="btn btn-primary">
+    <a [routerLink]="['/ris/clear-money', ActionMode.Create]" class="btn btn-primary">
       <i class="fa fa-paper-plane-o"></i> บันทึกรับคืนเรื่อง
     </a>
   </div>
@@ -23,69 +23,69 @@
 
   <div class="ibox float-e-margins">
     <div class="ibox-content">
-        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
-            <thead>
-              <tr>
-                <th class="text-center">ลำดับ</th>
-                <th></th>
-                <th>เลขที่ใบส่งเรื่อง</th>
-                <th>วันที่ส่งเรื่อง</th>
-                <th>ผู้ดำเนินการ</th>
-                <th>สถานะ</th>
-                <th class="text-right">เงินที่ต้องส่ง</th>
-                <th class="text-right">เงินที่ต้องยืม</th>
-                <th class="text-right">เงินยืม</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="SedList.length == 0; else else_tr;">
-                <td colspan="9" class="text-center">
-                  <div [ngSwitch]="loading">
-                    <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
-                    <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
-                    <div *ngSwitchDefault>
-                      <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                      <br>
-                      <span class="mt-2">รอสักครู่...</span>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              <ng-template #else_tr>
-                <tr *ngFor="let item of SedList; let i = index">
-                  <td class="text-center" [attr.data-order]="i">{{i+1}}</td>
-                  <td class="text-center">
-                    <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/sed-form-detail', item.sedNo]">
-                      <i class="fa fa-info-circle"></i>
-                      รายละเอียด
-                    </a>
-                  </td>
-                  <td>{{item.sedNo}}</td>
-                  <td [attr.data-order]="item.sedId">
-                    {{displayLocalDate(item.createDate)}}
-                  </td>
-                  <td>{{item.createName}}</td>
-                  <td [ngClass]="{
-                    'text-danger': item.status == SedStatus.Cancel,
-                    'text-navy': item.status == SedStatus.Normal,
-                    'text-muted': item.status == SedStatus.Borrowed
+      <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <thead>
+          <tr>
+            <th class="text-center">ลำดับ</th>
+            <th></th>
+            <th>เลขที่เอกสาร</th>
+            <th>วันที่ส่งเรื่อง</th>
+            <th>ผู้ดำเนินการ</th>
+            <th>สถานะ</th>
+            <th class="text-right">ค่าดำเนินการ</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="RevList.length == 0; else else_tr;">
+            <td colspan="9" class="text-center">
+              <div [ngSwitch]="loading">
+                <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
+                <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                <div *ngSwitchDefault>
+                  <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                  <br>
+                  <span class="mt-2">รอสักครู่...</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <ng-template #else_tr>
+            <tr *ngFor="let item of RevList; let i = index">
+              <td class="text-center" [attr.data-order]="i">{{i+1}}</td>
+              <td class="text-center">
+                <button class="btn btn-xs" [ngClass]="{'btn-info': item.status != RevStatus.Cancel}"
+                  [routerLink]="['/ris/clear-money', ActionMode.Edit, item.revNo]"
+                  [disabled]="item.status == RevStatus.Cancel">
+                  <i class="fa fa-pencil"></i>
+                  แก้ไข
+                </button>&nbsp;
+                <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/clear-money-detail', item.revNo]">
+                  <i class="fa fa-info-circle"></i>
+                  รายละเอียด
+                </a>
+              </td>
+              <td>{{item.sedNo}}</td>
+              <td [attr.data-order]="item.revId">
+                {{displayLocalDate(item.createDate)}}
+              </td>
+              <td>{{item.createName}}</td>
+              <td [ngClass]="{
+                    'text-danger': item.status == RevStatus.Cancel,
+                    'text-navy': item.status == RevStatus.Normal,
+                    'text-muted': item.status == RevStatus.Borrowed
                   }">
-                    {{item.statusDesc}}
-                  </td>
-                  <td class="text-right" [attr.data-order]="item.price1">
-                    {{item.price1 | number:'1.2-2'}}
-                  </td>
-                  <td class="text-right" [attr.data-order]="item.price2">
-                    {{item.price2 | number:'1.2-2'}}
-                  </td>
-                  <td class="text-right" [attr.data-order]="item.borrowMoney">
-                    {{item.borrowMoney | number:'1.2-2'}}
-                  </td>
-                </tr>
-              </ng-template>
-    
-            </tbody>
-          </table>
+                {{item.statusDesc}}
+              </td>
+              <td class="text-right" [attr.data-order]="item.totalPrice2">
+                {{item.totalPrice2 | number:'1.2-2'}}
+              </td>
+              <td>{{item.remark}}</td>
+            </tr>
+          </ng-template>
+
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

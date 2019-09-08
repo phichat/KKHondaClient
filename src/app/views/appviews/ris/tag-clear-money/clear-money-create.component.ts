@@ -3,13 +3,15 @@ import { FormControl, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { tap, distinctUntilChanged, debounceTime, switchMap, finalize } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime, switchMap, finalize, mergeMap, map, delay } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
-import { of } from 'rxjs';
-import { ISedRes, IConItemOutput, IConRes, IAlRes, IConItemRes, IConItemDocRes } from 'app/interfaces/ris';
+import { of, combineLatest, merge } from 'rxjs';
+import { ISedRes, IConItemOutput, IConRes, IAlRes, IConItemRes, IConItemDocRes, IRevListRes, IRevWithSedItem } from 'app/interfaces/ris';
 import { ClearMoneyService } from './clear-money.service';
 import { message } from 'app/app.message';
 import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
+import { ActivatedRoute, Router } from '@angular/router';
+
 declare var toastr: any;
 
 @Component({
@@ -25,6 +27,8 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private router: Router,
+    private activeRoute: ActivatedRoute,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
@@ -40,7 +44,11 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       createBy: new FormControl(null),
-      createDate: new FormControl(new Date()),
+      createName: new FormControl(null),
+      createDate: new FormControl(null),
+      updateBy: new FormControl(null),
+      updateName: new FormControl(null),
+      updateDate: new FormControl(null),
       sedCreateBy: new FormControl(null),
       sedCreateName: new FormControl(null),
       sedNo: new FormControl(null),
@@ -59,18 +67,64 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       status: new FormControl(1)
     });
 
-    this.searchSed();
+    this.activeRoute.params
+      .pipe(
+        mergeMap((x) => {
+          return combineLatest(of(x), this.s_user.currentData)
+            .pipe(
+              map(o => {
+                return {
+                  params: o[0],
+                  curretUser: o[1]
+                };
+              })
+            );
+        })
+      )
+      .subscribe(x => {
+        this.chRef.markForCheck();
+        if (x.curretUser == null) return;
+        this.mode = x.params.mode;
+        this.code = x.params.code ? x.params.code : null;
+        switch (x.params.mode) {
+          case this.ActionMode.Create.toString():
+            this.searchSed();
+            this.formGroup.patchValue({
+              createBy: x.curretUser.id,
+              createName: x.curretUser.fullName,
+              createDate: new Date(),
+              branchId: x.curretUser.branch
+            })
+            break;
 
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.mUser = x;
-      this.formGroup.patchValue({
-        createBy: x.id,
-        branchId: x.branch
+          case this.ActionMode.Edit.toString():
+            const params = { revNo: this.code };
+            this.http.get(`${this.risUrl}/Rev/GetByRevNo`, { params }).pipe(
+              tap(() => this.s_loader.showLoader()),
+              mergeMap((rev: IRevListRes) => {
+                const params = { sedNo: rev.sedNo };
+                const url = `${this.risUrl}/Sed/GetBySedNo`;
+                return this.http.get(url, { params }).pipe(
+                  map((sed: ISedRes) => {
+                    return {
+                      revItem: rev,
+                      sedItem: sed
+                    }
+                  })
+                )
+              }),
+              finalize(() => this.s_loader.onEnd())
+            ).subscribe((o: IRevWithSedItem) => {
+              o.revItem.updateBy = x.curretUser.id;
+              o.revItem.updateDate = new Date();
+              o.revItem.sedCreateName = o.sedItem.createName
+              this.formGroup.patchValue({ ...o.revItem });
+              this.$SedItem.next(o.sedItem);
+            });
+            break;
+        }
+        this.chRef.detectChanges();
       })
-      this.chRef.detectChanges();
-    });
 
     this.formGroup.get('totalCutBalance').valueChanges.subscribe((cutBalance: string) => {
       const balance = this.formGroup.get('totalClBalancePrice').value;
@@ -157,24 +211,26 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       listItemDoc = [...listItemDoc, ...itemDoc];
     });
 
-    if (!listConItem.length) {
-      alert('กรุณาตรวจสอบข้อมูล "รับเรื่องย่อย" และระบุข้อมูลให้ครบถ่วน!');
-      return;
-    }
+    if (this.mode == this.ActionMode.Create) {
+      if (!listConItem.length) {
+        alert('กรุณาตรวจสอบข้อมูล "รับเรื่องย่อย" และระบุข้อมูลให้ครบถ่วน!');
+        return;
+      }
 
-    const listConNullItem = listConItem
-      .filter(x => x.state == null)
-      .map(x => x.bookingNo);
-    let conNoUnique = listConNullItem.filter((v, i) => listConNullItem.indexOf(v) === i)
-    if (conNoUnique.length) {
-      alert(`กรุณา ระบุข้อมูล "รับเรื่องย่อย" ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nให้ครบถ่วน!`);
-      return;
+      const listConNullItem = listConItem
+        .filter(x => x.state == null)
+        .map(x => x.bookingNo);
+      const conNoUnique = listConNullItem.filter((v, i) => listConNullItem.indexOf(v) === i)
+      if (conNoUnique.length) {
+        alert(`กรุณา ระบุข้อมูล "รับเรื่องย่อย" ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nให้ครบถ่วน!`);
+        return;
+      }
     }
 
     const listNullItemDoc = listItemDoc
       .filter(x => !x.isReceive)
       .map(x => x.bookingNo);
-    conNoUnique = listNullItemDoc.filter((v, i) => listNullItemDoc.indexOf(v) === i);
+    const conNoUnique = listNullItemDoc.filter((v, i) => listNullItemDoc.indexOf(v) === i);
     if (conNoUnique.length) {
       if (!confirm(`"เอกสาร/สิ่งที่รับคืน" ใบรับเรื่องเลขที่ ${conNoUnique.join('\n')}\nยังระบุข้อมูลการ "รับเอกสาร" ไม่ครบ คุณต้องการบันทึกข้อมูลหรือไม่?`))
         return
@@ -205,6 +261,13 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);
+      if (this.mode == this.ActionMode.Edit) {
+        this.router.navigate(['ris/clear-money-detail', this.code]);
+      } else {
+        setTimeout(() => {
+          location.reload();
+        }, 400);
+      }
     }, () => toastr.error(message.failed));
     // console.log(listCon);
     // console.log(listConItem);

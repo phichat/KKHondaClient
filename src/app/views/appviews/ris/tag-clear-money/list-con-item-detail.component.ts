@@ -62,7 +62,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         const url = `${this.risUrl}/ConItem/GetByConNo`;
         return this.http.get<ICarRegisItemRes>(url, { params })
       }),
-      delay(300)
+      // delay(300)
     ).subscribe(x => {
       if (x == null) {
         this.loading = this.LoadEnt.noRecord;
@@ -70,10 +70,9 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
       };
       const listConItem = x.carRegisListItemRes
         .map(o => {
-          const obj = { ...o };
-          obj.dateReceipt = obj.dateReceipt != null ? this.setDateMyDatepicker(obj.dateReceipt) : null;
-          obj.state = obj.state != null ? obj.state.toString() : null;
-          return obj;
+          o.dateReceipt = o.dateReceipt != null ? this.setDateMyDatepicker(o.dateReceipt) : null;
+          o.state = o.state != null ? o.state.toString() : null;
+          return o;
         });
       this.setItemFormArray(listConItem, this.formGroup, 'ConListItem');
       this.ConListItemValueChange(listConItem);
@@ -117,7 +116,6 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     this.s_clearMoney.setListConItemBehaviorSubject(value)
     this.ConListItem.valueChanges.subscribe((x: IConItemRes[]) => {
       if (!x.length) return;
-      this.s_clearMoney.setListConItemBehaviorSubject(x);
       const state1 = x.filter(o => o.state != null).length ? 1 : null;
       const cutBalance = x.reduce((a, c) => {
         return (c.state != 2 && c.state != 3) ? a += c.itemCutBalance : a;
@@ -135,7 +133,8 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         state1: state1,
         state2: state2,
         cutBalance: cutBalance
-      })
+      });
+      this.s_clearMoney.setListConItemBehaviorSubject(x);
     });
   }
 

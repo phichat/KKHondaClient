@@ -13,6 +13,9 @@ export class ClearMoneyConfig extends RisConfig {
     public loading: number;
     public mUser: ModelUser;
 
+    public mode: number;
+    public code: string;
+
     public clReceivePriceState: number;
 
     public sedDropDown: any[];

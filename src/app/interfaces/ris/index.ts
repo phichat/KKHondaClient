@@ -5,3 +5,4 @@ export * from './con-item-res.interface';
 export * from './m-sendback.interface';
 export * from './con-list.interface';
 export * from './con-item-doc.interface';
+export * from './regis-rev.interface';
