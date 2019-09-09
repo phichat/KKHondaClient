@@ -73,9 +73,9 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
 
       const listConItem = x.carRegisListItemRes
         .map(o => {
-          if (o.dateReceipt != null) {
-            o.dateReceipt = o.dateReceipt.date ? o.dateReceipt : this.setDateMyDatepicker(o.dateReceipt);
-          }
+          // if (o.dateReceipt != null) {
+          //   o.dateReceipt = o.dateReceipt.date ? o.dateReceipt : this.setDateMyDatepicker(o.dateReceipt);
+          // }
           o.state = o.state != null ? o.state.toString() : null;
           return o;
         });

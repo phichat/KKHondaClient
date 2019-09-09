@@ -62,8 +62,9 @@
                   {{item.get('itemPrice1').value + item.get('itemVatPrice1').value | number:'1.2-2'}}
                 </td>
                 <td style="vertical-align: middle;" class="text-center">
-                  <my-date-picker-th [options]="myDatePickerOptions" formControlName="dateReceipt" [disabled]="$Mode == ActionMode.Detail">
-                  </my-date-picker-th>
+                  <input type="date" formControlName="dateReceipt" class="form-control">
+                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="dateReceipt" [disabled]="$Mode == ActionMode.Detail">
+                  </my-date-picker-th> -->
                 </td>
                 <td style="vertical-align: middle;">
                   <input type="text" class="form-control" formControlName="remark">
