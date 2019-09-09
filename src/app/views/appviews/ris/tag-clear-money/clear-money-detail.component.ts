@@ -8,7 +8,7 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, tap, mergeMap, map } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
 import { IRevListRes, ISedRes, IRevWithSedItem } from 'app/interfaces/ris';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of, combineLatest } from 'rxjs';
 import { DropDownModel } from 'app/models/drop-down-model';
 declare var toastr: any;
@@ -25,6 +25,7 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private activeRoute: ActivatedRoute,
     private http: HttpClient,
     private s_user: UserService,
@@ -85,6 +86,7 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
     ).subscribe(p => {
       this.chRef.markForCheck();
       if (p.curretUser == null) return;
+      this.code = p.params.code;
       const params = { revNo: p.params.code };
       this.http.get(`${this.risUrl}/Rev/GetByRevNo`, { params }).pipe(
         tap(() => this.s_loader.showLoader()),
@@ -103,7 +105,7 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
         finalize(() => this.s_loader.onEnd())
       ).subscribe((o: IRevWithSedItem) => {
         o.revItem.updateBy = p.curretUser.id;
-        o.revItem.updateDate = new Date();
+        // o.revItem.updateDate = new Date();
         o.revItem.sedCreateName = o.sedItem.createName
         this.formGroup.patchValue({ ...o.revItem });
         this.$SedItem.next(o.sedItem);
@@ -114,6 +116,17 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
   }
 
   onSubmit() {
+    if (!confirm('ยืนยันการยกเลิก "บันทึกรับคืนเรื่อง" หรือไม่?'))
+      return;
+
+    const url = `${this.risUrl}/REV/Cancel`;
+    const f = { ...this.formGroup.value };
+    this.http.post(url, f).pipe(
+      finalize(() => this.s_loader.onEnd())
+    ).subscribe(() => {
+      toastr.success(message.canceled);
+      this.router.navigate(['ris/clear-money-list']);
+    }, () => toastr.error(message.failed));
 
   }
 }

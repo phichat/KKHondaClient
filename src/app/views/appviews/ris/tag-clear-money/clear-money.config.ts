@@ -25,6 +25,7 @@ export class ClearMoneyConfig extends RisConfig {
     public searchSedLoading: boolean;
     public searchSedLoadingTxt: string;
     public RevStatus = RevStatus;
+    public SedStatus = SedStatus;
     public ActionMode = ActionMode;
 
     public TagListItem$ = new BehaviorSubject<any[]>([]);
