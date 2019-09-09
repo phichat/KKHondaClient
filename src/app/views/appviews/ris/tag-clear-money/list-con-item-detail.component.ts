@@ -70,17 +70,16 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         this.loading = this.LoadEnt.noRecord;
         return;
       };
-      
+
       const listConItem = x.carRegisListItemRes
         .map(o => {
           if (o.dateReceipt != null) {
-            o.dateReceipt = o.dateReceipt.date ? o.dateReceipt.date : this.setDateMyDatepicker(o.dateReceipt);
-          } 
+            o.dateReceipt = o.dateReceipt.date ? o.dateReceipt : this.setDateMyDatepicker(o.dateReceipt);
+          }
           o.state = o.state != null ? o.state.toString() : null;
           return o;
         });
-      console.log(listConItem);
-      
+
       this.setItemFormArray(listConItem, this.formGroup, 'ConListItem');
       this.ConListItemValueChange(listConItem);
 
@@ -133,6 +132,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     this.s_clearMoney.setListConItemBehaviorSubject(value)
     this.ConListItem.valueChanges.subscribe((x: IConItemRes[]) => {
       if (!x.length) return;
+      this.s_clearMoney.setListConItemBehaviorSubject(x);
       const state1 = x.filter(o => o.state != null).length ? 1 : null;
       const cutBalance = x.reduce((a, c) => {
         return (c.state != 2 && c.state != 3) ? a += c.itemCutBalance : a;
@@ -151,7 +151,6 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
         state2: state2,
         cutBalance: cutBalance
       });
-      this.s_clearMoney.setListConItemBehaviorSubject(x);
     });
   }
 

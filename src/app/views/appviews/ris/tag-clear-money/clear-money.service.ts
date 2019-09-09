@@ -43,10 +43,10 @@ export class ClearMoneyService {
             const count = copyItem.filter(x => x.bookingNo == bookingNo).length;
             item = count > 0
                 ? copyItem.map(x => {
+                    // const i = value.findIndex(o => o.bookingId == x.bookingId && o.runId == x.runId);
                     const res = value.find(o => o.bookingNo == x.bookingNo && o.runId == x.runId);
                     return res ? res : x;
-                })
-                : [...copyItem, ...value];
+                }) : [...copyItem, ...value];
         }
         this.listConItemBehaviorSubject.next(item);
     }

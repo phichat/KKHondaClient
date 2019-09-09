@@ -23,16 +23,26 @@
             <div class="ibox-content">
                 <div class="row form-group">
                     <div class="col-xs-6 col-lg-6">
-                        <label class="col-md-3 control-label required">อ้างอิงใบส่งเรื่อง</label>
-                        <div class="col-md-9">
+                        <label class="col-md-4 control-label required">เลขที่เอกสาร</label>
+                        <div class="col-md-8">
+                            <span class="form-control disabled">
+                                {{formGroup.get('revNo').value}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-md-4 control-label required">อ้างอิงใบส่งเรื่อง</label>
+                        <div class="col-md-8">
                             <span class="form-control disabled">
                                 {{formGroup.get('sedNo').value}}
                             </span>
                         </div>
                     </div>
                     <div class="col-xs-6 col-lg-6">
-                        <label class="col-md-3 control-label">ผู้ดำเนินการ</label>
-                        <div class="col-md-9">
+                        <label class="col-md-4 control-label">ผู้ดำเนินการ</label>
+                        <div class="col-md-8">
                             <span class="form-control disabled">
                                 {{formGroup.get('sedCreateName').value}}
                             </span>
@@ -43,16 +53,16 @@
 
                 <div class="row form-group">
                     <div class="col-xs-6 col-lg-6">
-                        <label class="col-md-3 control-label">วันที่ทำรายการ</label>
-                        <div class="col-md-9">
+                        <label class="col-md-4 control-label">วันที่ทำรายการ</label>
+                        <div class="col-md-8">
                             <span class="form-control disabled">
                                 {{displayLocalDate(formGroup.get('createDate').value)}}
                             </span>
                         </div>
                     </div>
                     <div class="col-xs-6 col-lg-6">
-                        <label class="col-md-3 control-label required">ผู้รับเรื่องคืน</label>
-                        <div class="col-md-9">
+                        <label class="col-md-4 control-label required">ผู้รับเรื่องคืน</label>
+                        <div class="col-md-8">
                             <span class="form-control disabled">
                                 {{formGroup.get('createName').value}}
                             </span>
@@ -62,10 +72,26 @@
 
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
-                        <label class="col-md-3 control-label">หมายเหตุ</label>
-                        <div class="col-md-9">
+                        <label class="col-md-4 control-label">หมายเหตุ</label>
+                        <div class="col-md-8">
                             <textarea class="form-control" rows="1" formControlName="remark" readonly></textarea>
                         </div>
+                    </div>
+                    <div class="col-xs-6 col-lg-6">
+                        <ng-container *ngIf="formGroup.get('status').value == RevStatus.Normal; else elseReason">
+                            <label class="col-md-4 control-label is-required">สาเหตุในการยกเลิก</label>
+                            <div class="col-md-8">
+                                <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
+                                    formControlName="reason">
+                                </ng-select>
+                            </div>
+                        </ng-container>
+                        <ng-template #elseReason>
+                            <label class="col-md-4 control-label">สาเหตุในการยกเลิก</label>
+                            <div class="col-md-8">
+                                <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </div>
@@ -102,7 +128,8 @@
 
                 <div class="hr-line-dashed"></div>
                 <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
-                <app-list-con-item-detail-component [$Mode]="ActionMode.Detail" [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
+                <app-list-con-item-detail-component [$Mode]="ActionMode.Detail" [$ConNo]="$ConNo"
+                    (ConItemOutput$)="$ConItemOutput.next($event)">
                 </app-list-con-item-detail-component>
 
                 <div class="hr-line-dashed"></div>
@@ -166,17 +193,16 @@
             </div>
         </div>
 
-        <div class="row m-t-md">
-            <!-- *ngIf="formGroup.get('bookingStatus').value != ConStatus.Cancel" -->
+        <div class="row m-t-md" *ngIf="formGroup.get('status').value != RevStatus.Cancel">
+            <!-- -->
             <div class="col-sm-6">
-                <!-- [routerLink]="['/ris/con-form-edit', code]" -->
-                <button type="button" class="btn btn-info btn-outline">
+                <button type="button" class="btn btn-info btn-outline" [routerLink]="['/ris/clear-money', ActionMode.Edit, code]">
                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
                     แก้ไข
                 </button>​</div>
             <div class="col-sm-6 text-right">
                 <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid">
-                    ยกเลิกรายการ
+                    ยกเลิกงาน
                 </button>
             </div>
 
