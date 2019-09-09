@@ -51,21 +51,21 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       updateDate: new FormControl(null),
       sedCreateBy: new FormControl(null),
       sedCreateName: new FormControl(null),
-      revId: new FormControl(null),
+      revId: new FormControl(0),
       revNo: new FormControl(null),
       sedNo: new FormControl(null),
       remark: new FormControl(null),
       branchId: new FormControl(null),
       totalPrice1: new FormControl(null),
-      totalVatPrice1: new FormControl(null),
-      totalNetPrice: new FormControl(null),
-      totalCutBalance: new FormControl(null),
-      totalPrice2: new FormControl(null),
-      totalIncome: new FormControl(null),
-      totalClBalancePrice: new FormControl(null),
-      totalClReceivePrice: new FormControl(null),
-      totalExpenses: new FormControl(null),
-      totalAccruedExpense: new FormControl(null),
+      totalVatPrice1: new FormControl(0),
+      totalNetPrice: new FormControl(0),
+      totalCutBalance: new FormControl(0),
+      totalPrice2: new FormControl(0),
+      totalIncome: new FormControl(0),
+      totalClBalancePrice: new FormControl(0),
+      totalClReceivePrice: new FormControl(0),
+      totalExpenses: new FormControl(0),
+      totalAccruedExpense: new FormControl(0),
       status: new FormControl(1)
     });
 
@@ -178,15 +178,16 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     this.AlOutput$.subscribe((x: IAlRes[]) => {
       this.chRef.markForCheck();
       const balance = x.reduce((a, c) => a += c.balancePrice, 0);
-      const cutBalance = this.formGroup.get('totalCutBalance').value;
+      const fgValue = this.formGroup.value;
+      const cutBalance = fgValue.totalCutBalance;
       const totalExpenses = this.calExpenses(balance, cutBalance);
       const receive = x.reduce((a, c) => a += c.receivePrice, 0);
       this.clReceivePriceState = receive;
       this.formGroup.patchValue({
-        totalClBalancePrice: balance.toFixed(2),
-        totalClReceivePrice: receive.toFixed(2),
-        totalAccruedExpense: balance.toFixed(2),
-        totalExpenses: totalExpenses.toFixed(2)
+        totalClBalancePrice: this.mode == this.ActionMode.Edit ? fgValue.totalClBalancePrice : balance.toFixed(2),
+        totalClReceivePrice: this.mode == this.ActionMode.Edit ? fgValue.totalClReceivePrice : receive.toFixed(2),
+        totalAccruedExpense: this.mode == this.ActionMode.Edit ? fgValue.totalAccruedExpense : balance.toFixed(2),
+        totalExpenses: this.mode == this.ActionMode.Edit ? fgValue.totalExpenses : totalExpenses.toFixed(2)
       });
       this.chRef.detectChanges();
     })
@@ -267,7 +268,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       } else {
         setTimeout(() => {
           location.reload();
-        }, 400);
+        }, 800);
       }
     }, () => toastr.error(message.failed));
     // console.log(listCon);
