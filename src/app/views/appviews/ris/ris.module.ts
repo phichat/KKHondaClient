@@ -28,7 +28,6 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { ClearMoneyCreateComponent } from './tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './tag-clear-money/clear-money-detail.component';
 import { ClearMoneyService } from './tag-clear-money/clear-money.service';
-import { ClearMoneyEditComponent } from './tag-clear-money/clear-money-edit.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +49,6 @@ import { ClearMoneyEditComponent } from './tag-clear-money/clear-money-edit.comp
     TagClearMoneyListComponent,
     TagBookWaitingListComponent,
     ClearMoneyCreateComponent,
-    ClearMoneyEditComponent,
     ClearMoneyDetailComponent,
     ListAlItemComponent,
     ListConItemComponent,

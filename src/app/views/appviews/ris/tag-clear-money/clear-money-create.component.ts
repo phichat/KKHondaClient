@@ -145,13 +145,13 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       });
     })
 
-    this.formGroup.get('totalClReceivePrice').valueChanges.subscribe((receive: string) => {
-      // const balance = this.formGroup.get('totalClBalancePrice').value;
+    this.formGroup.get('totalClReceivePrice').valueChanges.subscribe((receive: number) => {
+      const balance = this.formGroup.get('totalClBalancePrice').value;
       const totalPrice2 = this.formGroup.get('totalPrice2').value;
-      let receivePrice = this.clReceivePriceState == parseFloat(receive)
-        ? parseFloat(receive)
-        : this.clReceivePriceState + (parseFloat(receive) || 0);
-      const totalAccruedExpense = parseFloat(totalPrice2) - (receivePrice);
+      // let receivePrice = this.clReceivePriceState == parseFloat(receive)
+      //   ? parseFloat(receive)
+      //   : this.clReceivePriceState + (parseFloat(receive) || 0);
+      const totalAccruedExpense = parseFloat(balance) - receive;
       this.formGroup.patchValue({
         totalAccruedExpense: totalAccruedExpense.toFixed(2)
       })
@@ -182,10 +182,10 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       const cutBalance = fgValue.totalCutBalance;
       const totalExpenses = this.calExpenses(balance, cutBalance);
       const receive = x.reduce((a, c) => a += c.receivePrice, 0);
-      this.clReceivePriceState = receive;
+      // this.clReceivePriceState = receive;
       this.formGroup.patchValue({
         totalClBalancePrice: this.mode == this.ActionMode.Edit ? fgValue.totalClBalancePrice : balance.toFixed(2),
-        totalClReceivePrice: this.mode == this.ActionMode.Edit ? fgValue.totalClReceivePrice : receive.toFixed(2),
+        // totalClReceivePrice: this.mode == this.ActionMode.Edit ? fgValue.totalClReceivePrice : receive.toFixed(2),
         totalAccruedExpense: this.mode == this.ActionMode.Edit ? fgValue.totalAccruedExpense : balance.toFixed(2),
         totalExpenses: this.mode == this.ActionMode.Edit ? fgValue.totalExpenses : totalExpenses.toFixed(2)
       });

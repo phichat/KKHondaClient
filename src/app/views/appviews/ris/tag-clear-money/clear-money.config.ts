@@ -18,7 +18,7 @@ export class ClearMoneyConfig extends RisConfig {
     public code: string;
     public reasonDropdown: DropDownModel[];
 
-    public clReceivePriceState: number;
+    // public clReceivePriceState: number;
 
     public sedDropDown: any[];
     public searchTypeahead = new EventEmitter<string>();
