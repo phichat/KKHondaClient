@@ -1,5 +1,5 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-10">
+  <div class="col-lg-8">
     <h2>บันทึกรับเรื่อง</h2>
     <ol class="breadcrumb">
       <li>
@@ -11,7 +11,12 @@
       </li>
     </ol>
   </div>
-  <div class="col-lg-2 text-right pull-right">
+  <div class="col-lg-4 text-right pull-right">
+    <button class="btn btn-success m-t-md" type="button" (click)="printDeposit()">
+      <i class="fa fa-print"></i> ใบรับฝากเงิน</button>
+    &nbsp;
+    <button class="btn btn-success m-t-md" type="button" (click)="printPayment()">
+      <i class="fa fa-print"></i> ใบรับชำระเงิน</button>
     <h3>&nbsp;</h3>
   </div>
 </div>
