@@ -37,6 +37,7 @@ import { TagConFormEditComponent } from './views/appviews/ris/tag-con-form/tag-c
 import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money-list/tag-clear-money-list.component';
 import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
+import { ReportBalanceStock1Component } from './views/appviews/report-balance-stock1/report-balance-stock1.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -83,7 +84,8 @@ export const ROUTES: Routes = [
     children: [
       { path: 'booking', component: ReportBookingComponent },
       { path: 'credit-note', component: ReportCreditNoteComponent },
-      { path: 'sale-report', component: ReportSaleComponent }
+      { path: 'sale-report', component: ReportSaleComponent },
+      { path: 'balance-stock1', component: ReportBalanceStock1Component }
     ], canActivate: [GuardGuard]
   },
   {

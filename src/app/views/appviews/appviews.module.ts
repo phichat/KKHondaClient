@@ -16,10 +16,11 @@ import { StarterComponent } from './starter/starter.component';
 import { FormsModule } from '@angular/forms';
 import { CreditModule } from './credit/credit.module';
 import { CustomerService } from '../../services/customers';
+import { RISModule } from './ris/ris.module';
 import { ReportBookingModule } from './report-booking/report-booking.module';
 import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
 import { ReportSaleModule } from './report-sale/report-sale.module';
-import { RISModule } from './ris/ris.module';
+import { ReportBalanceStock1Module } from './report-balance-stock1/report-balance-stock1.module';
 
 @NgModule({
   declarations: [
@@ -35,10 +36,11 @@ import { RISModule } from './ris/ris.module';
     SparklineModule,
     IboxtoolsModule,
     CreditModule,
+    RISModule,
     ReportBookingModule,
     ReportCreditNoteModule,
     ReportSaleModule,
-    RISModule
+    ReportBalanceStock1Module
   ],
   exports: [
     // IcheckDirective

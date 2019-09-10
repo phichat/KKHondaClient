@@ -32,16 +32,16 @@ export class UserService {
       })
     }
 
-    if (getCookie('id')) {
-      const id = getCookie('id');
-      this.getUserById(id).then(x => {
-        if (x == null) {
-          this.signOut();
-          return;
-        }
-        this.changeData(x)
-      });
-    }
+    // if (getCookie('id')) {
+    //   const id = getCookie('id');
+    //   this.getUserById(id).then(x => {
+    //     if (x == null) {
+    //       this.signOut();
+    //       return;
+    //     }
+    //     this.changeData(x)
+    //   });
+    // }
   }
 
   changeData(data: ModelUser) {
