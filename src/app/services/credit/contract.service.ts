@@ -46,21 +46,21 @@ export class ContractService {
     }
 
     Edit(creditContract: ContractModel, booking: BookingModel) {
-        const params = JSON.stringify({contract: creditContract, booking});
+        const params = {contract: creditContract, booking};
         const apiURL = `${this.url}/Edit`;
 
         return this.httpService.post(apiURL, params);
     }
 
     Create(creditContract: ContractModel, booking: BookingModel) {
-        const params = JSON.stringify({contract: creditContract, booking});
+        const params = {contract: creditContract, booking};
         const apiURL = `${this.url}/Create`;
 
         return this.httpService.post(apiURL, params);
     }
 
     Termination(from: any) {
-        const params = JSON.stringify(from);
+        const params = from;
         const apiURL = `${this.url}/ContractTermination`;
 
         return this.httpService.post(apiURL, params);

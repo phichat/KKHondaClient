@@ -41,19 +41,19 @@ export class CalculateService {
     }
 
     Create(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
-        const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
+        const params = { creditCalculate, creditContract, creditContactItem };
         const apiURL = `${this.url}/Create`;
         return this.httpService.post(apiURL, params);
     }
 
     Edit(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
-        const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
+        const params = { creditCalculate, creditContract, creditContactItem };
         const apiURL = `${this.url}/Edit`;
         return this.httpService.post(apiURL, params);
     }
 
     Revice(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
-        const params = JSON.stringify({ creditCalculate, creditContract, creditContactItem });
+        const params = { creditCalculate, creditContract, creditContactItem };
         const apiURL = `${this.url}/Revice`;
         return this.httpService.post(apiURL, params);
     }

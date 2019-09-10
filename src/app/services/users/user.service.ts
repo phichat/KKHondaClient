@@ -26,11 +26,11 @@ export class UserService {
 
   constructor(private http: HttpClient) {
 
-    if (isDevMode()) {
+    // if (isDevMode()) {
       this.__user.map(async x => {
         await this.setCookie(x.name, x.value);
       })
-    }
+    // }
 
     if (getCookie('id')) {
       const id = getCookie('id');
