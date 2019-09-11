@@ -150,7 +150,7 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
   }
 
   printSed() {
-    const url = `${appConfig.reportUrl}/RIS/index.aspx?sedNo=${this.formGroup.get('sedNo').value}`;
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?sedNo=${this.formGroup.get('sedNo').value}&formSed=true`;
     window.open(url, '_blank');
   }
 }
