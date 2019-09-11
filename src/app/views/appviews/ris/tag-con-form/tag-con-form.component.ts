@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { combineLatest } from 'rxjs';
+import { DropDownModel } from 'app/models/drop-down-model';
+import { appConfig } from 'app/app.config';
 declare var toastr: any;
 
 @Component({
@@ -35,6 +37,8 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       'closeButton': true,
       'progressBar': true,
     }
+
+
   }
 
   ngOnInit() {
@@ -56,7 +60,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
       totalPrice: new FormControl(null)
-    })
+    });
 
     this.TagListItem$.subscribe(x => {
       this.chRef.markForCheck();
@@ -85,7 +89,12 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
             this.http.get(url, { params }),
             this.s_user.currentData
           ).pipe(
-            map(o => { return { car: o[0] as any, currentUser: o[1] } })
+            map(o => {
+              return {
+                car: o[0] as any,
+                currentUser: o[1]
+              }
+            })
           )
         })
       ).subscribe(x => {

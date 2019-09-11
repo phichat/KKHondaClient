@@ -3,6 +3,7 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Output, Input, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 export class ListItemConfig extends TagConFormConfig {
     public formGroup: FormGroup;
@@ -10,6 +11,8 @@ export class ListItemConfig extends TagConFormConfig {
     public formExpenses: FormGroup;
     public expenses: any[] = [];
     public loading: number;
+    public provinceDropdown: DropDownModel[];
+    public insureDropdown: DropDownModel[];
 
     get CarRegisListItem(): FormArray {
         return this.formGroup.get('carRegisListItem') as FormArray;

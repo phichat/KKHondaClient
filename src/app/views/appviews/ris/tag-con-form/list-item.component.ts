@@ -2,10 +2,11 @@ import { OnInit, Component, ChangeDetectorRef, ChangeDetectionStrategy, OnDestro
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormControl, FormControlName, Validators } from '@angular/forms';
 import { ListItemConfig } from './list-item.config';
-import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
+import { getDateMyDatepicker, setZeroHours, appConfig } from 'app/app.config';
 import { mergeMap, merge, map } from 'rxjs/operators';
 import { combineLatest, of } from 'rxjs';
 import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 @Component({
   selector: 'app-list-item',
@@ -73,6 +74,22 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       otPrice2: new FormControl(0),
       otVatPrice1: new FormControl(0),
       otIsVat: new FormControl(false)
+    })
+
+    const mProvince = `${appConfig.apiUrl}/Master/MProvince/DropDown`;
+    const mInsure = `${appConfig.apiUrl}/Master/CompanyInsurance/DropDown`;
+    const observe = combineLatest(
+      this.http.get<DropDownModel[]>(mProvince),
+      this.http.get<DropDownModel[]>(mInsure),
+    ).pipe(
+      map(x => {
+        return { mProvince: x[0], mInsure: x[1] }
+      })
+    )
+
+    observe.subscribe(x => {
+      this.provinceDropdown = x.mProvince;
+      this.insureDropdown = x.mInsure;
     })
 
     if (this.Mode != this.ActionMode.Detail) {
