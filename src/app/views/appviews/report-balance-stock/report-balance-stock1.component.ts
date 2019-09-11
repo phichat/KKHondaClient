@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportBookingService } from '../report-booking/report-booking.service';
 import { AutoCompleteModel } from 'app/models/auto-complete-model';
-import { ReportBalanceStock1 } from './report-balance-stock1';
+import { ReportBalanceStock } from './report-balance-stock';
 import {
   mapDropDownnToAutoComplete,
   MyDatePickerOptions,
@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-report-balance-stock1',
   templateUrl: './report-balance-stock1.component.html',
-  styleUrls: ['./report-balance-stock1.component.scss']
+  styleUrls: ['./report-balance-stock.component.scss']
 })
 export class ReportBalanceStock1Component implements OnInit {
 
@@ -29,14 +29,11 @@ export class ReportBalanceStock1Component implements OnInit {
   ACColor: AutoCompleteModel[];
   ACSell: AutoCompleteModel[]
 
-  formModel = new ReportBalanceStock1();
+  formModel = new ReportBalanceStock();
 
   ngOnInit() {
     this.formModel.branchType = '1';
     this.formModel.brandType = '1';
-    this.formModel.isSellName = '1';
-    this.formModel.isPaymentType = '1';
-    this.formModel.isSellDate = '1';
 
     this.s_ReportBooking.GetSellNameAutoComplete().subscribe(x => {
       this.ACSell = mapDropDownnToAutoComplete(x);
@@ -59,8 +56,8 @@ export class ReportBalanceStock1Component implements OnInit {
   }
 
   onPrint(form: any) {
-    const fm = <ReportBalanceStock1>form.value;
-    let strParameter = "?SaleReport=true"; // page;
+    const fm = <ReportBalanceStock>form.value;
+    let strParameter = "?BalanceStockReport=true"; // page;
 
     //สาขา
     strParameter += "&branchType=" + fm.branchType;
@@ -80,24 +77,9 @@ export class ReportBalanceStock1Component implements OnInit {
     strParameter += "&version=" + (version || 0);
     strParameter += "&design=" + (design || 0);
     strParameter += "&color=" + (color || 0);
+    strParameter += "&itemType=1";
 
-    //ชื่อขาย 
-    const sellId = (fm.isSellName == '1' ? "" : fm.SellId);
-    strParameter += "&isSellName=" + fm.isSellName;
-    strParameter += "&SellId=" + (sellId || "");
-
-    //สถานะใบจอง
-    const paymentTypeId = (fm.isPaymentType == '1' ? 0 : fm.paymentTypeId);
-    strParameter += "&isPaymentType=" + fm.isPaymentType;
-    strParameter += "&paymentTypeId=" + paymentTypeId;
-
-    //วันที่ขาย
-    const sDate = (fm.isSellDate == '1' ? "" : fm.sDate);
-    const eDate = (fm.isSellDate == '1' ? "" : fm.eDate);
-    strParameter += "&isSellDate=" + fm.isSellDate;
-    strParameter += "&sDate=" + (sDate ? setZeroHours(getDateMyDatepicker(sDate)) : '');
-    strParameter += "&eDate=" + (eDate ? setZeroHours(getDateMyDatepicker(eDate)) : '');
-
-    window.open(`${appConfig.reportUrl}/MCS/indexMCS2.aspx` + strParameter, '_blank');
+    window.open(`http://localhost:58874/MCS/indexMCS2.aspx` + strParameter, '_blank');
+    // window.open(`${appConfig.reportUrl}/MCS/indexMCS2.aspx` + strParameter, '_blank');
   }
 }

@@ -6,9 +6,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ReportBalanceStock1Component } from './report-balance-stock1.component';
+import { ReportBalanceStock2Component } from './report-balance-stock2.component';
 
 @NgModule({
-  declarations: [ReportBalanceStock1Component],
+  declarations: [
+    ReportBalanceStock1Component,
+    ReportBalanceStock2Component
+  ],
   imports: [
     CommonModule,
     BrowserModule,
@@ -19,4 +23,4 @@ import { ReportBalanceStock1Component } from './report-balance-stock1.component'
     NgSelectModule
   ]
 })
-export class ReportBalanceStock1Module { }
+export class ReportBalanceStockModule { }

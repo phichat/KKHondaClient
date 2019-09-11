@@ -1,7 +1,7 @@
 import { AutoCompleteModel } from 'app/models/auto-complete-model';
 import { IMyDateModel } from 'mydatepicker-th';
 
-export class ReportBalanceStock1 {
+export class ReportBalanceStock {
     branchType: string;
     branchId: AutoCompleteModel[];
 
@@ -11,13 +11,4 @@ export class ReportBalanceStock1 {
     design: AutoCompleteModel[];
     color: AutoCompleteModel[];
 
-    isSellName: string;
-    SellId: string;
-
-    isPaymentType: string;
-    paymentTypeId: string;
-
-    isSellDate: string;
-    sDate: IMyDateModel;
-    eDate: IMyDateModel;
 }

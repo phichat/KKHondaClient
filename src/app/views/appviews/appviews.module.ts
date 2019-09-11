@@ -20,7 +20,7 @@ import { RISModule } from './ris/ris.module';
 import { ReportBookingModule } from './report-booking/report-booking.module';
 import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
 import { ReportSaleModule } from './report-sale/report-sale.module';
-import { ReportBalanceStock1Module } from './report-balance-stock1/report-balance-stock1.module';
+import { ReportBalanceStockModule } from './report-balance-stock/report-balance-stock.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { ReportBalanceStock1Module } from './report-balance-stock1/report-balanc
     ReportBookingModule,
     ReportCreditNoteModule,
     ReportSaleModule,
-    ReportBalanceStock1Module
+    ReportBalanceStockModule
   ],
   exports: [
     // IcheckDirective

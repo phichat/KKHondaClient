@@ -378,6 +378,11 @@
                             <span class="nav-label">รายงานสินค้าคงเหลือขาย (รถ)</span>
                         </a>
                     </li>
+                    <li [ngClass]="{active: activeRoute('balance-stock2')}">
+                        <a [routerLink]="['/report/balance-stock2']">
+                            <span class="nav-label">รายงานสินค้าคงเหลือขาย (อะไหล่)</span>
+                        </a>
+                    </li>
                     <!-- <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_bike">
                             <span class="nav-label">สต๊อกสินค้า (รถ)</span>

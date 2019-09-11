@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>รายงานยอดขายรวม</h2>
+        <h2>รายงานสินค้าคงเหลือขาย (รถ)</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="/">หน้าแรก</a>
             </li>
             <li class="active">
-                <strong>รายงานยอดขายรวม</strong>
+                <strong>รายงานสินค้าคงเหลือขาย (รถ)</strong>
             </li>
         </ol>
     </div>
@@ -73,74 +73,6 @@
                         <ng-select [items]="ACColor" [hideSelected]="true" multiple="true" bindLabel="name" name="color"
                             [(ngModel)]="formModel.color" placeholder="เลือกสี" [disabled]="formModel.brandType == '1'">
                         </ng-select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="03" class="col-sm-2 control-label">พนักงานขาย</label>
-            <div class="col-sm-4">
-                <div class="radio radio-info">
-                    <input id="sell1" type="radio" name="isSellName" value="1" [(ngModel)]="formModel.isSellName">
-                    <label for="sell1">ทั้งหมด</label>
-                </div>
-                <div class="radio radio-info">
-                    <input id="sell2" type="radio" name="isSellName" value="2" [(ngModel)]="formModel.isSellName">
-                    <label for="sell2">ชื่อพนักงานขาย</label>
-                </div>
-                <ng-select [items]="ACSell" [hideSelected]="true" multiple="true" bindLabel="name" name="SellId"
-                    [(ngModel)]="formModel.SellId" placeholder="เลือกพนักงานขาย" [disabled]="formModel.isSellName == '1'">
-                </ng-select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="04" class="col-sm-2 control-label">กิจกรรมการขาย</label>
-            <div class="col-sm-4">
-                <div class="radio radio-info">
-                    <input id="isPayment1" type="radio" name="isPaymentType" value="1" [(ngModel)]="formModel.isPaymentType">
-                    <label for="isPayment1">ทั้งหมด</label>
-                </div>
-                <div class="radio radio-info">
-                    <input id="isPayment2" type="radio" name="isPaymentType" value="2" [(ngModel)]="formModel.isPaymentType">
-                    <label for="isPayment2">เฉพาะ</label>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <select class="form-control" id="ddlPaymentType" [disabled]="formModel.isPaymentType == '1'">
-                            <option value="" disabled selected></option>
-                            <option value="1">เงินสด</option>
-                            <option value="2">โอน</option>
-                            <option value="3">เช็ค</option>
-                            <option value="4">บัตรเครดิต</option>
-                            <option value="5">เครดิตเทอม</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="05" class="col-sm-2 control-label">วันที่ขาย</label>
-            <div class="col-sm-8">
-                <div class="radio radio-info">
-                    <input id=bookingDate1 type="radio" name="isSellDate" value="1" checked [(ngModel)]="formModel.isSellDate">
-                    <label for=bookingDate1>ทั้งหมด</label>
-                </div>
-                <div class="radio radio-info">
-                    <input id=bookingDate2 type="radio" name="isSellDate" value="2" [(ngModel)]="formModel.isSellDate">
-                    <label for=bookingDate2>ตั้งแต่</label>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-4">
-                        <my-date-picker-th [options]="myDatePickerOptions" name="sDate" [(ngModel)]="formModel.sDate"
-                            [disabled]="formModel.isSellDate == '1'"></my-date-picker-th>
-                    </div>
-                    <label for="inputEmail3" class="col-md-1">ถึง</label>
-                    <div class="col-md-4">
-                        <my-date-picker-th [options]="myDatePickerOptions" name="eDate" [(ngModel)]="formModel.eDate"
-                            [disabled]="formModel.isSellDate == '1'"></my-date-picker-th>
                     </div>
                 </div>
             </div>
