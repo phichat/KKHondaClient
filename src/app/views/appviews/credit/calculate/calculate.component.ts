@@ -381,7 +381,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     async onSubmit(f: any) {
-        let form = this.model;
+        let form = {...this.model};
         const firstPayment = getDateMyDatepicker(form.firstPayment);
         form.firstPayment = setZeroHours(firstPayment);
 

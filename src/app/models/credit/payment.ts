@@ -16,6 +16,7 @@ export class PaymentFG {
     paymentType: number;
     dueDate: any;
     payDate: any;
+    revenueStamp: number;
     payNetPrice: number;
     fineSume: number;
     fineSumeOther: number;
@@ -75,7 +76,7 @@ export class ContractItem {
     taxInvoiceNo: string;
     instalmentNo: number;
     dueDate: Date;
-    payDate: Date;
+    payDate: any;
     balanceNetPrice: number;
     payNetPrice: number; 
     paymentType: number;

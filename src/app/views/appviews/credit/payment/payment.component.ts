@@ -117,7 +117,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         contractId: item.contract.contractId,
         instalmentNo: res.instalmentNo,
         dueDate: (res.dueDate),
-        payDate: (res.payDate),
+        payDate: res.payDate,
         balanceNetPrice: res.balanceNetPrice,
         payNetPrice: res.payNetPrice,
         paymentType: res.paymentType,
@@ -147,7 +147,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paymentModel.payeer = this.user.id.toString();
     this.paymentModel.updateBy = this.user.id.toString();
     this.paymentModel.branchId = this.user.branch;
-    this.paymentModel.payDate = setZeroHours(new Date());
+    this.paymentModel.payDate = { myDate: null };
     this.paymentModel.outstanding = outstandingPrice;
 
     this.reInitDatatable();
@@ -174,7 +174,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paymentModel.fineSume = fineSumRemain;
     this.paymentModel.balanceNetPrice = balanceNetPrice;
     this.paymentModel.payNetPrice = balanceNetPrice;
-    this.paymentModel.totalPrice = balanceNetPrice + fineSumRemain;
+    this.paymentModel.totalPrice = (this.paymentModel.revenueStamp | 0) + balanceNetPrice + fineSumRemain;
     this.paymentModel.payDate = { myDate: null };
   }
 
@@ -199,8 +199,8 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
       this._paymentService.PaymentTerm(frm).subscribe((x) => {
-        toastr.success(message.canceled);
-
+        toastr.success(message.created);
+        
         this.loadCreditPayment(x);
       }, () => {
         toastr.error(message.failed);
@@ -256,12 +256,13 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onCalculate() {
-    const payNetPrice = this.paymentModel.payNetPrice ? currencyToFloat(this.paymentModel.payNetPrice.toString()) : 0;
-    const fineSum = this.paymentModel.fineSume ? currencyToFloat(this.paymentModel.fineSume.toString()) : 0;
-    const fineSumOther = this.paymentModel.fineSumeOther ? currencyToFloat(this.paymentModel.fineSumeOther.toString()) : 0;
-    const disCountPrice = this.paymentModel.disCountPrice ? currencyToFloat(this.paymentModel.disCountPrice.toString()) : 0;
+    const payNetPrice = this.paymentModel.payNetPrice | 0;
+    const fineSum = this.paymentModel.fineSume | 0;
+    const fineSumOther = this.paymentModel.fineSumeOther | 0;
+    const disCountPrice = this.paymentModel.disCountPrice | 0;
+    const revenueStamp = this.paymentModel.revenueStamp | 0;
 
-    this.paymentModel.totalPrice = (payNetPrice + fineSum + fineSumOther) - disCountPrice;
+    this.paymentModel.totalPrice = (revenueStamp + payNetPrice + fineSum + fineSumOther) - disCountPrice;
     this.paymentModel.disCountRate = (disCountPrice * 100) / payNetPrice;
   }
 

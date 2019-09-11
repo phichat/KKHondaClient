@@ -42,12 +42,20 @@
             <tr *ngIf="SedList.length == 0; else else_tr;">
               <td colspan="8" class="text-center">
                 <div [ngSwitch]="loading">
-                  <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
-                  <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                  <div *ngSwitchCase="1">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>ไม่มีข้อมูล</p>
+                  </div>
+                  <div *ngSwitchCase="2">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>มีบางอย่างผิดพลาด</p>
+                  </div>
                   <div *ngSwitchDefault>
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <br>
-                    <span class="mt-2">รอสักครู่...</span>
+                    <p>รอสักครู่...</p>
                   </div>
                 </div>
               </td>
@@ -56,7 +64,8 @@
               <tr *ngFor="let item of SedList.controls; let i = index" [formGroupName]="i">
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">
-                  <button type="button" class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/al-form-detail', item.get('alNo').value]">
+                  <button type="button" class="btn btn-info btn-outline btn-xs"
+                    [routerLink]="['/ris/al-form-detail', item.get('alNo').value]">
                     <i class="fa fa-info-circle"></i>
                     รายละเอียด
                   </button>

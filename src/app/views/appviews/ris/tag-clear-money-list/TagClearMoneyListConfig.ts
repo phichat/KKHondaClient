@@ -1,7 +1,9 @@
 import { RisConfig } from '../ris.config';
-import { SedStatus } from 'app/entities/ris.entities';
+import { SedStatus, RevStatus } from 'app/entities/ris.entities';
+import { ActionMode } from 'app/entities/general.entities';
 export class TagClearMoneyListConfig extends RisConfig {
-  SedList: any[] = [];
+  RevList: any[] = [];
   loading: number;
-  SedStatus = SedStatus;
+  RevStatus = RevStatus;
+  ActionMode = ActionMode;
 }

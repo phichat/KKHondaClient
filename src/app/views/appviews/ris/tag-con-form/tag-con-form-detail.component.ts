@@ -108,4 +108,14 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     }, () => toastr.error(message.failed))
   }
 
+  printDeposit() {
+    const url = `${appConfig.apikkWeb}/php/print_registertag_deposit.php?booking_id=${this.formGroup.get('bookingId').value}`;
+    window.open(url, '_blank');
+  }
+
+  printPayment() {
+    const url = `${appConfig.apikkWeb}/php/print_registertag_payment.php?booking_id=${this.formGroup.get('bookingId').value}`;
+    window.open(url, '_blank');
+  }
+
 }

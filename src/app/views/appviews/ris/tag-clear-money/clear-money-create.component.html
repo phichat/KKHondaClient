@@ -26,33 +26,40 @@
           <div class="col-xs-6 col-lg-6">
             <label class="col-md-3 control-label required">อ้างอิงใบส่งเรื่อง</label>
             <div class="col-md-9">
-              <ng-select [items]="sedDropDown" [typeahead]="searchTypeahead" (change)="selectItemSed($event)"
-                name="logReceiveId" dropdownPosition="auto" bindLabel="text" bindValue="value" labelForId="model"
-                [virtualScroll]="true" placeholder="ค้นหาเลขที่ใบส่งเรื่อง" [loading]="searchSedLoading"
-                [loadingText]="searchSedLoadingTxt">
-                <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                  <h3 class="no-margins text-navy">{{item.sedNo}}</h3>
-                  <table class="table small m-t-sm m-b-sm">
-                    <tbody>
-                      <tr>
-                        <td><b>ผู้ดำเนินการ </b>{{item.createName}}</td>
-                        <td><b>สาขา </b>{{item.branchName}}</td>
-                      </tr>
-                      <tr>
-                        <td><b>วันที่ </b>{{displayLocalDate(item.createDate)}}<br></td>
-                        <td>
-                          <b>สถานะ </b><span [ngClass]="{
+              <ng-container *ngIf="mode == ActionMode.Create; else elseSed;">
+                <ng-select [items]="sedDropDown" [typeahead]="searchTypeahead" (change)="selectItemSed($event)"
+                  name="logReceiveId" dropdownPosition="auto" bindLabel="text" bindValue="value" labelForId="model"
+                  [virtualScroll]="true" placeholder="ค้นหาเลขที่ใบส่งเรื่อง" [loading]="searchSedLoading"
+                  [loadingText]="searchSedLoadingTxt">
+                  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                    <h3 class="no-margins text-navy">{{item.sedNo}}</h3>
+                    <table class="table small m-t-sm m-b-sm">
+                      <tbody>
+                        <tr>
+                          <td><b>ผู้ดำเนินการ </b>{{item.createName}}</td>
+                          <td><b>สาขา </b>{{item.branchName}}</td>
+                        </tr>
+                        <tr>
+                          <td><b>วันที่ </b>{{displayLocalDate(item.createDate)}}<br></td>
+                          <td>
+                            <b>สถานะ </b><span [ngClass]="{
                               'text-danger': item.status == SedStatus.Cancel,
                               'text-navy': item.status == SedStatus.Normal,
                               'text-muted': item.status == SedStatus.Borrowed
                             }">{{item.statusDesc}}</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <hr class="hr-dashed m-t-xs m-b-xs">
-                </ng-template>
-              </ng-select>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <hr class="hr-dashed m-t-xs m-b-xs">
+                  </ng-template>
+                </ng-select>
+              </ng-container>
+              <ng-template #elseSed>
+                <span class="form-control disabled">
+                  {{formGroup.get('sedNo').value}}
+                </span>
+              </ng-template>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
@@ -79,7 +86,7 @@
             <label class="col-md-3 control-label required">ผู้รับเรื่องคืน</label>
             <div class="col-md-9">
               <span class="form-control disabled">
-                {{mUser?.name}}
+                {{formGroup.get('createName').value}}
               </span>
             </div>
           </div>
@@ -118,7 +125,8 @@
             </div>
             <div id="tab-clear-money-2" class="tab-pane">
               <div class="panel-body">
-                <app-list-al-item-component [$SedItem]="$SedItem" (AlOutput$)="AlOutput$.next($event)"></app-list-al-item-component>
+                <app-list-al-item-component [$SedItem]="$SedItem" (AlOutput$)="AlOutput$.next($event)">
+                </app-list-al-item-component>
               </div>
             </div>
           </div>
@@ -126,7 +134,7 @@
 
         <div class="hr-line-dashed"></div>
         <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
-        <app-list-con-item-detail-component [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
+        <app-list-con-item-detail-component [$Mode]="mode" [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
         </app-list-con-item-detail-component>
 
         <div class="hr-line-dashed"></div>
@@ -138,19 +146,19 @@
           <div class="col-md-3">
             <label class="col-md-6 control-label">ตัดยอดเงินรับฝาก</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalCutBalance" readonly>
+              <input type="number" class="form-control" formControlName="totalCutBalance" readonly>
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">หัก ค่าดำเนินการ</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalClBalancePrice" readonly>
+              <input type="number" class="form-control" formControlName="totalClBalancePrice" readonly>
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">คิดเป็น รายได้</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalIncome" readonly>
+              <input type="number" class="form-control" formControlName="totalIncome" readonly>
             </div>
           </div>
         </div>
@@ -159,19 +167,19 @@
           <div class="col-md-3">
             <label class="col-md-6 control-label">เงินยืมคงเหลือ</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalClBalancePrice" readonly>
+              <input type="number" class="form-control" formControlName="totalClBalancePrice" readonly>
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">หักเงินยืม</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalClReceivePrice">
+              <input type="number" class="form-control" formControlName="totalClReceivePrice">
             </div>
           </div>
           <div class="col-md-3">
             <label class="col-md-6 control-label">ค่าใช่จ่าย</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalExpenses" readonly>
+              <input type="number" class="form-control" formControlName="totalExpenses" readonly>
             </div>
           </div>
         </div>
@@ -181,7 +189,7 @@
           <div class="col-md-3">
             <label class="col-md-6 control-label">ค้างจ่าย</label>
             <div class="col-md-6">
-              <input type="text" class="form-control" formControlName="totalAccruedExpense" readonly>
+              <input type="number" class="form-control" formControlName="totalAccruedExpense" readonly>
             </div>
           </div>
           <div class="col-md-3"></div>

@@ -11,9 +11,15 @@ export enum ConStatus {
     CompleteDelivery = 4
 }
 
+export enum RevStatus {
+    Normal = 1,
+    Cancel = 0
+}
+
 export enum SedStatus {
     Normal = 1,
     Borrowed = 2,
+    Received = 3,
     Cancel = 0
 }
 

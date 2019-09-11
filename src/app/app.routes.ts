@@ -109,7 +109,8 @@ export const ROUTES: Routes = [
       { path: 'cl-form-create', component: TagClFormComponent },
       { path: 'cl-form-detail/:code', component: TagClFormDetailComponent },
       { path: 'clear-money-list', component: TagClearMoneyListComponent },
-      { path: 'clear-money-create', component: ClearMoneyCreateComponent },
+      { path: 'clear-money/:mode', component: ClearMoneyCreateComponent },
+      { path: 'clear-money/:mode/:code', component: ClearMoneyCreateComponent },
       { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent }
     ], canActivate: [GuardGuard]
   },

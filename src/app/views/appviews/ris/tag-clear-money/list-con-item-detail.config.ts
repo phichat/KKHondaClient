@@ -9,6 +9,7 @@ import { ModelUser } from 'app/models/users/user';
 export class ListConItemDetailConfig extends RisConfig {
     @Input() $ConNo: BehaviorSubject<string>;
     @Output() ConItemOutput$ = new EventEmitter<IConItemOutput>(null);
+    @Input() $Mode: number;
     // public ConItemList: Observable<IConItemRes[]>;
     public loading: number;
     public formGroup: FormGroup;

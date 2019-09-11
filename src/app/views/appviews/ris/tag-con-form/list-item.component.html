@@ -181,7 +181,14 @@
                   <div class="row m-b-sm">
                     <label class="col-md-5 control-label">จังหวัด</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="province" [readOnly]="IsTagItem">
+                      <div *ngIf="IsTagItem; else provinceDD">
+                        <input type="text" class="form-control" formControlName="province" readOnly>
+                      </div>
+                      <ng-template #provinceDD>
+                        <ng-select [items]="provinceDropdown" bindValue="text" bindLabel="text"
+                          formControlName="province">
+                        </ng-select>
+                      </ng-template>
                     </div>
                   </div>
                   <div class="row  m-b-sm">
@@ -211,7 +218,14 @@
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">บริษัท</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="prbCompany" [readOnly]="IsActItem">
+                      <div *ngIf="IsActItem; else prbDD">
+                        <input type="text" class="form-control" formControlName="prbCompany" readOnly>
+                      </div>
+                      <ng-template #prbDD>
+                        <ng-select [items]="insureDropdown" bindValue="text" bindLabel="text"
+                          formControlName="prbCompany">
+                        </ng-select>
+                      </ng-template>
                     </div>
                   </div>
                   <div class="row  m-b-sm">
@@ -255,7 +269,14 @@
                   <div class="row  m-b-sm">
                     <label class="col-md-5 control-label">บริษัทประกัน</label>
                     <div class="col-md-7">
-                      <input type="text" class="form-control" formControlName="warCompany" [readOnly]="IsWarItem">
+                      <div *ngIf="IsWarItem; else insureDD">
+                        <input type="text" class="form-control" formControlName="warCompany" readonly>
+                      </div>
+                      <ng-template #insureDD>
+                        <ng-select [items]="insureDropdown" bindValue="text" bindLabel="text"
+                          formControlName="warCompany">
+                        </ng-select>
+                      </ng-template>
                     </div>
                   </div>
                   <div class="row  m-b-sm">

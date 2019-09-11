@@ -41,42 +41,46 @@
             <div class="ibox-content">
                 <form action="" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit()">
                     <div class="row form-group">
-                        <div class="col-lg-9 b-r">
+                        <div class="col-lg-12 b-r">
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    ผู้จอง :
+                                    ผู้จอง
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
-                                    <input type="hidden" name="contractBooking" [(ngModel)]="contractModel.contractBooking">
+                                    <input type="hidden" name="contractBooking"
+                                        [(ngModel)]="contractModel.contractBooking">
                                     <input type="text" class="form-control form-control-sm" required disabled
                                         [(ngModel)]="customerFullName" name="customerFullName">
                                 </div>
                                 <label for="" class="control-label col-lg-2">คู่สมรส:</label>
                                 <div class="col-lg-4">
                                     <ng-select [items]="contractMateDropdown" bindValue="value" bindLabel="text"
-                                        [typeahead]="contractMateTypeahead" name="contractMate" [(ngModel)]="contractModel.contractMate"
-                                        [loading]="contractMateLoading" [loadingText]="contractMateLoadingTxt">
+                                        [typeahead]="contractMateTypeahead" name="contractMate"
+                                        [(ngModel)]="contractModel.contractMate" [loading]="contractMateLoading"
+                                        [loadingText]="contractMateLoadingTxt">
                                     </ng-select>
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="" class="control-label col-lg-2" [ngSwitch]="bookingModel.bookingPaymentType">
-                                    <span *ngSwitchCase="4">ผู้ซื้อ : </span>
-                                    <span *ngSwitchDefault>ผู้เช่าซื้อ : </span>
+                                <label for="" class="control-label col-lg-2"
+                                    [ngSwitch]="bookingModel.bookingPaymentType">
+                                    <span *ngSwitchCase="4">ผู้ซื้อ </span>
+                                    <span *ngSwitchDefault>ผู้เช่าซื้อ </span>
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
-                                    <ng-select required [items]="contractHireDropdown" bindValue="value" bindLabel="text"
-                                        [typeahead]="contractHireTypeahead" [(ngModel)]="contractModel.contractHire"
-                                        name="contractHire" [loading]="contractHireLoading" [loadingText]="contractHireLoadingTxt">
+                                    <ng-select required [items]="contractHireDropdown" bindValue="value"
+                                        bindLabel="text" [typeahead]="contractHireTypeahead"
+                                        [(ngModel)]="contractModel.contractHire" name="contractHire"
+                                        [loading]="contractHireLoading" [loadingText]="contractHireLoadingTxt">
                                     </ng-select>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    ชื่อจดทะเบียน :
+                                    ชื่อจดทะเบียน
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -84,7 +88,7 @@
                                         [value]="" class="form-control form-control-sm" required>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    สถานประกอบการ :
+                                    สถานประกอบการ
                                 </label>
                                 <div class="col-lg-4">
                                     <input type="text" name="cusTaxBranch" [(ngModel)]="bookingModel.cusTaxBranch"
@@ -94,18 +98,19 @@
 
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    เลขประจำตัวผู้เสียภาษี :
+                                    เลขประจำตัวผู้เสียภาษี
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
-                                    <input type="text" name="cusTaxNo" [(ngModel)]="bookingModel.cusTaxNo" class="form-control form-control-sm"
-                                        required>
+                                    <input type="text" name="cusTaxNo" [(ngModel)]="bookingModel.cusTaxNo"
+                                        class="form-control form-control-sm" required>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    หมายเหตุ :
+                                    หมายเหตุ
                                 </label>
                                 <div class="col-lg-4">
-                                    <input type="text" name="sellRemark" [(ngModel)]="bookingModel.sellRemark" class="form-control form-control-sm">
+                                    <input type="text" name="sellRemark" [(ngModel)]="bookingModel.sellRemark"
+                                        class="form-control form-control-sm">
                                 </div>
                             </div>
 
@@ -117,8 +122,10 @@
                                 <label for="" class="control-label col-lg-2">คนที่ 1:</label>
                                 <div class="col-lg-4">
                                     <ng-select [items]="contractGurantor1Dropdown" bindValue="value" bindLabel="text"
-                                        [typeahead]="contractGurantor1Typeahead" [(ngModel)]="contractModel.contractGurantor1"
-                                        name="contractGurantor1" [loading]="contractGurantor1Loading" [loadingText]="contractGurantor1LoadingTxt"></ng-select>
+                                        [typeahead]="contractGurantor1Typeahead"
+                                        [(ngModel)]="contractModel.contractGurantor1" name="contractGurantor1"
+                                        [loading]="contractGurantor1Loading"
+                                        [loadingText]="contractGurantor1LoadingTxt"></ng-select>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
                                     ความสัมพันธ์:
@@ -134,8 +141,10 @@
                                 <label for="" class="control-label col-lg-2"> คนที่ 2:</label>
                                 <div class="col-lg-4">
                                     <ng-select [items]="contractGurantor2Dropdown" bindValue="value" bindLabel="text"
-                                        [typeahead]="contractGurantor2Typeahead" [(ngModel)]="contractModel.contractGurantor2"
-                                        name="contractGurantor2" [loading]="contractGurantor2Loading" [loadingText]="contractGurantor2LoadingTxt"></ng-select>
+                                        [typeahead]="contractGurantor2Typeahead"
+                                        [(ngModel)]="contractModel.contractGurantor2" name="contractGurantor2"
+                                        [loading]="contractGurantor2Loading"
+                                        [loadingText]="contractGurantor2LoadingTxt"></ng-select>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
                                     ความสัมพันธ์:
@@ -151,13 +160,13 @@
                             <div class="hr-line-dashed"></div>
                             <h4>สัญญา</h4>
                             <div class="row form-group">
-                                <label for="" class="control-label col-lg-2">เลขที่สัญญา :</label>
+                                <label for="" class="control-label col-lg-2">เลขที่สัญญา</label>
                                 <div class="col-lg-4">
-                                    <input type="text" class="form-control form-control-sm" required="required"
-                                        readonly [(ngModel)]="contractModel.contractNo" name="contractNo">
+                                    <input type="text" class="form-control form-control-sm" required="required" readonly
+                                        [(ngModel)]="contractModel.contractNo" name="contractNo">
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    สถานะสัญญา :
+                                    สถานะสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -170,7 +179,7 @@
 
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    วันที่ทำสัญญา :
+                                    วันที่ทำสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -184,26 +193,28 @@
 
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    กลุ่มสัญญา :
+                                    กลุ่มสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
-                                    <ng-select required [items]="contractGroupDropdown" bindValue="value" bindLabel="text"
-                                        [(ngModel)]="contractModel.contractGroup" name="contractGroup"></ng-select>
+                                    <ng-select required [items]="contractGroupDropdown" bindValue="value"
+                                        bindLabel="text" [(ngModel)]="contractModel.contractGroup" name="contractGroup">
+                                    </ng-select>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    ประเภทสัญญา :
+                                    ประเภทสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
-                                    <ng-select required [items]="contractTypeDropdown" bindValue="value" bindLabel="text"
-                                        [(ngModel)]="contractModel.contractType" name="contractType"></ng-select>
+                                    <ng-select required [items]="contractTypeDropdown" bindValue="value"
+                                        bindLabel="text" [(ngModel)]="contractModel.contractType" name="contractType">
+                                    </ng-select>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    จุดทำสัญญา :
+                                    จุดทำสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -211,7 +222,7 @@
                                         [(ngModel)]="contractModel.contractPoint" name="contractPoint"></ng-select>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    เขตการเก็บเงิน :
+                                    เขตการเก็บเงิน
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -224,7 +235,7 @@
                             <h4>ผู้ดำเนินการ</h4>
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    ผู้ทำสัญญา :
+                                    ผู้ทำสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -232,7 +243,7 @@
                                         [(ngModel)]="contractModel.createdBy" name="createdBy"></ng-select>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    ผู้ตรวจสอบ :
+                                    ผู้ตรวจสอบ
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -243,7 +254,7 @@
 
                             <div class="row form-group">
                                 <label for="" class="control-label col-lg-2">
-                                    ผู้อนุมัติ :
+                                    ผู้อนุมัติ
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -251,7 +262,7 @@
                                         [(ngModel)]="contractModel.approvedBy" name="approvedBy"></ng-select>
                                 </div>
                                 <label for="" class="control-label col-lg-2">
-                                    ผู้ดูแลสัญญา :
+                                    ผู้ดูแลสัญญา
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-lg-4">
@@ -269,49 +280,48 @@
                             </div>
 
                         </div>
-                        <div class="col-lg-3">
-                            <!-- <input type="hidden" name="bookingId" [(ngModel)]="calculateModel.bookingId"> -->
-
+                        <!-- <div class="col-lg-3">
                             <div class="row form-group">
                                 <label for="" class="col-lg-7 control-label">
-                                    ราคาสินค้า (รวม VAT) :
+                                    ราคาสินค้า (รวม VAT)
                                 </label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{calculateModel.netPrice | number:'1.2-2'}}</label>
+                                    <p class="control-label">{{calculateModel.netPrice | number:'1.2-2'}}</p>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="col-lg-7 control-label">
-                                    เงินดาวน์ :
+                                    เงินดาวน์
                                 </label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{calculateModel.depositPrice |
+                                    <p class="control-label">{{calculateModel.depositPrice |
                                         number:'1.2-2'}}
-                                        ({{calculateModel.deposit | number:'1.2-2'}}%)</label>
+                                        ({{calculateModel.deposit | number:'1.2-2'}}%)</p>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="col-lg-7 control-label">
                                     <ng-container [ngSwitch]="bookingModel.bookingPaymentType">
-                                        <span *ngSwitchCase="4"> เครดิต :</span>
-                                        <span *ngSwitchDefault> ระยะเวลาผ่อนชำระ :</span>
+                                        <span *ngSwitchCase="4"> เครดิต</span>
+                                        <span *ngSwitchDefault> ระยะเวลาผ่อนชำระ</span>
                                     </ng-container>
                                 </label>
                                 <div class="col-lg-5">
                                     <ng-container [ngSwitch]="bookingModel.bookingPaymentType">
                                         <div *ngSwitchCase="4">
-                                            <label for="" class=" control-label">{{calculateModel.instalmentEnd}} วัน</label>
+                                            <p class=" control-label">{{calculateModel.instalmentEnd}}
+                                                วัน</p>
                                         </div>
                                         <ng-container *ngSwitchDefault>
-                                            <label for="" class=" control-label">
+                                            <p class=" control-label">
                                                 {{calculateModel.instalmentEnd}}
                                                 <ng-container [ngSwitch]="calculateModel.typePayment">
                                                     <span *ngSwitchCase="0"> งวด</span>
                                                     <span *ngSwitchCase="1"> ปี</span>
                                                 </ng-container>
-                                            </label>
+                                            </p>
                                         </ng-container>
                                     </ng-container>
 
@@ -320,83 +330,83 @@
 
                             <div class="row form-group" *ngIf="bookingModel.bookingPaymentType != 4">
                                 <label for="" class="col-lg-7 control-label">
-                                    อัตราดอกเบี้ย/เดือน :
+                                    อัตราดอกเบี้ย/เดือน
                                 </label>
                                 <div class="col-lg-5">
                                     <div class="input-group">
-                                        <label for="" class="control-label">{{calculateModel.interest |
-                                            number:'1.2-2'}}%</label>
+                                        <p class="control-label">{{calculateModel.interest |
+                                            number:'1.2-2'}}%</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="col-lg-7 control-label">
-                                    ยอดจัด (รวม VAT) :
+                                    ยอดจัด (รวม VAT)
                                 </label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{calculateModel.remain | number:'1.2-2'}}</label>
+                                    <p class="control-label">{{calculateModel.remain | number:'1.2-2'}}</p>
                                 </div>
                             </div>
 
                             <div class="row form-group" *ngIf="bookingModel.bookingPaymentType != 4">
                                 <label for="" class="col-lg-7 control-label">
-                                    ค่างวด (รวม VAT) :
+                                    ค่างวด (รวม VAT)
                                 </label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{calculateModel.instalmentPrice |
-                                        number:'1.2-2'}}</label>
+                                    <p class="control-label">{{calculateModel.instalmentPrice |
+                                        number:'1.2-2'}}</p>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="col-lg-7 control-label">
                                     <ng-container [ngSwitch]="bookingModel.bookingPaymentType">
-                                        <span *ngSwitchCase="4">วันที่นับเครดิต :</span>
-                                        <span *ngSwitchDefault>ชำระงวดแรก :</span>
+                                        <span *ngSwitchCase="4">วันที่นับเครดิต</span>
+                                        <span *ngSwitchDefault>ชำระงวดแรก</span>
                                     </ng-container>
                                 </label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{calculateModel.firstPayment}}</label>
+                                    <p class="control-label">{{calculateModel.firstPayment}}</p>
                                 </div>
                             </div>
 
                             <div class="row form-group" *ngIf="bookingModel.bookingPaymentType == 4">
-                                <label for="" class="col-lg-7 control-label">กำหนดชำระ :</label>
+                                <label for="" class="col-lg-7 control-label">กำหนดชำระ</label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{tempDueDate}}</label>
+                                    <p class="control-label">{{tempDueDate}}</p>
                                 </div>
                             </div>
 
                             <div class="row form-group" *ngIf="bookingModel.bookingPaymentType != 4">
                                 <label for="" class="col-lg-7 control-label">
-                                    ชำระทุกวันที่ :
+                                    ชำระทุกวันที่
                                 </label>
                                 <div class="col-lg-5">
-                                    <label for="" class="control-label">{{calculateModel.dueDate}} ของเดือน</label>
+                                    <p class="control-label">{{calculateModel.dueDate}} ของเดือน</p>
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="" class="col-lg-7 control-label">
-                                    Vat ณ วันที่ทำสัญญา :
+                                    Vat ณ วันที่ทำสัญญา
                                 </label>
                                 <div class="col-lg-5">
                                     <div class="input-group">
-                                        <label for="" class="control-label">{{calculateModel.nowVat}}%</label>
+                                        <p class="control-label">{{calculateModel.nowVat}}%</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row form-group" *ngIf="bookingModel.bookingPaymentType != 4">
-                                <label for="" class="col-lg-7 control-label">อัตราดอกเบี้ยต่อปี :</label>
+                                <label for="" class="col-lg-7 control-label">อัตราดอกเบี้ยต่อปี</label>
                                 <div class="col-lg-5">
                                     <div class="input-group">
-                                        <label for="" class="control-label">{{calculateModel.mrr | number:'1.2-2' }}</label>
+                                        <p class="control-label">{{calculateModel.mrr | number:'1.2-2' }}</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </form>
 

@@ -28,7 +28,7 @@
             <form autocomplete="off" class="form-horizontal" #f="ngForm" (ngSubmit)="onSubmit(f)">
               <input type="hidden" name="bookingId" required [(ngModel)]="model.bookingId">
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ค้นหาหมายเลขรถ :</label>
+                <label for="" class="col-md-4 control-label">ค้นหาหมายเลขรถ</label>
                 <div class="col-md-8">
                   <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" [(ngModel)]="model.logReceiveId"
                     (change)="selectItemEnging($event)" name="logReceiveId" dropdownPosition="auto" bindLabel="text"
@@ -47,14 +47,14 @@
                 </div>
               </div>
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">หมายเลขเครื่อง : <span class="required">*</span></label>
+                <label for="" class="col-md-4 control-label">หมายเลขเครื่อง <span class="required">*</span></label>
                 <div class="col-md-8">
                   <input type="text" required name="engineNo" [(ngModel)]="model.engineNo" class="form-control"
                     readonly>
                 </div>
               </div>
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">หมายเลขตัวถัง : <span class="required">*</span></label>
+                <label for="" class="col-md-4 control-label">หมายเลขตัวถัง <span class="required">*</span></label>
                 <div class="col-md-8">
                   <input type="text" required name="frameNo" [(ngModel)]="model.frameNo" class="form-control" readonly>
                 </div>
@@ -62,7 +62,7 @@
               <hr class="hr-dashed">
 
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ราคาสินค้า (รวม VAT) :</label>
+                <label for="" class="col-md-4 control-label">ราคาสินค้า (รวม VAT)</label>
                 <div class="col-md-8">
                   <span class="form-control disabled">{{model.outStandingPrice | number:'1.0-0'}}</span>
                 </div>
@@ -70,7 +70,7 @@
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
-                  เงินดาวน์ :
+                  เงินดาวน์
                   <span class="required">*</span>
                 </label>
                 <div class="col-md-8">
@@ -83,7 +83,7 @@
               </div>
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
-                  เงินดาวน์ :
+                  เงินดาวน์
                   <span class="required">*</span>
                 </label>
                 <div class="col-md-8">
@@ -96,7 +96,7 @@
               </div>
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
-                  เงินมัดจำ :
+                  เงินมัดจำ
                 </label>
                 <div class="col-md-8">
                   <span class="form-control disabled">{{model.bookDeposit | number:'1.0-0'}}</span>
@@ -107,7 +107,7 @@
               <ng-container *ngIf="model.bookingPaymentType != 4">
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">
-                    รูปแบบการชำระ :
+                    รูปแบบการชำระ
                     <span class="required">*</span>
                   </label>
                   <div class="col-md-8">
@@ -127,7 +127,7 @@
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
-                  การคืนเงินมัดจำ :
+                  การคืนเงินมัดจำ
                   <span class="required">*</span>
                 </label>
                 <div class="col-md-8">
@@ -145,7 +145,7 @@
               </div>
 
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ :</label>
+                <label for="" class="col-md-4 control-label">ราคาสินค้าคงเหลือ</label>
                 <div class="col-md-8">
                   <span class="form-control disabled">{{model.netPrice | number: '1.0-0'}}</span>
                 </div>
@@ -155,7 +155,7 @@
               <ng-container *ngIf="model.bookingPaymentType != 4">
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">
-                    อัตราดอกเบี้ย/เดือน : <span class="required">*</span>
+                    อัตราดอกเบี้ย/เดือน <span class="required">*</span>
                   </label>
                   <div class="col-md-8">
                     <div class="input-group">
@@ -170,10 +170,10 @@
               <div class="row form-group">
                 <ng-container [ngSwitch]="model.bookingPaymentType">
                   <label *ngSwitchCase="4" for="" class="col-md-4 control-label">
-                    เครดิต : <span class="required">*</span>
+                    เครดิต <span class="required">*</span>
                   </label>
                   <label *ngSwitchDefault for="" class="col-md-4 control-label">
-                    ระยะเวลาผ่อนชำระ : <span class="required">*</span>
+                    ระยะเวลาผ่อนชำระ <span class="required">*</span>
                   </label>
                 </ng-container>
                 <div class="col-md-8">
@@ -198,10 +198,10 @@
               <div class="row form-group">
                 <ng-container [ngSwitch]="model.bookingPaymentType">
                   <label *ngSwitchCase="4" for="" class="col-md-4 control-label">
-                    วันที่นับเครดิต : <span class="required">*</span>
+                    วันที่นับเครดิต <span class="required">*</span>
                   </label>
                   <label *ngSwitchDefault for="" class="col-md-4 control-label">
-                    ชำระงวดแรก : <span class="required">*</span>
+                    ชำระงวดแรก <span class="required">*</span>
                   </label>
                 </ng-container>
 
@@ -215,14 +215,14 @@
               <!-- แสดงเมื่อ ประเภทการซื้อ = ขายเชื่อ -->
               <ng-container *ngIf="model.bookingPaymentType == 4">
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">กำหนดชำระ :</label>
+                  <label for="" class="col-md-4 control-label">กำหนดชำระ</label>
                   <div class="col-md-8">
                     <input type="text" #tempDueDate class="form-control" readonly>
                   </div>
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา :</label>
+                  <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา</label>
                   <div class="col-md-8">
                     <div class="input-group">
                       <input type="text" [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" readonly>
@@ -232,7 +232,7 @@
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
+                  <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT)</label>
                   <div class="col-md-8">
                     <span class="form-control disabled">{{model.remain | number: '1.0-0'}}</span>
                   </div>
@@ -243,7 +243,7 @@
               <ng-container *ngIf="model.bookingPaymentType != 4">
                 <div class="row form-group ">
                   <label for="" class="col-md-4 control-label">
-                    ชำระทุกวันที่ : <span class="required">*</span>
+                    ชำระทุกวันที่ <span class="required">*</span>
                   </label>
                   <div class="col-md-8">
                     <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required [(ngModel)]="model.dueDate"
@@ -253,7 +253,7 @@
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา :</label>
+                  <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา</label>
                   <div class="col-md-8">
                     <div class="input-group">
                       <input type="text" [(ngModel)]="model.nowVat" name="nowVat" class="form-control number" readonly>
@@ -263,7 +263,7 @@
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">ดอกเบี้ย (รวม VAT) :</label>
+                  <label for="" class="col-md-4 control-label">ดอกเบี้ย (รวม VAT)</label>
                   <div class="col-md-8">
                     <input type="text" [(ngModel)]="model.interestPrice" name="interestPrice"
                       class="form-control number" readonly>
@@ -271,21 +271,21 @@
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT) :</label>
+                  <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT)</label>
                   <div class="col-md-8">
                     <span class="form-control disabled">{{model.remain | number: '1.0-0'}}</span>
                   </div>
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT) :</label>
+                  <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT)</label>
                   <div class="col-md-8">
                     <span class="form-control disabled">{{model.instalmentPrice | number: '1.0-0'}}</span>
                   </div>
                 </div>
 
                 <div class="row form-group">
-                  <label for="" class="col-md-4 control-label">อัตราดอกเบีย/ปี :</label>
+                  <label for="" class="col-md-4 control-label">อัตราดอกเบีย/ปี</label>
                   <div class="col-md-8">
                     <div class="input-group">
                         <span class="form-control disabled">{{model.mrr | number: '1.2-2'}}</span>
