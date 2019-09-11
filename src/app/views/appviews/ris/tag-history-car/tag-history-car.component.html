@@ -198,12 +198,14 @@
                 <label class="col-md-4 control-label">ประเภทบุคคล</label>
                 <div class="col-md-8">
                   <div class="radio radio-info radio-inline">
-                    <input type="radio" id="entityType1" value="นิติบุคล" formControlName="entityType" [disabled]="">
-                    <label for="entityType1">นิติบุคล</label>
+                    <input type="radio" id="contOS1" [value]="EntityType.Corperation" formControlName="ownershipEntityType"
+                      [disabled]="">
+                    <label for="contOS1">{{EntityType.Corperation}}</label>
                   </div>
                   <div class="radio radio-info radio-inline">
-                    <input type="radio" id="entityType2" value="บุคคลธรรมดา" formControlName="entityType" [disabled]="">
-                    <label for="entityType2">บุคคลธรรมดา</label>
+                    <input type="radio" id="contOS2" [value]="EntityType.Layman" formControlName="ownershipEntityType"
+                      [disabled]="">
+                    <label for="contOS2">{{EntityType.Layman}}</label>
                   </div>
                 </div>
               </div>
@@ -212,7 +214,7 @@
 
           <div class="hr-line-dashed"></div>
 
-          <section *ngIf="formGroup.get('entityType').value == '1'">
+          <section *ngIf="formGroup.get('ownershipEntityType').value == EntityType.Corperation">
             <div class="row form-group">
               <div class="col-xs-6 col-lg-6">
                 <div class="form-group">
@@ -260,7 +262,7 @@
             </div>
           </section>
 
-          <section *ngIf="formGroup.get('entityType').value == '2'">
+          <section *ngIf="formGroup.get('ownershipEntityType').value == EntityType.Layman">
             <div class="row form-group">
               <div class="col-xs-6 col-lg-6">
                 <div class="form-group"><label class="col-md-4 control-label">คำนำหน้าชื่อ</label>
@@ -359,7 +361,77 @@
       </div>
       <div id="tab-his-3" class="tab-pane">
         <div class="panel-body">
-          <section>
+          <div class="row form-group">
+            <div class="col-xs-6 col-lg-6">
+              <div class="form-group">
+                <label class="col-md-4 control-label">ประเภทบุคคล</label>
+                <div class="col-md-8">
+                  <div class="radio radio-info radio-inline">
+                    <input type="radio" id="contET1" [value]="EntityType.Corperation" formControlName="contractEntityType"
+                      [disabled]="">
+                    <label for="contET1">{{EntityType.Corperation}}</label>
+                  </div>
+                  <div class="radio radio-info radio-inline">
+                    <input type="radio" id="contET2" [value]="EntityType.Layman" formControlName="contractEntityType"
+                      [disabled]="">
+                    <label for="contET2">{{EntityType.Layman}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hr-line-dashed"></div>
+
+          <section *ngIf="formGroup.get('contractEntityType').value == EntityType.Corperation">
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เลขประจำตัวผู้เสียภาษี</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="contractIdcard" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">ชื่อสถานที่ประกอบการ</label>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="contractCustomerName" [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">เบอร์ติดต่อ</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="contractCustomerPhone"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">อีเมลล์</label>
+                  <div class="col-md-8"><input type="text" class="form-control" formControlName="contractCustomerEmail"
+                      [disabled]="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-lg-6">
+                <div class="form-group"><label class="col-md-4 control-label">ที่อยู่</label>
+                  <div class="col-md-8">
+                    <textarea class="form-control" row form-groups="5" formControlName="contractFulladdress"
+                      [disabled]=""></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section *ngIf="formGroup.get('contractEntityType').value == EntityType.Layman">
             <div class="row form-group">
               <div class="col-xs-6 col-lg-6">
                 <div class="form-group"><label class="col-md-4 control-label">คำนำหน้าชื่อ</label>
