@@ -79,7 +79,7 @@ export class ReportBalanceStock2Component implements OnInit {
     strParameter += "&color=" + (color || 0);
     strParameter += "&itemType=2";
 
-    window.open(`http://localhost:58874/MCS/indexMCS2.aspx` + strParameter, '_blank');
-    // window.open(`${appConfig.reportUrl}/MCS/indexMCS2.aspx` + strParameter, '_blank');
+    //window.open(`http://localhost:58874/MCS/indexMCS2.aspx` + strParameter, '_blank');
+    window.open(`${appConfig.reportUrl}/MCS/indexMCS2.aspx` + strParameter, '_blank');
   }
 }
