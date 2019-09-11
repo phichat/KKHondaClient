@@ -38,7 +38,7 @@ export class TagHistoryCarComponent extends TahHistoryConfig implements OnInit {
       warRegis: new FormControl(null),
       warExpire: new FormControl(null),
 
-      entityType: new FormControl('1'),
+      ownershipEntityType: new FormControl(this.EntityType.Layman),
 
       ownershipCustomerPrename: new FormControl(null),
       ownershipCustomerSex: new FormControl(null),
@@ -50,6 +50,8 @@ export class TagHistoryCarComponent extends TahHistoryConfig implements OnInit {
       ownershipCustomerEmail: new FormControl(null),
       ownershipBirthday: new FormControl(null),
       ownershipFulladdress: new FormControl(null),
+
+      contractEntityType: new FormControl(this.EntityType.Layman),
 
       contractCustomerPrename: new FormControl(null),
       contractCustomerSex: new FormControl(null),
