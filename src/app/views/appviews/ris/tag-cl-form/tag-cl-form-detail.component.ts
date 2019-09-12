@@ -57,6 +57,8 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
       createDate: new FormControl(null),
       createBy: new FormControl(null),
       createName: new FormControl(null),
+      updateDate: new FormControl(null),
+      updateBy: new FormControl(null),
       remark: new FormControl(null),
       reason: new FormControl(null),
       status: new FormControl(null),
@@ -138,7 +140,7 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
       updateBy: f.updateBy,
       remark: f.remark
     }
-    
+
     this.s_loader.showLoader();
     const url = `${appConfig.apiUrl}/Ris/Cl/Cancel`;
     this.http.post(url, f).pipe(
@@ -148,5 +150,10 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
       this.router.navigate(['ris/cl-list']);
     }, () => toastr.error(message.failed));
 
+  }
+
+  printCl() {
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?clNo=${this.formGroup.get('clNo').value}&userId=${this.formGroup.get('updateBy').value}&formCl=true`;
+    window.open(url, '_blank');
   }
 }

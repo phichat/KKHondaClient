@@ -157,4 +157,9 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
       this.router.navigate(['ris/al-list']);
     }, () => toastr.error(message.failed));
   }
+
+  printAl() {
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?alNo=${this.formGroup.get('alNo').value}&userId=${this.formGroup.get('updateBy').value}&formAl=true`;
+    window.open(url, '_blank');
+  }
 }
