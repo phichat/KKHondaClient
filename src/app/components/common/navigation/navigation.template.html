@@ -330,6 +330,17 @@
                             <span class="nav-label">รับคืนเรื่องจากการดำเนินการ</span>
                         </a>
                     </li>
+                    <hr>
+                    <li [ngClass]="{active: activeRoute('report-regis-tag')}">
+                        <a [routerLink]="['/ris/report-regis-tag']">
+                            <span class="nav-label">รายงานจดทะเบียนรถใหม่</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('report-regis-vehicle-tax')}">
+                        <a [routerLink]="['/ris/report-regis-vehicle-tax']">
+                            <span class="nav-label">รายงานต่อทะเบียน</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

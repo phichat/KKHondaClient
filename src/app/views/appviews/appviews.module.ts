@@ -20,6 +20,7 @@ import { ReportBookingModule } from './report-booking/report-booking.module';
 import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
 import { ReportSaleModule } from './report-sale/report-sale.module';
 import { RISModule } from './ris/ris.module';
+import { ReportRisModule } from './report-ris/report-ris.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { RISModule } from './ris/ris.module';
     ReportBookingModule,
     ReportCreditNoteModule,
     ReportSaleModule,
+    ReportRisModule,
     RISModule
   ],
   exports: [
