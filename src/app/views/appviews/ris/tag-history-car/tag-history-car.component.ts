@@ -19,7 +19,7 @@ export class TagHistoryCarComponent extends TahHistoryConfig implements OnInit {
     this.formGroup = this.fb.group({
       tagNo: new FormControl(null),
       province: new FormControl(null),
-      catName: new FormControl(null),
+      cateName: new FormControl(null),
       brandName: new FormControl(null),
       modelName: new FormControl(null),
       colorName: new FormControl(null),
