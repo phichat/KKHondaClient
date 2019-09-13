@@ -31,11 +31,11 @@ import { CoreModule } from './core/core.module';
     CoreModule,
     LayoutsModule,
     AppviewsModule,
-    RouterModule.forRoot(ROUTES),
-    
+    RouterModule.forRoot(ROUTES, { scrollPositionRestoration: 'top' }),
+
     // PageloaderModule,
     BookingModule,
-    
+
   ],
   providers: [
     GuardGuard,

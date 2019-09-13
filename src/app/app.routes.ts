@@ -37,6 +37,8 @@ import { TagConFormEditComponent } from './views/appviews/ris/tag-con-form/tag-c
 import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money-list/tag-clear-money-list.component';
 import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
+import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
+import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -107,7 +109,10 @@ export const ROUTES: Routes = [
       { path: 'clear-money-list', component: TagClearMoneyListComponent },
       { path: 'clear-money/:mode', component: ClearMoneyCreateComponent },
       { path: 'clear-money/:mode/:code', component: ClearMoneyCreateComponent },
-      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent }
+      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent },
+      { path: 'rpt-regis-tag', component: RegisTagComponent },
+      { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
+
     ], canActivate: [GuardGuard]
   },
 
