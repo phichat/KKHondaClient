@@ -289,6 +289,7 @@
                             <span class="nav-label">รายการรอจดทะเบียน</span>
                         </a>
                     </li>
+                    <hr class="menu-divider">
                     <li [ngClass]="{'active': 
                     activeRoute('con-list') || 
                     activeRoute('con-form-create') ||
@@ -328,6 +329,17 @@
                         activeRoute('clear-money-detail')}">
                         <a [routerLink]="['/ris/clear-money-list']">
                             <span class="nav-label">รับคืนเรื่องจากการดำเนินการ</span>
+                        </a>
+                    </li>
+                    <hr class="menu-divider">
+                    <li [ngClass]="{active: activeRoute('rpt-regis-tag')}">
+                        <a [routerLink]="['/ris/rpt-regis-tag']">
+                            <span class="nav-label">รายงานจดทะเบียนรถใหม่</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('rpt-regis-vehicle-tax')}">
+                        <a [routerLink]="['/ris/rpt-regis-vehicle-tax']">
+                            <span class="nav-label">รายงานต่อทะเบียน</span>
                         </a>
                     </li>
                 </ul>
