@@ -32,7 +32,6 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
     }
   }
   checkedAll: boolean;
-  mUser: ModelUser;
   bankingsDropdown = new Array<DropDownModel>();
 
   @ViewChild("receivePrice") inputReceivePrice: ElementRef;

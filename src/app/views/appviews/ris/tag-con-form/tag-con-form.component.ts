@@ -8,8 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { combineLatest } from 'rxjs';
-import { DropDownModel } from 'app/models/drop-down-model';
-import { appConfig } from 'app/app.config';
+import { getDateMyDatepicker } from 'app/app.config';
 declare var toastr: any;
 
 @Component({
@@ -43,9 +42,11 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
 
   ngOnInit() {
     // this.s_loader.showLoader();
+    
 
     this.formGroup = this.fb.group({
       bookingNo: new FormControl(null),
+      bookingDate: new FormControl(null, Validators.required),
       bookingStatus: new FormControl(1),
       createDate: new FormControl(new Date()),
       createBy: new FormControl(null),
@@ -59,6 +60,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       cutBalance: new FormControl(null),
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
+      price3: new FormControl(null),
       totalPrice: new FormControl(null)
     });
 
@@ -67,13 +69,17 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       if (!x) return;
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
       const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
-      const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
-      const totalPrice = price1 + vatPrice1 + price2;
+      const price3 = x.reduce((a, c) => a += c.itemPrice3, 0);
+      const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0); 
+      const netPrice1 = x.reduce((a, c) => a += c.itemNetPrice1, 0);
+      const totalPrice = price1 + vatPrice1 + price2 + price3;
       this.formGroup.patchValue({
         price1: price1,
         cutBalance: price1 + vatPrice1,
         price2: price2,
+        price3: price3,
         vatPrice1: vatPrice1,
+        netPrice1: netPrice1,
         totalPrice: totalPrice
       })
       this.chRef.detectChanges();
@@ -99,6 +105,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
         })
       ).subscribe(x => {
         this.chRef.markForCheck();
+        if (!x.currentUser) return;
         this.$Car.next(x.car);
         this.mUser = x.currentUser;
         this.formGroup.patchValue({
@@ -123,8 +130,15 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     let listItem = this.TagListItem$.value;
     listItem = listItem.reduce((a, c) => [...a, { ...c, runId: 0, bookingId: 0 }], []);
 
+    f = {
+      ...f,
+      bookingId: 0,
+      bookingDate: getDateMyDatepicker(f.bookingDate),
+      createDate: (f.createDate as Date).toISOString()
+    }
+
     const form = {
-      tagRegis: { ...f, bookingId: 0, createDate: (f.createDate as Date).toISOString() },
+      tagRegis: f,
       tagHistory: his,
       tagListItem: listItem
     };

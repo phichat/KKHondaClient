@@ -44,6 +44,34 @@
           </div>
         </div>
 
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">เลขทะเบียน</label>
+              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">จังหวัด</label>
+              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">ผู้ถือกรรมสิทธิ</label>
+              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">ผู้ติดต่อ</label>
+              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
@@ -67,7 +95,7 @@
           <div class="col-sm-6">
             <label class="col-lg-4 control-label">หมายเหตุ</label>
             <div class="col-lg-8">
-              <span class="form-control disabled">{{formGroup.get('remark').value}}</span>
+                <textarea formControlName="remark" rows="1" class="form-control" disabled></textarea>
             </div>
           </div>
           <div class="col-sm-6">
@@ -131,15 +159,15 @@
       <table class="table invoice-total m-t-sm">
         <tbody>
           <tr>
-            <td><strong>ยอดรวมเงินนำฝาก :</strong></td>
-            <td>{{formGroup.get('price1').value | number:'1.2-2'}}</td>
+            <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
+            <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td><strong>ยอดรวมภาษี :</strong></td>
             <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-          </tr>
+          </tr> -->
           <tr>
-            <td><strong>ยอดรวมเงินที่ต้องยืม :</strong></td>
+            <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
             <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
           </tr>
           <tr>
@@ -149,7 +177,7 @@
         </tbody>
       </table>
 
-      <div class="row m-t-md" *ngIf="formGroup.get('bookingStatus').value != ConStatus.Cancel">
+      <div class="row m-t-md form-group" *ngIf="formGroup.get('bookingStatus').value != ConStatus.Cancel">
         <div class="col-sm-6">
           <button type="button" class="btn btn-info btn-outline" [routerLink]="['/ris/con-form-edit', code]">
             <i class="fa fa-long-arrow-left" aria-hidden="true"></i>

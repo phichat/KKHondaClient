@@ -5,8 +5,9 @@ import { ListItemConfig } from './list-item.config';
 import { getDateMyDatepicker, setZeroHours, appConfig } from 'app/app.config';
 import { mergeMap, merge, map } from 'rxjs/operators';
 import { combineLatest, of } from 'rxjs';
-import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
+import { RisLocalStoreage as LS, UserForRis as EURIS, ExpensesType as EXPT } from 'app/entities/ris.entities';
 import { DropDownModel } from 'app/models/drop-down-model';
+import { UserService } from 'app/services/users';
 
 @Component({
   selector: 'app-list-item',
@@ -28,13 +29,21 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   constructor(
     private http: HttpClient,
     private chRef: ChangeDetectorRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private s_user: UserService
   ) {
     super();
     this.destroy();
+    this.mUser = s_user.cookies;
+    this.disableNotEqualSale = this.mUser.gId != EURIS.Sale;
+    this.disableNotEqualRis = this.mUser.gId != EURIS.Regist;
   }
 
+  toggleExpenses = true;
+  toggleTag = true;
+
   ngOnInit(): void {
+
     this.formGroup = this.fb.group({
       carRegisListItem: this.fb.array([])
     });
@@ -60,15 +69,17 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       warCompany: new FormControl(null),
       warRegis: new FormControl({ myDate: null }),
       warExpire: new FormControl({ myDate: null })
-    })
+    });
 
     this.formExpenses = this.fb.group({
       expitemCode: new FormControl(null),
       expItem: new FormControl(null),
       expPrice1: new FormControl(0),
-      expPrice2: new FormControl(0),
       expVatPrice1: new FormControl(0),
-      expIsVat: new FormControl(false),
+      expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
+      expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
+      expPrice2: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
+      expPrice3: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
       otItem: new FormControl(null),
       otPrice1: new FormControl(0),
       otPrice2: new FormControl(0),
@@ -80,7 +91,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     const mInsure = `${appConfig.apiUrl}/Master/CompanyInsurance/DropDown`;
     const observe = combineLatest(
       this.http.get<DropDownModel[]>(mProvince),
-      this.http.get<DropDownModel[]>(mInsure),
+      this.http.get<DropDownModel[]>(mInsure)
     ).pipe(
       map(x => {
         return { mProvince: x[0], mInsure: x[1] }
@@ -93,17 +104,17 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     })
 
     if (this.Mode != this.ActionMode.Detail) {
-      this.formExpenses.get('expPrice1')
+      this.formExpenses.get('expNetPrice1')
         .valueChanges
         .subscribe(() => {
           this.onExpensesCalVat();
         });
 
-      this.formExpenses.get('otPrice1')
-        .valueChanges
-        .subscribe(() => {
-          this.onOtherCalVat();
-        });
+      // this.formExpenses.get('otPrice1')
+      //   .valueChanges
+      //   .subscribe(() => {
+      //     this.onOtherCalVat();
+      //   });
 
       const apiURL = `${this.risUrl}/ExpensesOther`;
       this.http.get(apiURL)
@@ -135,13 +146,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
         }, () => this.loading = 2);
 
-      this.CarRegisListItem
-        .valueChanges
-        .subscribe((x: any[]) => this.emitValue(x));
+      this.CarRegisListItem.valueChanges.subscribe(() => this.emitValue(this.CarRegisListItem.getRawValue()));
 
-      this.formCarHistory
-        .valueChanges
-        .subscribe(x => this.emitValueTagHistory(x));
+      this.formCarHistory.valueChanges.subscribe(() => this.emitValueTagHistory(this.formCarHistory.getRawValue()));
     }
 
     if (this.Mode != this.ActionMode.Create) {
@@ -167,26 +174,32 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   }
 
   addListItemFromApi(list: any[]) {
+    const checkMode = this.Mode == this.ActionMode.Detail;
     list.forEach(item => {
       const fg = this.fb.group({
         runId: item.runId,
         bookingId: item.bookingId,
         itemCode: item.itemCode,
         itemName: item.itemName,
-        itemPrice1: new FormControl({
-          value: item.itemPrice1,
-          disabled: this.Mode == this.ActionMode.Detail ? true : false
-        }),
-        itemPrice2: new FormControl({
-          value: item.itemPrice2,
-          disabled: this.Mode == this.ActionMode.Detail ? true : false
+        itemPrice1: item.itemPrice1,
+        itemNetPrice1: new FormControl({
+          value: item.itemNetPrice1,
+          disabled: (checkMode || this.disableNotEqualSale) ? true : false
         }),
         itemIsVat: new FormControl({
           value: item.itemVatPrice1 > 0 && true,
-          disabled: this.Mode == this.ActionMode.Detail ? true : false
+          disabled: (checkMode || this.disableNotEqualSale) ? true : false
+        }),
+        itemPrice2: new FormControl({
+          value: item.itemPrice2,
+          disabled: (checkMode || this.disableNotEqualRis) ? true : false
+        }),
+        itemPrice3: new FormControl({
+          value: item.itemPrice3,
+          disabled: (checkMode || this.disableNotEqualRis) ? true : false
         }),
         itemVatPrice1: item.itemVatPrice1,
-        itemPriceTotal: item.itemPrice1 + item.itemVatPrice1 + item.itemPrice2
+        itemPriceTotal: item.itemNetPrice1 + item.itemPrice2 + item.itemPrice3
       });
       this.CarRegisListItem.push(fg);
     });
@@ -213,9 +226,19 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       itemCode: item.expensesCode,
       itemName: item.expensesDescription,
       itemPrice1: item.expensesAmount,
-      itemPrice2: 0,
-      itemIsVat: false,
       itemVatPrice1: 0,
+      itemNetPrice1: new FormControl({
+        value: 0, disabled: this.disableNotEqualSale ? true : false
+      }),
+      itemIsVat: new FormControl({
+        value: false, disabled: this.disableNotEqualSale ? true : false
+      }),
+      itemPrice2: new FormControl({
+        value: 0, disabled: this.disableNotEqualRis ? true : false
+      }),
+      itemPrice3: new FormControl({
+        value: 0, disabled: this.disableNotEqualRis ? true : false
+      }),
       itemCutBalance: item.itemCutBalance,
       itemPriceTotal: item.expensesAmount
     });
@@ -223,77 +246,77 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   }
 
   onAddExpItem() {
-    const exp = this.formExpenses.value;
+    const exp = this.formExpenses.getRawValue();
     const fg = this.fb.group({
       runId: 0,
       itemCode: exp.expitemCode,
       itemName: exp.expItem,
       itemPrice1: exp.expPrice1,
-      itemPrice2: exp.expPrice2,
-      itemIsVat: exp.expIsVat,
       itemVatPrice1: exp.expVatPrice1,
-      itemPriceTotal: exp.expPrice1 + exp.expVatPrice1 + exp.expPrice2
+      itemNetPrice1: new FormControl({
+        value: exp.expNetPrice1,
+        disabled: this.disableNotEqualSale ? true : false
+      }),
+      itemIsVat: new FormControl({
+        value: exp.expIsVat,
+        disabled: this.disableNotEqualSale
+      }),
+      itemPrice2: new FormControl({
+        value: exp.expPrice2,
+        disabled: this.disableNotEqualRis
+      }),
+      itemPrice3: new FormControl({
+        value: exp.expPrice3,
+        disabled: this.disableNotEqualRis
+      }),
+      itemPriceTotal: exp.expNetPrice1 + exp.expPrice2 + exp.expPrice3
     })
     this.CarRegisListItem.push(fg);
     this.formExpenses.patchValue({
       expitemCode: null,
       expItem: null,
-      expPrice1: 0,
-      expPrice2: 0,
-      expIsVat: false,
-      expVatPrice1: 0
-    })
-  }
-
-  onAddOtItem() {
-    const exp = this.formExpenses.value;
-    const fg = this.fb.group({
-      runId: 0,
-      itemName: exp.otItem,
-      itemPrice1: exp.otPrice1,
-      itemIsVat: exp.otIsVat,
-      itemVatPrice1: exp.otVatPrice1,
-      itemPrice2: exp.otPrice2,
-      itemPriceTotal: exp.otPrice1 + exp.otVatPrice1 + exp.otPrice2
-    })
-    this.CarRegisListItem.push(fg);
-    this.formExpenses.patchValue({
-      otItem: null,
-      otPrice1: 0,
-      otPrice2: 0,
-      otIsVat: false,
-      otVatPrice1: 0
+      expPrice1: null,
+      expVatPrice1: null,
+      expNetPrice1: null,
+      expPrice2: null,
+      expPrice3: null,
+      expIsVat: false
     })
   }
 
   onSelectExpenses(item: any) {
+    const isInternalCost = item.expensesType == EXPT.InternalCost;
     this.formExpenses.patchValue({
       expitemCode: item ? item.expensesCode : null,
-      expPrice1: item ? item.expensesAmount : null,
-      expPrice2: item ? item.expensesAmount : null
+      expPrice1: item ? (isInternalCost ? null : item.expensesAmount) : null,
+      expNetPrice1: item ? (isInternalCost ? null : item.expensesAmount) : null,
+      expPrice2: item ? (isInternalCost ? item.expensesAmount : null) : null,
     });
   }
 
   onExpensesCalVat() {
-    const expVatPrice1 = (this.formExpenses.get('expIsVat').value && this.formExpenses.get('expPrice1').value)
-      ? this.formExpenses.get('expPrice1').value * 0.07
-      : 0;
-    this.formExpenses.get('expVatPrice1').patchValue(expVatPrice1);
-  }
+    const expPrice1 = (this.formExpenses.get('expIsVat').value && this.formExpenses.get('expNetPrice1').value)
+      ? this.formExpenses.get('expNetPrice1').value / 1.07
+      : this.formExpenses.get('expNetPrice1').value;
 
-  onOtherCalVat() {
-    const otVatPrice1 = (this.formExpenses.get('otIsVat').value && this.formExpenses.get('otPrice1').value)
-      ? this.formExpenses.get('otPrice1').value * 0.07
-      : 0;
-    this.formExpenses.get('otVatPrice1').patchValue(otVatPrice1);
+    const expVatPrice1 = this.formExpenses.get('expNetPrice1').value - expPrice1;
+    this.formExpenses.patchValue({
+      expPrice1,
+      expVatPrice1
+    });
   }
 
   onItemCalVat(index) {
     let list = this.CarRegisListItem.at(index);
-    const vat = list.get('itemIsVat').value && list.get('itemPrice1').value
-      ? list.get('itemPrice1').value * 0.07
-      : 0;
-    list.get('itemVatPrice1').patchValue(vat);
+    const itemPrice1 = list.get('itemIsVat').value && list.get('itemNetPrice1').value
+      ? list.get('itemNetPrice1').value / 1.07
+      : list.get('itemNetPrice1').value;
+
+    const itemVatPrice1 = list.get('itemNetPrice1').value - itemPrice1;
+    list.patchValue({
+      itemPrice1,
+      itemVatPrice1
+    });
   }
 
   onRemoveListItem(index: number) {
@@ -311,7 +334,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
   emitValue(value: any[]) {
     const obj = [...value].reduce((a, c) =>
-      [...a, { ...c, itemCutBalance: c.itemPrice1 + c.itemVatPrice1 }],
+      [...a, { ...c, itemCutBalance: c.itemNetPrice1 }],
       []);
     this._IsTagItem = obj.filter(x => x.itemCode == 'EXP10001' || 'EXP10002').length ? false : true;
     this._IsActItem = obj.filter(x => x.itemCode == 'EXP10003').length ? false : true;

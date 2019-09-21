@@ -9,6 +9,7 @@ import { UserService } from 'app/services/users';
 import { combineLatest, BehaviorSubject } from 'rxjs';
 import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
 import { message } from 'app/app.message';
+import { getDateMyDatepicker } from 'app/app.config';
 declare var toastr: any;
 
 @Component({
@@ -28,6 +29,8 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     private router: Router
   ) {
     super()
+
+    this.mUser = this.s_user.cookies;
   }
 
   public $BookingId = new BehaviorSubject<number>(null);
@@ -40,6 +43,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     this.formGroup = this.fb.group({
       bookingId: new FormControl(null),
       bookingNo: new FormControl(null),
+      bookingDate: new FormControl(null),
       bookingStatus: new FormControl(null),
       statusDesc: new FormControl(null),
       createDate: new FormControl(null),
@@ -53,7 +57,9 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       fNo: new FormControl(null),
       price1: new FormControl(null),
       vatPrice1: new FormControl(null),
+      netPrice1: new FormControl(null),
       price2: new FormControl(null),
+      price3: new FormControl(null),
       totalPrice: new FormControl(null),
       remark: new FormControl(null)
     });
@@ -78,12 +84,13 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       })
     ).subscribe(o => {
       this.chRef.markForCheck();
+      
       this.$BookingStatus.next(o.conItem['bookingStatus']);
       const conItem = o.conItem;
-      this.mUser = o.curretUser;
       this.formGroup.patchValue({
         ...conItem,
-        updateBy: o.curretUser['id']
+        updateBy: this.mUser.id,
+        bookingDate: this.setDateMyDatepicker(conItem['bookingDate'])
       });
       this.$BookingId.next(conItem['bookingId']);
       this.s_loader.onEnd();
@@ -94,15 +101,19 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       if (!x) return;
       const remark = x.reduce((a, c) => [...a, c.itemName], []).join(', ')
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
-      const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
       const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
-      const totalPrice = price1 + vatPrice1 + price2;
+      const netPrice1 = x.reduce((a, c) => a += c.itemNetPrice1, 0);
+      const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
+      const price3 = x.reduce((a, c) => a += c.itemPrice3, 0);
+      const totalPrice = price1 + vatPrice1 + price2 + price3;
       this.formGroup.patchValue({
         remark: remark,
         price1: price1,
         cutBalance: price1 + vatPrice1,
         price2: price2,
+        price3: price3,
         vatPrice1: vatPrice1,
+        netPrice1: netPrice1,
         totalPrice: totalPrice
       })
       this.chRef.detectChanges();
@@ -117,6 +128,11 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     let tagListItem = this.TagListItem$.value;
     const trashTagListItem = (JSON.parse(localStorage.getItem(LS.TrashCarRegisListItem)) || []) as any[];
     tagListItem = tagListItem.reduce((a, c) => [...a, { ...c, bookingId: tagRegis.bookingId }], []);
+
+    tagRegis = {
+      ...tagRegis,
+      bookingDate: getDateMyDatepicker(tagRegis.bookingDate)
+    }
 
     const form = {
       tagRegis: tagRegis,

@@ -10,9 +10,9 @@ import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZeroH
 import { IMyDateModel } from 'mydatepicker-th';
 import { distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
-import { ModelUser } from '../../../../models/users';
 import { BookingModel } from 'app/models/selling';
 import { message } from 'app/app.message';
+import { IUserResCookie } from 'app/interfaces/users';
 
 declare var toastr: any;
 
@@ -51,7 +51,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     model: CalculateModel = new CalculateModel();
     contractModel: ContractModel = new ContractModel();
     contractItemModel = new Array<ContractModel>();
-    userModel = new ModelUser();
+    userModel: IUserResCookie;
     bookingNo: string;
     mode: string;
     myDatePickerOptions = MyDatePickerOptions;

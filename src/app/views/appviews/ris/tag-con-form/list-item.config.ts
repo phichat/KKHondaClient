@@ -33,6 +33,9 @@ export class ListItemConfig extends TagConFormConfig {
         return this._IsWarItem;
     }
 
+    disableNotEqualSale: boolean;
+    disableNotEqualRis: boolean;
+
     @Input() BookingId?: BehaviorSubject<number>;
     @Input() BookingStatus?: BehaviorSubject<number>;
     @Input() Car?: BehaviorSubject<any>;

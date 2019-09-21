@@ -1,6 +1,7 @@
 /* Import main Inspinia style */
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import "~datatables.net-bs/css/dataTables.bootstrap.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 @import "assets/styles/style";
 
@@ -181,3 +182,5 @@ span.required {
   left: 0 !important;
   width: 80%;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

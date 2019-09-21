@@ -11,7 +11,8 @@ export class RegisTagComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder
-  ) { }
+  ) { 
+  }
 
   formGroup: FormGroup;
 

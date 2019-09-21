@@ -4,10 +4,11 @@ import { DropDownModel } from 'app/models/drop-down-model';
 import { RisConfig } from '../ris.config';
 import { BehaviorSubject } from 'rxjs';
 import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
+import { IUserResCookie } from 'app/interfaces/users';
 
 export class TagConFormConfig extends RisConfig {
 
-    public mUser: ModelUser;
+    public mUser: IUserResCookie;
     public formGroup: FormGroup;
     public dataTable: any;
     public loading: number;

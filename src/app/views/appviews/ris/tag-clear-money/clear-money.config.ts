@@ -8,11 +8,12 @@ import { BehaviorSubject } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
 import { ISedRes, IConItemOutput, IConRes, IAlRes } from 'app/interfaces/ris';
 import { DropDownModel } from 'app/models/drop-down-model';
+import { IUserResCookie } from 'app/interfaces/users';
 
 export class ClearMoneyConfig extends RisConfig {
     public formGroup: FormGroup;
     public loading: number;
-    public mUser: ModelUser;
+    public mUser: IUserResCookie;
 
     public mode: number;
     public code: string;

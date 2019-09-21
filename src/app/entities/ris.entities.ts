@@ -37,3 +37,14 @@ export enum ClStatus {
 export enum RisLocalStoreage {
     TrashCarRegisListItem = "Trash_CarRegisListItem"
 }
+
+export enum UserForRis {
+    Sale = 1019,
+    Regist = 1029
+}
+
+export enum ExpensesType {
+    Service = 1,
+    Expenses = 2,
+    InternalCost = 3
+}

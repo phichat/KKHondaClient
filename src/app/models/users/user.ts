@@ -10,3 +10,5 @@ export class ModelUser {
     public userType: number;
     public fullName: string;
 };
+
+
