@@ -150,37 +150,33 @@
                     </div>
                   </div>
                 </div>
-                <!-- <ng-container *ngIf="formGroup.get('paymentType').value == '2'"> -->
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label"
-                    [ngClass]="{'is-required': formGroup.get('paymentType').value == '2'}">
-                    ธนาคาร
-                  </label>
-                  <div class="col-sm-6">
-                    <ng-select [required]="formGroup.get('paymentType').value == '2'" [items]="bankingsDropdown"
-                      bindValue="value" bindLabel="text" formControlName="bankCode">
-                    </ng-select>
+                <ng-container *ngIf="formGroup.get('paymentType').value == '2'">
+                  <div class="row form-group">
+                    <label for="" class="col-sm-6 control-label is-required">
+                      ธนาคาร
+                    </label>
+                    <div class="col-sm-6">
+                      <ng-select [items]="bankingsDropdown"
+                        bindValue="value" bindLabel="text" formControlName="bankCode">
+                      </ng-select>
+                    </div>
                   </div>
-                </div>
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label"
-                    [ngClass]="{'is-required': formGroup.get('paymentType').value == '2'}">
-                    หมายเลขอ้างอิง
-                  </label>
-                  <div class="col-sm-6 text-right">
-                    <input type="text" formControlName="documentRef"
-                      [required]="formGroup.get('paymentType').value == '2'" class="form-control"
-                      [readOnly]="formGroup.get('paymentType').value == '1'">
+                  <div class="row form-group">
+                    <label for="" class="col-sm-6 control-label is-required">
+                      หมายเลขอ้างอิง
+                    </label>
+                    <div class="col-sm-6 text-right">
+                      <input type="text" formControlName="documentRef" class="form-control">
+                    </div>
                   </div>
-                </div>
-                <!-- </ng-container> -->
+                </ng-container>
 
                 <div class="form-group">
                   <label class="col-lg-6 control-label">ยอดชำระ</label>
                   <div class="col-lg-6">
                     <input required type="number" class="form-control" formControlName="paymentPrice" #paymentPrice
                       (keyup)="onChangePaymentPrice(paymentPrice.value)" />
-                      <br>
+                    <br>
                     <div *ngIf="paymentPrice.value > price2RemainState" class="alert alert-danger" role="alert">
                       "ยอดชำระ" ต้องไม่มากกว่า "เงินที่ต้องยืม"
                     </div>
