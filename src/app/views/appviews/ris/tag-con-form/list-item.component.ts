@@ -34,7 +34,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   ) {
     super();
     this.destroy();
-    this.mUser = s_user.cookies;
+    this.mUser = this.s_user.cookies;
     this.disableNotEqualSale = this.mUser.gId != EURIS.Sale;
     this.disableNotEqualRis = this.mUser.gId != EURIS.Regist;
   }
@@ -43,6 +43,18 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   toggleTag = true;
 
   ngOnInit(): void {
+    const status = combineLatest(this.Status1, this.Status2).pipe(
+      map((val) => {
+        return { status1: val[0], status2: val[1] }
+      })
+    );
+
+    status.subscribe(x => {
+      this.chRef.markForCheck;
+      this.disableNotEqualReceive = x.status1 != this.ConStatus1.Received && x.status1 != null;
+      this.disableIsEqualSend1 = x.status2 != null;
+      this.disableIsEqualSend2 = x.status2 != this.ConStatus2.Send1;
+    })
 
     this.formGroup = this.fb.group({
       carRegisListItem: this.fb.array([])
@@ -74,17 +86,17 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     this.formExpenses = this.fb.group({
       expitemCode: new FormControl(null),
       expItem: new FormControl(null),
-      expPrice1: new FormControl(0),
-      expVatPrice1: new FormControl(0),
+      expPrice1: new FormControl(null),
+      expVatPrice1: new FormControl(null),
       expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
       expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
       expPrice2: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
       expPrice3: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
-      otItem: new FormControl(null),
-      otPrice1: new FormControl(0),
-      otPrice2: new FormControl(0),
-      otVatPrice1: new FormControl(0),
-      otIsVat: new FormControl(false)
+      // otItem: new FormControl(null),
+      // otPrice1: new FormControl(null),
+      // otPrice2: new FormControl(null),
+      // otVatPrice1: new FormControl(null),
+      // otIsVat: new FormControl(false)
     })
 
     const mProvince = `${appConfig.apiUrl}/Master/MProvince/DropDown`;
@@ -124,7 +136,13 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
             return;
           };
           this.chRef.markForCheck();
-          this.expenses = x;
+
+          if (this.mUser.gId == EURIS.Sale) {
+            this.expenses = x.filter(o => o.expensesType != EXPT.InternalCost);
+          } else {
+            this.expenses = x;
+          }
+
           if (this.Car) {
             this.Car.subscribe(o => {
               if (!o) return;
@@ -184,19 +202,19 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
         itemPrice1: item.itemPrice1,
         itemNetPrice1: new FormControl({
           value: item.itemNetPrice1,
-          disabled: (checkMode || this.disableNotEqualSale) ? true : false
+          disabled: (checkMode || this.disabledItemNetPrice1) ? true : false
         }),
         itemIsVat: new FormControl({
           value: item.itemVatPrice1 > 0 && true,
-          disabled: (checkMode || this.disableNotEqualSale) ? true : false
+          disabled: (checkMode || this.disabledItemVatPrice1) ? true : false
         }),
         itemPrice2: new FormControl({
           value: item.itemPrice2,
-          disabled: (checkMode || this.disableNotEqualRis) ? true : false
+          disabled: (checkMode || this.disabledItemPrice2) ? true : false
         }),
         itemPrice3: new FormControl({
           value: item.itemPrice3,
-          disabled: (checkMode || this.disableNotEqualRis) ? true : false
+          disabled: (checkMode || this.disableItemPrice3) ? true : false
         }),
         itemVatPrice1: item.itemVatPrice1,
         itemPriceTotal: item.itemNetPrice1 + item.itemPrice2 + item.itemPrice3
@@ -234,10 +252,10 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
         value: false, disabled: this.disableNotEqualSale ? true : false
       }),
       itemPrice2: new FormControl({
-        value: 0, disabled: this.disableNotEqualRis ? true : false
+        value: 0, disabled: this.disabledItemPrice2
       }),
       itemPrice3: new FormControl({
-        value: 0, disabled: this.disableNotEqualRis ? true : false
+        value: 0, disabled: this.disableItemPrice3
       }),
       itemCutBalance: item.itemCutBalance,
       itemPriceTotal: item.expensesAmount
@@ -263,11 +281,11 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       }),
       itemPrice2: new FormControl({
         value: exp.expPrice2,
-        disabled: this.disableNotEqualRis
+        disabled: this.disabledItemPrice2
       }),
       itemPrice3: new FormControl({
         value: exp.expPrice3,
-        disabled: this.disableNotEqualRis
+        disabled: this.disableItemPrice3
       }),
       itemPriceTotal: exp.expNetPrice1 + exp.expPrice2 + exp.expPrice3
     })
@@ -281,10 +299,30 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       expPrice2: null,
       expPrice3: null,
       expIsVat: false
-    })
+    });
+  }
+
+  get disabledItemNetPrice1(): boolean {
+    return (this.disableNotEqualSale || this.disableNotEqualReceive) ? true : false;
+  }
+
+  get disabledItemVatPrice1(): boolean {
+    return this.disabledItemNetPrice1;
+  }
+
+  get disabledItemPrice2(): boolean {
+    return (this.disableNotEqualRis || this.disableIsEqualSend1) ? true : false;
+  }
+
+  get disableItemPrice3(): boolean {
+    return (this.disableNotEqualRis || this.disableIsEqualSend2) ? true : false
   }
 
   onSelectExpenses(item: any) {
+    if (!item) {
+      this.formExpenses.reset();
+      return;
+    }
     const isInternalCost = item.expensesType == EXPT.InternalCost;
     this.formExpenses.patchValue({
       expitemCode: item ? item.expensesCode : null,

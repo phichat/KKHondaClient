@@ -1,7 +1,8 @@
 export interface ICon {
     bookingId: number;
     bookingNo: string;
-    bookingStatus: number;
+    status1?: number;
+    status2?: number;
     state: number;
     eNo: string;
     fNo: string;
@@ -9,6 +10,7 @@ export interface ICon {
     vatPrice1?: number;
     cutBalance?: number;
     price2?: number;
+    price3?: number;
     totalPrice?: number;
     createBy?: number;
     createDate?: Date;

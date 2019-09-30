@@ -34,7 +34,8 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
   }
 
   public $BookingId = new BehaviorSubject<number>(null);
-  public $BookingStatus = new BehaviorSubject<number>(null);
+  public $Status1 = new BehaviorSubject<number>(null);
+  public $Status2 = new BehaviorSubject<number>(null);
   private code: string;
 
   ngOnInit() {
@@ -44,7 +45,8 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       bookingId: new FormControl(null),
       bookingNo: new FormControl(null),
       bookingDate: new FormControl(null),
-      bookingStatus: new FormControl(null),
+      status1: new FormControl(null),
+      status2: new FormControl(null),
       statusDesc: new FormControl(null),
       createDate: new FormControl(null),
       createBy: new FormControl(null),
@@ -84,8 +86,9 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       })
     ).subscribe(o => {
       this.chRef.markForCheck();
-      
-      this.$BookingStatus.next(o.conItem['bookingStatus']);
+  
+      this.$Status1.next(o.conItem['status1']);
+      this.$Status2.next(o.conItem['status2']);
       const conItem = o.conItem;
       this.formGroup.patchValue({
         ...conItem,

@@ -37,15 +37,16 @@
               <th>จังหวัด</th>
               <th>หมายเลขตัวถัง</th>
               <th>หมายเลขเครื่อง</th>
-              <th class="text-right">เงินรับฝากรวมภาษี</th>
-              <th class="text-right">เงินที่ต้องยืม</th>
+              <th class="text-right">เงินรับฝาก</th>
+              <th class="text-right">ค่าใช้จ่าย</th>
+              <th class="text-right">ค่าใช่จ่าย(เบิกเพิ่ม)</th>
               <th class="text-right">ยอดรวม</th>
               <th>หมายเหตุ</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="conList.length == 0; else else_tr;">
-              <td colspan="13" class="text-center">
+              <td colspan="14" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="1">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -69,9 +70,9 @@
               <tr *ngFor="let item of conList; let i = index">
                 <td [attr.data-order]="i" class="text-center">{{i+1}}</td>
                 <td class="text-center">
-                  <button class="btn btn-xs" [ngClass]="{'btn-info': item.bookingStatus != ConStatus.Cancel}"
+                  <button class="btn btn-xs" [ngClass]="{'btn-info': item.status1 != ConStatus1.Cancel}"
                     [routerLink]="['/ris/con-form-edit', item.bookingNo]"
-                    [disabled]="item.bookingStatus == ConStatus.Cancel">
+                    [disabled]="item.status1 == ConStatus1.Cancel">
                     <i class="fa fa-pencil"></i>
                     แก้ไข
                   </button>&nbsp;
@@ -82,10 +83,10 @@
                 </td>
                 <td [attr.data-order]="item.bookingId">{{item.bookingNo}}</td>
                 <td [ngClass]="{
-                    'text-danger': item.bookingStatus == ConStatus.Cancel,
-                    'text-navy': item.bookingStatus == ConStatus.Received,
-                    'text-muted': item.bookingStatus != ConStatus.Cancel && item.bookingStatus != ConStatus.Received
-                  }">{{item.statusDesc}}</td>
+                    'text-danger': item.status1 == ConStatus1.Cancel,
+                    'text-navy': item.status1 == ConStatus1.Received || item.status1 == ConStatus1.Withdraw1,
+                    'text-muted': item.status1 == ConStatus1.Withdraw2
+                  }">{{item.status1Desc}}</td>
                 <td>{{item.branchName}}</td>
                 <td>{{item.tagNo}}</td>
                 <td>{{item.branchProvince}}</td>
@@ -94,6 +95,7 @@
                 <td [attr.data-order]="item.price1" class="text-right">{{item.price1 + item.vatPrice1 | number:'1.2-2'}}
                 </td>
                 <td [attr.data-order]="item.price2" class="text-right">{{item.price2 | number:'1.2-2'}}</td>
+                <td [attr.data-order]="item.price2" class="text-right">{{item.price3 | number:'1.2-2'}}</td>
                 <td [attr.data-order]="item.totalPrice" class="text-right">{{item.totalPrice | number:'1.2-2'}}</td>
                 <td>{{item.remark}}</td>
               </tr>

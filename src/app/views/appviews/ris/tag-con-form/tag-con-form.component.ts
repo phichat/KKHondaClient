@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { combineLatest } from 'rxjs';
+import { combineLatest, BehaviorSubject } from 'rxjs';
 import { getDateMyDatepicker } from 'app/app.config';
 declare var toastr: any;
 
@@ -36,18 +36,15 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       'closeButton': true,
       'progressBar': true,
     }
-
-
   }
 
-  ngOnInit() {
-    // this.s_loader.showLoader();
-    
+  public $Status1 = new BehaviorSubject<number>(null);
 
+  ngOnInit() {
     this.formGroup = this.fb.group({
       bookingNo: new FormControl(null),
       bookingDate: new FormControl(null, Validators.required),
-      bookingStatus: new FormControl(1),
+      status1: new FormControl(1),
       createDate: new FormControl(new Date()),
       createBy: new FormControl(null),
       updateDate: new FormControl(null),

@@ -134,7 +134,7 @@
     </div>
 
 
-    <app-list-item [BookingId]="$BookingId" [BookingStatus]="$BookingStatus" [Mode]="ActionMode.Edit"
+    <app-list-item [BookingId]="$BookingId" [Status1]="$Status1" [Status2]="$Status2" [Mode]="ActionMode.Edit"
       (TagListItem)="TagListItem$.next($event)" (TagHistory)="TagHistory$.next($event)"></app-list-item>
 
     <table class="table invoice-total">
@@ -143,13 +143,13 @@
           <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
           <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
         </tr>
-        <!-- <tr>
-              <td><strong>ยอดรวมภาษี :</strong></td>
-              <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-            </tr> -->
         <tr>
           <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
           <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
+          <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
         </tr>
         <tr>
           <td><strong>ยอดรวมทั้งหมด :</strong></td>

@@ -102,6 +102,8 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
             remainPrice: x.remainPrice,
             price2Remain: x.price2Remain,
             paymentPrice: x.paymentPrice,
+            price1: x.price1,
+            netPrice1: x.netPrice1,
             price2: x.price2,
             bankName: x.bankName,
             documentRef: x.documentRef,

@@ -3,12 +3,20 @@ export enum PaymentType {
     Transfer = 2
 }
 
-export enum ConStatus {
+export enum ConStatus1 {
     Cancel = 0,
     Received = 1,
-    Sending = 2,
-    PartialDelivery = 3,
-    CompleteDelivery = 4
+    Withdraw1 = 2,
+    Withdraw2 = 3,
+    // Sending = 4,
+    // PartialDelivery = 5,
+    // CompleteDelivery = 6
+}
+
+export enum ConStatus2 {
+    Send1 = 1,
+    Send2 = 2,
+    REV = 3
 }
 
 export enum RevStatus {

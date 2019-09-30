@@ -91,14 +91,22 @@
               </thead>
               <tbody formArrayName="SedList">
                 <tr *ngIf="SedList.length == 0; else else_tr;">
-                  <td colspan="7" class="text-center">
+                  <td colspan="8" class="text-center">
                     <div [ngSwitch]="loading">
-                      <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
-                      <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
+                      <div *ngSwitchCase="1">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>ไม่มีข้อมูล</p>
+                      </div>
+                      <div *ngSwitchCase="2">
+                        <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>มีบางอย่างผิดพลาด</p>
+                      </div>
                       <div *ngSwitchDefault>
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <br>
-                        <span class="mt-2">รอสักครู่...</span>
+                        <p>รอสักครู่...</p>
                       </div>
                     </div>
                   </td>
@@ -117,8 +125,8 @@
                     <td [attr.data-order]="item.get('sedId').value">
                       {{displayLocalDate(item.get('createDate').value)}}
                     </td>
-                    <td class="text-right" [attr.data-order]="item.get('price1').value">
-                      {{item.get('price1').value | number:'1.2-2'}}
+                    <td class="text-right" [attr.data-order]="item.get('netPrice1').value">
+                      {{item.get('netPrice1').value | number:'1.2-2'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2').value">
                       {{item.get('price2').value | number:'1.2-2'}}
@@ -156,8 +164,8 @@
                       ธนาคาร
                     </label>
                     <div class="col-sm-6">
-                      <ng-select [items]="bankingsDropdown"
-                        bindValue="value" bindLabel="text" formControlName="bankCode">
+                      <ng-select [items]="bankingsDropdown" bindValue="value" bindLabel="text"
+                        formControlName="bankCode">
                       </ng-select>
                     </div>
                   </div>

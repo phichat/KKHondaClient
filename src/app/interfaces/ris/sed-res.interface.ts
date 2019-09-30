@@ -6,6 +6,7 @@ export interface ISedRes {
     vatPrice1: number;
     netPrice1: number;
     price2: number;
+    price3?: number;
     price2Remain: number;
     totalPrice: number;
     borrowMoney: number;

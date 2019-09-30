@@ -35,9 +35,15 @@ export class ListItemConfig extends TagConFormConfig {
 
     disableNotEqualSale: boolean;
     disableNotEqualRis: boolean;
+    disableNotEqualReceive: boolean = true;
+    // disableNotEqualWithdraw1: boolean = true;
+    // disableNotEqualWithdraw2: boolean = true;
+    disableIsEqualSend1: boolean = true;
+    disableIsEqualSend2: boolean = true;
 
-    @Input() BookingId?: BehaviorSubject<number>;
-    @Input() BookingStatus?: BehaviorSubject<number>;
+    @Input() BookingId: BehaviorSubject<number>;
+    @Input() Status1: BehaviorSubject<number>;
+    @Input() Status2: BehaviorSubject<number>;
     @Input() Car?: BehaviorSubject<any>;
     @Input() Mode: ActionMode;
     @Output() TagListItem = new EventEmitter<any[]>();

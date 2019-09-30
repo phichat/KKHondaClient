@@ -8,17 +8,19 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class UserService {
-  private user = ['admin_name', 'branch', 'id', 'name', 'user_type'];
-
-  private __user = [
-    { name: 'admin_name', value: 'Admin+001' },
-    { name: 'branch', value: '1' },
-    { name: 'id', value: '4111' },
-    { name: 'menu', value: 'open' },
-    { name: 'name', value: '001' },
-    { name: 'user_type', value: '2' }
+  private user = [
+    'id',
+    'adminName',
+    'fullName',
+    'userType',
+    'branchId',
+    'branch',
+    'branchName',
+    'department',
+    'gId',
+    'name',
+    'groupPagePermission'
   ];
-
 
   private url = `${appConfig.apiUrl}/Users`;
 
@@ -73,7 +75,7 @@ export class UserService {
   }
 
   signOut() {
-    this.user.map(async x => await this.deleteCookie(x));
+    this.user.map(x => this.deleteCookie(x));
     window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
   }
 

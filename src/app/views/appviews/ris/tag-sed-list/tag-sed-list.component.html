@@ -31,15 +31,16 @@
             <th>วันที่ส่งเรื่อง</th>
             <th>ผู้ดำเนินการ</th>
             <th>สถานะ</th>
-            <th class="text-right">เงินที่ต้องส่งรวมภาษี</th>
-            <th class="text-right">เงินที่ต้องยืม</th>
+            <th class="text-right">เงินรับฝาก</th>
+            <th class="text-right">ค่าใช้จ่าย</th>
+            <th class="text-right">ค่าใช้จ่าย(เบิกเพิ่ม)</th>
             <th class="text-right">เงินยืม</th>
             <th>หมายเหตุ</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngIf="SedList.length == 0; else else_tr;">
-            <td colspan="9" class="text-center">
+            <td colspan="11" class="text-center">
               <div [ngSwitch]="loading">
                 <div *ngSwitchCase="1">
                   <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -85,6 +86,9 @@
               </td>
               <td class="text-right" [attr.data-order]="item.price2">
                 {{item.price2 | number:'1.2-2'}}
+              </td>
+              <td class="text-right" [attr.data-order]="item.price3">
+                {{item.price3 | number:'1.2-2'}}
               </td>
               <td class="text-right" [attr.data-order]="item.borrowMoney">
                 {{item.borrowMoney | number:'1.2-2'}}

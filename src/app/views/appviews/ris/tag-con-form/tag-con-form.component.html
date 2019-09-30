@@ -121,8 +121,8 @@
       </div>
     </div>
 
-    <app-list-item [Car]="$Car" [Mode]="ActionMode.Create" (TagListItem)="TagListItem$.next($event)"
-      (TagHistory)="TagHistory$.next($event)">
+    <app-list-item [Car]="$Car" [Mode]="ActionMode.Create" [Status1]="$Status1"
+      (TagListItem)="TagListItem$.next($event)" (TagHistory)="TagHistory$.next($event)">
     </app-list-item>
 
     <table class="table invoice-total m-t-sm">
@@ -131,13 +131,13 @@
           <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
           <td>{{formGroup.get('price1').value | number:'1.2-2'}}</td>
         </tr>
-        <!-- <tr>
-              <td><strong>ยอดรวมภาษี :</strong></td>
-              <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-            </tr> -->
         <tr>
           <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
           <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
+          <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
         </tr>
         <tr>
           <td><strong>ยอดรวมทั้งหมด :</strong></td>

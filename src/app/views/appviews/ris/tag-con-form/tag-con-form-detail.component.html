@@ -107,7 +107,7 @@
         </div>
         <div class="row form-group">
           <div class="col-sm-6">
-            <ng-container *ngIf="formGroup.get('bookingStatus').value == ConStatus.Received; else elseReason">
+            <ng-container *ngIf="formGroup.get('status1').value == ConStatus1.Received; else elseReason">
               <label class="col-lg-4 control-label is-required">สาเหตุในการยกเลิก</label>
               <div class="col-lg-8">
                 <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text" formControlName="reason">
@@ -153,7 +153,7 @@
 
       <br>
 
-      <app-list-item [BookingId]="$BookingId" [Mode]="ActionMode.Detail">
+      <app-list-item [BookingId]="$BookingId" [Status1]="$Status1" [Mode]="ActionMode.Detail">
       </app-list-item>
 
       <table class="table invoice-total m-t-sm">
@@ -162,13 +162,13 @@
             <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
             <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
           </tr>
-          <!-- <tr>
-            <td><strong>ยอดรวมภาษี :</strong></td>
-            <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-          </tr> -->
           <tr>
             <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
             <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+          </tr>
+          <tr>
+            <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
+            <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
           </tr>
           <tr>
             <td><strong>ยอดรวมทั้งหมด :</strong></td>
@@ -177,7 +177,7 @@
         </tbody>
       </table>
 
-      <div class="row m-t-md form-group" *ngIf="formGroup.get('bookingStatus').value != ConStatus.Cancel">
+      <div class="row m-t-md form-group" *ngIf="formGroup.get('status1').value != ConStatus1.Cancel">
         <div class="col-sm-6">
           <button type="button" class="btn btn-info btn-outline" [routerLink]="['/ris/con-form-edit', code]">
             <i class="fa fa-long-arrow-left" aria-hidden="true"></i>

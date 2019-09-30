@@ -36,12 +36,14 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
 
   public code: string;
   public $BookingId = new BehaviorSubject<number>(null);
+  public $Status1 = new BehaviorSubject<number>(null);
 
   ngOnInit() {
     this.formGroup = this.fb.group({
       bookingId: new FormControl(null),
       bookingNo: new FormControl(null),
-      bookingStatus: new FormControl(null),
+      status1: new FormControl(null),
+      status2: new FormControl(null),
       statusDesc: new FormControl(null),
       createDate: new FormControl(null),
       createName: new FormControl(null),
@@ -93,6 +95,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
         updateBy: o.curretUser['id']
       });
       this.$BookingId.next(conItem['bookingId']);
+      this.$Status1.next(conItem['status1']);
       this.s_loader.onEnd();
     });
   }
