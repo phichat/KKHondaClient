@@ -92,7 +92,7 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <table class="table table-stripped table-hover display nowrap" width="100%">
+            <table class="table table-stripped table-hover display nowrap set-dataTable" width="100%">
               <thead>
                 <tr>
                   <th>ลำดับ</th>
@@ -104,18 +104,20 @@
                   </th>
                   <th>เลขที่ใบรับเรื่อง</th>
                   <th>วันที่รับเรื่อง</th>
+                  <th class="text-right">เงินรับฝาก</th>
+                  <th class="text-right">ค่าใช้จ่าย</th>
+                  <th class="text-right">ค่าใช้จ่าย(เบิกเพิ่ม)</th>
+                  <th class="text-right">รวมค่าใช้จ่าย</th>
                   <th>สาขา</th>
                   <th>เลขทะเบียน</th>
                   <th>จังหวัด</th>
                   <th>หมายเลขตัวถัง</th>
-                  <th>เงินรับฝาก</th>
-                  <th>ค่าใช้จ่าย</th>
                   <th>หมายเหตุ</th>
                 </tr>
               </thead>
               <tbody formArrayName="conList">
                 <tr *ngIf="ConList.length == 0; else else_tr;">
-                  <td colspan="11" class="text-center">
+                  <td colspan="13" class="text-center">
                     <div [ngSwitch]="loading">
                       <div *ngSwitchCase="1">
                         <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -146,53 +148,58 @@
                     </td>
                     <td [attr.data-order]="i">{{item.get('bookingNo')?.value}}</td>
                     <td [attr.data-order]="i">{{displayLocalDate(item.get('createDate').value)}}</td>
-                    <td>{{item.get('branchName')?.value}}</td>
-                    <td>{{item.get('tagNo')?.value}}</td>
-                    <td>{{item.get('branchProvince')?.value}}</td>
-                    <td>{{item.get('fNo')?.value}}</td>
                     <td class="text-right" [attr.data-order]="item.get('netPrice1')?.value">
                       {{item.get('netPrice1')?.value | number:'1.2-2'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2')?.value">
                       {{item.get('price2')?.value | number:'1.2-2'}}
                     </td>
+                    <td class="text-right" [attr.data-order]="item.get('price3')?.value">
+                      {{item.get('price3')?.value | number:'1.2-2'}}
+                    </td>
+                    <td class="text-right" style="background-color: #d9edf7;" [attr.data-order]="item.get('price2')?.value + item.get('price3')?.value">
+                      {{item.get('price2')?.value + item.get('price3')?.value | number:'1.2-2'}}
+                    </td>
+                    <td>{{item.get('branchName')?.value}}</td>
+                    <td>{{item.get('tagNo')?.value}}</td>
+                    <td>{{item.get('branchProvince')?.value}}</td>
+                    <td>{{item.get('fNo')?.value}}</td>
                     <td>{{item.get('remark').value}}</td>
                   </tr>
                 </ng-template>
 
               </tbody>
             </table>
-            <hr>
-            <div class="row">
-              <div class="col-lg-5"></div>
-              <div class="col-lg-7">
-                <div class="form-group">
-                  <label class="col-lg-6 control-label">ยอดรวมเงินรับฝาก</label>
-                  <div class="col-lg-6">
-                    <span class="form-control disabled">
-                      {{formGroup.get('netPrice1').value | number:'1.2-2'}}</span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-lg-6 control-label">จำนวนเงินค่าใช้จ่าย</label>
-                  <div class="col-lg-6">
-                    <span class="form-control disabled">
-                      {{formGroup.get('price2').value | number:'1.2-2'}}</span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-lg-6 control-label">จำนวนเงินยืม</label>
-                  <div class="col-lg-6">
-                    <span class="form-control disabled">
-                      {{formGroup.get('borrowMoney').value | number:'1.2-2'}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
+
+
+    <table class="table invoice-total m-t-sm">
+      <tbody>
+        <tr>
+          <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
+          <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>ค่าใช้จ่าย :</strong></td>
+          <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
+          <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>รวมค่าใช่จ่าย :</strong></td>
+          <td>{{formGroup.get('price2').value + formGroup.get('price3').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>จำนวนเงินยืม :</strong></td>
+          <td>{{formGroup.get('borrowMoney').value | number:'1.2-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="row">
       <div class="col-lg-12 text-right">

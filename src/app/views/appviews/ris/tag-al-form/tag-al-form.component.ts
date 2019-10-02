@@ -48,6 +48,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       price1: new FormControl(null),
       netPrice1: new FormControl(null),
       price2: new FormControl(null),
+      price3: new FormControl(null),
       bankCode: new FormControl(null),
       documentRef: new FormControl(null),
       paymentType: new FormControl(null),

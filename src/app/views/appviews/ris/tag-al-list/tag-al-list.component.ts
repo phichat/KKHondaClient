@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./tag-al-list.component.scss']
 })
 export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDestroy {
-  
+
   ngOnDestroy(): void {
     this.destroyDatatable();
   }
@@ -38,6 +38,7 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
       const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false, conList: "" }], []);
       this.setItemFormArray(res, this.formGroup, 'SedList');
       this.chRef.markForCheck();
+      this.reInitDatatable();
     }, () => {
       this.loading = 2;
     });

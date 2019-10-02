@@ -63,6 +63,22 @@
                 <span class="form-control disabled">{{formGroup.get('paymentPrice').value | number:'1.2-2'}}</span>
               </div>
             </div>
+            <div class="form-group">
+              <ng-container *ngIf="formGroup.get('status').value == AlStatus.Normal; else elseReason">
+                <label class="col-lg-3 control-label is-required">สาเหตุในการยกเลิก</label>
+                <div class="col-lg-9">
+                  <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
+                    formControlName="reason">
+                  </ng-select>
+                </div>
+              </ng-container>
+              <ng-template #elseReason>
+                <label class="col-lg-3 control-label">สาเหตุในการยกเลิก</label>
+                <div class="col-lg-9">
+                  <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
+                </div>
+              </ng-template>
+            </div>
           </div>
 
           <div class="col-xs-6 col-lg-6">
@@ -100,16 +116,16 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+            <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
               <thead>
                 <tr>
                   <th class="text-center">ลำดับ</th>
                   <th></th>
                   <th>เลขที่ใบส่งเรื่อง</th>
                   <th>วันที่ส่งเรื่อง</th>
-                  <th>เงินที่ต้องส่ง</th>
-                  <th>เงินที่ต้องยืม</th>
-                  <th>เงินยืม</th>
+                  <th class="text-right">เงินที่ต้องส่ง</th>
+                  <th class="text-right">เงินที่ต้องยืม</th>
+                  <th class="text-right">เงินยืม</th>
                 </tr>
               </thead>
               <tbody formArrayName="SedList">
@@ -161,71 +177,41 @@
 
               </tbody>
             </table>
-            <hr>
-            <div class="row">
-              <div class="col-lg-5"></div>
-              <div class="col-lg-7">
-                <div class="form-group">
-                  <label class="col-lg-6 control-label">ประเภทชำระ</label>
-                  <div class="col-lg-6">
-
-                    <div class="radio radio-info radio-inline">
-                      <input required type="radio" formControlName="paymentType" id="paymentType0" value=1 disabled>
-                      <label for="paymentType0">เงินสด</label>
-                    </div>
-                    <div class="radio radio-info radio-inline">
-                      <input required type="radio" formControlName="paymentType" id="paymentType1" value=2 disabled>
-                      <label for="paymentType1">เงินโอน</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label">
-                    ธนาคาร
-                  </label>
-                  <div class="col-sm-6">
-                    <span class="form-control disabled">{{formGroup.get('bankName').value}}</span>
-                  </div>
-                </div>
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label">
-                    หมายเลขอ้างอิง
-                  </label>
-                  <div class="col-sm-6 text-right">
-                    <span class="form-control disabled">{{formGroup.get('documentRef').value}}</span>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="col-lg-6 control-label">ยอดชำระ</label>
-                  <div class="col-lg-6">
-                    <span class="form-control disabled">{{formGroup.get('paymentPrice').value | number:'1.2-2'}}</span>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <ng-container *ngIf="formGroup.get('status').value == AlStatus.Normal; else elseReason">
-                    <label class="col-lg-6 control-label is-required">สาเหตุในการยกเลิก</label>
-                    <div class="col-lg-6">
-                      <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
-                        formControlName="reason">
-                      </ng-select>
-                    </div>
-                  </ng-container>
-                  <ng-template #elseReason>
-                    <label class="col-lg-6 control-label">สาเหตุในการยกเลิก</label>
-                    <div class="col-lg-6">
-                      <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
-                    </div>
-                  </ng-template>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
+
+
+    <table class="table invoice-total m-t-sm">
+      <tbody>
+        <tr>
+          <td><strong>ประเภทชำระ :</strong></td>
+          <td>
+            <div class="radio radio-info radio-inline">
+              <input required type="radio" formControlName="paymentType" id="paymentType0" value=1 disabled>
+              <label for="paymentType0">เงินสด</label>
+            </div>
+            <div class="radio radio-info radio-inline">
+              <input required type="radio" formControlName="paymentType" id="paymentType1" value=2 disabled>
+              <label for="paymentType1">เงินโอน</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>ธนาคาร :</strong></td>
+          <td>{{formGroup.get('bankName').value}}</td>
+        </tr>
+        <tr>
+          <td><strong>หมายเลขอ้างอิง :</strong></td>
+          <td>{{formGroup.get('documentRef').value}}</td>
+        </tr>
+        <tr>
+          <td><strong>ยอดชำระ :</strong></td>
+          <td>{{formGroup.get('paymentPrice').value | number:'1.2-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="row">
       <div class="col-lg-12 text-right">

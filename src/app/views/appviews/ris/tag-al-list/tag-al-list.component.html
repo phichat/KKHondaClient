@@ -24,7 +24,7 @@
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup">
-        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
           <thead>
             <tr>
               <th class="text-center">ลำดับ</th>
@@ -33,9 +33,9 @@
               <th>เลขที่ใบยืม</th>
               <th>วันที่ยืม</th>
               <th>สถานะ</th>
-              <!-- <th class="text-right">เงินที่ต้องส่ง</th> -->
               <th class="text-right">เงินที่ต้องยืม</th>
               <th class="text-right">เงินยืม</th>
+              <th>หมายเหต</th>
             </tr>
           </thead>
           <tbody formArrayName="SedList">
@@ -79,7 +79,8 @@
                   'text-muted': item.get('status').value == AlStatus.CashBack
                 }">{{item.get('statusDesc').value}}</td>
                 <td class="text-right">{{item.get('price2Remain')?.value | number:'1.2-2'}}</td>
-                <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+                <td class="text-right" style="background-color: #d9edf7;">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+                <td>{{item.get('remark').value}}</td>
               </tr>
             </ng-template>
 

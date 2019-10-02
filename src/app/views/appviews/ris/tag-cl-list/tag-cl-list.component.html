@@ -25,7 +25,7 @@
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <form class="form-horizontal" style="margin-bottom: 15em;">
-        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
           <thead>
             <tr>
               <th class="text-center">ลำดับ</th>
@@ -37,14 +37,13 @@
               <th>สถานะ</th>
               <th class="text-right">เงินยืมคงเหลือ</th>
               <th class="text-right">เงินคืน</th>
-              <!-- <th class="text-right">จำนวนเงินยืม</th> -->
               <th>ผู้ดำเนินการ (คืนเงิน)</th>
               <th>ผู้รับคืน</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="clList.length == 0; else else_tr;">
-              <td colspan="10" class="text-center">
+              <td colspan="11" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="1">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -82,8 +81,7 @@
                   'text-navy': item.status == ClStatus.Normal
                 }">{{item.statusDesc}}</td>
                 <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
-                <td class="text-right">{{item.receivePrice | number:'1.2-2'}}</td>
-                <!-- <td class="text-right">{{item.netPrice | number:'1.2-2'}}</td> -->
+                <td class="text-right" style="background-color: #d9edf7;">{{item.receivePrice | number:'1.2-2'}}</td>
                 <td>{{item.refundName}}</td>
                 <td>{{item.createName}}</td>
               </tr>

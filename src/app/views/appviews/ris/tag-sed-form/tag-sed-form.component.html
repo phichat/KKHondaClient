@@ -63,7 +63,7 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <table class="table table-stripped table-hover display nowrap" width="100%">
+            <table class="table table-stripped table-hover display nowrap set-dataTable" width="100%">
               <thead>
                 <tr>
                   <th>ลำดับ</th>
@@ -114,7 +114,6 @@
                         <input type="checkbox" id="select{{i}}" formControlName="IS_CHECKED">
                         <label for="select{{i}}"></label>
                       </div>
-                      <!-- <input type="checkbox" formControlName="IS_CHECKED" [id]="i"> -->
                     </td>
                     <td [attr.data-order]="i">{{item.get('bookingNo')?.value}}</td>
                     <td [attr.data-order]="i">{{displayLocalDate(item.get('createDate').value)}}</td>
@@ -125,7 +124,7 @@
                     <td class="text-right" [attr.data-order]="item.get('netPrice1')?.value">
                       {{item.get('netPrice1')?.value | number:'1.2-2'}}
                     </td>
-                    <td class="text-right" [attr.data-order]="item.get('price2')?.value">
+                    <td style="background-color: #d9edf7;" class="text-right" [attr.data-order]="item.get('price2')?.value">
                       {{item.get('price2')?.value | number:'1.2-2'}}
                     </td>
                     <td>{{item.get('remark').value}}</td>

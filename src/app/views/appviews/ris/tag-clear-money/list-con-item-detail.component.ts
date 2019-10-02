@@ -114,7 +114,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     item.patchValue({
       receiveDate: checkbox.checked ? (new Date()) : null,
       receiveBy: checkbox.checked ? this.mUser.id : null,
-      receiveName: checkbox.checked ? this.mUser.name : null
+      receiveName: checkbox.checked ? this.mUser.fullName : null
     });
   }
 
@@ -124,7 +124,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     item.patchValue({
       sendDate: checkbox.checked ? (new Date()) : null,
       sendBy: checkbox.checked ? this.mUser.id : null,
-      sendName: checkbox.checked ? this.mUser.name : null
+      sendName: checkbox.checked ? this.mUser.fullName : null
     });
   }
 

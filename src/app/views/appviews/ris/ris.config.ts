@@ -20,7 +20,7 @@ export class RisConfig {
 
 
   public initDatatable(): void {
-    let table: any = $('table');
+    let table: any = $('table.set-dataTable');
     this.dataTable = table.DataTable({
       "scrollX": true,
       // "columns": [

@@ -75,7 +75,7 @@
         <div class="ibox float-e-margins">
           <div class="ibox-content">
             <div class="table-responsive">
-              <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+              <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
                 <thead>
                   <tr>
                     <th class="text-center">ลำดับ</th>
@@ -131,55 +131,6 @@
               </table>
             </div>
 
-            <!-- <div class="tabs-container">
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a data-toggle="tab" href="#tab1">
-                    รายการรถ
-                  </a>
-                </li>
-                <li>
-                  <a data-toggle="tab" href="#tab2">
-                    รายงานเงินยืม
-                  </a>
-                </li>
-              </ul>
-              <div class="tab-content" style="height: 240px; overflow:scroll;">
-                <div id="tab1" class="tab-pane active">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-                <div id="tab2" class="tab-pane">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <br>
-            <div class="tabs-container">
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a data-toggle="tab" href="#tab1_1">
-                    รายเรื่องย่อยที่รับคืน
-                  </a>
-                </li>
-                <li>
-                  <a data-toggle="tab" href="#tab1_2">
-                    เอกสาร/สิ่งที่รับคืน
-                  </a>
-                </li>
-              </ul>
-              <div class="tab-content">
-                <div id="tab1_1" class="tab-pane active">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-                <div id="tab1_2" class="tab-pane">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-              </div>
-            </div> -->
             <hr>
             <div class="row">
               <div class="col-lg-5"></div>
@@ -187,44 +138,46 @@
                 <div class="form-group">
                   <label class="col-lg-6 control-label">ประเภทชำระ</label>
                   <div class="col-lg-6">
-
                     <div class="radio radio-info radio-inline">
-                      <input type="radio" formControlName="paymentType" id="paymentType0" value=1>
+                      <input required type="radio" formControlName="paymentType" id="paymentType0" value=1>
                       <label for="paymentType0">เงินสด</label>
                     </div>
                     <div class="radio radio-info radio-inline">
-                      <input type="radio" formControlName="paymentType" id="paymentType1" value=2>
+                      <input required type="radio" formControlName="paymentType" id="paymentType1" value=2>
                       <label for="paymentType1">เงินโอน</label>
                     </div>
                   </div>
                 </div>
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label"
-                    [ngClass]="{'is-required': formGroup.get('paymentType').value == '2'}">
-                    ธนาคาร
-                  </label>
-                  <div class="col-sm-6">
-                    <ng-select [required]="formGroup.get('paymentType').value == '2'" [items]="bankingsDropdown"
-                      bindValue="value" bindLabel="text" formControlName="bankCode">
-                    </ng-select>
+                <ng-container *ngIf="formGroup.get('paymentType').value == '2'">
+                  <div class="row form-group">
+                    <label for="" class="col-sm-6 control-label is-required">
+                      ธนาคาร
+                    </label>
+                    <div class="col-sm-6">
+                      <ng-select [items]="bankingsDropdown" bindValue="value" bindLabel="text"
+                        formControlName="bankCode">
+                      </ng-select>
+                    </div>
                   </div>
-                </div>
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label"
-                    [ngClass]="{'is-required': formGroup.get('paymentType').value == '2'}">
-                    หมายเลขอ้างอิง
-                  </label>
-                  <div class="col-sm-6 text-right">
-                    <input type="text" formControlName="documentRef"
-                      [required]="formGroup.get('paymentType').value == '2'" class="form-control"
-                      [readOnly]="formGroup.get('paymentType').value == '1'">
+                  <div class="row form-group">
+                    <label for="" class="col-sm-6 control-label is-required">
+                      หมายเลขอ้างอิง
+                    </label>
+                    <div class="col-sm-6 text-right">
+                      <input type="text" formControlName="documentRef" class="form-control">
+                    </div>
                   </div>
-                </div>
+                </ng-container>
                 <div class="form-group">
                   <label class="col-lg-6 control-label is-required">ยอดรับคืนเงิน</label>
                   <div class="col-lg-6">
                     <input type="number" class="form-control" #receivePrice formControlName="receivePrice"
                       (keyup)="onChangeReceivePrice(receivePrice.value)" />
+                      <!-- formGroup.get('balancePrice').value -->
+                      <br>
+                    <div *ngIf="formGroup.get('balancePrice').value < 0" class="alert alert-danger" role="alert">
+                      "ยอดรับคืน" ต้องไม่มากกว่า "เงินยืมคงเหลือ"
+                    </div>
                   </div>
                 </div>
               </div>
@@ -236,7 +189,7 @@
 
     <div class="row">
       <div class="col-lg-12 text-right">
-        <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+        <button class="btn btn-success" type="submit" [disabled]="formGroup.invalid || formGroup.get('balancePrice').value < 0">บันทึกรายการ</button>
       </div>
     </div>
   </form>

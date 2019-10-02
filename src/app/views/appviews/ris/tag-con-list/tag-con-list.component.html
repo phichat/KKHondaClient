@@ -25,13 +25,15 @@
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <form class="form-horizontal" style="margin-bottom: 15em;">
-        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
           <thead>
             <tr>
               <th class="text-center">ลำดับ</th>
               <th></th>
-              <th>เลขที่ใบรับเรื่อง</th>
-              <th>สถานะ</th>
+              <th>เลขที่รับเรื่อง</th>
+              <th>เลขที่รับคืนเรื่อง</th>
+              <th>สถานะดำเนินการ</th>
+              <th>ผลดำเนินการ</th>
               <th>สาขา</th>
               <th>เลขทะเบียน</th>
               <th>จังหวัด</th>
@@ -46,7 +48,7 @@
           </thead>
           <tbody>
             <tr *ngIf="conList.length == 0; else else_tr;">
-              <td colspan="14" class="text-center">
+              <td colspan="16" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="1">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -82,11 +84,16 @@
                   </a>
                 </td>
                 <td [attr.data-order]="item.bookingId">{{item.bookingNo}}</td>
+                <td>{{item.revNo}}</td>
                 <td [ngClass]="{
                     'text-danger': item.status1 == ConStatus1.Cancel,
                     'text-navy': item.status1 == ConStatus1.Received || item.status1 == ConStatus1.Withdraw1,
                     'text-muted': item.status1 == ConStatus1.Withdraw2
                   }">{{item.status1Desc}}</td>
+                <td [ngClass]="{
+                    'text-navy': item.status2 == ConStatus2.Send1 || item.status2 == ConStatus2.Send2,
+                    'text-muted': item.status2 == ConStatus2.REV
+                  }">{{item.status2Desc}}</td>
                 <td>{{item.branchName}}</td>
                 <td>{{item.tagNo}}</td>
                 <td>{{item.branchProvince}}</td>

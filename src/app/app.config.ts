@@ -9,6 +9,9 @@ export const appConfig = {
     apiUrl: 'http://localhost:53076/api'
 }
 
+export const yy_th = (new Date().getFullYear() + 543).toString().substr(2, 2);
+export const mm = leftPad((new Date().getMonth() + 1).toString(), 2, '0');
+
 export const MyDatePickerOptions: IMyOptions = {
     dateFormat: 'dd / mm / yyyy',
     showClearDateBtn: true,
@@ -16,6 +19,11 @@ export const MyDatePickerOptions: IMyOptions = {
     openSelectorOnInputClick: true,
     editableDateField: false
 };
+
+export function leftPad(str: string, len: number, char: string): string {
+    len = len - str.length + 1;
+    return len > 0 ? new Array(len).join(char) + str : str;
+}
 
 export function resetLocalDate(date: string): string {
     if (date === '' || date == null) {

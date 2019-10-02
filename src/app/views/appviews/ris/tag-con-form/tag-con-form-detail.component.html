@@ -183,7 +183,7 @@
             <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
             แก้ไข
           </button>​</div>
-        <div class="col-sm-6 text-right">
+        <div class="col-sm-6 text-right" *ngIf="formGroup.get('status2').value == null">
           <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">
             ยกเลิกรายการ
           </button>

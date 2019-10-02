@@ -22,7 +22,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="ibox float-e-margins">
     <div class="ibox-content">
-      <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+      <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
         <thead>
           <tr>
             <th class="text-center">ลำดับ</th>
@@ -34,13 +34,14 @@
             <th class="text-right">เงินรับฝาก</th>
             <th class="text-right">ค่าใช้จ่าย</th>
             <th class="text-right">ค่าใช้จ่าย(เบิกเพิ่ม)</th>
+            <th class="text-right">รวมค่าใช้จ่าย</th>
             <th class="text-right">เงินยืม</th>
             <th>หมายเหตุ</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngIf="SedList.length == 0; else else_tr;">
-            <td colspan="11" class="text-center">
+            <td colspan="12" class="text-center">
               <div [ngSwitch]="loading">
                 <div *ngSwitchCase="1">
                   <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -89,6 +90,9 @@
               </td>
               <td class="text-right" [attr.data-order]="item.price3">
                 {{item.price3 | number:'1.2-2'}}
+              </td>
+              <td class="text-right" style="background-color: #d9edf7;" [attr.data-order]="item.price2 + item.price3">
+                {{item.price2 + item.price3 | number:'1.2-2'}}
               </td>
               <td class="text-right" [attr.data-order]="item.borrowMoney">
                 {{item.borrowMoney | number:'1.2-2'}}

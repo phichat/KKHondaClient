@@ -76,22 +76,23 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+            <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
               <thead>
                 <tr>
                   <th class="text-center">ลำดับ</th>
                   <th></th>
                   <th>เลขที่ใบส่งเรื่อง</th>
                   <th>วันที่ส่งเรื่อง</th>
-                  <th>เงินที่ต้องส่ง</th>
-                  <th>เงินที่ต้องยืม</th>
-                  <th>เงินยืม</th>
+                  <th class="text-right">เงินรับฝาก</th>
+                  <th class="text-right">ค่าใช้จ่าย</th>
+                  <th class="text-right">ค่าใช้จ่าย(เบิกเพิ่ม)</th>
+                  <th class="text-right">เงินที่ต้องยืม</th>
                   <th>หมายเหตุ</th>
                 </tr>
               </thead>
               <tbody formArrayName="SedList">
                 <tr *ngIf="SedList.length == 0; else else_tr;">
-                  <td colspan="8" class="text-center">
+                  <td colspan="9" class="text-center">
                     <div [ngSwitch]="loading">
                       <div *ngSwitchCase="1">
                         <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -130,6 +131,9 @@
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2').value">
                       {{item.get('price2').value | number:'1.2-2'}}
+                    </td>
+                    <td class="text-right" [attr.data-order]="item.get('price3').value">
+                      {{item.get('price3').value | number:'1.2-2'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2Remain').value">
                       {{item.get('price2Remain').value | number:'1.2-2'}}
@@ -199,7 +203,7 @@
 
     <div class="row">
       <div class="col-lg-12 text-right">
-        <button class="btn btn-success" [disabled]="form.invalid || paymentPrice.value > formGroup.get('price2').value"
+        <button class="btn btn-success" [disabled]="form.invalid || paymentPrice.value > price2RemainState"
           type="submit">บันทึกรายการ</button>
       </div>
     </div>

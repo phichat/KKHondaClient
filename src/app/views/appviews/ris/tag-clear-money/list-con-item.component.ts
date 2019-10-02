@@ -30,6 +30,7 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
       tap(() => {
         this.loading = this.LoadEnt.loading;
         this.destroyDatatable();
+        this.selectCon(null);
         while (this.ConList.length) this.ConList.removeAt(0);
       }),
       mergeMap(x => {

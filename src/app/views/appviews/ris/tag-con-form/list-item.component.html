@@ -156,7 +156,7 @@
   </div>
   <div class="ibox-content" *ngIf="toggleExpenses">
     <ng-container *ngIf="Mode != ActionMode.Detail">
-      <ng-container *ngIf="(BookingStatus | async) == ConStatus1.Received || (BookingStatus | async) == null">
+      <ng-container *ngIf="(Status1 | async) == ConStatus1.Received || (Status1 | async) == null">
         <section [formGroup]="formExpenses">
           <table class="table table-form-expenses" style="width: 120%;">
             <thead>
