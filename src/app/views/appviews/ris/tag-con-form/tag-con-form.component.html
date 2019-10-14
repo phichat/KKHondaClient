@@ -62,17 +62,16 @@
           </div>
         </div>
 
-
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-md-4 control-label is-required">เลขทะเบียน</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+            <div class="form-group"><label class="col-md-4 control-label">เลขทะเบียน</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="tagNo" readonly />
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-md-4 control-label is-required">จังหวัด</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+            <div class="form-group"><label class="col-md-4 control-label">จังหวัด</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="province" readonly />
               </div>
             </div>
           </div>
@@ -80,22 +79,33 @@
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label is-required">ผู้ถือกรรมสิทธิ</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="ownerName" readonly />
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label is-required">ผู้ติดต่อ</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="visitorName" readonly />
               </div>
             </div>
           </div>
         </div>
         <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
+                <textarea formControlName="remark" rows="1" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6"></div>
+        </div>
+
+        <div class="row form-group">
           <div class="col-xs-12 text-center">
             <div class="form-group">
               <button class="btn btn-info" type="button" data-toggle="modal"
-                data-target="#carHistory">ประวัติรถ</button>
+                data-target="#carHistory" (click)="openHistory()">ประวัติรถ</button>
             </div>
           </div>
         </div>
@@ -104,18 +114,22 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="carHistory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="carHistory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog _dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span></button>
+            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button> -->
             <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
           </div>
           <div class="modal-body">
-            <app-tag-history-car (ENo)="formGroup.get('eNo').patchValue($event)"
-              (FNo)="formGroup.get('fNo').patchValue($event)">
-            </app-tag-history-car>
+            <app-tag-history-car [$BookingId]="$CarHistoryBookingId" (HistoryCar$)="historyCarChange($event)"
+            [$ENo]="$ENo" [$FNo]="$FNo"></app-tag-history-car>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
+              [disabled]="$HistoryCar.invalid" (click)="confirmHistory()">ตกลง</button>
           </div>
         </div>
       </div>

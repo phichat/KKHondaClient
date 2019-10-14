@@ -1,12 +1,12 @@
 import { IMyOptions, IMyDateModel } from "mydatepicker-th";
 import { DropDownModel } from './models/drop-down-model';
 import { AutoCompleteModel } from './models/auto-complete-model';
+import { environment } from 'environments/environment';
 
 export const appConfig = {
-    // apiUrl: 'http://203.154.126.61/kk-honda-api/api',
     reportUrl: 'http://203.154.126.61/kk-honda-report',
     apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice',
-    apiUrl: 'http://localhost:53076/api'
+    apiUrl: environment.apiUrl
 }
 
 export const yy_th = (new Date().getFullYear() + 543).toString().substr(2, 2);

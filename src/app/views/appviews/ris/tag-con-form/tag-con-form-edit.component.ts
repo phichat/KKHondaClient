@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
 import { HttpClient } from '@angular/common/http';
 import { finalize, map, tap, mergeMap } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { UserService } from 'app/services/users';
-import { combineLatest, BehaviorSubject } from 'rxjs';
+import { combineLatest, BehaviorSubject, Subject } from 'rxjs';
 import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
 import { message } from 'app/app.message';
 import { getDateMyDatepicker } from 'app/app.config';
@@ -33,9 +33,10 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     this.mUser = this.s_user.cookies;
   }
 
-  public $BookingId = new BehaviorSubject<number>(null);
-  public $Status1 = new BehaviorSubject<number>(null);
-  public $Status2 = new BehaviorSubject<number>(null);
+  // public $BookingId = new Subject<number>();
+  // public $CarHistoryBookingId = new Subject<number>();
+  // public $Status1 = new Subject<number>();
+  // public $Status2 = new Subject<number>();
   private code: string;
 
   ngOnInit() {
@@ -63,7 +64,13 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       price2: new FormControl(null),
       price3: new FormControl(null),
       totalPrice: new FormControl(null),
-      remark: new FormControl(null)
+      remark: new FormControl(null),
+      ownerCode: new FormControl(null, Validators.required),
+      ownerName: new FormControl(null, Validators.required),
+      visitorCode: new FormControl(null, Validators.required),
+      visitorName: new FormControl(null, Validators.required),
+      province: new FormControl(null),
+      tagNo: new FormControl(null)
     });
 
     this.activeRoute.params.pipe(
@@ -72,30 +79,18 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
         const conNoUrl = `${this.risUrl}/GetByConNo`;
         const params = { conNo: x['code'] };
         this.code = x['code'];
-        return combineLatest(
-          this.http.get(conNoUrl, { params }),
-          this.s_user.currentData
-        ).pipe(
-          map(o => {
-            return {
-              conItem: o[0],
-              curretUser: o[1]
-            };
-          })
-        );
+        return this.http.get(conNoUrl, { params });
       })
     ).subscribe(o => {
       this.chRef.markForCheck();
-  
-      this.$Status1.next(o.conItem['status1']);
-      this.$Status2.next(o.conItem['status2']);
-      const conItem = o.conItem;
+      this.$Status1.next(o['status1']);
+      this.$Status2.next(o['status2']);
       this.formGroup.patchValue({
-        ...conItem,
+        ...o,
         updateBy: this.mUser.id,
-        bookingDate: this.setDateMyDatepicker(conItem['bookingDate'])
+        bookingDate: this.setDateMyDatepicker(o['bookingDate'])
       });
-      this.$BookingId.next(conItem['bookingId']);
+      this.$BookingId.next(o['bookingId']);
       this.s_loader.onEnd();
     });
 
@@ -122,12 +117,15 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       this.chRef.detectChanges();
     });
 
-
   }
 
   onSubmit() {
     let tagRegis = { ...this.formGroup.value };
-    let tagHistory = { ...this.TagHistory$.value };
+    const tagHistory = {
+      ...this.TagHistory$.value,
+      ownerCode: tagRegis.ownerCode,
+      visitorCode: tagRegis.visitorCode
+    };
     let tagListItem = this.TagListItem$.value;
     const trashTagListItem = (JSON.parse(localStorage.getItem(LS.TrashCarRegisListItem)) || []) as any[];
     tagListItem = tagListItem.reduce((a, c) => [...a, { ...c, bookingId: tagRegis.bookingId }], []);
@@ -143,7 +141,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       tagListItem,
       trashTagListItem
     };
-    
+
     this.s_loader.showLoader();
     const url = `${this.risUrl}/Update`;
     this.http.post(url, form)
@@ -155,4 +153,8 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       }, () => toastr.error(message.failed));
 
   }
+
+  openHistory() {
+    this.$CarHistoryBookingId.next(this.formGroup.get('bookingId').value)
+}
 }

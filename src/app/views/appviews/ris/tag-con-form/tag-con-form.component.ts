@@ -1,13 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
 import { HttpClient } from '@angular/common/http';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, map } from 'rxjs/operators';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { combineLatest, BehaviorSubject } from 'rxjs';
+import { combineLatest, BehaviorSubject, Subject } from 'rxjs';
 import { getDateMyDatepicker } from 'app/app.config';
 declare var toastr: any;
 
@@ -36,9 +36,8 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
   }
-
-  public $Status1 = new BehaviorSubject<number>(null);
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -58,7 +57,14 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
       price3: new FormControl(null),
-      totalPrice: new FormControl(null)
+      totalPrice: new FormControl(null),
+      remark: new FormControl(null),
+      ownerCode: new FormControl(null, Validators.required),
+      ownerName: new FormControl(null, Validators.required),
+      visitorCode: new FormControl(null, Validators.required),
+      visitorName: new FormControl(null, Validators.required),
+      province: new FormControl(null),
+      tagNo: new FormControl(null),
     });
 
     this.TagListItem$.subscribe(x => {
@@ -67,7 +73,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
       const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
       const price3 = x.reduce((a, c) => a += c.itemPrice3, 0);
-      const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0); 
+      const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
       const netPrice1 = x.reduce((a, c) => a += c.itemNetPrice1, 0);
       const totalPrice = price1 + vatPrice1 + price2 + price3;
       this.formGroup.patchValue({
@@ -88,27 +94,16 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
         mergeMap(x => {
           const url = `${this.risUrl}/GetCarBySellNo`;
           const params = { sellNo: x['code'] }
-          return combineLatest(
-            this.http.get(url, { params }),
-            this.s_user.currentData
-          ).pipe(
-            map(o => {
-              return {
-                car: o[0] as any,
-                currentUser: o[1]
-              }
-            })
-          )
+          return this.http.get(url, { params })
         })
       ).subscribe(x => {
         this.chRef.markForCheck();
-        if (!x.currentUser) return;
-        this.$Car.next(x.car);
-        this.mUser = x.currentUser;
+        if (!x) return;
+        this.$Car.next(x);
         this.formGroup.patchValue({
-          ...x.car,
-          branchId: x.currentUser.branch,
-          createBy: x.currentUser.id
+          ...x,
+          branchId: this.mUser.branch,
+          createBy: this.mUser.id
         });
         this.s_loader.onEnd()
         this.chRef.detectChanges();
@@ -119,10 +114,12 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     let f = { ...this.formGroup.value };
     let his = {
       ...this.TagHistory$.value,
-      carId: 0,
+      // carId: 0,
       branchId: f.branchId,
       eNo: f.eNo,
-      fNo: f.fNo
+      fNo: f.fNo,
+      ownerCode: f.ownerCode,
+      visitorCode: f.visitorCode
     };
     let listItem = this.TagListItem$.value;
     listItem = listItem.reduce((a, c) => [...a, { ...c, runId: 0, bookingId: 0 }], []);
@@ -140,8 +137,6 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       tagListItem: listItem
     };
 
-    // console.log(form);
-
     this.s_loader.showLoader();
     const url = `${this.risUrl}`;
     this.http.post(url, form)
@@ -149,7 +144,12 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {
         toastr.success(message.created);
-        this.router.navigate(['ris/con-form-create']);
+        this.router.navigate(['ris/con-list']);
       }, () => toastr.error(message.failed));
+  }
+
+  openHistory() {
+    this.$FNo.next(this.formGroup.get('fNo').value);
+    this.$ENo.next(this.formGroup.get('eNo').value);
   }
 }

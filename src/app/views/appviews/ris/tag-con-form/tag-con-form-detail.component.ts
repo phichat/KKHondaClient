@@ -6,8 +6,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { finalize, mergeMap, tap, map } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { message } from 'app/app.message';
@@ -35,8 +34,6 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
   }
 
   public code: string;
-  public $BookingId = new BehaviorSubject<number>(null);
-  public $Status1 = new BehaviorSubject<number>(null);
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -61,7 +58,11 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       price3: new FormControl(null),
       totalPrice: new FormControl(null),
       reason: new FormControl(null, Validators.required),
-      remark: new FormControl(null)
+      remark: new FormControl(null),
+      visitorName: new FormControl(null),
+      ownerName: new FormControl(null),
+      province: new FormControl(null),
+      tagNo: new FormControl(null)
     })
 
     this.activeRoute.params.pipe(
@@ -84,7 +85,8 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
             };
           })
         );
-      })
+      }),
+      finalize(() => this.s_loader.onEnd())
     ).subscribe(o => {
       this.chRef.markForCheck();
       const conItem = o.conItem;
@@ -96,7 +98,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       });
       this.$BookingId.next(conItem['bookingId']);
       this.$Status1.next(conItem['status1']);
-      this.s_loader.onEnd();
+
     });
   }
 
@@ -123,4 +125,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     window.open(url, '_blank');
   }
 
+  openHistory() {
+    this.$CarHistoryBookingId.next(this.formGroup.get('bookingId').value)
+  }
 }

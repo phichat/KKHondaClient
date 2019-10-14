@@ -46,14 +46,30 @@
 
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเลขเครื่อง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="eNo" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเลขตัวถัง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="fNo" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label">เลขทะเบียน</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="tagNo" readonly />
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label">จังหวัด</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="province" readonly />
               </div>
             </div>
           </div>
@@ -61,50 +77,34 @@
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label">ผู้ถือกรรมสิทธิ</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="ownerName" readonly />
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label">ผู้ติดต่อ</label>
-              <div class="col-md-8"><input type="text" class="form-control" readonly />
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="visitorName" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
+                <textarea formControlName="remark" rows="1" class="form-control" readonly></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">สถานะ</label>
+              <div class="col-md-8">
+                  <input type="text" class="form-control" formControlName="statusDesc" readonly />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row form-group">
-          <div class="col-xs-6 col-lg-6">
-            <div class="form-group">
-              <label class="col-lg-4 control-label is-required">หมายเลขเครื่อง</label>
-              <div class="col-lg-8">
-                <span class="form-control disabled">{{formGroup.get('eNo').value}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-6 col-lg-6">
-            <div class="form-group">
-              <label class="col-lg-4 control-label is-required">หมายเลขตัวถัง</label>
-              <div class="col-lg-8">
-                <span class="form-control disabled">{{formGroup.get('fNo').value}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row form-group">
-          <div class="col-sm-6">
-            <label class="col-lg-4 control-label">หมายเหตุ</label>
-            <div class="col-lg-8">
-                <textarea formControlName="remark" rows="1" class="form-control" disabled></textarea>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <label class="col-lg-4 control-label">สถานะ</label>
-            <div class="col-lg-8">
-              <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
-            </div>
-          </div>
-        </div>
         <div class="row form-group">
           <div class="col-sm-6">
             <ng-container *ngIf="formGroup.get('status1').value == ConStatus1.Received; else elseReason">
@@ -117,18 +117,19 @@
             <ng-template #elseReason>
               <label class="col-lg-4 control-label">สาเหตุในการยกเลิก</label>
               <div class="col-lg-8">
-                <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
+                  <input type="text" class="form-control" formControlName="reason" readonly />
               </div>
             </ng-template>
           </div>
           <div class="col-sm-6">
           </div>
         </div>
+
         <div class="row form-group">
           <div class="col-xs-12 text-center">
             <div class="form-group">
-              <button class="btn btn-info" type="button" data-toggle="modal"
-                data-target="#carHistory">ประวัติรถ</button>
+              <button class="btn btn-info" type="button" data-toggle="modal" data-target="#carHistory"
+                (click)="openHistory()">ประวัติรถ</button>
             </div>
           </div>
         </div>
@@ -144,8 +145,10 @@
               <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
             </div>
             <div class="modal-body">
-              <app-tag-history-car (ENo)="null" (FNo)="null">
-              </app-tag-history-car>
+              <app-tag-history-car [$BookingId]="$CarHistoryBookingId" [$ENo]="" [$FNo]=""></app-tag-history-car>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
             </div>
           </div>
         </div>
