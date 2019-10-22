@@ -13,6 +13,7 @@ export interface IConItemRes {
     state?: string | number;
     dateReceipt?: any;
     remark: string;
+    itemTag: string;
 }
 
 export interface IConItemOutput {

@@ -135,6 +135,7 @@ span.required {
   .btnpicker {
     border-radius: unset !important;
   }
+
   .mydpicon {
     color: $fontColor !important;
   }
@@ -182,5 +183,17 @@ span.required {
   left: 0 !important;
   width: 80%;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-middle {
+  vertical-align: middle !important;
+}

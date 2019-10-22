@@ -56,3 +56,10 @@ export enum ExpensesType {
     Expenses = 2,
     InternalCost = 3
 }
+
+export enum ExpensesTag {
+    EXP10001 = 'EXP10001',
+    EXP10002 = 'EXP10002',
+    EXP10003 = 'EXP10003',
+    EXP10004 = 'EXP10004'
+}

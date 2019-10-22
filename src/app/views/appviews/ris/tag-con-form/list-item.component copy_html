@@ -1,4 +1,4 @@
-<!-- <div class="ibox border-bottom float-e-margins">
+<div class="ibox border-bottom float-e-margins">
   <div class="ibox-title">
     <h5>บันทึก ทะเบียน/พ.ร.บ./ประกัน</h5>
     <div class="ibox-tools">
@@ -8,58 +8,18 @@
     </div>
   </div>
   <div class="ibox-content" *ngIf="toggleTag">
-   
-  </div>
-</div> -->
-
-
-
-<div class="ibox border-bottom float-e-margins">
-  <div class="ibox-title">
-    <h5>บันทึก บริการ/ค่าบริการ</h5>
-    <div class="ibox-tools">
-      <a class="close-link" (click)="toggleExpenses = !toggleExpenses">
-        <i class="fa" [ngClass]="{'fa-chevron-up': !toggleExpenses,'fa-chevron-down': toggleExpenses}"></i>
-      </a>
-    </div>
-  </div>
-  <div class="ibox-content" *ngIf="toggleExpenses">
-
     <section [formGroup]="formCarHistory">
-      <table class="table table-bordered">
+      <table class="table">
         <thead>
           <tr>
-            <th>
-              <div class="checkbox checkbox-primary">
-                <input #EXP10001 type="checkbox" id="EXP10001" value="EXP10001"
-                  (click)="addExpenseForm('EXP10001', $event)">
-                <label for="EXP10001">จดทะเบียนรถใหม่</label>
-              </div>
-              <div class="checkbox checkbox-primary">
-                <input #EXP10002 type="checkbox" id="EXP10002" value="EXP10002"
-                  (click)="addExpenseForm('EXP10002', $event)">
-                <label for="EXP10002">ต่อทะเบียน</label>
-              </div>
-            </th>
-            <th>
-              <div class="checkbox checkbox-primary">
-                <input #EXP10003 type="checkbox" id="EXP10003" value="EXP10003"
-                  (click)="addExpenseForm('EXP10003', $event)">
-                <label for="EXP10003">ทำ พ.ร.บ.</label>
-              </div>
-            </th>
-            <th>
-              <div class="checkbox checkbox-primary">
-                <input #EXP10004 type="checkbox" id="EXP10004" value="EXP10004"
-                  (click)="addExpenseForm('EXP10004', $event)">
-                <label for="EXP10004">ทำประกันภัย</label>
-              </div>
-            </th>
+            <th>ดำเนินการทางทะเบียน</th>
+            <th>ทำ พ.ร.บ.</th>
+            <th>ทำประกันภัย</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>
+            <td class="b-r">
               <div class="row m-b-sm">
                 <label class="col-md-5 control-label">เลขทะเบียน</label>
                 <div class="col-md-7">
@@ -94,7 +54,7 @@
               </div>
             </td>
 
-            <td>
+            <td class="b-r">
               <div class="row m-b-sm">
                 <label class="col-md-5 control-label">กรมธรรม์ พ.ร.บ.</label>
                 <div class="col-md-7">
@@ -127,6 +87,20 @@
                   </my-date-picker-th>
                 </div>
               </div>
+              <!-- <div class="row  m-b-sm">
+                <label class="col-md-5 control-label">เลขที่ใบอนุญาต</label>
+                <div class="col-md-7">
+                  <input type="text" class="form-control" formControlName="commitNo" [readOnly]="IsActItem">
+                </div>
+              </div>
+              <div class="row  m-b-sm">
+                <label class="col-md-5 control-label">ใบอนุญาตหมดอายุ</label>
+                <div class="col-md-7">
+                  <my-date-picker-th [options]="myDatePickerOptions" formControlName="commitExpire"
+                    [disabled]="IsActItem">
+                  </my-date-picker-th>
+                </div>
+              </div> -->
             </td>
 
             <td class="">
@@ -163,56 +137,25 @@
                 </div>
               </div>
             </td>
-          </tr>
 
+          </tr>
         </tbody>
       </table>
     </section>
+  </div>
+</div>
 
-    <div class="hr-line-dashed"></div>
-
-    <!-- <table [formGroup]="formExpenses" class="table table-bordered">
-      <tfoot >
-        <tr class="bg-muted">
-          <td>
-            <ng-select [items]="expenses" bindLabel="expensesDescription" bindValue="expensesDescription"
-              groupBy="expensesTypeDesc" (change)="onSelectExpenses($event)"
-              placeholder="ค่าใช้จ่าย">
-              <ng-template ng-optgroup-tmp let-item="item">
-                <strong>{{item.expensesTypeDesc}}</strong>
-              </ng-template>
-              <ng-template ng-option-tmp let-item="item">
-                {{item.expensesDescription}}
-              </ng-template>
-            </ng-select>
-          </td>
-          <td class="text-middle">
-            <input type="number" min="0" step="0.01" formControlName="expNetPrice1" class="form-control text-right">
-          </td>
-          <td class="text-middle text-center">
-            <div class="checkbox checkbox-primary m-t-none m-b-none">
-              <input type="checkbox" id="expIsVat" formControlName="expIsVat" (change)="onItemCalVat()">
-              <label for="expIsVat"></label>
-            </div>
-          </td>
-          <td *ngIf="Mode != ActionMode.Create">
-            <input type="number" min="0" step="0.01" formControlName="expPrice2" class="form-control text-right">
-          </td>
-          <td *ngIf="Mode != ActionMode.Create">
-            <input type="number" min="0" step="0.01" formControlName="expPrice3" class="form-control text-right">
-          </td>
-          <td style="vertical-align: middle;" class="text-center">
-            <button class="btn btn-xs btn-outline btn-primary" type="button"
-              [disabled]="!formExpenses.get('expItem').value" (click)="onAddExpItem()">
-              <i class="fa fa-plus"></i>
-              เพิ่มรายการ
-            </button>
-          </td>
-        </tr>
-      </tfoot>
-    </table> -->
-
-    <!-- <ng-container *ngIf="Mode != ActionMode.Detail">
+<div class="ibox border-bottom float-e-margins">
+  <div class="ibox-title">
+    <h5>บันทึก บริการ/ค่าบริการ</h5>
+    <div class="ibox-tools">
+      <a class="close-link" (click)="toggleExpenses = !toggleExpenses">
+        <i class="fa" [ngClass]="{'fa-chevron-up': !toggleExpenses,'fa-chevron-down': toggleExpenses}"></i>
+      </a>
+    </div>
+  </div>
+  <div class="ibox-content" *ngIf="toggleExpenses">
+    <ng-container *ngIf="Mode != ActionMode.Detail">
       <ng-container *ngIf="(Status1 | async) == ConStatus1.Received || (Status1 | async) == null">
         <section [formGroup]="formExpenses">
           <table class="table table-form-expenses" style="width: 120%;">
@@ -290,131 +233,21 @@
         </section>
         <div class="hr-line-dashed"></div>
       </ng-container>
-    </ng-container> -->
+    </ng-container>
 
-    <section [formGroup]="formGroup">
-      <div *ngFor="let expTag of ExpenseTagList" formArrayName="{{expTag}}">
-        <div *ngFor="let itemRegis of getFormArray(expTag).controls; let i=index;" [formGroupName]="i"
-          class="ibox-content p-h-sm">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>
-                  <h3 class="text-navy">
-                    {{itemRegis.get('itemName').value}}
-                  </h3>
-                </th>
-                <th class="text-center" width="15%">
-                  <h5>เงินรับฝาก</h5>
-                </th>
-                <th class="text-center" width="10%">
-                  <h5>คิดภาษี</h5>
-                </th>
-                <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create">
-                  <h5>ค่าใช่จ่าย</h5>
-                </th>
-                <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create">
-                  <h5>ค่าใช่จ่าย(เบิกเพิ่ม)</h5>
-                </th>
-                <th class="text-center" width="10%">
-                  จัดการ
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container formArrayName="children"
-                *ngFor="let child of getChildrenFormArray(itemRegis).controls; let j=index;">
-                <tr [formGroupName]="j">
-                  <td class="desc text-middle">
-                    <ul class="m-b-none">
-                      <li>{{child.get('itemName').value}}</li>
-                    </ul>
-                  </td>
-                  <td class="text-middle">
-                    <input type="number" min="0" step="0.01" formControlName="itemNetPrice1"
-                      class="form-control text-right">
-                  </td>
-                  <td class="text-middle text-center">
-                    <div class="checkbox checkbox-primary m-t-none m-b-none">
-                      <input type="checkbox" id="itemIsVat{{j}}" formControlName="itemIsVat" (change)="onItemCalVat(j)">
-                      <label for="itemIsVat{{j}}"></label>
-                    </div>
-                  </td>
-                  <td *ngIf="Mode != ActionMode.Create">
-                    <input type="number" min="0" step="0.01" formControlName="itemPrice2"
-                      class="form-control text-right">
-                  </td>
-                  <td *ngIf="Mode != ActionMode.Create">
-                    <input type="number" min="0" step="0.01" formControlName="itemPrice3"
-                      class="form-control text-right">
-                  </td>
-                  <td style="vertical-align: middle;" class="text-center">
-                    <a *ngIf="Mode != ActionMode.Detail" href="javaScript:void(0);" class="btn btn-default btn-xs"
-                      type="button">
-                      <!-- (click)="onRemoveListItem(i)" -->
-                      <i class="fa fa-trash"></i> ลบรายการ</a>
-                  </td>
-                </tr>
-              </ng-container>
-
-            </tbody>
-            <tfoot [formGroup]="getFormExpense(expTag)">
-              <tr class="bg-muted">
-                <td>
-                  <ng-select [items]="expenses" bindLabel="expensesDescription" bindValue="expensesDescription"
-                    groupBy="expensesTypeDesc" (change)="onSelectExpenses($event, getFormExpense(expTag))"
-                    placeholder="ค่าใช้จ่าย{{itemRegis.get('itemName').value}}" formControlName="expItem">
-                    <ng-template ng-optgroup-tmp let-item="item">
-                      <strong>{{item.expensesTypeDesc}}</strong>
-                    </ng-template>
-                    <ng-template ng-option-tmp let-item="item">
-                      {{item.expensesDescription}}
-                    </ng-template>
-                  </ng-select>
-                </td>
-                <td class="text-middle">
-                  <input type="number" min="0" step="0.01" formControlName="expNetPrice1"
-                    class="form-control text-right">
-                </td>
-                <td class="text-middle text-center">
-                  <div class="checkbox checkbox-primary m-t-none m-b-none">
-                    <input type="checkbox" id="expIsVat" formControlName="expIsVat"
-                      (change)="onExpensesCalVat(getFormExpense(expTag))">
-                    <label for="expIsVat"></label>
-                  </div>
-                </td>
-                <td *ngIf="Mode != ActionMode.Create">
-                  <input type="number" min="0" step="0.01" formControlName="expPrice2" class="form-control text-right">
-                </td>
-                <td *ngIf="Mode != ActionMode.Create">
-                  <input type="number" min="0" step="0.01" formControlName="expPrice3" class="form-control text-right">
-                </td>
-                <td style="vertical-align: middle;" class="text-center">
-                  <button class="btn btn-xs btn-outline btn-primary" type="button"
-                    [disabled]="!getFormExpense(expTag).get('expItem').value"
-                    (click)="onAddExpItem(getFormExpense(expTag), getFormArray(expTag))">
-                    <i class="fa fa-plus"></i>
-                    เพิ่มรายการ
-                  </button>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-
-      <!-- <table class="table table-striped" style="max-width: unset;">
+    <section class="table-responsive" [formGroup]="formGroup">
+      <table class="table table-bordered" style="max-width: unset;">
         <thead>
           <tr>
             <th colspan=6 class="text-center">รายการที่จะนำส่งดำเนินการ</th>
           </tr>
           <tr>
-            <th width="45%"><h5>รายการ</h5></th>
-            <th class="text-center" width="15%"><h5>เงินรับฝาก</h5></th>
-            <th class="text-center" width="10%"><h5>คิดภาษี</h5></th>
-            <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create"><h5>ค่าใช่จ่าย</h5></th>
-            <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create"><h5>ค่าใช่จ่าย(เบิกเพิ่ม)</h5></th>
-            <th class="text-center" width="10%"><h5>จัดการ</h5></th>
+            <th width="45%">รายการ</th>
+            <th class="text-center" width="15%">เงินรับฝาก</th>
+            <th class="text-center" width="10%">คิดภาษี</th>
+            <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create">ค่าใช่จ่าย</th>
+            <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create">ค่าใช่จ่าย(เบิกเพิ่ม)</th>
+            <th class="text-center" width="10%">จัดการ</th>
           </tr>
         </thead>
         <tbody formArrayName="carRegisListItem">
@@ -422,9 +255,7 @@
             <td colspan="5" class="text-center">ไม่มีรายการ</td>
           </tr>
           <tr *ngFor="let item of CarRegisListItem.controls; let i=index;" [formGroupName]="i">
-            <td style="vertical-align: middle;">
-             <h3 class="text-navy">{{item.get('itemName').value}}</h3>
-            </td>
+            <td style="vertical-align: middle;">{{item.get('itemName').value}}</td>
             <td>
               <input type="number" min="0" step="0.01" formControlName="itemNetPrice1" class="form-control">
             </td>
@@ -441,13 +272,42 @@
               <input type="number" min="0" step="0.01" formControlName="itemPrice3" class="form-control">
             </td>
             <td style="vertical-align: middle;" class="text-center">
-              <a *ngIf="Mode != ActionMode.Detail" href="javaScript:void(0);" class="btn btn-default btn-xs"
-                type="button" (click)="onRemoveListItem(i)">
+              <a *ngIf="Mode != ActionMode.Detail" href="javaScript:void(0);" class="btn btn-default btn-xs" type="button"
+                (click)="onRemoveListItem(i)">
                 <i class="fa fa-trash"></i> ลบรายการ</a>
             </td>
           </tr>
         </tbody>
-      </table> -->
+      </table>
     </section>
   </div>
 </div>
+
+
+<!-- <tr>
+                  <td>
+                    <input type="text" class="form-control" formControlName="otItem" placeholder="รายการอื่นๆ">
+                  </td>
+                  <td>
+                    <input type="number" min="0" step="0.01" formControlName="otPrice1" class="form-control">
+                  </td>
+                  <td>
+                    <div class="checkbox checkbox-primary">
+                      <input type="checkbox" id="isVat2" formControlName="otIsVat" (change)="onOtherCalVat()">
+                      <label for="isVat2" style="width: 100%;">
+                        <span
+                          class="form-control disabled">{{formExpenses.get('otVatPrice1').value | number:'1.2-2'}}</span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="number" min="0" step="0.01" formControlName="otPrice2" class="form-control">
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-xs btn-outline btn-primary" type="button"
+                      [disabled]="!formExpenses.get('otItem').value" (click)="onAddOtItem()">
+                      <i class="fa fa-plus"></i>
+                      เพิ่มรายการ
+                    </button>
+                  </td>
+                </tr> -->

@@ -156,5 +156,10 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
 
   openHistory() {
     this.$CarHistoryBookingId.next(this.formGroup.get('bookingId').value)
-}
+  }
+  //   <!-- <ul class="list-group clear-list m-t">
+  //   <li class="list-group-item">ค่าอากร</li>
+  //   <li class="list-group-item">ค่าจดทะเบียน</li>
+  //   <li class="list-group-item">ค่าจดแบบยกเว้นภาษี</li>
+  // </ul> -->
 }
