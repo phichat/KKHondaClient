@@ -7,6 +7,7 @@ import { CustomerService } from 'app/services/customers';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { ICustomerOutput } from './customer-output.interface';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { ActionMode } from 'app/entities/general.entities';
 
 @Component({
   selector: 'app-owner',
@@ -16,8 +17,10 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
 
   @Output() CustCode$ = new EventEmitter<ICustomerOutput>();
   @Input() $OwnerCode = new BehaviorSubject<string>(null);
+  @Input() $Mode: ActionMode;
 
   ngOnInit(): void {
+    console.log(this.$Mode);
     this.formGroup = new FormGroup({
       typePersonal: new FormControl({ value: this.EntityType.Layman, disabled: true }),
       sex: new FormControl({ value: null, disabled: true }),

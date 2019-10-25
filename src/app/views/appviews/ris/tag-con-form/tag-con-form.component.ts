@@ -1,13 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
 import { HttpClient } from '@angular/common/http';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { finalize, mergeMap, tap, map } from 'rxjs/operators';
-import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+import { finalize, mergeMap, tap } from 'rxjs/operators';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { combineLatest, BehaviorSubject, Subject } from 'rxjs';
 import { getDateMyDatepicker } from 'app/app.config';
 declare var toastr: any;
 
@@ -136,7 +135,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       tagHistory: his,
       tagListItem: listItem
     };
-
+    
     this.s_loader.showLoader();
     const url = `${this.risUrl}`;
     this.http.post(url, form)

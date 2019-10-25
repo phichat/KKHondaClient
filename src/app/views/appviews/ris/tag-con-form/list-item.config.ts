@@ -9,6 +9,10 @@ import { ExpensesTag as EXPTag } from 'app/entities/ris.entities';
 
 export class ListItemConfig extends TagConFormConfig {
     public formGroup: FormGroup;
+    public formExpensesEXP10001: FormGroup;
+    public formExpensesEXP10002: FormGroup;
+    public formExpensesEXP10003: FormGroup;
+    public formExpensesEXP10004: FormGroup;
     public formCarHistory: FormGroup;
     public expenses: any[] = [];
     public expenseServices: any[] = [];
@@ -28,51 +32,6 @@ export class ListItemConfig extends TagConFormConfig {
         EXPTag.EXP10003,
         EXPTag.EXP10004
     ];
-
-    formExpensesEXP10001 = new FormGroup({
-        expitemCode: new FormControl(null),
-        expItem: new FormControl(null),
-        expTag: new FormControl(null),
-        expPrice1: new FormControl(null),
-        expVatPrice1: new FormControl(null),
-        expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
-        expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
-        expPrice2: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
-        expPrice3: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false })
-    })
-    formExpensesEXP10002 = new FormGroup({
-        expitemCode: new FormControl(null),
-        expItem: new FormControl(null),
-        expTag: new FormControl(null),
-        expPrice1: new FormControl(null),
-        expVatPrice1: new FormControl(null),
-        expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
-        expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
-        expPrice2: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
-        expPrice3: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false })
-    })
-    formExpensesEXP10003 = new FormGroup({
-        expitemCode: new FormControl(null),
-        expItem: new FormControl(null),
-        expTag: new FormControl(null),
-        expPrice1: new FormControl(null),
-        expVatPrice1: new FormControl(null),
-        expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
-        expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
-        expPrice2: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
-        expPrice3: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false })
-    })
-    formExpensesEXP10004 = new FormGroup({
-        expitemCode: new FormControl(null),
-        expItem: new FormControl(null),
-        expTag: new FormControl(null),
-        expPrice1: new FormControl(null),
-        expVatPrice1: new FormControl(null),
-        expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
-        expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
-        expPrice2: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false }),
-        expPrice3: new FormControl({ value: null, disabled: this.disableNotEqualRis ? true : false })
-    })
 
     getFormExpense(form: string): FormGroup {
         switch (form) {
@@ -127,19 +86,19 @@ export class ListItemConfig extends TagConFormConfig {
     }
 
     get disabledItemNetPrice1(): boolean {
-        return (this.disableNotEqualSale || this.disableNotEqualReceive) ? true : false;
+      return (this.disableNotEqualSale || this.disableNotEqualReceive) ? true : false;
     }
-
+  
     get disabledItemVatPrice1(): boolean {
-        return this.disabledItemNetPrice1;
+      return this.disabledItemNetPrice1;
     }
-
+  
     get disabledItemPrice2(): boolean {
-        return (this.disableNotEqualRis || this.disableIsEqualSend1) ? true : false;
+      return (this.disableNotEqualRis || this.disableIsEqualSend1) ? true : false;
     }
-
-    get disableItemPrice3(): boolean {
-        return (this.disableNotEqualRis || this.disableIsEqualSend2) ? true : false
+  
+    get disabledItemPrice3(): boolean {
+      return (this.disableNotEqualRis || this.disableIsEqualSend2) ? true : false
     }
 
     @Input() BookingId: BehaviorSubject<number>;

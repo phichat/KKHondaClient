@@ -1,15 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
 import { HttpClient } from '@angular/common/http';
-import { finalize, map, tap, mergeMap } from 'rxjs/operators';
+import { finalize, tap, mergeMap } from 'rxjs/operators';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { UserService } from 'app/services/users';
-import { combineLatest, BehaviorSubject, Subject } from 'rxjs';
-import { RisLocalStoreage as LS } from 'app/entities/ris.entities';
+import { RisLocalStoreage as LS, UserForRis as EURIS } from 'app/entities/ris.entities';
 import { message } from 'app/app.message';
 import { getDateMyDatepicker } from 'app/app.config';
+
 declare var toastr: any;
 
 @Component({
@@ -32,11 +32,6 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
 
     this.mUser = this.s_user.cookies;
   }
-
-  // public $BookingId = new Subject<number>();
-  // public $CarHistoryBookingId = new Subject<number>();
-  // public $Status1 = new Subject<number>();
-  // public $Status2 = new Subject<number>();
   private code: string;
 
   ngOnInit() {
@@ -97,7 +92,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     this.TagListItem$.subscribe(x => {
       this.chRef.markForCheck();
       if (!x) return;
-      const remark = x.reduce((a, c) => [...a, c.itemName], []).join(', ')
+      // const remark = x.reduce((a, c) => [...a, c.itemName], []).join(', ')
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
       const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
       const netPrice1 = x.reduce((a, c) => a += c.itemNetPrice1, 0);
@@ -105,7 +100,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       const price3 = x.reduce((a, c) => a += c.itemPrice3, 0);
       const totalPrice = price1 + vatPrice1 + price2 + price3;
       this.formGroup.patchValue({
-        remark: remark,
+        // remark: remark,
         price1: price1,
         cutBalance: price1 + vatPrice1,
         price2: price2,
@@ -157,9 +152,4 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
   openHistory() {
     this.$CarHistoryBookingId.next(this.formGroup.get('bookingId').value)
   }
-  //   <!-- <ul class="list-group clear-list m-t">
-  //   <li class="list-group-item">ค่าอากร</li>
-  //   <li class="list-group-item">ค่าจดทะเบียน</li>
-  //   <li class="list-group-item">ค่าจดแบบยกเว้นภาษี</li>
-  // </ul> -->
 }

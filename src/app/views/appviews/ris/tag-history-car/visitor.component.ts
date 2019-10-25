@@ -1,12 +1,13 @@
 import { OnInit, Component, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { TahHistoryConfig } from './tag-history-car.config';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { CustomerService } from 'app/services/customers';
 import { ICustomerOutput } from './customer-output.interface';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { ActionMode } from 'app/entities/general.entities';
 
 @Component({
   selector: 'app-visitor',
@@ -16,8 +17,11 @@ export class VisitorComponent extends TahHistoryConfig implements OnInit {
 
   @Output() CustCode$ = new EventEmitter<ICustomerOutput>();
   @Input() $VisitorCode = new BehaviorSubject<string>(null);
+  @Input() $Mode: ActionMode;
 
   ngOnInit(): void {
+    console.log(this.$Mode);
+    
     this.formGroup = new FormGroup({
       typePersonal: new FormControl({ value: this.EntityType.Layman, disabled: true }),
       sex: new FormControl({ value: null, disabled: true }),

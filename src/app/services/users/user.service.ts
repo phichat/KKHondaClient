@@ -1,9 +1,8 @@
 import { Injectable, isDevMode } from '@angular/core';
-import { ModelUser } from '../../models/users';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { getCookie, appConfig } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
-import { IUserResCookie, IUser } from 'app/interfaces/users';
+import { IUserResCookie } from 'app/interfaces/users';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -31,7 +30,7 @@ export class UserService {
   constructor(private http: HttpClient) {
 
     if (isDevMode()) {
-      this.getUserById('6119').subscribe(x => {
+      this.getUserById('6120').subscribe(x => {
         for (const key in x) {
           if (x.hasOwnProperty(key)) {
             this.setCookie(key, JSON.stringify(x[key]));

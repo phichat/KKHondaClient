@@ -1,46 +1,44 @@
 <form action="" [formGroup]="formGroup">
-  <div class="row form-group">
-    <div class="col-xs-6">
-      <div class="form-group">
-        <label class="col-md-4 control-label">ค้นหาข้อมูลลูกค้า</label>
-        <div class="col-md-8">
-          <ng-select [items]="CustDropDown" [typeahead]="searchTypeahead"
-            (change)="selectItemCust($event)" dropdownPosition="auto"
-            [virtualScroll]="true" placeholder="ค้นหาข้อมูลลูกค้า" [loading]="searchCustLoading"
-            [loadingText]="searchCustLoadingTxt">
-            <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-              <p class="no-margins">{{item.text}}</p>
-              <small class="text-muted">{{item.value}}</small>
-              <hr class="hr-dashed m-t-xs m-b-xs">
-            </ng-template>
-          </ng-select>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row form-group">
-    <div class="col-xs-6 col-lg-6">
-      <div class="form-group">
-        <label class="col-md-4 control-label">ประเภทบุคคล</label>
-        <div class="col-md-8">
-          <div class="radio radio-info radio-inline">
-            <input type="radio" id="visitorOS1" [value]="EntityType.Corperation" formControlName="typePersonal">
-            <label for="visitorOS1">{{EntityType.Corperation}}</label>
-          </div>
-          <div class="radio radio-info radio-inline">
-            <input type="radio" id="visitorOS2" [value]="EntityType.Layman" formControlName="typePersonal">
-            <label for="visitorOS2">{{EntityType.Layman}}</label>
+  <ng-container *ngIf="$Mode != ActionMode.Detail">
+    <div class="row form-group">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">ค้นหาข้อมูลลูกค้า</label>
+          <div class="col-md-8">
+            <ng-select [items]="CustDropDown" [typeahead]="searchTypeahead" (change)="selectItemCust($event)"
+              dropdownPosition="auto" [virtualScroll]="true" placeholder="ค้นหาข้อมูลลูกค้า"
+              [loading]="searchCustLoading" [loadingText]="searchCustLoadingTxt">
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                <p class="no-margins">{{item.text}}</p>
+                <small class="text-muted">{{item.value}}</small>
+                <hr class="hr-dashed m-t-xs m-b-xs">
+              </ng-template>
+            </ng-select>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="hr-line-dashed"></div>
+    <div class="hr-line-dashed"></div>
+  </ng-container>
 
   <section *ngIf="formGroup.get('typePersonal').value == EntityType.Corperation">
     <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">ประเภทบุคคล</label>
+          <div class="col-md-8">
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorOS1" [value]="EntityType.Corperation" formControlName="typePersonal">
+              <label for="visitorOS1">{{EntityType.Corperation}}</label>
+            </div>
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorOS2" [value]="EntityType.Layman" formControlName="typePersonal">
+              <label for="visitorOS2">{{EntityType.Layman}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="col-xs-6 col-lg-6">
         <div class="form-group">

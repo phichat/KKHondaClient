@@ -72,6 +72,52 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       warRegis: new FormControl({ myDate: null }),
       warExpire: new FormControl({ myDate: null })
     });
+
+    const checkMode = this.Mode == this.ActionMode.Detail;
+    this.formExpensesEXP10001 = this.fb.group({
+      expitemCode: new FormControl(null),
+      expItem: new FormControl(null),
+      expTag: new FormControl(null),
+      expPrice1: new FormControl(null),
+      expVatPrice1: new FormControl(null),
+      expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
+      expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
+      expPrice2: new FormControl({ value: null, disabled: (checkMode || this.disabledItemPrice2) ? true : false }),
+      expPrice3: new FormControl({ value: null, disabled: (checkMode || this.disabledItemPrice3) ? true : false })
+    })
+    this.formExpensesEXP10002 = this.fb.group({
+      expitemCode: new FormControl(null),
+      expItem: new FormControl(null),
+      expTag: new FormControl(null),
+      expPrice1: new FormControl(null),
+      expVatPrice1: new FormControl(null),
+      expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
+      expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
+      expPrice2: new FormControl({ value: null, disabled: this.disabledItemPrice2 ? true : false }),
+      expPrice3: new FormControl({ value: null, disabled: this.disabledItemPrice3 ? true : false })
+    })
+    this.formExpensesEXP10003 = this.fb.group({
+      expitemCode: new FormControl(null),
+      expItem: new FormControl(null),
+      expTag: new FormControl(null),
+      expPrice1: new FormControl(null),
+      expVatPrice1: new FormControl(null),
+      expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
+      expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
+      expPrice2: new FormControl({ value: null, disabled: this.disabledItemPrice2 ? true : false }),
+      expPrice3: new FormControl({ value: null, disabled: this.disabledItemPrice3 ? true : false })
+    })
+    this.formExpensesEXP10004 = this.fb.group({
+      expitemCode: new FormControl(null),
+      expItem: new FormControl(null),
+      expTag: new FormControl(null),
+      expPrice1: new FormControl(null),
+      expVatPrice1: new FormControl(null),
+      expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
+      expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
+      expPrice2: new FormControl({ value: null, disabled: this.disabledItemPrice2 ? true : false }),
+      expPrice3: new FormControl({ value: null, disabled: this.disabledItemPrice3 ? true : false })
+    })
   }
 
   @ViewChild("EXP10001") checkBoxEXP10001: ElementRef;
@@ -94,7 +140,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       this.disableNotEqualReceive = x.status1 != this.ConStatus1.Received && x.status1 != null;
       this.disableIsEqualSend1 = x.status2 != null;
       this.disableIsEqualSend2 = x.status2 != this.ConStatus2.Send1;
-    })
+    });
 
     const mProvince = `${appConfig.apiUrl}/Master/MProvince/DropDown`;
     const mInsure = `${appConfig.apiUrl}/Master/CompanyInsurance/DropDown`;
@@ -119,12 +165,6 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       //     this.onExpensesCalVat();
       //   });
 
-      // this.formExpenses.get('otPrice1')
-      //   .valueChanges
-      //   .subscribe(() => {
-      //     this.onOtherCalVat();
-      //   });
-
       const apiURL = `${this.risUrl}/ExpensesOther`;
       this.http.get(apiURL)
         .subscribe((x: any[]) => {
@@ -138,8 +178,8 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
           this.expenseServices = x.filter(o => o.expensesType == EXPT.Service);
           if (this.mUser.gId == EURIS.Sale) {
             this.expenses = exp.filter(o => o.expensesType != EXPT.InternalCost);
-          } else {
-            this.expenses = exp;
+          } else if (this.mUser.gId == EURIS.Regist) {
+            this.expenses = exp.filter(o => o.expensesType == EXPT.InternalCost);
           }
 
           if (this.Car) {
@@ -166,7 +206,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
           }
         }, () => this.loading = 2);
 
-      // this.CarRegisListItem.valueChanges.subscribe(() => this.emitValue(this.CarRegisListItem.getRawValue()));
+      this.formGroup.valueChanges.subscribe(() => this.emitValue(this.formGroup.getRawValue()));
 
       this.formCarHistory.valueChanges.subscribe(() => this.emitValueTagHistory(this.formCarHistory.getRawValue()));
     }
@@ -193,40 +233,89 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     }
   }
 
-  addListItemFromApi(list: any[]) {
-    const checkMode = this.Mode == this.ActionMode.Detail;
-    list.forEach(item => {
-      const fg = this.fb.group({
-        runId: item.runId,
-        bookingId: item.bookingId,
-        itemCode: item.itemCode,
-        itemName: item.itemName,
-        itemPrice1: item.itemPrice1,
-        itemNetPrice1: new FormControl({
-          value: item.itemNetPrice1,
-          disabled: (checkMode || this.disabledItemNetPrice1) ? true : false
-        }),
-        itemIsVat: new FormControl({
-          value: item.itemVatPrice1 > 0 && true,
-          disabled: (checkMode || this.disabledItemVatPrice1) ? true : false
-        }),
-        itemPrice2: new FormControl({
-          value: item.itemPrice2,
-          disabled: (checkMode || this.disabledItemPrice2) ? true : false
-        }),
-        itemPrice3: new FormControl({
-          value: item.itemPrice3,
-          disabled: (checkMode || this.disableItemPrice3) ? true : false
-        }),
-        itemVatPrice1: item.itemVatPrice1,
-        itemPriceTotal: item.itemNetPrice1 + item.itemPrice2 + item.itemPrice3
-      });
-      this.CarRegisListItem.push(fg);
+  private addListItemFromApi(list: any[]) {
+    const _01Parent = list.filter(x => x.itemCode == EXPTag.EXP10001);
+    const _01Children = list.filter(x => x.itemCode != EXPTag.EXP10001 && x.itemTag == EXPTag.EXP10001);
+
+    const _02Parent = list.filter(x => x.itemCode == EXPTag.EXP10002);
+    const _02Children = list.filter(x => x.itemCode != EXPTag.EXP10002 && x.itemTag == EXPTag.EXP10002);
+
+    const _03Parent = list.filter(x => x.itemCode == EXPTag.EXP10003);
+    const _03Children = list.filter(x => x.itemCode != EXPTag.EXP10003 && x.itemTag == EXPTag.EXP10003);
+
+    const _04Parent = list.filter(x => x.itemCode == EXPTag.EXP10004);
+    const _04Children = list.filter(x => x.itemCode != EXPTag.EXP10004 && x.itemTag == EXPTag.EXP10004);
+
+    const parent = [..._01Parent, ..._02Parent, ..._03Parent, ..._04Parent];
+
+    parent.forEach(item => {
+      let fgParent = this.setExpenseFormGroup(item);
+      let children = fgParent.get('children') as FormArray;
+      switch (item.itemTag) {
+        case EXPTag.EXP10001:
+          this.checkBoxEXP10001.nativeElement.checked = true;
+          _01Children.forEach(child => {
+            children.push(this.setExpenseFormGroup(child));
+          })
+          break;
+        case EXPTag.EXP10002:
+          this.checkBoxEXP10002.nativeElement.checked = true;
+          _02Children.forEach(child => {
+            children.push(this.setExpenseFormGroup(child));
+          })
+          break;
+        case EXPTag.EXP10003:
+          this.checkBoxEXP10003.nativeElement.checked = true;
+          _03Children.forEach(child => {
+            children.push(this.setExpenseFormGroup(child));
+          })
+          break;
+        case EXPTag.EXP10004:
+          this.checkBoxEXP10004.nativeElement.checked = true;
+          _04Children.forEach(child => {
+            children.push(this.setExpenseFormGroup(child));
+          });
+          break;
+      }
+      const parent = this.formGroup.get(item.itemTag) as FormArray
+      parent.push(fgParent);
     });
     this.chRef.detectChanges();
   }
 
-  addHistoryFromApi(item: any) {
+  private setExpenseFormGroup(item: any): FormGroup {
+    const checkMode = this.Mode == this.ActionMode.Detail;
+    this.disabledHistoryForm(item.itemTag, checkMode ? true : false);
+    return this.fb.group({
+      runId: item.runId,
+      bookingId: item.bookingId,
+      itemCode: item.itemCode,
+      itemName: item.itemName,
+      itemTag: item.itemTag,
+      itemPrice1: item.itemPrice1,
+      itemNetPrice1: new FormControl({
+        value: item.itemNetPrice1,
+        disabled: (checkMode || this.disabledItemNetPrice1) ? true : false
+      }),
+      itemIsVat: new FormControl({
+        value: item.itemVatPrice1 > 0 && true,
+        disabled: (checkMode || this.disabledItemVatPrice1) ? true : false
+      }),
+      itemPrice2: new FormControl({
+        value: item.itemPrice2,
+        disabled: (checkMode || this.disabledItemPrice2) ? true : false
+      }),
+      itemPrice3: new FormControl({
+        value: item.itemPrice3,
+        disabled: (checkMode || this.disabledItemPrice3) ? true : false
+      }),
+      itemVatPrice1: item.itemVatPrice1,
+      itemPriceTotal: item.itemNetPrice1 + item.itemPrice2 + item.itemPrice3,
+      children: this.fb.array([])
+    });
+  }
+
+  private addHistoryFromApi(item: any) {
     let his = { ...item };
     his.tagRegis = this.setDateMyDatepicker(his.tagRegis);
     his.tagExpire = this.setDateMyDatepicker(his.tagExpire);
@@ -240,7 +329,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     this.chRef.detectChanges();
   }
 
-  addFreeItem(item: any, itemTag: string) {
+  private addFreeItem(item: any, itemTag: string) {
     const fg = this.fb.group({
       runId: 0,
       itemCode: item.expensesCode,
@@ -256,14 +345,15 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       itemPriceTotal: 0,
       children: this.fb.array([])
     });
-
     let formArray = this.formGroup.get(itemTag) as FormArray;
     formArray.push(fg);
+    this.disabledHistoryForm(itemTag, false);
+
     this.chRef.detectChanges();
   }
 
   onAddExpItem(formGroup: FormGroup, parentForm: FormArray) {
-    const itemTag = parentForm.at(0).get('itemName').value;
+    const itemTag = parentForm.at(0).get('itemCode').value;
     const exp = formGroup.getRawValue();
     const fg = this.fb.group({
       runId: 0,
@@ -278,15 +368,15 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       }),
       itemIsVat: new FormControl({
         value: exp.expIsVat,
-        disabled: this.disableNotEqualSale
+        disabled: this.disableNotEqualSale ? true : false
       }),
       itemPrice2: new FormControl({
         value: exp.expPrice2,
-        disabled: this.disabledItemPrice2
+        disabled: this.disabledItemPrice2 ? true : false
       }),
       itemPrice3: new FormControl({
         value: exp.expPrice3,
-        disabled: this.disableItemPrice3
+        disabled: this.disabledItemPrice3 ? true : false
       }),
       itemPriceTotal: exp.expNetPrice1 + exp.expPrice2 + exp.expPrice3
     })
@@ -331,8 +421,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     });
   }
 
-  onItemCalVat(index) {
-    let list = this.CarRegisListItem.at(index);
+  onItemCalVat(childIndex: number, parent: FormGroup) {
+    const child = parent.get('children') as FormArray;
+    let list = child.at(childIndex);
     const itemPrice1 = list.get('itemIsVat').value && list.get('itemNetPrice1').value
       ? list.get('itemNetPrice1').value / 1.07
       : list.get('itemNetPrice1').value;
@@ -344,8 +435,9 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     });
   }
 
-  onRemoveListItem(index: number) {
-    const item = this.CarRegisListItem.at(index);
+  onRemoveExpenseItem(childIndex: number, parent: FormGroup) {
+    const child = parent.get('children') as FormArray;
+    const item = child.at(childIndex);
     if (!confirm(`ยืนยันการลบรายการ "${item.get('itemName').value}" หรือไม่?`)) return;
 
     if (this.Mode == this.ActionMode.Edit) {
@@ -353,22 +445,23 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       rmItem = [...rmItem, item.value];
       localStorage.setItem(LS.TrashCarRegisListItem, JSON.stringify(rmItem));
     }
-
-    this.CarRegisListItem.removeAt(index);
+    child.removeAt(childIndex);
   }
 
-  // emitValue(value: any[]) {
-  //   const obj = [...value].reduce((a, c) =>
-  //     [...a, { ...c, itemCutBalance: c.itemNetPrice1 }],
-  //     []);
-  //   this._IsTagItem = obj.filter(x => x.itemCode == 'EXP10001' || 'EXP10002').length ? false : true;
-  //   this._IsActItem = obj.filter(x => x.itemCode == 'EXP10003').length ? false : true;
-  //   this._IsWarItem = obj.filter(x => x.itemCode == 'EXP10004').length ? false : true;
+  private emitValue(value: any) {
+    let _01 = value[EXPTag.EXP10001] as any[];
+    let _02 = value[EXPTag.EXP10002] as any[];
+    let _03 = value[EXPTag.EXP10003] as any[];
+    let _04 = value[EXPTag.EXP10004] as any[];
+    _01 = _01.length ? [..._01, ..._01[0].children] : [];
+    _02 = _02.length ? [..._02, ..._02[0].children] : [];
+    _03 = _03.length ? [..._03, ..._03[0].children] : [];
+    _04 = _04.length ? [..._04, ..._04[0].children] : [];
+    const summary = [..._01, ..._02, ..._03, ..._04];
+    this.TagListItem.emit(summary);
+  }
 
-  //   this.TagListItem.emit(obj)
-  // }
-
-  emitValueTagHistory(value: any) {
+  private emitValueTagHistory(value: any) {
     let obj = { ...value };
     const tagRegis = getDateMyDatepicker(obj.tagRegis);
     const tagExpire = getDateMyDatepicker(obj.tagExpire);
@@ -391,22 +484,6 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     this.TagHistory.emit(obj);
   }
 
-  enableFormExpenses(): boolean {
-    let res: boolean;
-    switch (this.Mode) {
-      case this.ActionMode.Detail:
-        res = false;
-        break;
-
-      default:
-        if (this.BookingId) {
-          this.BookingId.value
-        }
-        break;
-    }
-    return res;
-  }
-
   addExpenseForm(tag: string, ele: Event) {
     const checkbox = ele.target as HTMLInputElement;
     if (checkbox.checked) {
@@ -415,12 +492,43 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     } else {
       const exp = this.formGroup.get(tag) as FormArray;
       if (exp.length && confirm('ยืนยันการทำรายการหรือไม่?')) {
+        if (this.Mode == this.ActionMode.Edit) {
+          const parent = exp.at(0);
+          const children = parent.get('children') as FormArray;
+          let rmItem = (JSON.parse(localStorage.getItem(LS.TrashCarRegisListItem)) || []) as any[];
+          rmItem = [...rmItem, ...[parent.value, ...children.value]];
+          localStorage.setItem(LS.TrashCarRegisListItem, JSON.stringify(rmItem));
+        }
         exp.removeAt(0);
+        this.disabledHistoryForm(tag, true);
       } else {
         checkbox.checked = true;
       }
     }
 
+  }
+
+  private disabledHistoryForm(tag: string, value: boolean) {
+    switch (tag) {
+      case EXPTag.EXP10001:
+      case EXPTag.EXP10002:
+        const _01 = this.formGroup.get(EXPTag.EXP10001) as FormArray;
+        const _02 = this.formGroup.get(EXPTag.EXP10002) as FormArray;
+        if (!_01.length && !_02.length && value == true) {
+          this._IsTagItem = value;
+        } else if (value == false) {
+          this._IsTagItem = value;
+        }
+        break;
+
+      case EXPTag.EXP10003:
+        this._IsActItem = value;
+        break;
+
+      case EXPTag.EXP10004:
+        this._IsWarItem = value;
+        break;
+    }
   }
 
 }  

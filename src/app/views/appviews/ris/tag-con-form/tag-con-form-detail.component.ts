@@ -6,10 +6,11 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { finalize, mergeMap, tap, map } from 'rxjs/operators';
-import { combineLatest, Subject } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { message } from 'app/app.message';
+import { UserForRis as EURIS } from 'app/entities/ris.entities';
 declare var toastr: any;
 
 @Component({
@@ -31,8 +32,10 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     private router: Router
   ) {
     super()
+    this.mUser = this.s_user.cookies;
+    this.isSeller = this.mUser.gId == EURIS.Sale;
   }
-
+  isSeller: boolean;
   public code: string;
 
   ngOnInit() {
@@ -74,14 +77,12 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
         this.code = x['code'];
         return combineLatest(
           this.http.get(conNoUrl, { params }),
-          this.http.get(reasonUrl),
-          this.s_user.currentData
+          this.http.get(reasonUrl)
         ).pipe(
           map(o => {
             return {
               conItem: o[0],
-              reason: o[1] as DropDownModel[],
-              curretUser: o[2]
+              reason: o[1] as DropDownModel[]
             };
           })
         );
@@ -91,10 +92,9 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       this.chRef.markForCheck();
       const conItem = o.conItem;
       this.reasonDropdown = o.reason;
-      this.mUser = o.curretUser;
       this.formGroup.patchValue({
         ...conItem,
-        updateBy: o.curretUser['id']
+        updateBy: this.mUser.id
       });
       this.$BookingId.next(conItem['bookingId']);
       this.$Status1.next(conItem['status1']);

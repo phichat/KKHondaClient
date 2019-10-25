@@ -99,7 +99,7 @@
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label">สถานะ</label>
               <div class="col-md-8">
-                  <input type="text" class="form-control" formControlName="statusDesc" readonly />
+                <input type="text" class="form-control" formControlName="statusDesc" readonly />
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@
             <ng-template #elseReason>
               <label class="col-lg-4 control-label">สาเหตุในการยกเลิก</label>
               <div class="col-lg-8">
-                  <input type="text" class="form-control" formControlName="reason" readonly />
+                <input type="text" class="form-control" formControlName="reason" readonly />
               </div>
             </ng-template>
           </div>
@@ -145,7 +145,8 @@
               <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
             </div>
             <div class="modal-body">
-              <app-tag-history-car [$BookingId]="$CarHistoryBookingId" [$ENo]="" [$FNo]=""></app-tag-history-car>
+              <app-tag-history-car [$Mode]="ActionMode.Detail" [$BookingId]="$CarHistoryBookingId" [$ENo]="" [$FNo]="">
+              </app-tag-history-car>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
@@ -187,9 +188,11 @@
             แก้ไข
           </button>​</div>
         <div class="col-sm-6 text-right" *ngIf="formGroup.get('status2').value == null">
-          <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">
-            ยกเลิกรายการ
-          </button>
+          <ng-container *ngIf="isSeller">
+            <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">
+              ยกเลิกรายการ
+            </button>
+          </ng-container>
         </div>
 
       </div>

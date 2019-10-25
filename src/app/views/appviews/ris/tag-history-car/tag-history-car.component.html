@@ -17,30 +17,32 @@
         <div class="panel-body">
           <section>
 
-            <div class="row form-group">
-              <div class="col-xs-6 col-lg-6">
-                <div class="form-group"><label class="col-md-4 control-label">ค้นหาประวัติ</label>
-                  <div class="col-md-8">
-                    <ng-select [items]="EngineDropDown" [typeahead]="searchTypeahead" (change)="patchValueForm($event)"
-                      name="logReceiveId" dropdownPosition="auto" bindLabel="text" bindValue="value" labelForId="model"
-                      [virtualScroll]="true" placeholder="ค้นหาด้วยเลขเครื่องหรือ เลขโครง"
-                      [loading]="searchEngineLoading" [loadingText]="searchEngineLoadingTxt">
-                      <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                        <h5 class="">เลขเครื่อง : {{item.eNo}}</h5>
-                        <h5 class="">เลขโครง​ : {{item.fNo}}</h5>
-                        <ul style="padding-left: 30px;">
-                          <li><small>ทะเบียน​ : {{item.tagNo}}</small></li>
-                          <li><small>จังหวัด : {{item.province}}</small></li>
-                        </ul>
-                        <hr class="hr-dashed m-t-xs m-b-xs">
-                      </ng-template>
-                    </ng-select>
+            <ng-container *ngIf="$Mode != ActionMode.Detail">
+              <div class="row form-group">
+                <div class="col-xs-6 col-lg-6">
+                  <div class="form-group"><label class="col-md-4 control-label">ค้นหาประวัติ</label>
+                    <div class="col-md-8">
+                      <ng-select [items]="EngineDropDown" [typeahead]="searchTypeahead"
+                        (change)="patchValueForm($event)" name="logReceiveId" dropdownPosition="auto" bindLabel="text"
+                        bindValue="value" labelForId="model" [virtualScroll]="true"
+                        placeholder="ค้นหาด้วยเลขเครื่องหรือ เลขโครง" [loading]="searchEngineLoading"
+                        [loadingText]="searchEngineLoadingTxt">
+                        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                          <h5 class="">เลขเครื่อง : {{item.eNo}}</h5>
+                          <h5 class="">เลขโครง​ : {{item.fNo}}</h5>
+                          <ul style="padding-left: 30px;">
+                            <li><small>ทะเบียน​ : {{item.tagNo}}</small></li>
+                            <li><small>จังหวัด : {{item.province}}</small></li>
+                          </ul>
+                          <hr class="hr-dashed m-t-xs m-b-xs">
+                        </ng-template>
+                      </ng-select>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="hr-line-dashed"></div>
+              <div class="hr-line-dashed"></div>
+            </ng-container>
 
             <div class="row form-group">
               <div class="col-xs-6 col-lg-6">
@@ -204,13 +206,13 @@
       </div>
       <div id="tab-his-2" class="tab-pane">
         <div class="panel-body">
-          <app-owner (CustCode$)="ownerChange($event)" [$OwnerCode]="ownerCode">
+          <app-owner [$Mode]="$Mode" (CustCode$)="ownerChange($event)" [$OwnerCode]="ownerCode">
           </app-owner>
         </div>
       </div>
       <div id="tab-his-3" class="tab-pane">
         <div class="panel-body">
-          <app-visitor (CustCode$)="visitorChange($event)" [$VisitorCode]="visitorCode">
+          <app-visitor [$Mode]="$Mode" (CustCode$)="visitorChange($event)" [$VisitorCode]="visitorCode">
           </app-visitor>
         </div>
       </div>
