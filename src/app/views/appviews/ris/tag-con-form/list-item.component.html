@@ -194,12 +194,15 @@
                     </ul>
                   </td>
                   <td class="text-middle">
-                    <input type="number" min="0" step="0.01" formControlName="itemNetPrice1"
+                    <input #itemNetPrice type="number" min="0" step="0.01" formControlName="itemNetPrice1"
                       class="form-control text-right">
+                    <input style="display: none;" type="number" formControlName="itemCutBalance"
+                      [value]="itemNetPrice.value">
                   </td>
                   <td class="text-middle text-center">
                     <div class="checkbox checkbox-primary m-t-none m-b-none">
-                      <input type="checkbox" id="itemIsVat{{expTag}}{{j}}" formControlName="itemIsVat" (change)="onItemCalVat(j, itemRegis)">
+                      <input type="checkbox" id="itemIsVat{{expTag}}{{j}}" formControlName="itemIsVat"
+                        (change)="onItemCalVat(j, itemRegis)">
                       <label for="itemIsVat{{expTag}}{{j}}"></label>
                     </div>
                   </td>
@@ -212,8 +215,8 @@
                       class="form-control text-right">
                   </td>
                   <td *ngIf="Mode != ActionMode.Detail" style="vertical-align: middle;" class="text-center">
-                    <a href="javaScript:void(0);" class="btn btn-default btn-xs"
-                      type="button" (click)="onRemoveExpenseItem(j, itemRegis)">
+                    <a href="javaScript:void(0);" class="btn btn-default btn-xs" type="button"
+                      (click)="onRemoveExpenseItem(j, itemRegis)">
                       <i class="fa fa-trash"></i> ลบรายการ</a>
                   </td>
                 </tr>
@@ -270,52 +273,6 @@
           </table>
         </div>
       </div>
-
-      <!-- <table class="table table-striped" style="max-width: unset;">
-        <thead>
-          <tr>
-            <th colspan=6 class="text-center">รายการที่จะนำส่งดำเนินการ</th>
-          </tr>
-          <tr>
-            <th width="45%"><h5>รายการ</h5></th>
-            <th class="text-center" width="15%"><h5>เงินรับฝาก</h5></th>
-            <th class="text-center" width="10%"><h5>คิดภาษี</h5></th>
-            <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create"><h5>ค่าใช่จ่าย</h5></th>
-            <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create"><h5>ค่าใช่จ่าย(เบิกเพิ่ม)</h5></th>
-            <th class="text-center" width="10%"><h5>จัดการ</h5></th>
-          </tr>
-        </thead>
-        <tbody formArrayName="carRegisListItem">
-          <tr *ngIf="CarRegisListItem.length == 0">
-            <td colspan="5" class="text-center">ไม่มีรายการ</td>
-          </tr>
-          <tr *ngFor="let item of CarRegisListItem.controls; let i=index;" [formGroupName]="i">
-            <td style="vertical-align: middle;">
-             <h3 class="text-navy">{{item.get('itemName').value}}</h3>
-            </td>
-            <td>
-              <input type="number" min="0" step="0.01" formControlName="itemNetPrice1" class="form-control">
-            </td>
-            <td class="text-center">
-              <div class="checkbox checkbox-primary m-t-none m-b-none">
-                <input type="checkbox" id="itemIsVat{{i}}" formControlName="itemIsVat" (change)="onItemCalVat(i)">
-                <label for="itemIsVat{{i}}"></label>
-              </div>
-            </td>
-            <td *ngIf="Mode != ActionMode.Create">
-              <input type="number" min="0" step="0.01" formControlName="itemPrice2" class="form-control">
-            </td>
-            <td *ngIf="Mode != ActionMode.Create">
-              <input type="number" min="0" step="0.01" formControlName="itemPrice3" class="form-control">
-            </td>
-            <td style="vertical-align: middle;" class="text-center">
-              <a *ngIf="Mode != ActionMode.Detail" href="javaScript:void(0);" class="btn btn-default btn-xs"
-                type="button" (click)="onRemoveListItem(i)">
-                <i class="fa fa-trash"></i> ลบรายการ</a>
-            </td>
-          </tr>
-        </tbody>
-      </table> -->
     </section>
   </div>
 </div>

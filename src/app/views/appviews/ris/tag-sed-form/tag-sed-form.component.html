@@ -62,6 +62,14 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <h5>ค้นหา</h5>
+            <!-- <div class="ibox-tools">
+              <a class="close-link" (click)="toggleExpenses = !toggleExpenses">
+                <i class="fa" [ngClass]="{'fa-chevron-up': !toggleExpenses,'fa-chevron-down': toggleExpenses}"></i>
+              </a>
+            </div> -->
+          </div>
           <div class="ibox-content">
             <table class="table table-stripped table-hover display nowrap set-dataTable" width="100%">
               <thead>
@@ -124,7 +132,8 @@
                     <td class="text-right" [attr.data-order]="item.get('netPrice1')?.value">
                       {{item.get('netPrice1')?.value | number:'1.2-2'}}
                     </td>
-                    <td style="background-color: #d9edf7;" class="text-right" [attr.data-order]="item.get('price2')?.value">
+                    <td style="background-color: #d9edf7;" class="text-right"
+                      [attr.data-order]="item.get('price2')?.value">
                       {{item.get('price2')?.value | number:'1.2-2'}}
                     </td>
                     <td>{{item.get('remark').value}}</td>

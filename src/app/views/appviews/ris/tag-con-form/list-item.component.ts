@@ -297,6 +297,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
         value: item.itemNetPrice1,
         disabled: (checkMode || this.disabledItemNetPrice1) ? true : false
       }),
+      itemCutBalance: item.itemNetPrice1,
       itemIsVat: new FormControl({
         value: item.itemVatPrice1 > 0 && true,
         disabled: (checkMode || this.disabledItemVatPrice1) ? true : false
@@ -366,6 +367,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
         value: exp.expNetPrice1,
         disabled: this.disableNotEqualSale ? true : false
       }),
+      itemCutBalance: exp.expNetPrice1,
       itemIsVat: new FormControl({
         value: exp.expIsVat,
         disabled: this.disableNotEqualSale ? true : false
@@ -457,7 +459,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     _02 = _02.length ? [..._02, ..._02[0].children] : [];
     _03 = _03.length ? [..._03, ..._03[0].children] : [];
     _04 = _04.length ? [..._04, ..._04[0].children] : [];
-    const summary = [..._01, ..._02, ..._03, ..._04];
+    let summary = [..._01, ..._02, ..._03, ..._04];
     this.TagListItem.emit(summary);
   }
 
