@@ -44,42 +44,70 @@
           </div>
         </div>
 
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเลขเครื่อง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="eNo" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเลขตัวถัง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="fNo" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">เลขทะเบียน</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="tagNo" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">จังหวัด</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="province" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">ผู้ถือกรรมสิทธิ</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="ownerName" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">ผู้ติดต่อ</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="visitorName" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
+                <textarea formControlName="remark" rows="1" class="form-control" readonly></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">สถานะ</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="statusDesc" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="row form-group">
-          <div class="col-xs-6 col-lg-6">
-            <div class="form-group">
-              <label class="col-lg-4 control-label is-required">หมายเลขเครื่อง</label>
-              <div class="col-lg-8">
-                <span class="form-control disabled">{{formGroup.get('eNo').value}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-6 col-lg-6">
-            <div class="form-group">
-              <label class="col-lg-4 control-label is-required">หมายเลขตัวถัง</label>
-              <div class="col-lg-8">
-                <span class="form-control disabled">{{formGroup.get('fNo').value}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row form-group">
           <div class="col-sm-6">
-            <label class="col-lg-4 control-label">หมายเหตุ</label>
-            <div class="col-lg-8">
-              <span class="form-control disabled">{{formGroup.get('remark').value}}</span>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <label class="col-lg-4 control-label">สถานะ</label>
-            <div class="col-lg-8">
-              <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
-            </div>
-          </div>
-        </div>
-        <div class="row form-group">
-          <div class="col-sm-6">
-            <ng-container *ngIf="formGroup.get('bookingStatus').value == ConStatus.Received; else elseReason">
+            <ng-container *ngIf="formGroup.get('status1').value == ConStatus1.Received; else elseReason">
               <label class="col-lg-4 control-label is-required">สาเหตุในการยกเลิก</label>
               <div class="col-lg-8">
                 <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text" formControlName="reason">
@@ -89,18 +117,19 @@
             <ng-template #elseReason>
               <label class="col-lg-4 control-label">สาเหตุในการยกเลิก</label>
               <div class="col-lg-8">
-                <span class="form-control disabled">{{formGroup.get('reason').value}}</span>
+                <input type="text" class="form-control" formControlName="reason" readonly />
               </div>
             </ng-template>
           </div>
           <div class="col-sm-6">
           </div>
         </div>
+
         <div class="row form-group">
           <div class="col-xs-12 text-center">
             <div class="form-group">
-              <button class="btn btn-info" type="button" data-toggle="modal"
-                data-target="#carHistory">ประวัติรถ</button>
+              <button class="btn btn-info" type="button" data-toggle="modal" data-target="#carHistory"
+                (click)="openHistory()">ประวัติรถ</button>
             </div>
           </div>
         </div>
@@ -116,8 +145,11 @@
               <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
             </div>
             <div class="modal-body">
-              <app-tag-history-car (ENo)="null" (FNo)="null">
+              <app-tag-history-car [$Mode]="ActionMode.Detail" [$BookingId]="$CarHistoryBookingId" [$ENo]="" [$FNo]="">
               </app-tag-history-car>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
             </div>
           </div>
         </div>
@@ -125,22 +157,22 @@
 
       <br>
 
-      <app-list-item [BookingId]="$BookingId" [Mode]="ActionMode.Detail">
+      <app-list-item [BookingId]="$BookingId" [Status1]="$Status1" [Mode]="ActionMode.Detail">
       </app-list-item>
 
       <table class="table invoice-total m-t-sm">
         <tbody>
           <tr>
-            <td><strong>ยอดรวมเงินนำฝาก :</strong></td>
-            <td>{{formGroup.get('price1').value | number:'1.2-2'}}</td>
+            <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
+            <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
           </tr>
           <tr>
-            <td><strong>ยอดรวมภาษี :</strong></td>
-            <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ยอดรวมเงินที่ต้องยืม :</strong></td>
+            <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
             <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+          </tr>
+          <tr>
+            <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
+            <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
           </tr>
           <tr>
             <td><strong>ยอดรวมทั้งหมด :</strong></td>
@@ -149,16 +181,18 @@
         </tbody>
       </table>
 
-      <div class="row m-t-md" *ngIf="formGroup.get('bookingStatus').value != ConStatus.Cancel">
+      <div class="row m-t-md form-group" *ngIf="formGroup.get('status1').value != ConStatus1.Cancel">
         <div class="col-sm-6">
           <button type="button" class="btn btn-info btn-outline" [routerLink]="['/ris/con-form-edit', code]">
             <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
             แก้ไข
           </button>​</div>
-        <div class="col-sm-6 text-right">
-          <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">
-            ยกเลิกรายการ
-          </button>
+        <div class="col-sm-6 text-right" *ngIf="formGroup.get('status2').value == null">
+          <ng-container *ngIf="isSeller">
+            <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">
+              ยกเลิกรายการ
+            </button>
+          </ng-container>
         </div>
 
       </div>

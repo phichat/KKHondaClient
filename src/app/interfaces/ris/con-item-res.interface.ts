@@ -7,11 +7,13 @@ export interface IConItemRes {
     itemPrice1: number;
     itemVatPrice1: number;
     itemCutBalance: number;
-    itemPrice2: number;
+    itemPrice2?: number;
+    itemPrice3?: number;
     itemPriceTotal: number;
     state?: string | number;
     dateReceipt?: any;
     remark: string;
+    itemTag: string;
 }
 
 export interface IConItemOutput {

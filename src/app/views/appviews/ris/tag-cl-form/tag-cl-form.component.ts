@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { ModelUser } from 'app/models/users';
-import { FormArray, FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
@@ -32,7 +32,6 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
     }
   }
   checkedAll: boolean;
-  mUser: ModelUser;
   bankingsDropdown = new Array<DropDownModel>();
 
   @ViewChild("receivePrice") inputReceivePrice: ElementRef;
@@ -45,11 +44,11 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       refundId: new FormControl(null),
       refundName: new FormControl(null),
       balancePrice: new FormControl(null),
-      receivePrice: new FormControl(null),
+      receivePrice: new FormControl(null, Validators.required),
       netPrice: new FormControl(null),
       bankCode: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
       createDate: new FormControl(null),
       createBy: new FormControl(null),
@@ -102,6 +101,22 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
 
       this.reInitDatatable();
     }, () => this.loading = 2);
+
+    this.formGroup.get('paymentType').valueChanges.subscribe(x => {
+      if (x == '1') {
+        let bankCode = this.formGroup.get('bankCode');
+        bankCode.setValue(null);
+        bankCode.setValidators(null);
+        let documentRef = this.formGroup.get('documentRef');
+        documentRef.setValue(null);
+        documentRef.setValidators(null);
+      } else if (x == '2') {
+        this.formGroup.get('bankCode').setValidators(Validators.required);
+        this.formGroup.get('documentRef').setValidators(Validators.required);
+      }
+      this.formGroup.get('bankCode').updateValueAndValidity();
+      this.formGroup.get('documentRef').updateValueAndValidity();
+    });
   }
 
   checkingRecord(i: number) {

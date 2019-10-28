@@ -3,12 +3,20 @@ export enum PaymentType {
     Transfer = 2
 }
 
-export enum ConStatus {
+export enum ConStatus1 {
     Cancel = 0,
     Received = 1,
-    Sending = 2,
-    PartialDelivery = 3,
-    CompleteDelivery = 4
+    Withdraw1 = 2,
+    Withdraw2 = 3,
+    // Sending = 4,
+    // PartialDelivery = 5,
+    // CompleteDelivery = 6
+}
+
+export enum ConStatus2 {
+    Send1 = 1,
+    Send2 = 2,
+    REV = 3
 }
 
 export enum RevStatus {
@@ -36,4 +44,22 @@ export enum ClStatus {
 
 export enum RisLocalStoreage {
     TrashCarRegisListItem = "Trash_CarRegisListItem"
+}
+
+export enum UserForRis {
+    Sale = 1019,
+    Regist = 1029
+}
+
+export enum ExpensesType {
+    Service = 1,
+    Expenses = 2,
+    InternalCost = 3
+}
+
+export enum ExpensesTag {
+    EXP10001 = 'EXP10001',
+    EXP10002 = 'EXP10002',
+    EXP10003 = 'EXP10003',
+    EXP10004 = 'EXP10004'
 }

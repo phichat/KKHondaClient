@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BookingModule } from './views/dashboards/booking/booking.module';
 import { GuardGuard } from './guards/guard.guard';
 import { CoreModule } from './core/core.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,8 @@ import { CoreModule } from './core/core.module';
 
     // PageloaderModule,
     BookingModule,
+
+    BrowserAnimationsModule,
 
   ],
   providers: [

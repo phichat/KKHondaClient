@@ -11,7 +11,8 @@ export class RegisVehicleTaxComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder
-  ) { }
+  ) {
+   }
 
   formGroup: FormGroup;
 

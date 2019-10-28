@@ -7,10 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { finalize, mergeMap, tap, map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { message } from 'app/app.message';
+import { UserForRis as EURIS } from 'app/entities/ris.entities';
 declare var toastr: any;
 
 @Component({
@@ -32,16 +32,18 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     private router: Router
   ) {
     super()
+    this.mUser = this.s_user.cookies;
+    this.isSeller = this.mUser.gId == EURIS.Sale;
   }
-
+  isSeller: boolean;
   public code: string;
-  public $BookingId = new BehaviorSubject<number>(null);
 
   ngOnInit() {
     this.formGroup = this.fb.group({
       bookingId: new FormControl(null),
       bookingNo: new FormControl(null),
-      bookingStatus: new FormControl(null),
+      status1: new FormControl(null),
+      status2: new FormControl(null),
       statusDesc: new FormControl(null),
       createDate: new FormControl(null),
       createName: new FormControl(null),
@@ -53,11 +55,17 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       fNo: new FormControl(null, Validators.required),
       price1: new FormControl(null),
       vatPrice1: new FormControl(null),
+      netPrice1: new FormControl(null),
       cutBalance: new FormControl(null),
       price2: new FormControl(null),
+      price3: new FormControl(null),
       totalPrice: new FormControl(null),
       reason: new FormControl(null, Validators.required),
-      remark: new FormControl(null)
+      remark: new FormControl(null),
+      visitorName: new FormControl(null),
+      ownerName: new FormControl(null),
+      province: new FormControl(null),
+      tagNo: new FormControl(null)
     })
 
     this.activeRoute.params.pipe(
@@ -69,29 +77,28 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
         this.code = x['code'];
         return combineLatest(
           this.http.get(conNoUrl, { params }),
-          this.http.get(reasonUrl),
-          this.s_user.currentData
+          this.http.get(reasonUrl)
         ).pipe(
           map(o => {
             return {
               conItem: o[0],
-              reason: o[1] as DropDownModel[],
-              curretUser: o[2]
+              reason: o[1] as DropDownModel[]
             };
           })
         );
-      })
+      }),
+      finalize(() => this.s_loader.onEnd())
     ).subscribe(o => {
       this.chRef.markForCheck();
       const conItem = o.conItem;
       this.reasonDropdown = o.reason;
-      this.mUser = o.curretUser;
       this.formGroup.patchValue({
         ...conItem,
-        updateBy: o.curretUser['id']
+        updateBy: this.mUser.id
       });
       this.$BookingId.next(conItem['bookingId']);
-      this.s_loader.onEnd();
+      this.$Status1.next(conItem['status1']);
+
     });
   }
 
@@ -118,4 +125,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     window.open(url, '_blank');
   }
 
+  openHistory() {
+    this.$CarHistoryBookingId.next(this.formGroup.get('bookingId').value)
+  }
 }

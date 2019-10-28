@@ -1,6 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { TahHistoryConfig } from './tag-history-car.config';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ICustomerOutput } from './customer-output.interface';
+import { appConfig } from 'app/app.config';
+import { HttpClient } from '@angular/common/http';
+import { DropDownModel } from 'app/models/drop-down-model';
+import { tap, debounceTime, distinctUntilChanged, switchMap, mergeMap, map } from 'rxjs/operators';
+import { of } from 'rxjs/internal/observable/of';
+import { CarHistoryService } from 'app/services/ris';
+import { ICarHistory } from 'app/interfaces/ris';
+import { LoaderService } from 'app/core/loader/loader.service';
+import { combineLatest, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-tag-history-car',
@@ -10,67 +20,151 @@ import { FormBuilder, FormControl } from '@angular/forms';
 export class TagHistoryCarComponent extends TahHistoryConfig implements OnInit {
 
   constructor(
-    private fb: FormBuilder
+    private http: HttpClient,
+    private chRef: ChangeDetectorRef,
+    private s_loader: LoaderService,
+    private s_carHist: CarHistoryService
   ) {
     super();
   }
 
+  bookingId: number;
+  visitorCode = new BehaviorSubject<string>(null);
+  ownerCode = new BehaviorSubject<string>(null);
+
   ngOnInit() {
-    this.formGroup = this.fb.group({
+    this.formGroup = new FormGroup({
       tagNo: new FormControl(null),
       province: new FormControl(null),
       cateName: new FormControl(null),
       brandName: new FormControl(null),
       modelName: new FormControl(null),
       colorName: new FormControl(null),
-      fNo: new FormControl(null),
-      eNo: new FormControl(null),
-      tagRegis: new FormControl(null),
-      tagExpire: new FormControl(null),
-      prbNo: new FormControl(null),
-      prbCompany: new FormControl(null),
-      prbRegis: new FormControl(null),
-      prbExpire: new FormControl(null),
-      commitNo: new FormControl(null),
-      commitExpire: new FormControl(null),
-      warNo: new FormControl(null),
-      warCompany: new FormControl(null),
-      warRegis: new FormControl(null),
-      warExpire: new FormControl(null),
-
-      ownershipEntityType: new FormControl(this.EntityType.Layman),
-
-      ownershipCustomerPrename: new FormControl(null),
-      ownershipCustomerSex: new FormControl(null),
-      ownershipName: new FormControl(null),
-      ownershipSurname: new FormControl(null),
-      ownershipCustomerNickname: new FormControl(null),
-      ownershipIdcard: new FormControl(null),
-      ownershipCustomerPhone: new FormControl(null),
-      ownershipCustomerEmail: new FormControl(null),
-      ownershipBirthday: new FormControl(null),
-      ownershipFulladdress: new FormControl(null),
-
-      contractEntityType: new FormControl(this.EntityType.Layman),
-
-      contractCustomerPrename: new FormControl(null),
-      contractCustomerSex: new FormControl(null),
-      contractCustomerName: new FormControl(null),
-      contractCustomerSurname: new FormControl(null),
-      contractCustomerNickname: new FormControl(null),
-      contractIdcard: new FormControl(null),
-      contractCustomerPhone: new FormControl(null),
-      contractCustomerEmail: new FormControl(null),
-      contractBirthday: new FormControl(null),
-      contractFulladdress: new FormControl(null),
+      fNo: new FormControl(null, Validators.required),
+      eNo: new FormControl(null, Validators.required),
+      tagRegis: new FormControl({ value: null, disabled: true }),
+      tagExpire: new FormControl({ value: null, disabled: true }),
+      prbNo: new FormControl({ value: null, disabled: true }),
+      prbCompany: new FormControl({ value: null, disabled: true }),
+      prbRegis: new FormControl({ value: null, disabled: true }),
+      prbExpire: new FormControl({ value: null, disabled: true }),
+      commitNo: new FormControl({ value: null, disabled: true }),
+      commitExpire: new FormControl({ value: null, disabled: true }),
+      warNo: new FormControl({ value: null, disabled: true }),
+      warCompany: new FormControl({ value: null, disabled: true }),
+      warRegis: new FormControl({ value: null, disabled: true }),
+      warExpire: new FormControl({ value: null, disabled: true }),
+      ownerCode: new FormControl(null, Validators.required),
+      ownerName: new FormControl(null, Validators.required),
+      visitorCode: new FormControl(null, Validators.required),
+      visitorName: new FormControl(null, Validators.required)
     });
 
-    this.formGroup.get('eNo')
-      .valueChanges
-      .subscribe(x => this.ENo.emit(x));
+    this.HistoryCar$.emit({ invalid: true });
 
-    this.formGroup.get('fNo')
-      .valueChanges
-      .subscribe(x => this.FNo.emit(x));
+    this.formGroup.valueChanges.subscribe(() => {
+      if (this.formGroup.valid) {
+        this.HistoryCar$.emit({ ...this.formGroup.getRawValue(), invalid: false });
+      } else {
+        this.HistoryCar$.emit({ invalid: true });
+      }
+    });
+
+    this.loadCarHistory();
+
+    this.searchEngine();
+  }
+
+  loadCarHistory() {
+    const mProvinceUrl = `${appConfig.apiUrl}/Master/MProvince/DropDown`;
+    this.http.get<DropDownModel[]>(mProvinceUrl)
+      .pipe(tap(() => this.s_loader.showLoader()))
+      .subscribe(x => {
+        this.provinceDropdown = x;
+        this.s_loader.onEnd();
+      });
+
+    combineLatest(this.$ENo, this.$FNo)
+      .pipe(
+        map(x => { return { eNo: x[0], fNo: x[1] } })
+      ).subscribe(x => {
+        this.formGroup.patchValue({
+          eNo: x.eNo,
+          fNo: x.fNo
+        });
+      })
+
+    this.$BookingId.pipe(
+      tap(() => this.s_loader.showLoader()),
+      mergeMap(x => {
+        this.bookingId = x;
+        return this.s_carHist.GetByBookingId(x.toString());
+      })
+    ).subscribe(x => {
+      this.chRef.markForCheck();
+      this.visitorCode.next(x.visitorCode);
+      this.ownerCode.next(x.ownerCode);
+      this.patchValueForm(x);
+      this.s_loader.onEnd();
+    });
+  }
+
+  ownerChange(event: ICustomerOutput) {
+    this.formGroup.patchValue({
+      ownerCode: event.code,
+      ownerName: event.fullName
+    })
+  }
+
+  visitorChange(event: ICustomerOutput) {
+    this.formGroup.patchValue({
+      visitorCode: event.code,
+      visitorName: event.fullName
+    })
+  }
+
+  patchValueForm(event: ICarHistory | any) {
+    if (!event) {
+      this.formGroup.reset();
+      // this.$BookingId.next(0);
+      return;
+    }
+    if (event.bookingId != this.bookingId) {
+      // this.$BookingId.next(event.bookingId);
+    };
+    this.formGroup.patchValue({
+      ...event,
+      tagRegis: this.setLocalDate(event.tagRegis),
+      tagExpire: this.setLocalDate(event.tagExpire),
+      prbRegis: this.setLocalDate(event.prbRegis),
+      prbExpire: this.setLocalDate(event.prbExpire),
+      warRegis: this.setLocalDate(event.warRegis),
+      warExpire: this.setLocalDate(event.warExpire)
+    })
+  }
+
+  searchEngine() {
+    this.searchTypeahead.pipe(
+      tap(() => {
+        this.searchEngineLoading = true;
+        this.searchEngineLoadingTxt = 'รอสักครู่...'
+      }),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(term => term ? this.s_carHist.SearchByEngine(term) : of([]))
+    ).subscribe((x: DropDownModel[]) => {
+      this.chRef.markForCheck();
+      this.searchEngineLoading = false;
+      this.searchEngineLoadingTxt = '';
+      this.EngineDropDown = x;
+      this.EngineDropDown.map(item => {
+        item.text = `${item.eNo} ${item.fNo}`;
+        item.value = `${item.eNo} ${item.fNo}`;
+      })
+    }, () => {
+      this.searchEngineLoading = false;
+      this.searchEngineLoadingTxt = '';
+      this.EngineDropDown = [];
+    });
   }
 }

@@ -1,55 +1,80 @@
 import { Injectable, isDevMode } from '@angular/core';
-import { ModelUser } from '../../models/users';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { getCookie, appConfig } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
+import { IUserResCookie } from 'app/interfaces/users';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class UserService {
-  private user = ['admin_name', 'branch', 'id', 'name', 'user_type'];
-
-  private __user = [
-    { name: 'admin_name', value: 'Admin+001' },
-    { name: 'branch', value: '1' },
-    { name: 'id', value: '4111' },
-    { name: 'menu', value: 'open' },
-    { name: 'name', value: '001' },
-    { name: 'user_type', value: '2' }
+  private user = [
+    'id',
+    'adminName',
+    'fullName',
+    'userType',
+    'branchId',
+    'branch',
+    'branchName',
+    'department',
+    'gId',
+    'name',
+    'groupPagePermission'
   ];
-
 
   private url = `${appConfig.apiUrl}/Users`;
 
 
-  currentData = new BehaviorSubject<ModelUser>(null);
+  currentData = new BehaviorSubject<IUserResCookie>(null);
   // currentData = this.dataSource.asObservable();
 
   constructor(private http: HttpClient) {
 
     if (isDevMode()) {
-      this.__user.map(async x => {
-        await this.setCookie(x.name, x.value);
-      })
-    }
-
-    if (getCookie('id')) {
-      const id = getCookie('id');
-      this.getUserById(id).then(x => {
-        if (x == null) {
-          this.signOut();
-          return;
+      this.getUserById('6120').subscribe(x => {
+        for (const key in x) {
+          if (x.hasOwnProperty(key)) {
+            this.setCookie(key, JSON.stringify(x[key]));
+          }
         }
         this.changeData(x)
       });
+    } else {
+      if (getCookie('id')) {
+        const id = getCookie('id');
+        this.getUserById(id).subscribe(x => {
+          if (x == null) {
+            this.signOut();
+            return;
+          }
+          this.changeData(x)
+        });
+      }
     }
   }
 
-  changeData(data: ModelUser) {
+  changeData(data: IUserResCookie) {
     this.currentData.next(data);
   }
 
+  get cookies(): IUserResCookie {
+    const _cookie: IUserResCookie = {
+      id: JSON.parse(getCookie('id')),
+      adminName: JSON.parse(getCookie('adminName')),
+      fullName: JSON.parse(getCookie('fullName')),
+      userType: JSON.parse(getCookie('userType')),
+      branchId: JSON.parse(getCookie('branchId')),
+      branch: JSON.parse(getCookie('branch')),
+      branchName: JSON.parse(getCookie('branchName')),
+      department: JSON.parse(getCookie('department')),
+      gId: JSON.parse(getCookie('gId')),
+      name: JSON.parse(getCookie('name')),
+      groupPagePermission: JSON.parse(getCookie('groupPagePermission')),
+    };
+    return _cookie;
+  }
+
   signOut() {
-    this.user.map(async x => await this.deleteCookie(x));
+    this.user.map(x => this.deleteCookie(x));
     window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
   }
 
@@ -68,11 +93,11 @@ export class UserService {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
 
-  async  getUserById(id: string): Promise<ModelUser> {
+  getUserById(id: string): Observable<IUserResCookie> {
     const apiURL = `${this.url}/GetUserById`;
     const params = { id };
 
-    return await this.http.get<ModelUser>(apiURL, { params }).toPromise();
+    return this.http.get<IUserResCookie>(apiURL, { params });
   }
 
 }  

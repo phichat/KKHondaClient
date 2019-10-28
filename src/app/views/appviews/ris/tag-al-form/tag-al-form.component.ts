@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
@@ -45,7 +45,10 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       remainPrice: new FormControl(null),
       price2Remain: new FormControl(null),
       paymentPrice: new FormControl(null),
+      price1: new FormControl(null),
+      netPrice1: new FormControl(null),
       price2: new FormControl(null),
+      price3: new FormControl(null),
       bankCode: new FormControl(null),
       documentRef: new FormControl(null),
       paymentType: new FormControl(null),
@@ -71,6 +74,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       this.mUser = x;
       this.chRef.detectChanges();
     });
+
   }
 
   loadingSedList() {
@@ -108,6 +112,22 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     }, () => {
       this.loading = 2;
     });
+
+    this.formGroup.get('paymentType').valueChanges.subscribe(x => {
+      if (x == '1') {
+        let bankCode = this.formGroup.get('bankCode');
+        bankCode.setValue(null);
+        bankCode.setValidators(null);
+        let documentRef = this.formGroup.get('documentRef');
+        documentRef.setValue(null);
+        documentRef.setValidators(null);
+      } else if (x == '2') {
+        this.formGroup.get('bankCode').setValidators(Validators.required);
+        this.formGroup.get('documentRef').setValidators(Validators.required);
+      }
+      this.formGroup.get('bankCode').updateValueAndValidity();
+      this.formGroup.get('documentRef').updateValueAndValidity();
+    });
   }
 
   checkingRecord(i: number) {
@@ -127,16 +147,6 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     // this.formGroup.get('price2').value - value;
     this.formGroup.get('price2Remain').patchValue(price);
   }
-
-  // togglePaymentType(value: number) {
-  //   if (value == 1) {
-  //     this.formGroup.get('bankCode').disable;
-  //     this.formGroup.get('documentRef').disable;
-  //   } else {
-  //     this.formGroup.get('bankCode').enable;
-  //     this.formGroup.get('documentRef').enable;
-  //   }
-  // }
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
     if (array !== undefined && array.length) {

@@ -3,6 +3,8 @@ import { ModelUser } from 'app/models/users';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { AlStatus } from 'app/entities/ris.entities';
 import { RisConfig } from '../ris.config';
+import { IUserResCookie } from 'app/interfaces/users';
+import { Input } from '@angular/core';
 
 export class TagAlConfig extends RisConfig {
     get SedList(): FormArray {
@@ -16,7 +18,7 @@ export class TagAlConfig extends RisConfig {
     public bankingsDropdown: DropDownModel[];
     public reasonDropdown: DropDownModel[];
     public checkedAll: boolean;
-    public mUser: ModelUser;
+    public mUser: IUserResCookie;
     public formGroup: FormGroup;
     public loading: number;
     public AlStatus = AlStatus;

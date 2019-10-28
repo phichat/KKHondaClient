@@ -8,6 +8,7 @@ import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
 import * as $ from 'jquery';
+import { IUserResCookie } from 'app/interfaces/users';
 
 declare var toastr: any;
 
@@ -19,7 +20,7 @@ declare var toastr: any;
 })
 export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  user = new ModelUser();
+  user: IUserResCookie;
   asyncUser: any;
   notPayment = 13; // ยังไม่ชำระ
 

@@ -1,6 +1,7 @@
 /* Import main Inspinia style */
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import "~datatables.net-bs/css/dataTables.bootstrap.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 @import "assets/styles/style";
 
@@ -134,6 +135,7 @@ span.required {
   .btnpicker {
     border-radius: unset !important;
   }
+
   .mydpicon {
     color: $fontColor !important;
   }
@@ -180,4 +182,18 @@ span.required {
 ._dialog {
   left: 0 !important;
   width: 80%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-middle {
+  vertical-align: middle !important;
 }

@@ -4,8 +4,10 @@ import { IConItemDocRes } from './con-item-doc.interface';
 export interface IConRes {
     bookingId: number;
     bookingNo: string;
-    bookingStatus: number;
-    statusDesc: string;
+    status1?: number;
+    status2?: number;
+    status1Desc: string;
+    status2Desc: string;
     state1?: number;
     state2?: number;
     eNo: string;
