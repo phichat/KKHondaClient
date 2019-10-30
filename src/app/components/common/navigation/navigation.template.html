@@ -315,6 +315,14 @@
                         </a>
                     </li>
                     <li [ngClass]="{'active': 
+                    activeRoute('receive-deposit-list') || 
+                    activeRoute('receive-deposit-create') ||
+                    activeRoute('receive-deposit-detail')}">
+                        <a [routerLink]="['/ris/receive-deposit-list']">
+                            <span class="nav-label">บันทึกรับชำระเงินรับฝาก</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': 
                     activeRoute('sed-list') || 
                     activeRoute('sed-form-create') ||
                     activeRoute('sed-form-detail')}">
@@ -449,7 +457,7 @@
                     </li> -->
                 </ul>
             </li>
-            
+
             <li>
                 <a href="javaScript:void(0);" (click)="signOut();">
                     <i class="fa fa-sign-out"></i>

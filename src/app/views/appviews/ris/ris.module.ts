@@ -16,10 +16,12 @@ import { components as TagSedForm } from './tag-sed-form';
 import { components as TagHistoryCar } from './tag-history-car';
 import { components as TagConForm } from './tag-con-form';
 import { components as TagClearMoney } from './tag-clear-money';
+import { components as ReceiveDeposit } from './receive-deposit-form';
 import { ClearMoneyService } from './tag-clear-money/clear-money.service';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { services as RisService } from 'app/services/ris';
-
+import { ReceiveDepositListComponent } from './receive-deposit-list/receive-deposit-list.component';
+import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
 
 @NgModule({
   declarations: [
@@ -29,12 +31,14 @@ import { services as RisService } from 'app/services/ris';
     TagConListComponent,
     TagBookWaitingListComponent,
     TagClearMoneyListComponent,
+    ReceiveDepositListComponent,
     ...TagAlForm,
     ...TagClForm,
     ...TagSedForm,
     ...TagHistoryCar,
     ...TagConForm,
-    ...TagClearMoney
+    ...TagClearMoney,
+    ...ReceiveDeposit
   ],
   imports: [
     CommonModule,
@@ -43,7 +47,8 @@ import { services as RisService } from 'app/services/ris';
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
-    MyDatePickerTHModule
+    MyDatePickerTHModule,
+    PaymentTypeModule
   ],
   providers: [
     ClearMoneyService,

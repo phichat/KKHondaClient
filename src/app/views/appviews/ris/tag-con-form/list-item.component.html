@@ -245,9 +245,9 @@
                     </td>
                     <td class="text-middle text-center">
                       <div class="checkbox checkbox-primary m-t-none m-b-none">
-                        <input type="checkbox" id="expIsVat" formControlName="expIsVat"
+                        <input type="checkbox" id="expIsVat{{expTag}}{{i}}" formControlName="expIsVat"
                           (change)="onExpensesCalVat(getFormExpense(expTag))">
-                        <label for="expIsVat"></label>
+                        <label for="expIsVat{{expTag}}{{i}}"></label>
                       </div>
                     </td>
                     <td *ngIf="Mode != ActionMode.Create">

@@ -53,6 +53,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       fNo: new FormControl(null, Validators.required),
       price1: new FormControl(null),
       cutBalance: new FormControl(null),
+      netPrice1: new FormControl(null),
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
       price3: new FormControl(null),
