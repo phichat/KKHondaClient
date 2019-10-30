@@ -8,15 +8,15 @@ import { IBankingDetail } from 'app/interfaces/banking';
 export class BankingService {
   constructor(private httpClient: HttpClient) { }
 
-  api = `${appConfig.apiUrl}/Bank`;
+  api = `${appConfig.apiUrl}/Master/Bank`;
 
   DropDown() {
     const url = `${this.api}/DropDown`;
     return this.httpClient.get<DropDownModel[]>(url);
   }
 
-  GetBankingAndDetail() {
-    const url = `${this.api}/GetBankingAndDetail`;
+  GetBookBank() {
+    const url = `${this.api}/GetBookBank`;
     return this.httpClient.get<IBankingDetail[]>(url);
   }
 

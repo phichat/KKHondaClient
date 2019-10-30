@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { PaymentTypeConfig } from './paymey-type.config';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { BankingService } from 'app/services/banking';
+import { BankingService } from 'app/services/masters';
 import { IBankingDetail } from 'app/interfaces/banking';
 import { IPayment } from 'app/interfaces/payment.interface';
 
@@ -39,7 +39,7 @@ export class TransferComponent extends PaymentTypeConfig implements OnInit {
     };
     this.Payment$.emit(value);
 
-    this.s_bank.GetBankingAndDetail().subscribe(o => {
+    this.s_bank.GetBookBank().subscribe(o => {
       this.banking = o.filter(x => x.accBankNumber != null);
     });
 
