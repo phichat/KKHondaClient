@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { PaymentTypeConfig } from './paymey-type.config';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { BankingService } from 'app/services/masters';
@@ -13,29 +13,33 @@ import { IPayment } from 'app/interfaces/payment.interface';
 export class TransferComponent extends PaymentTypeConfig implements OnInit {
   constructor(
     private fb: FormBuilder,
-    private s_bank: BankingService
+    private s_bank: BankingService,
+    private chRef: ChangeDetectorRef
   ) {
     super();
     this.formGroup = this.fb.group({
       paymentPrice: new FormControl(0, Validators.required),
       discount: new FormControl(null),
       totalPaymentPrice: new FormControl(null),
-      bankCode: new FormControl(null, Validators.required),
       paymentDate: new FormControl(null, Validators.required),
+      accBankId: new FormControl(null, Validators.required),
       bankName: new FormControl(null, Validators.required),
-      accBankName: new FormControl(null, Validators.required)
+      accBankName: new FormControl(null, Validators.required),
+      accBankNumber: new FormControl(null, Validators.required),
+      documentRef: new FormControl(null)
     });
   }
 
   ngOnInit() {
 
+    this.disabledForm.next(false);
     const value: IPayment = {
       paymentPrice: 0,
-      discountPrice: null,
-      totalPaymentPrice: null,
-      bankCode: null,
-      paymentDate: null,
-      invalid: this.formGroup.invalid
+      options: {
+        invalid: this.formGroup.invalid,
+        disabled: false
+      }
+
     };
     this.Payment$.emit(value);
 
@@ -48,19 +52,39 @@ export class TransferComponent extends PaymentTypeConfig implements OnInit {
         paymentPrice: o.paymentPrice,
         discountPrice: 0,
         totalPaymentPrice: o.paymentPrice,
-        bankCode: o.bankCode,
+        accBankId: o.accBankId,
         paymentDate: this.getDateMyDatepicker(o.paymentDate),
-        invalid: this.formGroup.invalid
+        documentRef: o.documentRef,
+        options: {
+          invalid: this.formGroup.invalid,
+          disabled: false
+        }
       };
       this.Payment$.emit(value);
     })
   }
 
+  ngAfterViewInit(): void {
+    if (this.$Data != undefined) {
+      this.$Data.subscribe(x => {
+        this.chRef.markForCheck();
+        this.formGroup.patchValue({ ...x });
+
+        if (x.options.disabled) {
+          this.formGroup.disable();
+          this.disabledForm.next(true);
+        } else {
+          this.disabledForm.next(false);
+        }
+      });
+    }
+  }
+
   selectItem(event: IBankingDetail) {
     this.formGroup.patchValue({
-      bankCode: event.bankCode,
       bankName: event.bankName,
-      accBankName: event.accBankName
+      accBankName: event.accBankName,
+      accBankNumber: event.accBankNumber
     })
   }
 

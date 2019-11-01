@@ -22,17 +22,6 @@
     <form action="" [formGroup]="formGroup">
       <div class="row">
         <div class="col-md-8">
-          <!-- <div class="ibox-content ibox-heading">
-            <h4>ประเภทการส่งเงิน</h4>
-            <div class="radio radio-info radio-inline">
-              <input required type="radio" formControlName="expenseTag" [id]=EXPTag.EXP10003 [value]=EXPTag.EXP10003>
-              <label [for]=EXPTag.EXP10003>พ.ร.บ.</label>
-            </div>
-            <div class="radio radio-info radio-inline">
-              <input required type="radio" formControlName="expenseTag" [id]=EXPTag.EXP10004 [value]=EXPTag.EXP10004>
-              <label [for]=EXPTag.EXP10004>ประกันภัย</label>
-            </div>
-        </div> -->
 
           <div class="ibox-content">
             <table class="table table-bordered set-dataTable">
@@ -41,7 +30,7 @@
                   <th class="text-center">ลำดับ</th>
                   <th class="text-center">
                     <div class="checkbox checkbox-primary no-margins">
-                      <input type="checkbox" id="select" (change)="checkAll($event)" [checked]="checkedAll">
+                      <input type="checkbox" id="select" disabled [checked]="checkedAll">
                       <label for="select"></label>
                     </div>
                   </th>
@@ -57,25 +46,22 @@
                 <tr *ngIf="ConList.length == 0; else else_tr;">
                   <td colspan="8" class="text-center">
                     <div [ngSwitch]="loading">
-                        <div *ngSwitchCase="LoadingEntities.noRecord">
-                          <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
-                          <br>
-                          <p>ไม่มีข้อมูล</p>
-                        </div>
-                        <div *ngSwitchCase="LoadingEntities.error">
-                          <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
-                          <br>
-                          <p>มีบางอย่างผิดพลาด</p>
-                        </div>
-                        <div *ngSwitchCase="LoadingEntities.loading">
-                          <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                          <br>
-                          <p>รอสักครู่...</p>
-                        </div>
-                        <div *ngSwitchDefault>
-                            <p>กรุณาเลือก ประเภทการส่งเงิน</p>
-                        </div>
+                      <div *ngSwitchCase="LoadingEntities.noRecord">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>ไม่มีข้อมูล</p>
                       </div>
+                      <div *ngSwitchCase="LoadingEntities.error">
+                        <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>มีบางอย่างผิดพลาด</p>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <p>รอสักครู่...</p>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <ng-template #else_tr>
@@ -83,7 +69,7 @@
                     <td class="text-center">{{i+1}}</td>
                     <td class="text-center">
                       <div class="checkbox checkbox-primary no-margins">
-                        <input type="checkbox" id="select{{i}}" formControlName="IS_CHECKED">
+                        <input type="checkbox" id="select{{i}}" formControlName="IS_CHECKED" disabled>
                         <label for="select{{i}}"></label>
                       </div>
                     </td>
@@ -145,8 +131,7 @@
             <div class="form-group">
               <label class="col-lg-4 control-label is-required">ชื่อบริษัท</label>
               <div class="col-lg-8">
-                <ng-select [items]="insureDropdown" bindValue="value" bindLabel="text" formControlName="insuranceCode">
-                </ng-select>
+                <input type="text" formControlName="insuranceName" class="form-control">
               </div>
             </div>
           </div>
@@ -154,7 +139,7 @@
             <div class="form-group">
               <label class="col-lg-4 control-label is-required">ผู้ชำระเงิน</label>
               <div class="col-lg-8">
-                <input type="text" class="form-control" formControlName="createByName" disabled>
+                <input type="text" class="form-control" formControlName="createName">
               </div>
             </div>
           </div>
@@ -166,12 +151,26 @@
               </div>
             </div>
           </div>
+          <div class="row form-group">
+            <div class="form-group">
+              <ng-container *ngIf="formGroup.get('status').value == ReceiveClStatus.Normal; else elseReason">
+                <label class="col-md-4 control-label is-required">สาเหตุในการยกเลิก</label>
+                <div class="col-md-8">
+                  <ng-select required [items]="reasonDropdown" bindValue="text" bindLabel="text"
+                    formControlName="reason">
+                  </ng-select>
+                </div>
+              </ng-container>
+              <ng-template #elseReason>
+                <label class="col-md-4 control-label is-required">สาเหตุในการยกเลิก</label>
+                <div class="col-md-8">
+                  <input type="text" formControlName="reason" disabled class="form-control">
+                </div>
+              </ng-template>
+            </div>
+          </div>
 
           <hr class="hr-dashed">
-          <div *ngIf="paymentLessThenTotal" class="alert alert-danger" role="alert">
-            "ยอดชำระเงิน" ต้องเท่ากับ "ยอดที่ต้องชำระ"
-          </div>
-          <!-- <ng-template #noneAlert></ng-template> -->
 
           <div class="row form-group">
             <div class="form-group">
@@ -195,13 +194,13 @@
 
           <div [ngSwitch]="formGroup.get('paymentType').value">
             <ng-container *ngSwitchCase="1">
-              <app-payment-type-cash (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
+              <app-payment-type-cash [$Data]="PaymentData"></app-payment-type-cash>
             </ng-container>
             <ng-container *ngSwitchCase="2">
-              <app-payment-type-transfer (Payment$)="formPaymentChange($event)"></app-payment-type-transfer>
+              <app-payment-type-transfer [$Data]="PaymentData"></app-payment-type-transfer>
             </ng-container>
             <ng-container *ngSwitchCase="3">
-              <app-payment-type-cheque (Payment$)="formPaymentChange($event)"></app-payment-type-cheque>
+              <app-payment-type-cheque [$Data]="PaymentData"></app-payment-type-cheque>
             </ng-container>
           </div>
         </div>
@@ -211,10 +210,11 @@
 
       <div class="row">
         <div class="col-lg-12 text-right">
-          <button class="btn btn-success" type="button" (click)="onSubmit()"
-            [disabled]="ConListIsSelect.length == 0 || formGroup.invalid || paymentLessThenTotal || formPayment.options.invalid">
-            บันทึกรายการ
-          </button>
+          <ng-container *ngIf="formGroup.get('status').value == ReceiveClStatus.Normal">
+            <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="onSubmit()">
+              ยกเลิกงาน
+            </button>
+          </ng-container>
         </div>
       </div>
     </form>

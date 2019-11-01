@@ -79,15 +79,6 @@ export interface ICarRegisRes {
     revNo: string;
 }
 
-export interface ICarRegisReceiveDeposit {
-    bookingId: number;
-    bookingNo: string;
-    bookingDate: Date;
-    netPrice1: number;
-    expense: number;
-    paymentPrice: number;
-}
-
 export interface ICarRegisItemRes {
     carRegisListItemRes: IConItemRes[];
     carRegisListItemDocRes: IConItemDocRes[];

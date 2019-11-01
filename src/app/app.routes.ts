@@ -40,7 +40,7 @@ import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/
 import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
 import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
 import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
-import { ReceiveDepositCreateComponent } from './views/appviews/ris/receive-deposit-form';
+import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -114,6 +114,7 @@ export const ROUTES: Routes = [
       { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent },
       { path: 'receive-deposit-list', component: ReceiveDepositListComponent },
       { path: 'receive-deposit-create', component: ReceiveDepositCreateComponent },
+      { path: 'receive-deposit-detail/:id', component: ReceiveDepositDetailComponent },
       { path: 'rpt-regis-tag', component: RegisTagComponent },
       { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
 

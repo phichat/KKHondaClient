@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { PaymentTypeConfig } from './paymey-type.config';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IPayment } from 'app/interfaces/payment.interface';
@@ -8,9 +8,11 @@ import { IPayment } from 'app/interfaces/payment.interface';
   templateUrl: 'cash.component.html'
 })
 
-export class CashComponent extends PaymentTypeConfig implements OnInit {
+export class CashComponent extends PaymentTypeConfig implements OnInit, AfterViewInit {
+
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private chRef: ChangeDetectorRef
   ) {
     super();
     this.formGroup = this.fb.group({
@@ -26,26 +28,48 @@ export class CashComponent extends PaymentTypeConfig implements OnInit {
   }
 
   ngOnInit() {
+    this.disabledForm.next(false);
     const value: IPayment = {
       paymentPrice: 0,
       discountPrice: null,
       totalPaymentPrice: null,
       paymentDate: null,
-      invalid: this.formGroup.invalid
+      documentRef: null,
+      options: {
+        invalid: this.formGroup.invalid,
+        disabled: false
+      }
     };
     this.Payment$.emit(value);
-    
+
     this.formGroup.valueChanges.subscribe(o => {
       const value: IPayment = {
         paymentPrice: o.paymentPrice,
         discountPrice: o.discount,
         totalPaymentPrice: this.totalPaymentPrice,
         paymentDate: this.getDateMyDatepicker(o.paymentDate),
-        invalid: this.formGroup.invalid
+        documentRef: null,
+        options: {
+          invalid: this.formGroup.invalid,
+          disabled: false
+        }
       };
       this.Payment$.emit(value);
     });
   }
 
-
+  ngAfterViewInit(): void {
+    if (this.$Data != undefined) {
+      this.$Data.subscribe(x => {
+        this.chRef.markForCheck();
+        this.formGroup.patchValue({ ...x });
+        if (x.options.disabled) {
+          this.formGroup.disable();
+          this.disabledForm.next(true);
+        } else {
+          this.disabledForm.next(false);
+        }
+      });
+    }
+  }
 }

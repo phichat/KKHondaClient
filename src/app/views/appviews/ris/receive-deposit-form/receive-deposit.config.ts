@@ -3,7 +3,7 @@ import { ExpensesTag } from 'app/entities/ris.entities';
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
-import { ICarRegisReceiveDeposit } from 'app/interfaces/ris';
+import { ICarRegisClDeposit } from 'app/interfaces/ris';
 import { IUserResCookie } from 'app/interfaces/users';
 import { LoadingEntities } from 'app/entities/loading.entities';
 import { setLocalDate } from 'app/app.config';
@@ -16,6 +16,8 @@ export class ReceiveDepositConfig {
   displayLocalDate = setLocalDate;
   dataTable: any;
   mUser: IUserResCookie;
+  checkedAll: boolean;
+  loading: number;
 
   get ConList(): FormArray {
     return this.formGroup.get('conList') as FormArray;
@@ -26,12 +28,12 @@ export class ReceiveDepositConfig {
   }
 
   get price1Summary(): number {
-    const o = this.ConListIsSelect as ICarRegisReceiveDeposit[];
+    const o = this.ConListIsSelect as ICarRegisClDeposit[];
     return o.reduce((a, c) => a += c.netPrice1, 0);
   }
 
   get expenseSummary(): number {
-    const o = this.ConListIsSelect as ICarRegisReceiveDeposit[];
+    const o = this.ConListIsSelect as ICarRegisClDeposit[];
     return o.reduce((a, c) => a += c.expense, 0);
   }
 
@@ -39,21 +41,22 @@ export class ReceiveDepositConfig {
     return this.price1Summary + this.expenseSummary;
   }
 
+  initDatatable(): void {
+    let table: any = this.$('table.set-dataTable');
+    this.dataTable = table.DataTable({
+      scrollY: '50vh',
+      scrollCollapse: true,
+      paging: false,
+      searching: false,
+      ordering: false,
+      info: false
+    });
+  }
 
-  // initDatatable(): void {
-  //   let table: any = $('table.set-dataTable');
-  //   this.dataTable = table.DataTable({
-  //     scrollX: true,
-  //     // scrollY: '50vh',
-  //     // scrollCollapse: true,
-  //     // paging: false
-  //   });
-  // }
-
-  // reInitDatatable(): void {
-  //   this.destroyDatatable()
-  //   setTimeout(() => this.initDatatable(), 0)
-  // }
+  reInitDatatable(): void {
+    this.destroyDatatable()
+    setTimeout(() => this.initDatatable(), 0)
+  }
 
   destroyDatatable() {
     if (this.dataTable) {

@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>บันทึกการคืนเงิน</h2>
+    <h2>บันทึกรับชำระเงินรับฝาก</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">หน้าแรก</a>
@@ -30,15 +30,14 @@
             <tr>
               <th class="text-center">ลำดับ</th>
               <th></th>
-              <th>ใบส่งเรื่อง</th>
-              <th>เลขที่ใบยืม</th>
-              <th>เลขที่ใบคืน</th>
-              <th>วันที่คืน</th>
+              <th>เลขที่ใบชำระเงิน</th>
+              <th>วันที่</th>
+              <th>ประเภทการส่งเงิน</th>
+              <th>ประเภทการชำระ</th>
+              <th class="text-right">ยอดชำระเงิน</th>
+              <th>วันที่ชำระ</th>
               <th>สถานะ</th>
-              <th class="text-right">เงินยืมคงเหลือ</th>
-              <th class="text-right">เงินคืน</th>
-              <th>ผู้ดำเนินการ (คืนเงิน)</th>
-              <th>ผู้รับคืน</th>
+              <th>ผู้ชำระเงิน</th>
             </tr>
           </thead>
           <tbody>
@@ -64,27 +63,26 @@
               </td>
             </tr>
             <ng-template #else_tr>
-              <!-- <tr *ngFor="let item of list; let i = index">
+              <tr *ngFor="let item of list; let i = index">
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">
-                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/cl-form-detail', item.clNo]">
+                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/ris/receive-deposit-detail', item.id]">
                     <i class="fa fa-info-circle"></i>
                     รายละเอียด
                   </a>
                 </td>
-                <td>{{item.sedNo}}</td>
-                <td>{{item.alNo}}</td>
-                <td>{{item.clNo}}</td>
-                <td>{{displayLocalDate(item.createDate)}}</td>
+                <td>{{item.receiptNo}}</td>
+                <td>{{displayLocalDate(item.receiptDate)}}</td>
+                <td>{{item.expenseTagName}}</td>
+                <td>{{item.paymentTypeDesc}}</td>
+                <td>{{item.totalPaymentPrice | number:'1.2-2'}}</td>
+                <td>{{displayLocalDate(item.paymentDate)}}</td>
                 <td [ngClass]="{
-                  'text-danger': item.status == ClStatus.Cancel,
-                  'text-navy': item.status == ClStatus.Normal
+                  'text-danger': item.status == ReceiveClStatus.Cancel,
+                  'text-navy': item.status == ReceiveClStatus.Normal
                 }">{{item.statusDesc}}</td>
-                <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
-                <td class="text-right" style="background-color: #d9edf7;">{{item.receivePrice | number:'1.2-2'}}</td>
-                <td>{{item.refundName}}</td>
                 <td>{{item.createName}}</td>
-              </tr> -->
+              </tr>
             </ng-template>
 
           </tbody>

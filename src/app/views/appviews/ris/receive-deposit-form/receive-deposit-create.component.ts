@@ -6,9 +6,15 @@ import { InsuranceService } from 'app/services/masters';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { IPayment } from 'app/interfaces/payment.interface';
 import { UserService } from 'app/services/users';
-import { tap } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ICarRegisReceiveDeposit } from 'app/interfaces/ris';
+import { ICarRegisClDeposit } from 'app/interfaces/ris';
+import { LoaderService } from 'app/core/loader/loader.service';
+import { message } from 'app/app.message';
+import { Router } from '@angular/router';
+import { ReceiveDepositService } from 'app/services/ris';
+
+declare var toastr: any;
 
 @Component({
   selector: 'app-receive-deposit-create',
@@ -21,9 +27,16 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
     private fb: FormBuilder,
     private s_CarRegis: CarRegisService,
     private s_insur: InsuranceService,
-    private s_user: UserService
+    private s_user: UserService,
+    public s_clDeposit: ReceiveDepositService,
+    private s_loader: LoaderService,
+    private route: Router
   ) {
     super();
+    toastr.options = {
+      'closeButton': true,
+      'progressBar': true,
+    }
 
     this.mUser = this.s_user.cookies;
     this.formGroup = this.fb.group({
@@ -33,29 +46,30 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
       paymentPrice: new FormControl(null, Validators.required),
       discountPrice: new FormControl(null),
       totalPaymentPrice: new FormControl(null, Validators.required),
-      bankCode: new FormControl(null),
+      accBankId: new FormControl(null),
       paymentDate: new FormControl(null, Validators.required),
       createBy: new FormControl(this.mUser.id, Validators.required),
+      branchId: new FormControl(this.mUser.branch, Validators.required),
       createByName: new FormControl(this.mUser.fullName),
       remark: new FormControl(null),
       conList: this.fb.array([])
     });
   }
 
-  loading: number;
-  checkedAll: boolean;
   insureDropdown: DropDownModel[];
+  formPayment: IPayment;
 
   get paymentLessThenTotal(): boolean {
     return this.formGroup.get('paymentPrice').value != this.total;
   }
 
   formPaymentChange(event: IPayment) {
+    this.formPayment = event;
     this.formGroup.patchValue({
       paymentPrice: event.paymentPrice,
       discountPrice: event.discountPrice,
       totalPaymentPrice: event.paymentPrice,
-      bankCode: event.bankCode,
+      accBankId: event.accBankId,
       paymentDate: event.paymentDate
     })
   }
@@ -68,7 +82,7 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
 
     this.formGroup.get('expenseTag').valueChanges.subscribe((x: string) => {
 
-      let observe: Observable<ICarRegisReceiveDeposit[]>;
+      let observe: Observable<ICarRegisClDeposit[]>;
 
       if (x == this.EXPTag.EXP10003) {
         observe = this.s_CarRegis.CarRegisReceiveAct();
@@ -81,6 +95,7 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
         tap(() => {
           while (this.ConList.length)
             this.ConList.removeAt(0);
+          this.destroyDatatable();
           this.checkedAll = false;
           this.loading = this.LoadingEntities.loading;
         }),
@@ -104,23 +119,6 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
     })
   }
 
-  initDatatable(): void {
-    let table: any = this.$('table.set-dataTable');
-    this.dataTable = table.DataTable({
-      scrollY: '50vh',
-      scrollCollapse: true,
-      paging: false,
-      searching: false,
-      ordering: false,
-      info: false
-    });
-  }
-
-  reInitDatatable(): void {
-    this.destroyDatatable()
-    setTimeout(() => this.initDatatable(), 0)
-  }
-
   checkAll(e: Event) {
     const checkbox = e.target as HTMLInputElement;
     for (let index = 0; index < this.ConList.value.length; index++) {
@@ -129,10 +127,16 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
   }
 
   onSubmit() {
+    this.s_loader.showLoader()
     let f = this.formGroup.getRawValue();
-    f = { ...f, conList: this.ConListIsSelect }
-    console.log(f);
+    f = { ...f, conList: this.ConListIsSelect };
 
+    this.s_clDeposit.Create(f)
+      .pipe(finalize(() => this.s_loader.onEnd()))
+      .subscribe(() => {
+        toastr.success(message.created);
+        this.route.navigate(['ris/receive-deposit-list']);
+      }, () => toastr.error(message.failed));
   }
 
 }

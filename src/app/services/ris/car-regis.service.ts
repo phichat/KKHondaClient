@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
-import { ICarRegisRes, ICarRegisReceiveDeposit } from 'app/interfaces/ris';
+import { ICarRegisRes, ICarRegisClDeposit } from 'app/interfaces/ris';
 
 @Injectable({ providedIn: 'root' })
 export class CarRegisService {
@@ -16,11 +16,11 @@ export class CarRegisService {
 
   CarRegisReceiveWaranty() {
     const url = `${this.api}/CarRegisReceiveWaranty`;
-    return this.httpClient.get<ICarRegisReceiveDeposit[]>(url);
+    return this.httpClient.get<ICarRegisClDeposit[]>(url);
   }
 
   CarRegisReceiveAct() {
     const url = `${this.api}/CarRegisReceiveAct`;
-    return this.httpClient.get<ICarRegisReceiveDeposit[]>(url);
+    return this.httpClient.get<ICarRegisClDeposit[]>(url);
   }
 }

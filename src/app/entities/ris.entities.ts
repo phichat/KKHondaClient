@@ -1,6 +1,7 @@
 export enum PaymentType {
     Cash = 1,
-    Transfer = 2
+    Transfer = 2,
+    Cheque = 3
 }
 
 export enum ConStatus1 {
@@ -55,6 +56,12 @@ export enum ExpensesType {
     Service = 1,
     Expenses = 2,
     InternalCost = 3
+}
+
+export enum ReceiveClStatus
+{
+  Cancel = 0,
+  Normal = 1
 }
 
 export enum ExpensesTag {

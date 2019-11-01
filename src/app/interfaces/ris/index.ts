@@ -7,3 +7,4 @@ export * from './con-list.interface';
 export * from './con-item-doc.interface';
 export * from './regis-rev.interface';
 export * from './car-history.interface';
+export * from './cl-deposit.interface';

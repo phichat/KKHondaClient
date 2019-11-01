@@ -11,8 +11,21 @@
     <div class="form-group">
       <label class="col-lg-4 control-label is-required">วันที่โอน</label>
       <div class="col-lg-8">
-        <my-date-picker-th [options]="myDatePickerOptions" formControlName="paymentDate">
-        </my-date-picker-th>
+        <ng-container *ngIf="!(disabledForm | async); else elsePayDate">
+          <my-date-picker-th [options]="myDatePickerOptions" formControlName="paymentDate">
+          </my-date-picker-th>
+        </ng-container>
+        <ng-template #elsePayDate>
+          <span class="form-control disabled">{{displayLocalDate(formGroup.get('paymentDate').value)}}</span>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="form-group">
+      <label class="col-lg-4 control-label">เลขที่อ้างอิง</label>
+      <div class="col-lg-8">
+        <input type="text" formControlName="documentRef" class="form-control">
       </div>
     </div>
   </div>
@@ -20,15 +33,21 @@
     <div class="form-group">
       <label class="col-lg-4 control-label is-required">เลขที่บัญชี</label>
       <div class="col-lg-8">
-        <ng-select [items]="banking" (change)="selectItem($event)" dropdownPosition="auto" [virtualScroll]="true"
-          placeholder="เลือกบัญชีธนาคาร" bindValue="bankCode" bindLabel="accBankNumber" [searchFn]="customSearchFn">
-          <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-            <p class="m-b-xxs">เลขที่บัญชี : {{item.accBankNumber}}</p>
-            <small class="text-muted">ธนาคาร : {{item.bankName}}</small><br>
-            <small class="text-muted">สาขา : {{item.accBankName}}</small>
-            <hr class="hr-dashed m-t-xs m-b-xs">
-          </ng-template>
-        </ng-select>
+        <ng-container *ngIf="!(disabledForm | async); else elseBank">
+          <ng-select [items]="banking" (change)="selectItem($event)" dropdownPosition="auto" [virtualScroll]="true"
+            placeholder="เลือกบัญชีธนาคาร" bindValue="accBankId" bindLabel="accBankNumber" formControlName="accBankId"
+            [searchFn]="customSearchFn">
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+              <p class="m-b-xxs">เลขที่บัญชี : {{item.accBankNumber}}</p>
+              <small class="text-muted">ธนาคาร : {{item.bankName}}</small><br>
+              <small class="text-muted">สาขา : {{item.accBankName}}</small>
+              <hr class="hr-dashed m-t-xs m-b-xs">
+            </ng-template>
+          </ng-select>
+        </ng-container>
+        <ng-template #elseBank>
+          <input type="text" formControlName="accBankNumber" class="form-control">
+        </ng-template>
       </div>
     </div>
   </div>
@@ -48,12 +67,4 @@
       </div>
     </div>
   </div>
-  <!-- <div class="row form-group">
-    <div class="form-group">
-      <label class="col-lg-4 control-label">เอกสารอ้างอิง</label>
-      <div class="col-lg-8">
-        <input type="text" formControlName="documentRef" disabled class="form-control">
-      </div>
-    </div>
-  </div> -->
 </form>
