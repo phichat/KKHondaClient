@@ -76,11 +76,9 @@ export class ReceiveDepositDetailComponent extends ReceiveDepositConfig implemen
             totalPaymentPrice: x.totalPaymentPrice,
             paymentDate: x.paymentDate,
             accBankId: x.accBankId,
-            bankName: x.bankName,
-            accBankName: x.accBankName,
-            accBankNumber: x.accBankNumber,
             documentRef: x.documentRef,
             options: {
+              invalid: false,
               disabled: true
             }
           }

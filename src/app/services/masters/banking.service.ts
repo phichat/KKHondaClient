@@ -20,4 +20,10 @@ export class BankingService {
     return this.httpClient.get<IBankingDetail[]>(url);
   }
 
+  GetBookBankById(accBankId: string) {
+    const url = `${this.api}/GetBookBankById`;
+    const params = { accBankId };
+    return this.httpClient.get<IBankingDetail>(url, { params });
+  }
+
 }

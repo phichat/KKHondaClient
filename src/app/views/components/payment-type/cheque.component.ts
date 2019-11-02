@@ -3,7 +3,8 @@ import { PaymentTypeConfig } from './paymey-type.config';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IBankingDetail } from 'app/interfaces/banking';
 import { BankingService } from 'app/services/masters';
-import { IPayment } from 'app/interfaces/payment.interface';
+import { IPayment, IPaymentInput } from 'app/interfaces/payment.interface';
+import { mergeMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payment-type-cheque',
@@ -18,7 +19,7 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
   ) {
     super();
     this.formGroup = this.fb.group({
-      paymentPrice: new FormControl(0, Validators.required),
+      paymentPrice: new FormControl(null, Validators.required),
       discount: new FormControl(null),
       totalPaymentPrice: new FormControl(null),
       paymentDate: new FormControl(null, Validators.required),
@@ -31,10 +32,9 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
   }
 
   ngOnInit() {
-
     this.disabledForm.next(false);
     const value: IPayment = {
-      paymentPrice: 0,
+      paymentPrice: null,
       options: {
         invalid: this.formGroup.invalid,
         disabled: false
@@ -42,10 +42,6 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
 
     };
     this.Payment$.emit(value);
-
-    this.s_bank.GetBookBank().subscribe(o => {
-      this.banking = o.filter(x => x.accBankNumber != null);
-    });
 
     this.formGroup.valueChanges.subscribe(o => {
       const value: IPayment = {
@@ -66,17 +62,43 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
 
   ngAfterViewInit(): void {
     if (this.$Data != undefined) {
-      this.$Data.subscribe(x => {
+      const observe = this.$Data
+        .pipe(
+          mergeMap(x => {
+            const getBookBank = (id: number) => this.s_bank.GetBookBankById(`${id}`).pipe(
+              map(o => {
+                return {
+                  ...x,
+                  bankName: o.bankName,
+                  accBankName: o.accBankName,
+                  accBankNumber: o.accBankNumber,
+                } as IPaymentInput;
+              }),
+            );
+            return getBookBank(x.accBankId);
+          }),
+        );
+
+      observe.subscribe(x => {
         this.chRef.markForCheck();
-        this.formGroup.patchValue({ ...x });
         if (x.options.disabled) {
           this.formGroup.disable();
           this.disabledForm.next(true);
         } else {
+          this.loadBookBank();
           this.disabledForm.next(false);
         }
+        this.formGroup.patchValue({ ...x });
       });
+    } else {
+      this.loadBookBank();
     }
+  }
+
+  private loadBookBank(): void {
+    this.s_bank.GetBookBank().subscribe(o => {
+      this.banking = o.filter(x => x.accBankNumber != null);
+    });
   }
 
   selectItem(event: IBankingDetail) {

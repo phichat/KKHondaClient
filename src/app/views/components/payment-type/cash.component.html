@@ -1,41 +1,33 @@
 <div [formGroup]="formGroup">
   <div class="row form-group">
-    <div class="form-group">
-      <label class="col-md-4 control-label is-required">ยอดชำระเงิน</label>
-      <div class="col-md-8">
-        <input type="number" #payment formControlName="paymentPrice" class="form-control">
-      </div>
+    <label class="col-md-4 control-label is-required">ยอดชำระเงิน</label>
+    <div class="col-md-8">
+      <input type="number" #payment formControlName="paymentPrice" class="form-control">
     </div>
   </div>
   <div class="row form-group">
-    <div class="form-group">
-      <label class="col-md-4 control-label">ส่วนลด</label>
-      <div class="col-md-8">
-        <input type="number" #discount formControlName="discount" class="form-control">
-      </div>
+    <label class="col-md-4 control-label">ส่วนลด</label>
+    <div class="col-md-8">
+      <input type="number" #discount formControlName="discount" class="form-control">
     </div>
   </div>
   <div class="row form-group">
-    <div class="form-group">
-      <label class="col-lg-4 control-label is-required">วันที่ชำระ</label>
-      <div class="col-lg-8">
-        <ng-container *ngIf="(disabledForm | async) == false; else elsePayDate">
-          <my-date-picker-th [options]="myDatePickerOptions" formControlName="paymentDate">
-          </my-date-picker-th>
-        </ng-container>
-        <ng-template #elsePayDate>
-          <span class="form-control disabled">{{displayLocalDate(formGroup.get('paymentDate').value)}}</span>
-        </ng-template>
-      </div>
+    <label class="col-lg-4 control-label is-required">วันที่ชำระ</label>
+    <div class="col-lg-8">
+      <ng-container *ngIf="(disabledForm | async) == false; else elsePayDate">
+        <my-date-picker-th [options]="myDatePickerOptions" formControlName="paymentDate">
+        </my-date-picker-th>
+      </ng-container>
+      <ng-template #elsePayDate>
+        <span class="form-control disabled">{{displayLocalDate(formGroup.get('paymentDate').value)}}</span>
+      </ng-template>
     </div>
   </div>
   <div class="row form-group">
-    <div class="form-group">
-      <label class="col-md-4 control-label">ยอดเงินรวม</label>
-      <div class="col-md-8">
-        <input type="number" formControlName="totalPaymentPrice" class="form-control" [value]="totalPaymentPrice"
-          disabled>
-      </div>
+    <label class="col-md-4 control-label">ยอดเงินรวม</label>
+    <div class="col-md-8">
+      <input type="number" formControlName="totalPaymentPrice" class="form-control" [value]="totalPaymentPrice"
+        disabled>
     </div>
   </div>
 </div>

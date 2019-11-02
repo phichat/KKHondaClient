@@ -28,9 +28,10 @@
         <div class="row">
           <div class="col-xs-6 col-lg-6">
             <div class="form-group">
-              <label class="col-lg-3 control-label">วันที่ทำรายการ</label>
+              <label class="col-lg-3 control-label is-required">วันที่ทำรายการ</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{displayLocalDate(formGroup.get('createDate').value)}}</span>
+                  <my-date-picker-th [options]="myDatePickerOptions" formControlName="createDate">
+                  </my-date-picker-th>
               </div>
             </div>
           </div>

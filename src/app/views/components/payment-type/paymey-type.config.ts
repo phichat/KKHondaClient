@@ -21,6 +21,6 @@ export class PaymentTypeConfig {
   formGroup: FormGroup;
   disabledForm = new BehaviorSubject<boolean>(false);
 
-  @Input() $Data: Subject<IPaymentInput>;
+  @Input() $Data: Subject<IPayment>;
   @Output() Payment$ = new EventEmitter<IPayment>();
 }

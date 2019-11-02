@@ -29,9 +29,8 @@
             <div class="form-group">
               <label class="col-lg-4 control-label">วันที่ทำรายการ</label>
               <div class="col-lg-8">
-                <span class="form-control disabled">
-                  {{displayLocalDate(formGroup.get('createDate').value)}}
-                </span>
+                <my-date-picker-th [options]="myDatePickerOptions" formControlName="createDate">
+                </my-date-picker-th>
               </div>
             </div>
           </div>

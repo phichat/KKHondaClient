@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
-import { appConfig } from 'app/app.config';
+import { appConfig, getDateMyDatepicker } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
@@ -50,7 +50,7 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       documentRef: new FormControl(null),
       paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
-      createDate: new FormControl(null),
+      createDate: new FormControl(null, Validators.required),
       createBy: new FormControl(null),
       remark: new FormControl(null),
       AlList: this.fb.array([])
@@ -91,7 +91,7 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
           balancePrice: this.balancePriceState,
           receivePrice: this.balancePriceState,
           netPrice: rec ? rec.netPrice : null,
-          createDate: new Date(),
+          // createDate: new Date(),
           createBy: this.mUser.id,
           branchId: this.mUser.branch,
           paymentType: '1'
@@ -158,7 +158,7 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       documentRef: f.documentRef,
       paymentType: f.paymentType,
       branchId: f.branchId,
-      createDate: (f.createDate as Date).toISOString(),
+      createDate: getDateMyDatepicker(f.createDate),
       createBy: f.createBy,
       remark: f.remark,
     }

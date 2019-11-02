@@ -9,6 +9,8 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, mapTo } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropDownModel } from 'app/models/drop-down-model';
+import { IPaymentInput, IPayment } from 'app/interfaces/payment.interface';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 declare var toastr: any;
 
 @Component({
@@ -36,6 +38,8 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
     }
   }
 
+  PaymentData = new BehaviorSubject(null);
+
   ngOnInit() {
     this.formGroup = this.fb.group({
       alNo: new FormControl(null),
@@ -50,7 +54,7 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
       bankCode: new FormControl(null),
       bankName: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentType: new FormControl({ value: null, disabled: true }),
       branchId: new FormControl(null),
       createDate: new FormControl(null),
       createBy: new FormControl(null),
@@ -94,6 +98,20 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
             return getConNo(al);
           })
         ).subscribe((x: any) => {
+
+          const paymentData: IPayment = {
+            paymentPrice: x.paymentPrice,
+            discountPrice: x.discount,
+            totalPaymentPrice: x.totalPaymentPrice,
+            paymentDate: x.paymentDate,
+            accBankId: x.accBankId,
+            documentRef: x.documentRef,
+            options: {
+              invalid: false,
+              disabled: true
+            }
+          }
+          this.PaymentData.next(paymentData);
 
           this.formGroup.patchValue({
             alNo: x.alNo,

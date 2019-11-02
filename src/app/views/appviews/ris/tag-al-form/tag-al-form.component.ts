@@ -3,10 +3,11 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { appConfig } from 'app/app.config';
+import { appConfig, getDateMyDatepicker } from 'app/app.config';
 import { TagAlConfig } from './tag-al.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
+import { IPayment } from 'app/interfaces/payment.interface';
 declare var toastr: any;
 
 @Component({
@@ -33,7 +34,8 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     }
   }
 
-  @ViewChild("paymentPrice") inputPaymentPrice: ElementRef;
+  // @ViewChild("paymentPrice") inputPaymentPrice: ElementRef;
+  formPayment: IPayment;
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -44,27 +46,30 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       sendingPrice: new FormControl(null),
       remainPrice: new FormControl(null),
       price2Remain: new FormControl(null),
-      paymentPrice: new FormControl(null),
       price1: new FormControl(null),
       netPrice1: new FormControl(null),
       price2: new FormControl(null),
       price3: new FormControl(null),
-      bankCode: new FormControl(null),
+      paymentDate: new FormControl(null),
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
-      createDate: new FormControl(null),
+      createDate: new FormControl(null, Validators.required),
       createBy: new FormControl(null),
       remark: new FormControl(null),
       SedList: this.fb.array([])
     });
 
-    const bank = `${appConfig.apiUrl}/Bank/DropDown`;
-    this.http.get(bank).subscribe((x: any[]) => {
-      this.chRef.markForCheck();
-      this.bankingsDropdown = x;
-      this.chRef.detectChanges();
-    });
+    // const bank = `${appConfig.apiUrl}/Bank/DropDown`;
+    // this.http.get(bank).subscribe((x: any[]) => {
+    //   this.chRef.markForCheck();
+    //   this.bankingsDropdown = x;
+    //   this.chRef.detectChanges();
+    // });
 
     this.loadingSedList();
 
@@ -100,12 +105,12 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
           borrowerName: rec ? rec.createName : null,
           paymentPrice: rec ? rec.price2Remain : null,
           price2: rec ? rec.price2 : null,
-          createDate: new Date(),
+          // createDate: new Date(),
           createBy: this.mUser.id,
           branchId: this.mUser.branch,
           paymentType: '1'
         });
-        this.onChangePaymentPrice(this.inputPaymentPrice.nativeElement.value);
+        // this.onChangePaymentPrice(this.formPayment.totalPaymentPrice);
       })
 
       this.reInitDatatable();
@@ -113,21 +118,21 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       this.loading = 2;
     });
 
-    this.formGroup.get('paymentType').valueChanges.subscribe(x => {
-      if (x == '1') {
-        let bankCode = this.formGroup.get('bankCode');
-        bankCode.setValue(null);
-        bankCode.setValidators(null);
-        let documentRef = this.formGroup.get('documentRef');
-        documentRef.setValue(null);
-        documentRef.setValidators(null);
-      } else if (x == '2') {
-        this.formGroup.get('bankCode').setValidators(Validators.required);
-        this.formGroup.get('documentRef').setValidators(Validators.required);
-      }
-      this.formGroup.get('bankCode').updateValueAndValidity();
-      this.formGroup.get('documentRef').updateValueAndValidity();
-    });
+    // this.formGroup.get('paymentType').valueChanges.subscribe(x => {
+    //   if (x == '1') {
+    //     let bankCode = this.formGroup.get('bankCode');
+    //     bankCode.setValue(null);
+    //     bankCode.setValidators(null);
+    //     let documentRef = this.formGroup.get('documentRef');
+    //     documentRef.setValue(null);
+    //     documentRef.setValidators(null);
+    //   } else if (x == '2') {
+    //     this.formGroup.get('bankCode').setValidators(Validators.required);
+    //     this.formGroup.get('documentRef').setValidators(Validators.required);
+    //   }
+    //   this.formGroup.get('bankCode').updateValueAndValidity();
+    //   this.formGroup.get('documentRef').updateValueAndValidity();
+    // });
   }
 
   checkingRecord(i: number) {
@@ -135,17 +140,37 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       if (index == i) {
         const val = this.SedList.at(index).get('IS_CHECKED').value;
         this.SedList.at(index).get('IS_CHECKED').patchValue(!val);
-        if (!val == true) this.inputPaymentPrice.nativeElement.focus();
+        // this.formGroup.get('total').patchValue()
+        // if (!val == true) this.inputPaymentPrice.nativeElement.focus();
       } else {
         this.SedList.at(index).get('IS_CHECKED').patchValue(false);
       }
     }
   }
 
-  onChangePaymentPrice(value: number) {
-    let price = this.price2RemainState - value;
-    // this.formGroup.get('price2').value - value;
-    this.formGroup.get('price2Remain').patchValue(price);
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    // debugger
+    let price2Remain = this.price2RemainState - (event.totalPaymentPrice ? event.totalPaymentPrice : 0);
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef,
+      price2Remain: price2Remain
+    });
+  }
+
+  // onChangePaymentPrice(value: number) {
+  //   let price = this.price2RemainState - value;
+  //   // this.formGroup.get('price2').value - value;
+  //   this.formGroup.get('price2Remain').patchValue(price);
+  // }
+
+  get paymentMoreThenPrice2Remain(): boolean {
+    return this.formGroup.get('totalPaymentPrice').value > this.price2RemainState
   }
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
@@ -158,16 +183,19 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
 
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f = {
+    f = { 
       alNo: f.alNo,
       sedNo: f.sedNo,
       price2Remain: f.price2Remain,
       paymentPrice: f.paymentPrice,
-      bankCode: f.bankCode,
+      discountPrice: f.discountPrice,
+      totalPaymentPrice: f.paymentPrice,
+      paymentDate: f.paymentDate,
+      accBankId: f.accBankId,
       documentRef: f.documentRef,
       paymentType: f.paymentType,
       branchId: f.branchId,
-      createDate: (f.createDate as Date).toISOString(),
+      createDate: getDateMyDatepicker(f.createDate),
       createBy: f.createBy,
       remark: f.remark
     }

@@ -1,13 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { appConfig } from 'app/app.config';
+import { appConfig, getDateMyDatepicker } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { Router } from '@angular/router';
 import { TagSedConfig } from './tag-sed.config';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'app/core/loader/loader.service';
+import { CarRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -27,7 +28,8 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private router: Router,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_carRegis: CarRegisService
   ) {
     super();
     toastr.options = {
@@ -38,7 +40,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.fb.group({
-      createDate: new FormControl(new Date()),
+      createDate: new FormControl(null, Validators.required),
       createBy: new FormControl(null),
       updateDate: new FormControl(new Date()),
       updateBy: new FormControl(null),
@@ -65,6 +67,9 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
       this.chRef.detectChanges();
     });
 
+    this.ConList.valueChanges.subscribe((o: any[]) => {
+      this.checkedAll = o.filter(x => x['IS_CHECKED'] == false).length ? false : true;
+    })
   }
 
   checkAll(e: Event) {
@@ -76,9 +81,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
 
   loadingConList() {
 
-    const apiURL = `${appConfig.apiUrl}/Ris/CarRegisReceive`;
-
-    this.http.get(apiURL).subscribe((x: any[]) => {
+    this.s_carRegis.CarRegisReceiveTag().subscribe((x: any[]) => {
       if (x.length == 0) {
         this.loading = 1;
         while (this.ConList.length) {
@@ -106,7 +109,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
           // price2Remain: price2,
           borrowMoney: price2,
           createBy: this.mUser.id,
-          createDate: new Date(),
+          // createDate: new Date(),
           branchId: this.mUser.branch,
           status: 0
         });
@@ -128,17 +131,16 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
 
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f.createDate = (<Date>f.createDate).toISOString();
+    f.createDate = getDateMyDatepicker(f.createDate);
     f.price2Remain = f.borrowMoney;
     f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
-
-    // console.log(f);
 
     this.s_loader.showLoader();
     const url = `${appConfig.apiUrl}/Ris/Sed`;
     this.http.post(url, f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
+      this.checkedAll = false;
       toastr.success(message.created);
       this.formGroup.reset();
 

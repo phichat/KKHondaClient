@@ -70,7 +70,8 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
       discountPrice: event.discountPrice,
       totalPaymentPrice: event.paymentPrice,
       accBankId: event.accBankId,
-      paymentDate: event.paymentDate
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
     })
   }
 

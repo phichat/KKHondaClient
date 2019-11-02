@@ -60,7 +60,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">ยอดค้างทั้งสิ้น</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{formGroup.get('paymentPrice').value | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{formGroup.get('price2Remain').value | number:'1.2-2'}}</span>
               </div>
             </div>
             <div class="form-group">
@@ -181,37 +181,45 @@
         </div>
       </div>
     </div>
+    <hr>
+    <div class="row">
+      <div class="col-lg-7"></div>
+      <div class="col-lg-5">
 
+        <div class="row form-group">
+          <div class="">
+            <label class="col-md-4 control-label">ประเภทชำระ</label>
+            <div class="col-md-8">
 
-    <table class="table invoice-total m-t-sm">
-      <tbody>
-        <tr>
-          <td><strong>ประเภทชำระ :</strong></td>
-          <td>
-            <div class="radio radio-info radio-inline">
-              <input required type="radio" formControlName="paymentType" id="paymentType0" value=1 disabled>
-              <label for="paymentType0">เงินสด</label>
+              <div class="radio radio-info radio-inline">
+                <input required type="radio" formControlName="paymentType" id="paymentType0" value=1>
+                <label for="paymentType0">เงินสด</label>
+              </div>
+              <div class="radio radio-info radio-inline">
+                <input required type="radio" formControlName="paymentType" id="paymentType1" value=2>
+                <label for="paymentType1">เงินโอน</label>
+              </div>
+              <div class="radio radio-info radio-inline">
+                <input required type="radio" formControlName="paymentType" id="paymentType2" value=3>
+                <label for="paymentType2">เช็ค</label>
+              </div>
             </div>
-            <div class="radio radio-info radio-inline">
-              <input required type="radio" formControlName="paymentType" id="paymentType1" value=2 disabled>
-              <label for="paymentType1">เงินโอน</label>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>ธนาคาร :</strong></td>
-          <td>{{formGroup.get('bankName').value}}</td>
-        </tr>
-        <tr>
-          <td><strong>หมายเลขอ้างอิง :</strong></td>
-          <td>{{formGroup.get('documentRef').value}}</td>
-        </tr>
-        <tr>
-          <td><strong>ยอดชำระ :</strong></td>
-          <td>{{formGroup.get('paymentPrice').value | number:'1.2-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+
+        <div [ngSwitch]="formGroup.get('paymentType').value">
+          <ng-container *ngSwitchCase="1">
+            <app-payment-type-cash [$Data]="PaymentData"></app-payment-type-cash>
+          </ng-container>
+          <ng-container *ngSwitchCase="2">
+            <app-payment-type-transfer [$Data]="PaymentData"></app-payment-type-transfer>
+          </ng-container>
+          <ng-container *ngSwitchCase="3">
+            <app-payment-type-cheque [$Data]="PaymentData"></app-payment-type-cheque>
+          </ng-container>
+        </div>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-lg-12 text-right">

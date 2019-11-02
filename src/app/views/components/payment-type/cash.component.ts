@@ -16,7 +16,7 @@ export class CashComponent extends PaymentTypeConfig implements OnInit, AfterVie
   ) {
     super();
     this.formGroup = this.fb.group({
-      paymentPrice: new FormControl(0, Validators.required),
+      paymentPrice: new FormControl(null, Validators.required),
       discount: new FormControl(null),
       totalPaymentPrice: new FormControl(null),
       paymentDate: new FormControl(null, Validators.required)
@@ -30,7 +30,7 @@ export class CashComponent extends PaymentTypeConfig implements OnInit, AfterVie
   ngOnInit() {
     this.disabledForm.next(false);
     const value: IPayment = {
-      paymentPrice: 0,
+      paymentPrice: null,
       discountPrice: null,
       totalPaymentPrice: null,
       paymentDate: null,
