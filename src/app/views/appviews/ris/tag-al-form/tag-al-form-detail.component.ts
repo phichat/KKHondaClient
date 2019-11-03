@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { IPaymentInput, IPayment } from 'app/interfaces/payment.interface';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReasonService } from 'app/services/masters';
 declare var toastr: any;
 
 @Component({
@@ -28,6 +29,7 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
+    private s_reason: ReasonService,
     private activeRoute: ActivatedRoute,
     private router: Router
   ) {
@@ -36,6 +38,8 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
+    this.s_reason.DropDown().subscribe(x => this.reasonDropdown = x);
   }
 
   PaymentData = new BehaviorSubject(null);
@@ -59,27 +63,15 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
       createDate: new FormControl(null),
       createBy: new FormControl(null),
       createName: new FormControl(null),
-      updateBy: new FormControl(null),
+      updateBy: new FormControl(this.mUser.id, Validators.required),
       remark: new FormControl(null),
-      reason: new FormControl(null),
+      reason: new FormControl(null, Validators.required),
       status: new FormControl(null),
       statusDesc: new FormControl(null),
       SedList: this.fb.array([])
     });
 
-    const url = `${appConfig.apiUrl}/Reason/DropDown`;
-    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
-
     this.loadingSedList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.formGroup.patchValue({
-        updateBy: x.id
-      });
-      this.chRef.detectChanges();
-    });
   }
 
   loadingSedList() {

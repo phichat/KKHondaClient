@@ -19,8 +19,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
 
-  <form class="form-horizontal" style="margin-bottom: 15em;" #form="ngForm" autocomplete="off" [formGroup]="formGroup"
-    (ngSubmit)="onSubmit()">
+  <form class="form-horizontal" style="margin-bottom: 15em;" #form="ngForm" autocomplete="off" [formGroup]="formGroup">
 
     <div class="ibox">
       <div class="ibox-content">
@@ -227,7 +226,7 @@
 
     <div class="row">
       <div class="col-lg-12 text-right">
-        <button class="btn btn-success" type="submit"
+        <button class="btn btn-success" type="button" (click)="onSubmit()"
           [disabled]="form.invalid || paymentMoreThenPrice2Remain || formPayment.options.invalid">บันทึกรายการ</button>
       </div>
     </div>

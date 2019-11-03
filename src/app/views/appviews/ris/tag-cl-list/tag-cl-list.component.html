@@ -81,7 +81,7 @@
                   'text-navy': item.status == ClStatus.Normal
                 }">{{item.statusDesc}}</td>
                 <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
-                <td class="text-right" style="background-color: #d9edf7;">{{item.receivePrice | number:'1.2-2'}}</td>
+                <td class="text-right" style="background-color: #d9edf7;">{{item.totalPaymentPrice | number:'1.2-2'}}</td>
                 <td>{{item.refundName}}</td>
                 <td>{{item.createName}}</td>
               </tr>

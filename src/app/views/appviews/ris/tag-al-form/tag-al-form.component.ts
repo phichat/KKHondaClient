@@ -32,9 +32,8 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
   }
-
-  // @ViewChild("paymentPrice") inputPaymentPrice: ElementRef;
   formPayment: IPayment;
 
   ngOnInit() {
@@ -64,21 +63,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       SedList: this.fb.array([])
     });
 
-    // const bank = `${appConfig.apiUrl}/Bank/DropDown`;
-    // this.http.get(bank).subscribe((x: any[]) => {
-    //   this.chRef.markForCheck();
-    //   this.bankingsDropdown = x;
-    //   this.chRef.detectChanges();
-    // });
-
     this.loadingSedList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.mUser = x;
-      this.chRef.detectChanges();
-    });
 
   }
 
@@ -110,29 +95,12 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
           branchId: this.mUser.branch,
           paymentType: '1'
         });
-        // this.onChangePaymentPrice(this.formPayment.totalPaymentPrice);
       })
 
       this.reInitDatatable();
     }, () => {
       this.loading = 2;
     });
-
-    // this.formGroup.get('paymentType').valueChanges.subscribe(x => {
-    //   if (x == '1') {
-    //     let bankCode = this.formGroup.get('bankCode');
-    //     bankCode.setValue(null);
-    //     bankCode.setValidators(null);
-    //     let documentRef = this.formGroup.get('documentRef');
-    //     documentRef.setValue(null);
-    //     documentRef.setValidators(null);
-    //   } else if (x == '2') {
-    //     this.formGroup.get('bankCode').setValidators(Validators.required);
-    //     this.formGroup.get('documentRef').setValidators(Validators.required);
-    //   }
-    //   this.formGroup.get('bankCode').updateValueAndValidity();
-    //   this.formGroup.get('documentRef').updateValueAndValidity();
-    // });
   }
 
   checkingRecord(i: number) {
@@ -140,8 +108,6 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       if (index == i) {
         const val = this.SedList.at(index).get('IS_CHECKED').value;
         this.SedList.at(index).get('IS_CHECKED').patchValue(!val);
-        // this.formGroup.get('total').patchValue()
-        // if (!val == true) this.inputPaymentPrice.nativeElement.focus();
       } else {
         this.SedList.at(index).get('IS_CHECKED').patchValue(false);
       }
@@ -162,12 +128,6 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       price2Remain: price2Remain
     });
   }
-
-  // onChangePaymentPrice(value: number) {
-  //   let price = this.price2RemainState - value;
-  //   // this.formGroup.get('price2').value - value;
-  //   this.formGroup.get('price2Remain').patchValue(price);
-  // }
 
   get paymentMoreThenPrice2Remain(): boolean {
     return this.formGroup.get('totalPaymentPrice').value > this.price2RemainState

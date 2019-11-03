@@ -77,7 +77,7 @@
                     {{item.get('cutBalance').value | number:'1.2-2'}}
                 </td>
                 <td class="text-right" style="vertical-align: middle;">
-                    {{item.get('price2').value | number:'1.2-2'}}
+                    {{(item.get('price2').value + item.get('price3').value) | number:'1.2-2'}}
                 </td>
                 <td style="vertical-align: middle;">{{item.get('bookingNo').value}}</td>
                 <td style="vertical-align: middle;">{{item.get('sedNo').value}}</td>

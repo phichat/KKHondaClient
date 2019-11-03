@@ -166,7 +166,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
         const cutBalance = x.reduce((a, c) => a += c.cutBalance, 0);
         const price1 = x.reduce((a, c) => a += c.price1, 0);
         const vatPrice1 = x.reduce((a, c) => a += c.vatPrice1, 0);
-        const price2 = x.reduce((a, c) => a += c.price2, 0);
+        const price2 = x.reduce((a, c) => a += (c.price2 + c.price3), 0);
         const netPrice = x.reduce((a, c) => a += (c.price1 + c.vatPrice1), 0);
         this.formGroup.patchValue({
           totalPrice1: price1,

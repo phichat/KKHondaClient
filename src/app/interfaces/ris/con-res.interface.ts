@@ -15,6 +15,7 @@ export interface IConRes {
     price1: number;
     vatPrice1: number;
     price2: number;
+    price3?: number;
     totalPrice: number;
     cutBalance: number;
     createBy: number;
