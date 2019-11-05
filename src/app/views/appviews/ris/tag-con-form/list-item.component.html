@@ -153,13 +153,11 @@
       </table>
     </section>
 
-    <div class="hr-line-dashed"></div>
-
     <section [formGroup]="formGroup">
       <div *ngFor="let expTag of ExpenseTagList" formArrayName="{{expTag}}">
         <div *ngFor="let itemRegis of getFormArray(expTag).controls; let i=index;" [formGroupName]="i"
           class="ibox-content p-h-sm">
-          <table class="table table-bordered">
+          <table class="table table-sm table-striped">
             <thead>
               <tr>
                 <th>
@@ -224,7 +222,9 @@
 
             </tbody>
             <ng-container *ngIf="Mode != ActionMode.Detail">
-              <ng-container *ngIf="(Status1 | async) == ConStatus1.Received || (Status1 | async) == null">
+              <ng-container *ngIf="(Status2 | async) == null">
+                {{(Status2 | async) | json}}
+                <!-- (Status1 | async) == ConStatus1.Received || (Status1 | async) == null -->
                 <tfoot [formGroup]="getFormExpense(expTag)">
                   <tr class="bg-muted">
                     <td>

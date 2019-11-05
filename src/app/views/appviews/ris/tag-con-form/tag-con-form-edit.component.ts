@@ -9,6 +9,8 @@ import { UserService } from 'app/services/users';
 import { RisLocalStoreage as LS, UserForRis as EURIS } from 'app/entities/ris.entities';
 import { message } from 'app/app.message';
 import { getDateMyDatepicker } from 'app/app.config';
+import { CarRegisService } from 'app/services/ris';
+import { BehaviorSubject } from 'rxjs';
 
 declare var toastr: any;
 
@@ -26,7 +28,8 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     private s_loader: LoaderService,
     private chRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private s_carRegis: CarRegisService
   ) {
     super()
 
@@ -60,6 +63,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       price3: new FormControl(null),
       totalPrice: new FormControl(null),
       remark: new FormControl(null),
+      revNo: new FormControl(null),
       ownerCode: new FormControl(null, Validators.required),
       ownerName: new FormControl(null, Validators.required),
       visitorCode: new FormControl(null, Validators.required),
@@ -71,15 +75,13 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     this.activeRoute.params.pipe(
       tap(() => this.s_loader.showLoader()),
       mergeMap((x) => {
-        const conNoUrl = `${this.risUrl}/GetByConNo`;
-        const params = { conNo: x['code'] };
         this.code = x['code'];
-        return this.http.get(conNoUrl, { params });
+        return this.s_carRegis.GetByConNo(this.code);
       })
     ).subscribe(o => {
       this.chRef.markForCheck();
-      this.$Status1.next(o['status1']);
-      this.$Status2.next(o['status2']);
+      this.$Status1.next(o.status1);
+      this.$Status2.next(o.status2);
       this.formGroup.patchValue({
         ...o,
         updateBy: this.mUser.id,
@@ -136,7 +138,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       tagListItem,
       trashTagListItem
     };
-
+    
     this.s_loader.showLoader();
     const url = `${this.risUrl}/Update`;
     this.http.post(url, form)

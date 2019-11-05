@@ -9,6 +9,13 @@ export class CarRegisService {
 
   api = `${appConfig.apiUrl}/Ris`;
 
+  GetByConNo(conNo: string) {
+    const params = { conNo }
+    const url = `${this.api}/GetByConNo`;
+    return this.httpClient.get<ICarRegisRes>(url, { params });
+  }
+
+
   CarRegisReceiveTag() {
     const url = `${this.api}/CarRegisReceiveTag`;
     return this.httpClient.get<ICarRegisRes[]>(url);

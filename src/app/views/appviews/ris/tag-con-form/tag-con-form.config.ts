@@ -20,7 +20,7 @@ export class TagConFormConfig extends RisConfig {
     $CarHistoryBookingId = new Subject<number>();
     $BookingId = new Subject<number>();
     $Status1 = new BehaviorSubject<number>(null);
-    $Status2 = new Subject<number>();
+    $Status2 = new BehaviorSubject<number>(null);
     $FNo = new Subject<string>();
     $ENo = new Subject<string>();
 

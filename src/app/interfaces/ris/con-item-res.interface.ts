@@ -4,16 +4,41 @@ export interface IConItemRes {
     bookingNo: string;
     itemCode: string;
     itemName: string;
-    itemPrice1: number;
-    itemVatPrice1: number;
-    itemCutBalance: number;
+    itemTag: string;
+    itemType?: number;
+    itemPrice1?: number;
+    itemVatPrice1?: number;
+    itemNetPrice1?: number;
+    itemCutBalance?: number;
     itemPrice2?: number;
     itemPrice3?: number;
-    itemPriceTotal: number;
-    state?: string | number;
+    itemPriceTotal?: number;
+    state?: any;
+    paymentStatus?: number;
+    paymentPrice?: number;
     dateReceipt?: any;
     remark: string;
+}
+
+export interface IConItem {
+    runId: number;
+    bookingId?: number;
+    itemCode: string;
+    itemName: string;
     itemTag: string;
+    itemType?: number;
+    itemPrice1?: number;
+    itemVatPrice1?: number;
+    itemNetPrice1?: number;
+    itemCutBalance?: number;
+    itemPrice2?: number;
+    itemPrice3?: number;
+    itemPriceTotal?: number;
+    state?: number;
+    paymentStatus?: number;
+    paymentPrice?: number;
+    dateReceipt?:  Date | string;
+    remark: string;
 }
 
 export interface IConItemOutput {

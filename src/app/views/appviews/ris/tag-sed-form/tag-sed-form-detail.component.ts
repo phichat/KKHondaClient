@@ -9,6 +9,8 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { message } from 'app/app.message';
 import { UserService } from 'app/services/users';
 import { DropDownModel } from 'app/models/drop-down-model';
+import { ReasonService } from 'app/services/masters';
+import { CarRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -28,13 +30,17 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
     private activeRoute: ActivatedRoute,
     private router: Router,
     private s_user: UserService,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_reason: ReasonService,
+    private s_carRegis: CarRegisService
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+
+    this.s_reason.DropDown().subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
   }
 
   ngOnInit() {
@@ -60,24 +66,22 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
       reason: new FormControl(null, Validators.required),
       remark: new FormControl(null)
     });
-
-    const url = `${appConfig.apiUrl}/Reason/DropDown`;
-    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
   }
 
   ngAfterViewInit(): void {
     this.activeRoute.params.subscribe(x => {
       const sedGetByCon = `${appConfig.apiUrl}/Ris/Sed/GetBySedNo`;
-      const conGetByCon = `${appConfig.apiUrl}/Ris/GetByConNoList`;
       const params = { sedNo: x['code'] };
       this.http.get(sedGetByCon, { params })
         .pipe(
-          mergeMap((sed) => {
-            const getConNo = (p: any) => this.http.get(conGetByCon, { params: { conListNo: sed['conList'] } })
-              .pipe(
-                tap(list => p['conNoList'] = list),
-                mapTo(p)
-              );
+          mergeMap((sed: any) => {
+            const conListNo = sed.conList.split(",");
+            const getConNo = (p: any) =>
+              this.s_carRegis.GetByConNoListReceiveTag(conListNo)
+                .pipe(
+                  tap(list => p['conNoList'] = list),
+                  mapTo(p)
+                );
             return getConNo(sed);
           })
         ).subscribe((x: any) => {

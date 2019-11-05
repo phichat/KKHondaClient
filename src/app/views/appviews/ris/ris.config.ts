@@ -17,6 +17,7 @@ export class RisConfig {
   public risUrl = `${appConfig.apiUrl}/Ris`;
   public ConStatus1 = ConStatus1;
   public ConStatus2 = ConStatus2;
+  
 
 
   public initDatatable(): void {

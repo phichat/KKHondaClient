@@ -20,7 +20,6 @@ export class VisitorComponent extends TahHistoryConfig implements OnInit {
   @Input() $Mode: ActionMode;
 
   ngOnInit(): void {
-    console.log(this.$Mode);
     
     this.formGroup = new FormGroup({
       typePersonal: new FormControl({ value: this.EntityType.Layman, disabled: true }),

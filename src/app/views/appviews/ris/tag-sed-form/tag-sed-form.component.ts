@@ -36,6 +36,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
   }
 
   ngOnInit() {
@@ -59,13 +60,6 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
     });
 
     this.loadingConList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.mUser = x;
-      this.chRef.detectChanges();
-    });
 
     this.ConList.valueChanges.subscribe((o: any[]) => {
       this.checkedAll = o.filter(x => x['IS_CHECKED'] == false).length ? false : true;

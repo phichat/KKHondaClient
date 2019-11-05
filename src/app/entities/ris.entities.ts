@@ -4,6 +4,11 @@ export enum PaymentType {
     Cheque = 3
 }
 
+export enum PaymentStatus {
+    Cancel = 0,         // ยกเลิก
+    IsPayment = 1       // ชำระแล้ว
+}
+
 export enum ConStatus1 {
     Cancel = 0,
     Received = 1,
@@ -58,10 +63,9 @@ export enum ExpensesType {
     InternalCost = 3
 }
 
-export enum ReceiveClStatus
-{
-  Cancel = 0,
-  Normal = 1
+export enum ReceiveClStatus {
+    Cancel = 0,
+    Normal = 1
 }
 
 export enum ExpensesTag {
