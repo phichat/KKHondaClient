@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import { FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { LoaderService } from 'app/core/loader/loader.service';
@@ -42,6 +42,10 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     this.mUser = this.s_user.cookies;
   }
 
+  get balanceNotEqueaReceive(): boolean {
+    return this.formGroup.get('totalClBalancePrice').value != this.formGroup.get('totalClReceivePrice').value
+  }
+
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       createBy: new FormControl(null),
@@ -64,25 +68,13 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       totalPrice2: new FormControl(0),
       totalIncome: new FormControl(0),
       totalClBalancePrice: new FormControl(0),
-      totalClReceivePrice: new FormControl(0),
+      totalClReceivePrice: new FormControl(0, Validators.required),
       totalExpenses: new FormControl(0),
       totalAccruedExpense: new FormControl(0),
       status: new FormControl(1)
     });
 
     this.activeRoute.params
-      // .pipe(
-      //   mergeMap((x) => {
-      //     return combineLatest(of(x), this.s_user.currentData).pipe(
-      //       map(o => {
-      //         return {
-      //           params: o[0],
-      //           curretUser: o[1]
-      //         };
-      //       })
-      //     );
-      //   })
-      // )
       .subscribe(x => {
         this.chRef.markForCheck();
 
