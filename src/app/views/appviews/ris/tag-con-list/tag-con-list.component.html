@@ -20,7 +20,75 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-
+  <div class="ibox">
+    <div class="ibox-title">
+      <h3>ค้นหาข้อมูลรอจดทะเบียน</h3>
+    </div>
+    <div class="ibox-content">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบรับเรื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="bookingNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่รับคืนเรื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="revNo">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">สถานะการดำเนินการ</label>
+            <div class="col-lg-8">
+              <select formControlName="status1" class="form-control">
+                <option value="">ทั้งหมด</option>
+                <option [value]="item.id" *ngFor="let item of ConStatus1List">
+                  {{item.desc}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผลการดำเนินการ</label>
+            <div class="col-lg-8">
+              <select formControlName="status2" class="form-control">
+                <option value="">ทั้งหมด</option>
+                <option [value]="item.id" *ngFor="let item of ConStatus2List">
+                  {{item.desc}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขเครื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="eNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขโครง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="fNo">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="ibox float-e-margins">
     <div class="ibox-content">
@@ -60,7 +128,7 @@
                     <br>
                     <p>มีบางอย่างผิดพลาด</p>
                   </div>
-                  <div *ngSwitchDefault>
+                  <div *ngSwitchCase="0">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <br>
                     <p>รอสักครู่...</p>

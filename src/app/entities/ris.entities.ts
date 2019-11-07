@@ -19,11 +19,24 @@ export enum ConStatus1 {
     // CompleteDelivery = 6
 }
 
+export const ConStatus1List: any[] = [
+    { id: ConStatus1.Cancel, desc: "ยกเลิก" },
+    { id: ConStatus1.Received, desc: "รับเอกสารเข้าระบบ" },
+    { id: ConStatus1.Withdraw1, desc: "เบิกเงินครั้งที่ 1" },
+    { id: ConStatus1.Withdraw2, desc: "เบิกเงินครั้งที่ 2" }
+];
+
 export enum ConStatus2 {
     Send1 = 1,
     Send2 = 2,
     REV = 3
 }
+
+export const ConStatus2List: any[] = [
+    { id: ConStatus2.Send1, desc: "ส่งเรื่องครั้งที่ 1" },
+    { id: ConStatus2.Send2, desc: "ส่งเรื่องครั้งที่ 2" },
+    { id: ConStatus2.REV, desc: "บันทึกรับคืนเรื่อง" }
+];
 
 export enum RevStatus {
     Normal = 1,
