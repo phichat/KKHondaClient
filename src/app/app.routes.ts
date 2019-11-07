@@ -42,6 +42,16 @@ import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehi
 import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
 import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
 
+import { SummarySaleReportByTypeComponent } from './views/appviews/summary-sale-report-by-type/summary-sale-report-by-type.component';
+import { SummaryStockBalanceComponent } from './views/appviews/summary-stock-balance/summary-stock-balance.component';
+import { ContractGradePaymentComponent } from './views/appviews/contract-grade-payment/contract-grade-payment.component';
+import { SummaryDepositByDateComponent } from './views/appviews/summary-deposit-by-date/summary-deposit-by-date.component';
+import { ProductSellingProfitReportComponent } from './views/appviews/product-selling-profit-report/product-selling-profit-report.component';
+import { SummaryDepositReportComponent } from './views/appviews/summary-deposit-report/summary-deposit-report.component';
+import { ServiceCheckReportComponent } from './views/appviews/service-check-report/service-check-report.component';
+import { CreditNoteDetailsReportComponent } from './views/appviews/credit-note-details-report/credit-note-details-report.component';
+import { StockBalanceMainReportComponent} from './views/appviews/stock-balance-main-report/stock-balance-main-report.component';
+
 export const ROUTES: Routes = [
   // Main redirect
   { path: '', redirectTo: 'starterview', pathMatch: 'full' },
@@ -87,7 +97,18 @@ export const ROUTES: Routes = [
     children: [
       { path: 'booking', component: ReportBookingComponent },
       { path: 'credit-note', component: ReportCreditNoteComponent },
-      { path: 'sale-report', component: ReportSaleComponent }
+      { path: 'sale-report', component: ReportSaleComponent },
+
+      { path: 'summary-sale-report-by-type', component:SummarySaleReportByTypeComponent},
+      { path: 'summary-stock-balance', component:SummaryStockBalanceComponent},
+      { path: 'contract-grade-payment', component:ContractGradePaymentComponent},
+      { path: 'summary-deposit-by-date', component:SummaryDepositByDateComponent},
+      { path: 'product-selling-profit-report', component:ProductSellingProfitReportComponent},
+      { path: 'summary-deposit-report', component:SummaryDepositReportComponent},
+      { path: 'service-check-report', component:ServiceCheckReportComponent},
+      { path: 'credit-note-details-report', component:CreditNoteDetailsReportComponent},
+      { path: 'stock-balance-main-report', component:StockBalanceMainReportComponent},
+      
     ], canActivate: [GuardGuard]
   },
   {

@@ -22,6 +22,16 @@ import { ReportSaleModule } from './report-sale/report-sale.module';
 import { RISModule } from './ris/ris.module';
 import { ReportRisModule } from './report-ris/report-ris.module';
 
+import { SummarySaleReportByTypeModule } from './summary-sale-report-by-type/summary-sale-report-by-type.module';
+import { SummaryStockBalanceModule } from './summary-stock-balance/summary-stock-balance.module';
+import { ContractGradePaymentModule } from './contract-grade-payment/contract-grade-payment.module';
+import { SummaryDepositByDateModule } from './summary-deposit-by-date/summary-deposit-by-date.module';
+import { ProductSellingProfitReportModule } from './product-selling-profit-report/product-selling-profit-report.module';
+import { SummaryDepositReportModule } from './summary-deposit-report/summary-deposit-report.module';
+import { ServiceCheckReportModule } from './service-check-report/service-check-report.module';
+import { CreditNoteDetailsReportModule } from './credit-note-details-report/credit-note-details-report.module';
+import { StockBalanceMainReportModule } from './stock-balance-main-report/stock-balance-main-report.module';
+
 @NgModule({
   declarations: [
     StarterViewComponent,
@@ -38,9 +48,18 @@ import { ReportRisModule } from './report-ris/report-ris.module';
     CreditModule,
     ReportBookingModule,
     ReportCreditNoteModule,
-    ReportSaleModule,
+    ReportSaleModule,    
     ReportRisModule,
-    RISModule
+    RISModule,
+    SummarySaleReportByTypeModule,    
+    SummaryStockBalanceModule,
+    ContractGradePaymentModule,
+    SummaryDepositByDateModule,
+    ProductSellingProfitReportModule,
+    SummaryDepositReportModule,
+    ServiceCheckReportModule,
+    CreditNoteDetailsReportModule,
+    StockBalanceMainReportModule
   ],
   exports: [
     // IcheckDirective
