@@ -46,6 +46,11 @@ export class UserService {
             this.signOut();
             return;
           }
+          for (const key in x) {
+            if (x.hasOwnProperty(key)) {
+              this.setCookie(key, JSON.stringify(x[key]));
+            }
+          }
           this.changeData(x)
         });
       }
