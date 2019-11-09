@@ -22,7 +22,6 @@ declare var toastr: any;
 export class TagConFormEditComponent extends TagConFormConfig implements OnInit {
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private s_user: UserService,
     private s_loader: LoaderService,
@@ -140,8 +139,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     };
     
     this.s_loader.showLoader();
-    const url = `${this.risUrl}/Update`;
-    this.http.post(url, form)
+    this.s_carRegis.Update(form)
       .pipe(
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {

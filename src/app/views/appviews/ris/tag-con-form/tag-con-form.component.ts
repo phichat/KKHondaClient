@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
-import { HttpClient } from '@angular/common/http';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap } from 'rxjs/operators';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -8,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { getDateMyDatepicker } from 'app/app.config';
+import { CarRegisService } from 'app/services/ris';
 declare var toastr: any;
 
 @Component({
@@ -22,13 +22,13 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
   }
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private s_loader: LoaderService,
     private chRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
     private s_user: UserService,
-    private router: Router
+    private router: Router,
+    private s_carRegis: CarRegisService
   ) {
     super()
     toastr.options = {
@@ -91,11 +91,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     this.activeRoute.params
       .pipe(
         tap(() => this.s_loader.showLoader()),
-        mergeMap(x => {
-          const url = `${this.risUrl}/GetCarBySellNo`;
-          const params = { sellNo: x['code'] }
-          return this.http.get(url, { params })
-        })
+        mergeMap(x => this.s_carRegis.GetCarBySellNo(x['code']))
       ).subscribe(x => {
         this.chRef.markForCheck();
         if (!x) return;
@@ -136,10 +132,9 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       tagHistory: his,
       tagListItem: listItem
     };
-    
+
     this.s_loader.showLoader();
-    const url = `${this.risUrl}`;
-    this.http.post(url, form)
+    this.s_carRegis.Post(form)
       .pipe(
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {

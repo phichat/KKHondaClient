@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ReasonService } from 'app/services/masters';
 import { IPayment } from 'app/interfaces/payment.interface';
+import { ClRegisService, AlRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -23,13 +24,14 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
     private s_reason: ReasonService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private s_clRegis: ClRegisService,
+    private s_alRegis: AlRegisService
   ) {
     super();
     toastr.options = {
@@ -56,7 +58,7 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
       accBankId: new FormControl(null),
       paymentDate: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl({value:null, disabled: true}),
+      paymentType: new FormControl({ value: null, disabled: true }),
       branchId: new FormControl(null),
       createDate: new FormControl(null),
       createBy: new FormControl(null),
@@ -75,13 +77,10 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
 
   loadingAlList() {
     this.activeRoute.params.subscribe(x => {
-      const GetByClNo = `${appConfig.apiUrl}/Ris/Cl/GetByClNo`;
-      const GetByAlNo = `${appConfig.apiUrl}/Ris/Al/GetByAlNo`;
-      const params = { clNo: x['code'] }
-      this.http.get(GetByClNo, { params })
+      this.s_clRegis.GetByClNo(x['code'])
         .pipe(
           mergeMap((al) => {
-            const getConNo = (p: any) => this.http.get(GetByAlNo, { params: { alNo: al['alNo'] } })
+            const getConNo = (p: any) => this.s_alRegis.GetByAlNo(al['alNo'])
               .pipe(
                 tap(al => p['AlList'] = [al]),
                 mapTo(p)
@@ -153,8 +152,7 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Cl/Cancel`;
-    this.http.post(url, f).pipe(
+    this.s_clRegis.Cancel(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);

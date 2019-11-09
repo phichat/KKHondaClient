@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { TagSedListConfig } from './tag-sed-list.config';
+import { SedRegisService } from 'app/services/ris';
 
 @Component({
   selector: 'app-tag-sed-list',
@@ -15,25 +16,28 @@ export class TagSedListComponent extends TagSedListConfig implements OnInit {
   }
 
   constructor(
-    private http: HttpClient
+    private s_sedRegis: SedRegisService
   ) {
     super();
   }
 
   ngOnInit() {
 
-    const apiURL = `${appConfig.apiUrl}/Ris/Sed/All`;
-    this.http.get(apiURL).subscribe((x: any[]) => {
-      if (x.length == 0) {
-        this.loading = 1;
-        return;
-      }
-      this.SedList = x;
-      
-      this.reInitDatatable();
-    }, () => {
-      this.loading = 2;
-    });
+  }
+
+  onSearch() {
+    this.s_sedRegis.SearchSedList({})
+      .subscribe((x: any[]) => {
+        if (x.length == 0) {
+          this.loading = 1;
+          return;
+        }
+        this.SedList = x;
+
+        this.reInitDatatable();
+      }, () => {
+        this.loading = 2;
+      });
 
   }
 

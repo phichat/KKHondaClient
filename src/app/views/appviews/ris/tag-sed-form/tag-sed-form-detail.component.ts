@@ -10,7 +10,7 @@ import { message } from 'app/app.message';
 import { UserService } from 'app/services/users';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { ReasonService } from 'app/services/masters';
-import { CarRegisService } from 'app/services/ris';
+import { CarRegisService, SedRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -25,14 +25,14 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private chRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private s_user: UserService,
     private s_loader: LoaderService,
     private s_reason: ReasonService,
-    private s_carRegis: CarRegisService
+    private s_carRegis: CarRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
@@ -70,9 +70,7 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
 
   ngAfterViewInit(): void {
     this.activeRoute.params.subscribe(x => {
-      const sedGetByCon = `${appConfig.apiUrl}/Ris/Sed/GetBySedNo`;
-      const params = { sedNo: x['code'] };
-      this.http.get(sedGetByCon, { params })
+      this.s_sedRegis.GetBySedNo(x['code'])
         .pipe(
           mergeMap((sed: any) => {
             const conListNo = sed.conList.split(",");
@@ -145,15 +143,13 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
         sedNo: this.formGroup.get('sedNo').value,
         reason: this.formGroup.get('reason').value
       };
-      // f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
-      const url = `${appConfig.apiUrl}/Ris/Sed/Cancel`;
       this.s_loader.showLoader();
-      this.http.post(url, f).pipe(
+      this.s_sedRegis.Cancel(f).pipe(
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {
         toastr.success(message.created);
         this.router.navigate(['ris/sed-list']);
-      }, () => toastr.error(message.failed));
+      }, () => toastr.error(message.failed)); 
     }
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { LoaderService } from 'app/core/loader/loader.service';
@@ -11,6 +11,7 @@ import { ClearMoneyService } from './clear-money.service';
 import { message } from 'app/app.message';
 import { setZeroHours, leftPad, yy_th, mm } from 'app/app.config';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RevRegisService, SedRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 
@@ -26,13 +27,14 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
     private activeRoute: ActivatedRoute,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
-    private s_cloarMoney: ClearMoneyService
+    private s_cloarMoney: ClearMoneyService,
+    private s_revRegis: RevRegisService,
+    private s_sedRegis: SedRegisService,
   ) {
     super();
     toastr.options = {
@@ -93,13 +95,10 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
             break;
 
           case this.ActionMode.Edit.toString():
-            const params = { revNo: this.code };
-            this.http.get(`${this.risUrl}/Rev/GetByRevNo`, { params }).pipe(
+            this.s_revRegis.GetByRevNo(this.code).pipe(
               tap(() => this.s_loader.showLoader()),
               mergeMap((rev: IRevListRes) => {
-                const params = { sedNo: rev.sedNo };
-                const url = `${this.risUrl}/Sed/GetBySedNo`;
-                return this.http.get(url, { params }).pipe(
+                return this.s_sedRegis.GetBySedNo(rev.sedNo).pipe(
                   map((sed: ISedRes) => {
                     return {
                       revItem: rev,
@@ -233,7 +232,6 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     }
 
     this.s_loader.showLoader();
-    const url = `${this.risUrl}/REV`;
     listItemDoc = listItemDoc
       .filter(x => x.isReceive != null)
       .map(x => {
@@ -254,7 +252,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       tagConListItem: listConItem,
       tagListItemDoc: listItemDoc
     }
-    this.http.post(url, f).pipe(
+    this.s_revRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);
@@ -285,7 +283,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     let branch = this.mUser.branchId.toString();
     branch = leftPad(branch, 2, '0');
     const term = `SED${branch}${yy_th}${mm}`;
-    this.http.get<ISedRes[]>(`${this.risUrl}/Sed/GetByTermSedNo`, { params: { term } })
+    this.s_sedRegis.GetByTermSedNo(term)
       .subscribe(x => {
         this.sedDropDown = x;
         this.sedDropDown.map(item => {
@@ -307,7 +305,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       distinctUntilChanged(),
       switchMap(term =>
         term
-          ? this.http.get<ISedRes[]>(`${this.risUrl}/Sed/GetByTermSedNo`, { params: { term } })
+          ? this.s_sedRegis.GetByTermSedNo(term)
           : of([])
       )
     ).subscribe((x: ISedRes[]) => {

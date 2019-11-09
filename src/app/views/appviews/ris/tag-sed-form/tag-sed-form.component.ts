@@ -1,14 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { appConfig, getDateMyDatepicker } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { Router } from '@angular/router';
 import { TagSedConfig } from './tag-sed.config';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { CarRegisService } from 'app/services/ris';
+import { CarRegisService, SedRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -24,12 +22,11 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private router: Router,
     private s_loader: LoaderService,
-    private s_carRegis: CarRegisService
+    private s_carRegis: CarRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
@@ -130,8 +127,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
     f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Sed`;
-    this.http.post(url, f).pipe(
+    this.s_sedRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       this.checkedAll = false;

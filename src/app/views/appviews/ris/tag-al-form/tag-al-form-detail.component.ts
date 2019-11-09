@@ -12,6 +12,7 @@ import { DropDownModel } from 'app/models/drop-down-model';
 import { IPaymentInput, IPayment } from 'app/interfaces/payment.interface';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ReasonService } from 'app/services/masters';
+import { AlRegisService, SedRegisService } from 'app/services/ris';
 declare var toastr: any;
 
 @Component({
@@ -25,13 +26,14 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
     private s_reason: ReasonService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private s_alRegis: AlRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
@@ -76,13 +78,10 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
 
   loadingSedList() {
     this.activeRoute.params.subscribe(x => {
-      const GetByAlNo = `${appConfig.apiUrl}/Ris/Al/GetByAlNo`;
-      const GetBySedNo = `${appConfig.apiUrl}/Ris/Sed/GetBySedNo`;
-      const params = { alNo: x['code'] }
-      this.http.get(GetByAlNo, { params })
+      this.s_alRegis.GetByAlNo(x['code'])
         .pipe(
           mergeMap((al) => {
-            const getConNo = (p: any) => this.http.get(GetBySedNo, { params: { sedNo: al['sedNo'] } })
+            const getConNo = (p: any) => this.s_sedRegis.GetBySedNo(al['sedNo'])
               .pipe(
                 tap(sed => p['SedList'] = [sed]),
                 mapTo(p)
@@ -161,8 +160,7 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Al/Cancel`;
-    this.http.post(url, f).pipe(
+    this.s_alRegis.Cancel(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);

@@ -1,7 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { ModelUser } from 'app/models/users';
-import { FormArray, FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
@@ -10,6 +8,7 @@ import { TagClConfig } from './tag-cl.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
 import { IPayment } from 'app/interfaces/payment.interface';
+import { AlRegisService, ClRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -21,10 +20,11 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_alRegis: AlRegisService,
+    private s_clRegis: ClRegisService
   ) {
     super();
     toastr.options = {
@@ -65,16 +65,15 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
   }
 
   loadingAlList() {
-    const carList = `${appConfig.apiUrl}/Ris/Al/NormalList`;
-    this.http.get(carList).subscribe((x: any[]) => {
-      
+    this.s_alRegis.NormalList().subscribe((x: any[]) => {
+
       if (!x.length) {
         this.loading = 1;
         while (this.AlList.length)
           this.AlList.removeAt(0);
         return;
       };
-      
+
       const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false }], []);
       this.setItemFormArray(res, this.formGroup, 'AlList');
       this.chRef.markForCheck();
@@ -161,8 +160,7 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Cl`;
-    this.http.post(url, f).pipe(
+    this.s_clRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);

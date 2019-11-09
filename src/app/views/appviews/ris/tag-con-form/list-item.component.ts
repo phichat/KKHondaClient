@@ -1,15 +1,14 @@
 import { OnInit, Component, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormControl, FormArray, FormGroup } from '@angular/forms';
 import { ListItemConfig } from './list-item.config';
-import { getDateMyDatepicker, setZeroHours, appConfig } from 'app/app.config';
+import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
 import { mergeMap, map } from 'rxjs/operators';
 import { combineLatest, of, zip } from 'rxjs';
 import { RisLocalStoreage as LS, UserForRis as EURIS, ExpensesType as EXPT, ExpensesTag as EXPTag } from 'app/entities/ris.entities';
-import { DropDownModel } from 'app/models/drop-down-model';
 import { UserService } from 'app/services/users';
-import { ExpenseOtherService } from 'app/services/ris';
+import { ExpenseOtherService, CarListItemService, CarHistoryService } from 'app/services/ris';
 import { IExpensesOtherRisRes, IConItem } from 'app/interfaces/ris';
+import { ProvinceService, InsuranceService } from 'app/services/masters';
 
 @Component({
   selector: 'app-list-item',
@@ -29,11 +28,14 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   }
 
   constructor(
-    private http: HttpClient,
     private chRef: ChangeDetectorRef,
     private fb: FormBuilder,
     private s_user: UserService,
-    private s_expense: ExpenseOtherService
+    private s_expense: ExpenseOtherService,
+    private s_province: ProvinceService,
+    private s_insure: InsuranceService,
+    private s_carListItem: CarListItemService,
+    private s_carHistory: CarHistoryService
   ) {
     super();
     this.destroy();
@@ -103,12 +105,10 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
       this.setExpenseForm();
     });
-
-    const mProvince = `${appConfig.apiUrl}/Master/MProvince/DropDown`;
-    const mInsure = `${appConfig.apiUrl}/Master/CompanyInsurance/DropDown`;
-    const observe = combineLatest(
-      this.http.get<DropDownModel[]>(mProvince),
-      this.http.get<DropDownModel[]>(mInsure)
+    
+    const observe = zip(
+      this.s_province.DropDown(),
+      this.s_insure.Dropdown()
     ).pipe(
       map(x => {
         return { mProvince: x[0], mInsure: x[1] }
@@ -166,16 +166,13 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     }
 
     if (this.Mode != this.ActionMode.Create) {
-      const listItemUrl = `${this.risUrl}/CarListItem/GetByBookingId`;
-      const histotyUrl = `${this.risUrl}/CarHistory/GetByBookingId`
       this.BookingId.pipe(
         mergeMap((x: number) => {
           this.chRef.markForCheck();
           if (x == null) return of();
-          const params = { bookingId: x.toString() };
-          return combineLatest(
-            this.http.get<IConItem[]>(listItemUrl, { params }),
-            this.http.get(histotyUrl, { params })
+          return zip(
+            this.s_carListItem.GetByBookingId(x.toString()),
+            this.s_carHistory.GetByBookingId(x.toString())
           ).pipe(
             map(o => { return { listItem: o[0], history: o[1] } })
           )

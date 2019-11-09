@@ -1,11 +1,9 @@
 import { OnInit, Component, ChangeDetectorRef } from '@angular/core';
 import { ListConItemConfig } from './list-con-item.config';
-import { HttpClient } from '@angular/common/http';
 import { mergeMap, tap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { IConRes } from 'app/interfaces/ris';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ClearMoneyService } from './clear-money.service';
 import { CarRegisService } from 'app/services/ris';
 
 @Component({

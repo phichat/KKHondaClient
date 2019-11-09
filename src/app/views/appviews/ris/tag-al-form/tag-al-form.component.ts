@@ -8,6 +8,7 @@ import { TagAlConfig } from './tag-al.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
 import { IPayment } from 'app/interfaces/payment.interface';
+import { AlRegisService, SedRegisService } from 'app/services/ris';
 declare var toastr: any;
 
 @Component({
@@ -22,10 +23,11 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_alRegis: AlRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
@@ -68,9 +70,8 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
   }
 
   loadingSedList() {
-    const sedList = `${appConfig.apiUrl}/Ris/Sed/NormalList`;
 
-    this.http.get(sedList).subscribe((x: any[]) => {
+    this.s_sedRegis.NormalList().subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
         while (this.SedList.length)
@@ -143,7 +144,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
 
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f = { 
+    f = {
       alNo: f.alNo,
       sedNo: f.sedNo,
       price2Remain: f.price2Remain,
@@ -161,8 +162,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Al`;
-    this.http.post(url, f).pipe(
+    this.s_alRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);

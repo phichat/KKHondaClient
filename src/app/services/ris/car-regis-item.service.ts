@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
-import { IExpensesOtherRisRes } from '../../interfaces/ris/expense-other.interface';
+import { ICarRegisItemRes } from 'app/interfaces/ris';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable({ providedIn: 'root' })
-export class ExpenseOtherService {
+export class CarRegisItemService {
   constructor(private httpClient: HttpClient) { }
 
-  url = `${appConfig.apiUrl}/Ris/ExpensesOther`;
+  api = `${appConfig.apiUrl}/Ris/ConItem`;
 
-  GetAll() {
-    return this.httpClient.get<IExpensesOtherRisRes[]>(this.url)
-    .pipe(
-      catchError(this.onCatch)
-    );
+  GetByConNo(conNo: string) {
+    const url = `${this.api}/GetByConNo`;
+    const params = { conNo }
+    return this.httpClient.get<ICarRegisItemRes>(url, { params })
+      .pipe(
+        catchError(this.onCatch)
+      );
   }
 
   private onCatch(error: any, caught: Observable<any>): Observable<any> {

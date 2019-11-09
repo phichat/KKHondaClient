@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagAlListConfig } from './tag-al-list.config';
-import { appConfig } from 'app/app.config';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AlRegisService } from 'app/services/ris';
 
 @Component({
   selector: 'app-tag-al-list',
@@ -17,8 +16,8 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
-    private chRef: ChangeDetectorRef
+    private chRef: ChangeDetectorRef,
+    private s_alRegis: AlRegisService
   ) {
     super();
   }
@@ -28,9 +27,12 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
       SedList: this.fb.array([])
     });
 
-    const sedList = `${appConfig.apiUrl}/Ris/Al/All`;
+    
+  }
 
-    this.http.get(sedList).subscribe((x: any[]) => {
+  onSearch() {
+
+    this.s_alRegis.SearchAlList({}).subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
         return;

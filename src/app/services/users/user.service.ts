@@ -4,6 +4,7 @@ import { getCookie, appConfig } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
 import { IUserResCookie } from 'app/interfaces/users';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -102,7 +103,14 @@ export class UserService {
     const apiURL = `${this.url}/GetUserById`;
     const params = { id };
 
-    return this.http.get<IUserResCookie>(apiURL, { params });
+    return this.http.get<IUserResCookie>(apiURL, { params })
+      .pipe(
+        catchError(this.onCatch)
+      );
+  }
+
+  private onCatch(error: any, caught: Observable<any>): Observable<any> {
+    return Observable.throw(error);
   }
 
 }  

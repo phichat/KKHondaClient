@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { TagConFormConfig } from './tag-con-form.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -11,6 +10,8 @@ import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { message } from 'app/app.message';
 import { UserForRis as EURIS } from 'app/entities/ris.entities';
+import { CarRegisService } from 'app/services/ris';
+import { ReasonService } from 'app/services/masters';
 declare var toastr: any;
 
 @Component({
@@ -23,13 +24,14 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
   }
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private s_loader: LoaderService,
     private s_user: UserService,
     private activeRoute: ActivatedRoute,
     private chRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private s_CarRegis: CarRegisService,
+    private s_Reason: ReasonService
   ) {
     super()
     this.mUser = this.s_user.cookies;
@@ -71,13 +73,10 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     this.activeRoute.params.pipe(
       tap(() => this.s_loader.showLoader()),
       mergeMap((x) => {
-        const conNoUrl = `${this.risUrl}/GetByConNo`;
-        const reasonUrl = `${appConfig.apiUrl}/Reason/DropDown`;
-        const params = { conNo: x['code'] };
         this.code = x['code'];
         return combineLatest(
-          this.http.get(conNoUrl, { params }),
-          this.http.get(reasonUrl)
+          this.s_CarRegis.GetByConNo(this.code),
+          this.s_Reason.DropDown()
         ).pipe(
           map(o => {
             return {
@@ -105,11 +104,9 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
   cancel() {
     if (!confirm('ยืนยันการยกเลิก "บันทึกเรื่องดำเนินการ" หรือไม่?')) return;
     const f = { ...this.formGroup.value };
-    const url = `${this.risUrl}/Cancel`;
-    this.http.post(url, f).pipe(
-      tap(() => this.s_loader.showLoader()),
-      finalize(() => this.s_loader.onEnd())
-    ).subscribe(() => {
+    this.s_loader.showLoader()
+    this.s_CarRegis.Cancel(f).subscribe(() => {
+      this.s_loader.onEnd();
       toastr.success(message.created);
       this.router.navigate(['ris/con-list']);
     }, () => toastr.error(message.failed))

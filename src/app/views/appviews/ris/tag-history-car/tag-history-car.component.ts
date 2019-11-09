@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TahHistoryConfig } from './tag-history-car.config';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ICustomerOutput } from './customer-output.interface';
-import { appConfig } from 'app/app.config';
-import { HttpClient } from '@angular/common/http';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { tap, debounceTime, distinctUntilChanged, switchMap, mergeMap, map } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
@@ -11,6 +9,7 @@ import { CarHistoryService } from 'app/services/ris';
 import { ICarHistory } from 'app/interfaces/ris';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { combineLatest, BehaviorSubject } from 'rxjs';
+import { ProvinceService } from 'app/services/masters';
 
 @Component({
   selector: 'app-tag-history-car',
@@ -20,10 +19,10 @@ import { combineLatest, BehaviorSubject } from 'rxjs';
 export class TagHistoryCarComponent extends TahHistoryConfig implements OnInit {
 
   constructor(
-    private http: HttpClient,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
-    private s_carHist: CarHistoryService
+    private s_carHist: CarHistoryService,
+    private s_province: ProvinceService
   ) {
     super();
   }
@@ -76,8 +75,7 @@ export class TagHistoryCarComponent extends TahHistoryConfig implements OnInit {
   }
 
   loadCarHistory() {
-    const mProvinceUrl = `${appConfig.apiUrl}/Master/MProvince/DropDown`;
-    this.http.get<DropDownModel[]>(mProvinceUrl)
+    this.s_province.DropDown()
       .pipe(tap(() => this.s_loader.showLoader()))
       .subscribe(x => {
         this.provinceDropdown = x;

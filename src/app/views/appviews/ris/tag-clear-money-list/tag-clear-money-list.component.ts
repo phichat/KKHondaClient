@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SedStatus } from 'app/entities/ris.entities';
 import { TagClearMoneyListConfig } from './TagClearMoneyListConfig';
+import { RevRegisService } from 'app/services/ris';
 
 @Component({
   selector: 'app-tag-clear-money-list',
@@ -15,15 +14,19 @@ export class TagClearMoneyListComponent extends TagClearMoneyListConfig implemen
   }
 
   constructor(
-    private http: HttpClient
+    private s_revRegis: RevRegisService
   ) {
     super();
   }
 
   ngOnInit() {
 
-    const apiURL = `${this.risUrl}/Rev/All`;
-    this.http.get(apiURL).subscribe((x: any[]) => {
+   
+
+  }
+
+  onSearch() {
+    this.s_revRegis.SearchRevList({}).subscribe((x: any[]) => {
       if (x.length == 0) {
         this.loading = 1;
         return;
@@ -34,7 +37,6 @@ export class TagClearMoneyListComponent extends TagClearMoneyListConfig implemen
     }, () => {
       this.loading = 2;
     });
-
   }
 
 }

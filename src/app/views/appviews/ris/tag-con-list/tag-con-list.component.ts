@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { appConfig } from 'app/app.config';
 import { TagClListConfig } from './tag-con-list.config';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { CarRegisService } from 'app/services/ris';
@@ -16,7 +14,6 @@ export class TagConListComponent extends TagClListConfig implements OnInit, OnDe
   }
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private s_carRegis: CarRegisService
   ) {
