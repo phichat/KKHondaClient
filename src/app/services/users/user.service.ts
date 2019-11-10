@@ -4,7 +4,7 @@ import { getCookie, appConfig } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
 import { IUserResCookie } from 'app/interfaces/users';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -98,12 +98,12 @@ export class UserService {
     const expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
-
-  getUserById(id: string): Observable<IUserResCookie> {
+  // : Observable<IUserResCookie>
+  getUserById(id: string) {
     const apiURL = `${this.url}/GetUserById`;
     const params = { id };
 
-    return this.http.get<IUserResCookie>(apiURL, { params })
+    return this.http.get(apiURL, { params })
       .pipe(
         catchError(this.onCatch)
       );
@@ -111,6 +111,14 @@ export class UserService {
 
   private onCatch(error: any, caught: Observable<any>): Observable<any> {
     return Observable.throw(error);
+  }
+
+  private onSuccess(res: Response): void {
+    console.log('Request successful');
+  }
+
+  private onError(res: Response): void {
+    console.log('Error, status code: ' + res.status);
   }
 
 }  

@@ -16,13 +16,13 @@ export class CarHistoryService {
   SearchByEngine(term: string) {
     const params = { term };
     return this.http.get<any>(`${this.api}/SearchByEngine`, { params })
-    .pipe(
-      catchError(this.onCatch)
-    );
+      .pipe(
+        catchError(this.onCatch)
+      );
   }
 
   GetByBookingId(bookingId: string) {
-    const params = {bookingId};
+    const params = { bookingId };
     return this.http.get<ICarHistoryRes>(`${this.api}/GetByBookingId`, { params })
       .pipe(
         catchError(this.onCatch)
