@@ -98,15 +98,12 @@ export class UserService {
     const expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
-  // : Observable<IUserResCookie>
-  getUserById(id: string) {
+  // 
+  getUserById(id: string): Observable<IUserResCookie> {
     const apiURL = `${this.url}/GetUserById`;
     const params = { id };
 
-    return this.http.get(apiURL, { headers: this.getHeaders(), params })
-      .pipe(
-        catchError(this.onCatch)
-      );
+    return this.http.get<IUserResCookie>(apiURL, { headers: this.getHeaders(), params });
   }
 
   private onCatch(error: any, caught: Observable<any>): Observable<any> {
@@ -116,6 +113,7 @@ export class UserService {
   private getHeaders(): HttpHeaders {
     const headers = new HttpHeaders();
     headers.append('Accept', 'application/json');
+    headers.delete('Cookie');
     return headers;
   }
 
