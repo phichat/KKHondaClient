@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { getCookie, appConfig } from '../../app.config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IUserResCookie } from 'app/interfaces/users';
 import { Observable } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
@@ -103,7 +103,7 @@ export class UserService {
     const apiURL = `${this.url}/GetUserById`;
     const params = { id };
 
-    return this.http.get(apiURL, { params })
+    return this.http.get(apiURL, { headers: this.getHeaders(), params })
       .pipe(
         catchError(this.onCatch)
       );
@@ -113,12 +113,10 @@ export class UserService {
     return Observable.throw(error);
   }
 
-  private onSuccess(res: Response): void {
-    console.log('Request successful');
-  }
-
-  private onError(res: Response): void {
-    console.log('Error, status code: ' + res.status);
+  private getHeaders(): HttpHeaders {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/json');
+    return headers;
   }
 
 }  
