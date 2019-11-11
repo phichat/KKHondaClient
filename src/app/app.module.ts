@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -13,13 +13,13 @@ import { AppviewsModule } from './views/appviews/appviews.module';
 
 // App modules/components
 import { LayoutsModule } from './components/common/layouts/layouts.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 // import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
 import { BookingModule } from './views/dashboards/booking/booking.module';
 import { GuardGuard } from './guards/guard.guard';
 import { CoreModule } from './core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderInterceptor } from './services/header.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -38,11 +38,13 @@ import { HeaderInterceptor } from './services/header.interceptor';
     // PageloaderModule,
     BookingModule,
     BrowserAnimationsModule,
-
+    // MatDatepickerModule,
+    // MatInputModule,
+    // MatFormFieldModule
   ],
   providers: [
     GuardGuard,
-    // { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: "th-TH" },
     { provide: APP_BASE_HREF, useValue: '/KK-Honda' },
     { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],

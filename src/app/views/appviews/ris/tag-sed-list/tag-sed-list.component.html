@@ -83,19 +83,19 @@
                 {{item.statusDesc}}
               </td>
               <td class="text-right" [attr.data-order]="item.netPrice1">
-                {{item.netPrice1 | number:'1.2-2'}}
+                {{item.netPrice1 | number:'1.2-2':'en-US'}}
               </td>
               <td class="text-right" [attr.data-order]="item.price2">
-                {{item.price2 | number:'1.2-2'}}
+                {{item.price2 | number:'1.2-2':'en-US'}}
               </td>
               <td class="text-right" [attr.data-order]="item.price3">
-                {{item.price3 | number:'1.2-2'}}
+                {{item.price3 | number:'1.2-2':'en-US'}}
               </td>
               <td class="text-right" style="background-color: #d9edf7;" [attr.data-order]="item.price2 + item.price3">
-                {{item.price2 + item.price3 | number:'1.2-2'}}
+                {{item.price2 + item.price3 | number:'1.2-2':'en-US'}}
               </td>
               <td class="text-right" [attr.data-order]="item.borrowMoney">
-                {{item.borrowMoney | number:'1.2-2'}}
+                {{item.borrowMoney | number:'1.2-2':'en-US'}}
               </td>
               <td>{{item.remark}}</td>
             </tr>

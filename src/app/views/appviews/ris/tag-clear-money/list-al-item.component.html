@@ -34,9 +34,9 @@
             <tr *ngFor="let item of AlList;">
                 <td class="text-center">{{item.alNo}}</td>
                 <td class="text-center">{{displayLocalDate(item.createDate)}}</td>
-                <td class="text-right">{{item.netPrice | number:'1.2-2'}}</td>
-                <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
-                <td class="text-right">{{item.receivePrice | number:'1.2-2'}}</td>
+                <td class="text-right">{{item.netPrice | number:'1.2-2':'en-US'}}</td>
+                <td class="text-right">{{item.balancePrice | number:'1.2-2':'en-US'}}</td>
+                <td class="text-right">{{item.receivePrice | number:'1.2-2':'en-US'}}</td>
             </tr>
         </ng-template>
     </tbody>

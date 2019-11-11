@@ -48,7 +48,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">ยอดที่ต้องชำระ</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{price2RemainState | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{price2RemainState | number:'1.2-2':'en-US'}}</span>
               </div>
             </div>
           </div>
@@ -125,16 +125,16 @@
                       {{displayLocalDate(item.get('createDate').value)}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('netPrice1').value">
-                      {{item.get('netPrice1').value | number:'1.2-2'}}
+                      {{item.get('netPrice1').value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2').value">
-                      {{item.get('price2').value | number:'1.2-2'}}
+                      {{item.get('price2').value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price3').value">
-                      {{item.get('price3').value | number:'1.2-2'}}
+                      {{item.get('price3').value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2Remain').value">
-                      {{item.get('price2Remain').value | number:'1.2-2'}}
+                      {{item.get('price2Remain').value | number:'1.2-2':'en-US'}}
                     </td>
                     <td>{{item.get('remark')?.value}}</td>
                   </tr>

@@ -49,7 +49,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">ยอดค้างชำระ</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{formGroup.get('balancePrice').value | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{formGroup.get('balancePrice').value | number:'1.2-2':'en-US'}}</span>
               </div>
             </div>
           </div>
@@ -122,9 +122,9 @@
                       </td>
                       <td>{{item.get('alNo').value}}</td>
                       <td>{{displayLocalDate(item.get('createDate').value)}}</td>
-                      <td class="text-right">{{item.get('balancePrice')?.value | number:'1.2-2'}}</td>
-                      <td class="text-right">{{item.get('totalPaymentPrice')?.value | number:'1.2-2'}}</td>
-                      <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+                      <td class="text-right">{{item.get('balancePrice')?.value | number:'1.2-2':'en-US'}}</td>
+                      <td class="text-right">{{item.get('totalPaymentPrice')?.value | number:'1.2-2':'en-US'}}</td>
+                      <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2':'en-US'}}</td>
                     </tr>
                   </ng-template>
 

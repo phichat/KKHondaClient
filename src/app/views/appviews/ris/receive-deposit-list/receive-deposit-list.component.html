@@ -75,7 +75,7 @@
                 <td>{{displayLocalDate(item.receiptDate)}}</td>
                 <td>{{item.expenseTagName}}</td>
                 <td>{{item.paymentTypeDesc}}</td>
-                <td>{{item.totalPaymentPrice | number:'1.2-2'}}</td>
+                <td>{{item.totalPaymentPrice | number:'1.2-2':'en-US'}}</td>
                 <td>{{displayLocalDate(item.paymentDate)}}</td>
                 <td [ngClass]="{
                   'text-danger': item.status == ReceiveClStatus.Cancel,

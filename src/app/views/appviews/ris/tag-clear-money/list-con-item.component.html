@@ -71,13 +71,13 @@
                     {{displayLocalDate(item.get('tagRegis').value)}}
                 </td>
                 <td class="text-right" style="vertical-align: middle;">
-                    {{item.get('price1').value + item.get('vatPrice1').value | number:'1.2-2'}}
+                    {{item.get('price1').value + item.get('vatPrice1').value | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-right" style="vertical-align: middle;">
-                    {{item.get('cutBalance').value | number:'1.2-2'}}
+                    {{item.get('cutBalance').value | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-right" style="vertical-align: middle;">
-                    {{(item.get('price2').value + item.get('price3').value) | number:'1.2-2'}}
+                    {{(item.get('price2').value + item.get('price3').value) | number:'1.2-2':'en-US'}}
                 </td>
                 <td style="vertical-align: middle;">{{item.get('bookingNo').value}}</td>
                 <td style="vertical-align: middle;">{{item.get('sedNo').value}}</td>

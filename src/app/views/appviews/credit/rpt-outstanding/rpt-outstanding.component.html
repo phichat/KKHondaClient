@@ -6,16 +6,19 @@
 
 <div class="row">
     <label class="col-md-2">ดอกเบี้ยล่าช้าค้างชำระ :</label>
-    <div class="col-md-1 text-right" [ngClass]="{'text-danger': outStanding.fineSum > 0}">{{outStanding.fineSum | number:'1.2-2'}}</div>
+    <div class="col-md-1 text-right" [ngClass]="{'text-danger': outStanding.fineSum > 0}">
+        {{outStanding.fineSum | number:'1.2-2':'en-US'}}</div>
 
 </div>
 <div class="row">
     <label class="col-md-2">เงินดาวน์ค้างชำระ :</label>
-    <div class="col-md-1 text-right" [ngClass]="{'text-danger':outStanding.deposit > 0}">{{outStanding.deposit | number:'1.2-2'}}</div>
+    <div class="col-md-1 text-right" [ngClass]="{'text-danger':outStanding.deposit > 0}">
+        {{outStanding.deposit | number:'1.2-2':'en-US'}}</div>
 </div>
 <div class="row">
     <label class="col-md-2">ค่างวดค้างชำระ :</label>
-    <div class="col-md-1 text-right" [ngClass]="{'text-danger':outStanding.balance > 0}">{{outStanding.balance | number:'1.2-2'}}</div>
+    <div class="col-md-1 text-right" [ngClass]="{'text-danger':outStanding.balance > 0}">
+        {{outStanding.balance | number:'1.2-2':'en-US'}}</div>
     <label class="col-md-1">ตั้งแต่งวดที่ :</label>
     <div class="col-md-1">{{outStanding.startInstalment}}</div>
     <label class="col-md-1">ถึงงวดที่ :</label>
@@ -23,11 +26,13 @@
 </div>
 <div class="row">
     <label for="" class="col-md-2">ยอดค้างชำระทั้งสิ้น :</label>
-    <div class="col-md-1 text-right" [ngClass]="{'text-danger':outStanding.outstandingTotal > 0}">{{outStanding.outstandingTotal | number:'1.2-2'}}</div>
+    <div class="col-md-1 text-right" [ngClass]="{'text-danger':outStanding.outstandingTotal > 0}">
+        {{outStanding.outstandingTotal | number:'1.2-2':'en-US'}}</div>
 </div>
 <div class="row">
     <label for="" class="col-md-2">ยอดรับชำระทั้งสิ้น :</label>
-    <div class="col-md-1 text-right" [ngClass]="{'text-navy':outStanding.payPriceTotal > 0}">{{outStanding.payPriceTotal | number:'1.2-2'}}</div>
+    <div class="col-md-1 text-right" [ngClass]="{'text-navy':outStanding.payPriceTotal > 0}">
+        {{outStanding.payPriceTotal | number:'1.2-2':'en-US'}}</div>
 </div>
 <hr>
 <h4>งวดต่อไปที่ต้องชำระ</h4>
@@ -35,13 +40,13 @@
     <label for="" class="col-md-1">งวดที่ :</label>
     <div class="col-md-1">{{outStanding.nextInstalment}}</div>
     <label class="col-md-1" for="">จำนวนเงิน :</label>
-    <div class="col-md-1 text-right">{{outStanding.nextInstalmentBalance | number:'1.2-2'}}</div>
+    <div class="col-md-1 text-right">{{outStanding.nextInstalmentBalance | number:'1.2-2':'en-US'}}</div>
     <label class="col-md-2" for="">วันที่ครบกำหนดชำระ :</label>
     <div class="col-md-2">{{outStanding.nextDueDate}}</div>
 </div>
 <hr>
 <div class="row">
     <label for="" class="col-md-3">ค่างวดที่ยังไม่ถึงกำหนดชำระ จำนวน : {{outStanding.futureInstalment}} งวด</label>
-    <label for="" class="col-md-3">เป็นเงิน : {{outStanding.futureInstalmentBalance | number:'1.2-2'}}</label>
+    <label for="" class="col-md-3">เป็นเงิน : {{outStanding.futureInstalmentBalance | number:'1.2-2':'en-US'}}</label>
 
 </div>

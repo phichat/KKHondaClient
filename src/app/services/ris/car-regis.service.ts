@@ -22,7 +22,8 @@ export class CarRegisService {
 
   GetCarBySellNo(sellNo: string) {
     const params = { sellNo };
-    return this.httpClient.get(this.api, { params })
+    const url = `${this.api}/GetCarBySellNo`;
+    return this.httpClient.get(url, { params })
       .pipe(
         catchError(this.onCatch)
       );

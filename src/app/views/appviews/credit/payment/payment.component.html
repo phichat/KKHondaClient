@@ -53,25 +53,30 @@
   </div>
   <div class="row form-group">
     <label for="price" class="col-sm-2 control-label">เงินดาวน์ </label>
-    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2'}}
+    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2':'en-US'}}
       บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">เงินดาวน์ชำระแล้ว </label>
-    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(bookingModel.depositIsPay || 0) | number:'1.2-2'}} บาท
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(bookingModel.depositIsPay || 0) | number:'1.2-2':'en-US'}}
+      บาท
     </strong>
     <label for="" class="col-sm-2 control-label">เงินดาวน์ค้างชำระ </label>
-    <strong class="col-md-2 col-sm-6 text-danger">{{(bookingModel.depositIsOutstanding || 0) | number:'1.2-2'}} บาท
+    <strong class="col-md-2 col-sm-6 text-danger">{{(bookingModel.depositIsOutstanding || 0) | number:'1.2-2':'en-US'}}
+      บาท
     </strong>
   </div>
   <div class="row form-group">
     <label for="price" class="col-sm-2 control-label">ยอดจัด </label>
-    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2'}} บาท</strong>
+    <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.price | number:'1.2-2':'en-US'}}
+      บาท</strong>
     <label for="ispay" class="col-sm-2 control-label">ค่างวดชำระแล้ว </label>
-    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2'}} บาท
+    <strong id="ispay" class="col-md-2 col-sm-6 text-navy">{{(isPayModel.isPayPrice || 0) | number:'1.2-2':'en-US'}} บาท
       ({{(isPayModel.isPayTerm
       || 0)}} งวด)
     </strong>
     <label for="" class="col-sm-2 control-label">ค่างวดค้างชำระ </label>
-    <strong class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2'}} บาท
+    <strong
+      class="col-md-2 col-sm-6 text-danger">{{(isOutstandingModel.isOutstandingPrice || 0) | number:'1.2-2':'en-US'}}
+      บาท
       ({{(isOutstandingModel.isOutstandingTerm
       || 0)}} งวด)
     </strong>
@@ -120,15 +125,17 @@
                 </td>
                 <td class="text-center" [attr.data-order]="getTime(item.dueDate)">{{setLocalDate(item.dueDate)}}</td>
                 <td class="text-right" [attr.data-order]="item.balanceNetPrice">{{item.balanceNetPrice |
-                  number:'1.2-2'}}</td>
-                <td class="text-right" [attr.data-order]="item.fineSum">{{item.fineSum | number:'1.2-2'}}</td>
-                <td class="text-right" [attr.data-order]="item.fineSumRemain">{{item.fineSumRemain | number:'1.2-2'}}
+                  number:'1.2-2':'en-US'}}</td>
+                <td class="text-right" [attr.data-order]="item.fineSum">{{item.fineSum | number:'1.2-2':'en-US'}}</td>
+                <td class="text-right" [attr.data-order]="item.fineSumRemain">
+                  {{item.fineSumRemain | number:'1.2-2':'en-US'}}
                 </td>
-                <td class="text-right" [attr.data-order]="item.fineSumeOther">{{item.fineSumeOther | number:'1.2-2'}}
+                <td class="text-right" [attr.data-order]="item.fineSumeOther">
+                  {{item.fineSumeOther | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-right"
                   [attr.data-order]="(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther)">
-                  {{(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther) | number:'1.2-2'}}
+                  {{(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther) | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-center" [ngSwitch]="item.status">
                   <span *ngSwitchCase="11" class="text-navy">{{item.statusDesc}}</span>
@@ -153,14 +160,14 @@
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">ยอดคงค้าง</label>
               <div class="col-sm-8">
-                <span class="form-control disabled">{{paymentModel.outstanding | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{paymentModel.outstanding | number:'1.2-2':'en-US'}}</span>
               </div>
             </div>
 
             <div class="row form-group">
               <label for="" class="col-sm-4 control-label">ค่าปรับล่าช้า</label>
               <div class="col-sm-8">
-                <span class="form-control disabled">{{paymentModel.fineSume | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{paymentModel.fineSume | number:'1.2-2':'en-US'}}</span>
                 <!-- <input readonly type="text" name="fineSume" [(ngModel)]="paymentModel.fineSume"
                   class="form-control form-control-sm number-2-digit" placeholder="0.00"> -->
               </div>
@@ -214,7 +221,7 @@
                 <span class="required">*</span>
               </label>
               <div class="col-md-8">
-                <span class="form-control disabled">{{paymentModel.totalPrice | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{paymentModel.totalPrice | number:'1.2-2':'en-US'}}</span>
                 <!-- <input type="text" readonly name="totalPrice" [(ngModel)]="paymentModel.totalPrice"
                   class="form-control form-control-sm number-2-digit" placeholder="0.00"> -->
               </div>

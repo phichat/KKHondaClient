@@ -43,6 +43,11 @@ export enum RevStatus {
     Cancel = 0
 }
 
+export const RevStatusList: any[] = [
+    { id: RevStatus.Normal, desc: "ปกติ" },
+    { id: RevStatus.Cancel, desc: "ยกเลิก" }
+];
+
 export enum SedStatus {
     Normal = 1,
     Borrowed = 2,

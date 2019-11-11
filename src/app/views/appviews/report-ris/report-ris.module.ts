@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegisTagComponent } from './regis-tag/regis-tag.component';
 import { RegisVehicleTaxComponent } from './regis-vehicle-tax/regis-vehicle-tax.component';
-import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
-    RegisTagComponent, 
+    RegisTagComponent,
     RegisVehicleTaxComponent
   ],
   imports: [
@@ -16,7 +17,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MyDatePickerTHModule
+
+    MatNativeDateModule,
+    MatDatepickerModule
   ]
 })
 export class ReportRisModule { }

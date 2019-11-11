@@ -16,36 +16,52 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-        <div class="row">
-          <div class="col-xs-6 col-lg-6">
-            <div class="form-group">
-              <label class="col-lg-3 control-label required">วันที่รับรถ(เข้าคลัง)</label>
-              <div class="col-lg-6">
-                <my-date-picker-th [options]="myDatePickerOptions" formControlName="sDate">
-                </my-date-picker-th>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-3 control-label">ถึงวันที่</label>
-              <div class="col-lg-6">
-                <my-date-picker-th [options]="myDatePickerOptions" formControlName="eDate">
-                </my-date-picker-th>
-              </div>
+  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-lg-3 control-label required">วันที่รับรถ(เข้าคลัง)</label>
+          <div class="col-lg-6">
+            <div class="input-group">
+              <input class="form-control mat-date-picker" readonly [matDatepicker]="dp1" (click)="dp1.open()"
+                formControlName="sDate">
+              <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+              <span class="input-group-btn mat-icon-picker" (click)="dp1.open()">
+                  <button class="btn btn-default" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </span>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-xs-6 col-lg-6">
-            <div class="form-group">
-              <div class="col-lg-3"></div>
-              <div class="col-lg-6">
-                <button type="submit" class="btn btn-success" [disabled]="formGroup.invalid">
-                  <i class="fa fa-cloud-download"></i> ดาวน์โหลด
+        <div class="form-group">
+          <label class="col-lg-3 control-label">ถึงวันที่</label>
+          <div class="col-lg-6">
+            <div class="input-group">
+              <input class="form-control mat-date-picker" readonly [matDatepicker]="dp2" (click)="dp2.open()"
+                formControlName="eDate">
+              <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+              <span class="input-group-btn mat-icon-picker" (click)="dp2.open()">
+                <button class="btn btn-default" type="button">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
                 </button>
-              </div>
+              </span>
             </div>
           </div>
         </div>
-      </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <div class="col-lg-3"></div>
+          <div class="col-lg-6">
+            <button type="submit" class="btn btn-success" [disabled]="formGroup.invalid">
+              <i class="fa fa-cloud-download"></i> ดาวน์โหลด
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

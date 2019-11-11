@@ -89,11 +89,11 @@
                     </td>
                     <td>{{item.get('bookingNo').value}}</td>
                     <td>{{displayLocalDate(item.get('bookingDate').value)}}</td>
-                    <td class="text-right">{{item.get('netPrice1').value | number:'1.2-2'}}</td>
-                    <td class="text-right">{{item.get('expense').value | number:'1.2-2'}}</td>
-                    <td class="text-right">{{item.get('netPrice1').value + item.get('expense').value | number:'1.2-2'}}
+                    <td class="text-right">{{item.get('netPrice1').value | number:'1.2-2':'en-US'}}</td>
+                    <td class="text-right">{{item.get('expense').value | number:'1.2-2':'en-US'}}</td>
+                    <td class="text-right">{{item.get('netPrice1').value + item.get('expense').value | number:'1.2-2':'en-US'}}
                     </td>
-                    <td class="text-right">{{item.get('paymentPrice').value | number:'1.2-2'}}</td>
+                    <td class="text-right">{{item.get('paymentPrice').value | number:'1.2-2':'en-US'}}</td>
                   </tr>
                 </ng-template>
               </tbody>
@@ -105,15 +105,15 @@
               <tbody>
                 <tr>
                   <td><strong>รวมเงินที่ค้างส่ง :</strong></td>
-                  <td>{{price1Summary | number:'1.2-2'}}</td>
+                  <td>{{price1Summary | number:'1.2-2':'en-US'}}</td>
                 </tr>
                 <tr>
                   <td><strong>รวมค่าใช้จ่าย :</strong></td>
-                  <td>{{expenseSummary | number:'1.2-2'}}</td>
+                  <td>{{expenseSummary | number:'1.2-2':'en-US'}}</td>
                 </tr>
                 <tr>
                   <td><strong>ยอดที่ต้องชำระ :</strong></td>
-                  <td>{{total | number:'1.2-2'}}</td>
+                  <td>{{total | number:'1.2-2':'en-US'}}</td>
                 </tr>
               </tbody>
             </table>

@@ -27,8 +27,8 @@ export class RegisVehicleTaxComponent implements OnInit {
 
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f.sDate = setZeroHours(getDateMyDatepicker(f.sDate));
-    f.eDate = setZeroHours(getDateMyDatepicker(f.eDate));
+    f.sDate = setZeroHours(f.sDate);
+    f.eDate = setZeroHours(f.eDate);
     const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisVehicleTax=true`;
     window.open(url, '_blank');
   }

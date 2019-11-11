@@ -11,7 +11,7 @@ export class RegisTagComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder
-  ) { 
+  ) {
   }
 
   formGroup: FormGroup;
@@ -27,10 +27,13 @@ export class RegisTagComponent implements OnInit {
 
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f.sDate = setZeroHours(getDateMyDatepicker(f.sDate));
-    f.eDate = setZeroHours(getDateMyDatepicker(f.eDate));
+
+    f.sDate = setZeroHours(f.sDate);
+    f.eDate = setZeroHours(f.eDate);
+    
     const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisTag=true`;
     window.open(url, '_blank');
+
   }
 
 }

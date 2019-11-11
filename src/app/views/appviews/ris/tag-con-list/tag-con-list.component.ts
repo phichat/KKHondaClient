@@ -34,8 +34,8 @@ export class TagConListComponent extends TagClListConfig implements OnInit, OnDe
 
   onSearch() {
     let form = this.formSearch.value;
-    form = JSON.stringify(form);  
- 
+    // form = JSON.stringify(form);  
+    this.loading = 0;
     this.s_carRegis.SearchRegisList(form)
       .subscribe(x => {
         if (!x.length) {

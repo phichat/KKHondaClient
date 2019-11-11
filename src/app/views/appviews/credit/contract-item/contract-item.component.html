@@ -25,22 +25,22 @@
           <tr *ngFor="let item of contractItemModel; let i=index;">
             <td class="text-center">{{ item.instalmentNo == 0 ? "เงินดาวน์" : item.instalmentNo}}</td>
             <td class="text-right">{{setLocalDate(item.dueDate)}}</td>
-            <td class="text-right">{{item.balanceNetPrice | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.principal | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.interestInstalment | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.balanceVatPrice | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.principalRemain | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.interestPrincipalRemain | number:'1.2-2'}}</td>
-            <td class="text-right">{{item.discountInterest | number: '1.2-2'}}</td>
+            <td class="text-right">{{item.balanceNetPrice | number:'1.2-2':'en-US'}}</td>
+            <td class="text-right">{{item.principal | number:'1.2-2':'en-US'}}</td>
+            <td class="text-right">{{item.interestInstalment | number:'1.2-2':'en-US'}}</td>
+            <td class="text-right">{{item.balanceVatPrice | number:'1.2-2':'en-US'}}</td>
+            <td class="text-right">{{item.principalRemain | number:'1.2-2':'en-US'}}</td>
+            <td class="text-right">{{item.interestPrincipalRemain | number:'1.2-2':'en-US'}}</td>
+            <td class="text-right">{{item.discountInterest | number: '1.2-2':'en-US'}}</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <th class="text-center" colspan="2">รวม</th>
-            <th class="text-right">{{balanchNetTotol | number:'1.2-2'}}</th>
-            <th class="text-right">{{principalTotal | number:'1.2-2'}}</th>
-            <th class="text-right">{{interestTotal | number:'1.2-2'}}</th>
-            <th class="text-right">{{balanchVatTotal | number:'1.2-2'}}</th>
+            <th class="text-right">{{balanchNetTotol | number:'1.2-2':'en-US'}}</th>
+            <th class="text-right">{{principalTotal | number:'1.2-2':'en-US'}}</th>
+            <th class="text-right">{{interestTotal | number:'1.2-2':'en-US'}}</th>
+            <th class="text-right">{{balanchVatTotal | number:'1.2-2':'en-US'}}</th>
           </tr>
         </tfoot>
       </table>

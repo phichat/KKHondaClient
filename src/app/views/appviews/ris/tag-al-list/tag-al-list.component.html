@@ -78,8 +78,8 @@
                   'text-navy': item.get('status').value == AlStatus.Normal,
                   'text-muted': item.get('status').value == AlStatus.CashBack
                 }">{{item.get('statusDesc').value}}</td>
-                <td class="text-right">{{item.get('price2Remain')?.value | number:'1.2-2'}}</td>
-                <td class="text-right" style="background-color: #d9edf7;">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+                <td class="text-right">{{item.get('price2Remain')?.value | number:'1.2-2':'en-US'}}</td>
+                <td class="text-right" style="background-color: #d9edf7;">{{item.get('netPrice')?.value | number:'1.2-2':'en-US'}}</td>
                 <td>{{item.get('remark').value}}</td>
               </tr>
             </ng-template>

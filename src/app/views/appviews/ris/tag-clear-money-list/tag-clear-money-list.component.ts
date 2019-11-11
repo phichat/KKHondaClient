@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TagClearMoneyListConfig } from './TagClearMoneyListConfig';
 import { RevRegisService } from 'app/services/ris';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { setZeroHours } from 'app/app.config';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tag-clear-money-list',
@@ -14,29 +17,37 @@ export class TagClearMoneyListComponent extends TagClearMoneyListConfig implemen
   }
 
   constructor(
-    private s_revRegis: RevRegisService
+    private s_revRegis: RevRegisService,
+    private fb: FormBuilder
   ) {
     super();
+    this.formSearch = this.fb.group({
+      revNo: new FormControl(null),
+      createDate: new FormControl(null),
+      createBy: new FormControl(null),
+      status: new FormControl()
+    })
   }
 
   ngOnInit() {
-
-   
-
   }
 
   onSearch() {
-    this.s_revRegis.SearchRevList({}).subscribe((x: any[]) => {
-      if (x.length == 0) {
-        this.loading = 1;
-        return;
-      }
-      this.RevList = x;
+    let form = { ...this.formSearch.value };
+    form = { ...form, createDate: setZeroHours(form.createDate) };
+    this.loading = 0
+    this.s_revRegis.SearchRevList(form)
+      .subscribe((x: any[]) => {
+        if (x.length == 0) {
+          this.loading = 1;
+          return;
+        }
+        this.RevList = x;
 
-      this.reInitDatatable();
-    }, () => {
-      this.loading = 2;
-    });
+        this.reInitDatatable();
+      }, () => {
+        this.loading = 2;
+      });
   }
 
 }

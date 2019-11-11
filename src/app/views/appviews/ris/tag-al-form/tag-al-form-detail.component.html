@@ -59,7 +59,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">ยอดค้างทั้งสิ้น</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{formGroup.get('price2Remain').value | number:'1.2-2'}}</span>
+                <span class="form-control disabled">{{formGroup.get('price2Remain').value | number:'1.2-2':'en-US'}}</span>
               </div>
             </div>
             <div class="form-group">
@@ -163,13 +163,13 @@
                       {{displayLocalDate(item.get('createDate').value)}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('netPrice1').value">
-                      {{item.get('netPrice1').value | number:'1.2-2'}}
+                      {{item.get('netPrice1').value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2Remain').value">
-                      {{item.get('price2Remain').value | number:'1.2-2'}}
+                      {{item.get('price2Remain').value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('borrowMoney').value">
-                      {{item.get('borrowMoney').value | number:'1.2-2'}}
+                      {{item.get('borrowMoney').value | number:'1.2-2':'en-US'}}
                     </td>
                   </tr>
                 </ng-template>

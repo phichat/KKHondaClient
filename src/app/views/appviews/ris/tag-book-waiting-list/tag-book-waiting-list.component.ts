@@ -54,7 +54,7 @@ export class TagBookWaitingListComponent extends TagBookWaitingListListConfig im
     };
 
     // f = JSON.stringify(f);
-
+    this.loading = 0;
     this.s_carRegis.SearchWaitingTag(f)
       .subscribe((x: any[]) => {
         if (!x.length) {

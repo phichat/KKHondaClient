@@ -157,7 +157,7 @@
               <td>{{item.bookContractNo}}</td>
               <td>{{item.eNo}}</td>
               <td>{{item.fNo}}</td>
-              <td [attr.data-order]="item.bookNetPrice" class="text-right">{{item.bookNetPrice | number:'1.2-2'}}</td>
+              <td [attr.data-order]="item.bookNetPrice" class="text-right">{{item.bookNetPrice | number:'1.2-2':'en-US'}}</td>
               <td [attr.data-order]="i">
                 {{displayLocalDate(item.sellDate)}}
               </td>

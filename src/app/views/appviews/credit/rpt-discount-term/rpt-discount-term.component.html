@@ -13,18 +13,18 @@
     <tr *ngFor="let item of discount; let i=index">
       <td>{{item.instalmentNo}}</td>
       <td>{{item.dueDate}}</td>
-      <td>{{item.balance | number:'1.2-2'}}</td>
-      <td [ngClass]="{'text-warning':item.outstanding > 0}">{{item.outstanding | number:'1.2-2'}}</td>
-      <td [ngClass]="{'text-navy':item.discount > 0}">{{item.discount | number:'1.2-2'}}</td>
-      <td>{{item.useDiscount | number:'1.2-2'}}</td>
+      <td>{{item.balance | number:'1.2-2':'en-US'}}</td>
+      <td [ngClass]="{'text-warning':item.outstanding > 0}">{{item.outstanding | number:'1.2-2':'en-US'}}</td>
+      <td [ngClass]="{'text-navy':item.discount > 0}">{{item.discount | number:'1.2-2':'en-US'}}</td>
+      <td>{{item.useDiscount | number:'1.2-2':'en-US'}}</td>
     </tr>
   </tbody>
 </table>
 <div class="row">
     <label class="col-md-2">ยอดรวม :</label>
-    <div class="col-md-1">{{totalDist | number:'1.2-2'}}</div>
+    <div class="col-md-1">{{totalDist | number:'1.2-2':'en-US'}}</div>
     <label class="col-md-2">ยอดใช้ส่วนลด :</label>
-    <div class="col-md-1">{{totalUseDist | number:'1.2-2'}}</div>
+    <div class="col-md-1">{{totalUseDist | number:'1.2-2':'en-US'}}</div>
     <label class="col-md-2">ยอดคงเหลือ :</label>
-    <div class="col-md-1">{{totalDistOutstanding | number:'1.2-2'}}</div>
+    <div class="col-md-1">{{totalDistOutstanding | number:'1.2-2':'en-US'}}</div>
 </div>

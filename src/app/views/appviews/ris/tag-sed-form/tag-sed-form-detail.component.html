@@ -149,16 +149,16 @@
                     <td [attr.data-order]="i">{{item.get('bookingNo')?.value}}</td>
                     <td [attr.data-order]="i">{{displayLocalDate(item.get('createDate').value)}}</td>
                     <td class="text-right" [attr.data-order]="item.get('netPrice1')?.value">
-                      {{item.get('netPrice1')?.value | number:'1.2-2'}}
+                      {{item.get('netPrice1')?.value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price2')?.value">
-                      {{item.get('price2')?.value | number:'1.2-2'}}
+                      {{item.get('price2')?.value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" [attr.data-order]="item.get('price3')?.value">
-                      {{item.get('price3')?.value | number:'1.2-2'}}
+                      {{item.get('price3')?.value | number:'1.2-2':'en-US'}}
                     </td>
                     <td class="text-right" style="background-color: #d9edf7;" [attr.data-order]="item.get('price2')?.value + item.get('price3')?.value">
-                      {{item.get('price2')?.value + item.get('price3')?.value | number:'1.2-2'}}
+                      {{item.get('price2')?.value + item.get('price3')?.value | number:'1.2-2':'en-US'}}
                     </td>
                     <td>{{item.get('branchName')?.value}}</td>
                     <td>{{item.get('tagNo')?.value}}</td>
@@ -180,23 +180,23 @@
       <tbody>
         <tr>
           <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
-          <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('netPrice1').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ค่าใช้จ่าย :</strong></td>
-          <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('price2').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
-          <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('price3').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>รวมค่าใช่จ่าย :</strong></td>
-          <td>{{formGroup.get('price2').value + formGroup.get('price3').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('price2').value + formGroup.get('price3').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>จำนวนเงินยืม :</strong></td>
-          <td>{{formGroup.get('borrowMoney').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('borrowMoney').value | number:'1.2-2':'en-US'}}</td>
         </tr>
       </tbody>
     </table>

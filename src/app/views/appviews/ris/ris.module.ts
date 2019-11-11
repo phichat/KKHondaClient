@@ -22,6 +22,9 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { services as RisService } from 'app/services/ris';
 import { ReceiveDepositListComponent } from './receive-deposit-list/receive-deposit-list.component';
 import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 
 @NgModule({
   declarations: [
@@ -48,7 +51,10 @@ import { PaymentTypeModule } from 'app/views/components/payment-type/payment-typ
     ReactiveFormsModule,
     NgSelectModule,
     MyDatePickerTHModule,
-    PaymentTypeModule
+    PaymentTypeModule,
+
+    MatNativeDateModule,
+    MatDatepickerModule
   ],
   providers: [
     ClearMoneyService,
