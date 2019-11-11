@@ -8,10 +8,10 @@ export interface IUserResCookie {
     branchId: number;
     branch: number;
     branchName: string;
-    department: string;
+    name?: string;
+    department?: string;
     gId?: number;
-    name: string;
-    groupPagePermission: IGroupPagePermissionRes[]
+    groupPagePermission?: IGroupPagePermissionRes[]
 }
 
 export interface IUser {

@@ -37,6 +37,7 @@ export class UserService {
             this.setCookie(key, JSON.stringify(x[key]));
           }
         }
+        this.setLocalStore(x);
         this.changeData(x)
       });
     } else {
@@ -47,11 +48,7 @@ export class UserService {
             this.signOut();
             return;
           }
-          for (const key in x) {
-            if (x.hasOwnProperty(key)) {
-              this.setCookie(key, JSON.stringify(x[key]));
-            }
-          }
+          this.setLocalStore(x);
           this.changeData(x)
         });
       }
@@ -63,24 +60,25 @@ export class UserService {
   }
 
   get cookies(): IUserResCookie {
-    const _cookie: IUserResCookie = {
-      id: JSON.parse(getCookie('id')),
-      adminName: JSON.parse(getCookie('adminName')),
-      fullName: JSON.parse(getCookie('fullName')),
-      userType: JSON.parse(getCookie('userType')),
-      branchId: JSON.parse(getCookie('branchId')),
-      branch: JSON.parse(getCookie('branch')),
-      branchName: JSON.parse(getCookie('branchName')),
-      department: JSON.parse(getCookie('department')),
-      gId: JSON.parse(getCookie('gId')),
-      name: JSON.parse(getCookie('name')),
-      groupPagePermission: JSON.parse(getCookie('groupPagePermission')),
-    };
-    return _cookie;
+    // const _cookie: IUserResCookie = {
+    //   id: JSON.parse(getCookie('id')),
+    //   adminName: JSON.parse(getCookie('adminName')),
+    //   fullName: JSON.parse(getCookie('fullName')),
+    //   userType: JSON.parse(getCookie('userType')),
+    //   branchId: JSON.parse(getCookie('branchId')),
+    //   branch: JSON.parse(getCookie('branch')),
+    //   branchName: JSON.parse(getCookie('branchName')),
+    //   // department: JSON.parse(getCookie('department')),
+    //   // name: JSON.parse(getCookie('name')),
+    //   // gId: JSON.parse(getCookie('gId')),
+    //   // groupPagePermission: JSON.parse(getCookie('groupPagePermission')),
+    // };
+    return JSON.parse(localStorage.getItem('user-logged'));
   }
 
   signOut() {
     this.user.map(x => this.deleteCookie(x));
+    localStorage.removeItem('user-logged');
     window.location.href = 'http://203.154.126.61/KK-Honda-Web/backoffice/login.php';
   }
 
@@ -90,6 +88,10 @@ export class UserService {
     var expires = "expires=" + d.toUTCString(); //Compose the expirartion date
     window.document.cookie = cname + "=" + "; " + expires;//Set the cookie with name and the expiration date
 
+  }
+
+  private setLocalStore(item: IUserResCookie) {
+    localStorage.setItem('user-logged', JSON.stringify(item));
   }
 
   private setCookie(cname, cvalue) {

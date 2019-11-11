@@ -13,12 +13,13 @@ import { AppviewsModule } from './views/appviews/appviews.module';
 
 // App modules/components
 import { LayoutsModule } from './components/common/layouts/layouts.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { PageloaderModule } from './views/appviews/pageloader/pageloader.module';
 import { BookingModule } from './views/dashboards/booking/booking.module';
 import { GuardGuard } from './guards/guard.guard';
 import { CoreModule } from './core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HeaderInterceptor } from './services/header.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,13 +37,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
     // PageloaderModule,
     BookingModule,
-
     BrowserAnimationsModule,
 
   ],
   providers: [
-
     GuardGuard,
+    // { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
     { provide: APP_BASE_HREF, useValue: '/KK-Honda' },
     { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
