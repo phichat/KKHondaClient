@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { appConfig, getDateMyDatepicker } from 'app/app.config';
+import { appConfig, getDateMyDatepicker, setZeroHours } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { TagSedConfig } from './tag-sed.config';
@@ -122,7 +122,7 @@ export class TagSedFormComponent extends TagSedConfig implements OnInit {
 
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f.createDate = getDateMyDatepicker(f.createDate);
+    f.createDate = setZeroHours(f.createDate);
     f.price2Remain = f.borrowMoney;
     f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
 

@@ -20,7 +20,85 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-
+  <div class="ibox">
+    <div class="ibox-title">
+      <h3>ค้นหาข้อมูลบันทึกรับชำระเงินรับฝาก</h3>
+    </div>
+    <div class="ibox-content">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบรับเงิน</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="receiptNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">วันที่ชำระเงิน</label>
+            <div class="col-lg-8">
+              <div class="input-group">
+                <input class="form-control mat-date-picker" readonly [matDatepicker]="dp" (click)="dp.open()"
+                  formControlName="paymentDate">
+                <mat-datepicker #dp disabled="false"></mat-datepicker>
+                <span class="input-group-btn mat-icon-picker" (click)="dp.open()">
+                  <button class="btn btn-default" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ประเภทการส่งเงิน</label>
+            <div class="col-lg-8">
+              <div formArrayName="expenseTag" *ngFor="let item of expenseTag.controls; let i = index;"
+                class="checkbox checkbox-info checkbox-inline">
+                <input type="checkbox" [formControlName]="i" id="ext{{i}}" [value]="ExpTagList[i].id">
+                <label for="ext{{i}}">{{ExpTagList[i].desc}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ประเภทการชำระเงิน</label>
+            <div class="col-lg-8">
+              <div formArrayName="paymentType" *ngFor="let item of paymentType.controls; let i = index;"
+                class="checkbox checkbox-info checkbox-inline">
+                <input type="checkbox" [formControlName]="i" id="pt{{i}}" [value]="PaymentTypeList[i].id">
+                <label for="pt{{i}}">{{PaymentTypeList[i].desc}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้ชำระเงิน</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="createName">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">สถานะ</label>
+            <div class="col-lg-8">
+              <select formControlName="status" class="form-control">
+                <option value=""></option>
+                <option [value]="item.id" *ngFor="let item of ReceiveClStatusList">{{item.desc}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="ibox float-e-margins">
     <div class="ibox-content">
@@ -54,7 +132,7 @@
                     <br>
                     <p>มีบางอย่างผิดพลาด</p>
                   </div>
-                  <div *ngSwitchDefault>
+                  <div *ngSwitchCase="0">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <br>
                     <p>รอสักครู่...</p>

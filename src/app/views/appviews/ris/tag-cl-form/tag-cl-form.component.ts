@@ -3,7 +3,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
-import { appConfig, getDateMyDatepicker } from 'app/app.config';
+import { appConfig, getDateMyDatepicker, setZeroHours } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
@@ -154,7 +154,7 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       bankCode: f.bankCode,
       paymentType: f.paymentType,
       branchId: f.branchId,
-      createDate: getDateMyDatepicker(f.createDate),
+      createDate: setZeroHours(f.createDate),
       createBy: f.createBy,
       remark: f.remark,
     }

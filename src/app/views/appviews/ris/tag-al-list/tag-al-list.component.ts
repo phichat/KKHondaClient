@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagAlListConfig } from './tag-al-list.config';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AlRegisService } from 'app/services/ris';
+import { setZeroHours } from 'app/app.config';
 
 @Component({
   selector: 'app-tag-al-list',
@@ -20,19 +21,27 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
     private s_alRegis: AlRegisService
   ) {
     super();
+    this.formSearch = this.fb.group({
+      sedNo: new FormControl(null),
+      alNo: new FormControl(null),
+      borrowerName: new FormControl(null),
+      createName: new FormControl(null),
+      createDate: new FormControl(null),
+      status: new FormControl(null),
+    })
   }
 
   ngOnInit() {
     this.formGroup = this.fb.group({
       SedList: this.fb.array([])
     });
-
-    
   }
 
   onSearch() {
-
-    this.s_alRegis.SearchAlList({}).subscribe((x: any[]) => {
+    let form = { ...this.formSearch.value };
+    form = { ...form, createDate: setZeroHours(form.createDate) };
+    this.loading = 0;
+    this.s_alRegis.SearchAlList(form).subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
         return;

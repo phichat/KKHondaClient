@@ -4,6 +4,12 @@ export enum PaymentType {
     Cheque = 3
 }
 
+export const PaymentTypeList: any[] = [
+    { id: PaymentType.Cash, desc: "เงินสด" },
+    { id: PaymentType.Transfer, desc: "โอน" },
+    { id: PaymentType.Cheque, desc: "เช็ค" },
+];
+
 export enum PaymentStatus {
     Cancel = 0,         // ยกเลิก
     IsPayment = 1       // ชำระแล้ว
@@ -55,16 +61,34 @@ export enum SedStatus {
     Cancel = 0
 }
 
+export const SedStatusList: any[] = [
+    { id: SedStatus.Normal, desc: "ปกติ" },
+    { id: SedStatus.Borrowed, desc: "บันทึกการยืมเงิน" },
+    { id: SedStatus.Received, desc: "บันทึกรับคืนเรื่อง" },
+    { id: SedStatus.Cancel, desc: "ยกเลิก" }
+]
+
 export enum AlStatus {
     Cancel = 0,
     Normal = 1,
     CashBack = 2
 }
 
+export const AlStatusList: any[] = [
+    { id: AlStatus.CashBack, desc: "บันทึกคืนเงิน" },
+    { id: AlStatus.Normal, desc: "ปกติ" },
+    { id: AlStatus.Cancel, desc: "ยกเลิก" }
+]
+
 export enum ClStatus {
     Cancel = 0,
     Normal = 1
 }
+
+export const ClStatusList: any[] = [
+    { id: ClStatus.Normal, desc: "ปกติ" },
+    { id: ClStatus.Cancel, desc: "ยกเลิก" }
+]
 
 export enum RisLocalStoreage {
     TrashCarRegisListItem = "Trash_CarRegisListItem"
@@ -86,9 +110,21 @@ export enum ReceiveClStatus {
     Normal = 1
 }
 
+export const ReceiveClStatusList: any[] = [
+    { id: ReceiveClStatus.Normal, desc: "ปกติ" },
+    { id: ReceiveClStatus.Cancel, desc: "ยกเลิก" }
+]
+
 export enum ExpensesTag {
     EXP10001 = 'EXP10001',
     EXP10002 = 'EXP10002',
     EXP10003 = 'EXP10003',
     EXP10004 = 'EXP10004'
 }
+
+export const ExpensesTagList: any[] = [
+    { id: ExpensesTag.EXP10001, desc: "จดทะเบียนรถใหม่" },
+    { id: ExpensesTag.EXP10002, desc: "ต่อทะเบียน" },
+    { id: ExpensesTag.EXP10003, desc: "พ.ร.บ." },
+    { id: ExpensesTag.EXP10004, desc: "ประกันภัย" },
+]

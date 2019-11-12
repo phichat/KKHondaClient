@@ -3,7 +3,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { appConfig, getDateMyDatepicker } from 'app/app.config';
+import { appConfig, getDateMyDatepicker, setZeroHours } from 'app/app.config';
 import { TagAlConfig } from './tag-al.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
@@ -156,7 +156,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       documentRef: f.documentRef,
       paymentType: f.paymentType,
       branchId: f.branchId,
-      createDate: getDateMyDatepicker(f.createDate),
+      createDate: setZeroHours(f.createDate),
       createBy: f.createBy,
       remark: f.remark
     }

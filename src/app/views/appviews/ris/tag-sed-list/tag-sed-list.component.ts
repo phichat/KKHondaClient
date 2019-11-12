@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { appConfig } from 'app/app.config';
+import { appConfig, setZeroHours } from 'app/app.config';
 import { TagSedListConfig } from './tag-sed-list.config';
 import { SedRegisService } from 'app/services/ris';
+import { FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-tag-sed-list',
@@ -16,9 +17,16 @@ export class TagSedListComponent extends TagSedListConfig implements OnInit {
   }
 
   constructor(
-    private s_sedRegis: SedRegisService
+    private s_sedRegis: SedRegisService,
+    private fb: FormBuilder
   ) {
     super();
+    this.formSearch = this.fb.group({
+      sedNo: new FormControl(null),
+      createDate: new FormControl(null),
+      createName: new FormControl(null),
+      status: new FormControl()
+    })
   }
 
   ngOnInit() {
@@ -26,7 +34,10 @@ export class TagSedListComponent extends TagSedListConfig implements OnInit {
   }
 
   onSearch() {
-    this.s_sedRegis.SearchSedList({})
+    let form = { ...this.formSearch.value };
+    form = { ...form, createDate: setZeroHours(form.createDate) };
+    this.loading = 0
+    this.s_sedRegis.SearchSedList(form)
       .subscribe((x: any[]) => {
         if (x.length == 0) {
           this.loading = 1;

@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { getDateMyDatepicker } from 'app/app.config';
+import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
 import { CarRegisService } from 'app/services/ris';
 declare var toastr: any;
 
@@ -123,7 +123,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     f = {
       ...f,
       bookingId: 0,
-      bookingDate: getDateMyDatepicker(f.bookingDate),
+      bookingDate: setZeroHours(f.bookingDate),
       createDate: (f.createDate as Date).toISOString()
     }
 

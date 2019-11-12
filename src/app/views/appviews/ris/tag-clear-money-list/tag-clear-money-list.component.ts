@@ -24,7 +24,7 @@ export class TagClearMoneyListComponent extends TagClearMoneyListConfig implemen
     this.formSearch = this.fb.group({
       revNo: new FormControl(null),
       createDate: new FormControl(null),
-      createBy: new FormControl(null),
+      createName: new FormControl(null),
       status: new FormControl()
     })
   }

@@ -11,38 +11,39 @@ export class ReceiveDepositService {
 
   api = `${appConfig.apiUrl}/Ris/ClDeposit`;
 
-  GetAll() {
-    const url = `${this.api}/All`
-    return this.httpClient.get<IClDepositRes[]>(url)
-    .pipe(
-      catchError(this.onCatch)
-    );
+  SearchClDepositList(form: any) {
+    const url = `${this.api}/SearchClDepositList`;
+    const params = { ...form };
+    return this.httpClient.get<IClDepositRes[]>(url, { params })
+      .pipe(
+        catchError(this.onCatch)
+      );
   }
 
   GetDetailById(id: string) {
     const url = `${this.api}/GetDetailById`;
     const params = { id };
     return this.httpClient.get<IClDepositDetail>(url, { params })
-    .pipe(
-      catchError(this.onCatch)
-    );
+      .pipe(
+        catchError(this.onCatch)
+      );
   }
 
   Create(form: IClDeposit) {
     return this.httpClient.post(this.api, form)
-    .pipe(
-      catchError(this.onCatch)
-    );
+      .pipe(
+        catchError(this.onCatch)
+      );
   }
 
   Cancel(form: IClDepositCancel) {
     const url = `${this.api}/Cancel`;
     return this.httpClient.post(url, form)
-    .pipe(
-      catchError(this.onCatch)
-    );
+      .pipe(
+        catchError(this.onCatch)
+      );
   }
-  
+
   private onCatch(error: any, caught: Observable<any>): Observable<any> {
     return Observable.throw(error);
   }
