@@ -65,35 +65,15 @@
               <div class="row  m-b-sm">
                 <label class="col-md-5 control-label">วันจดทะเบียน</label>
                 <div class="col-md-7">
-                  <div class="input-group">
-                    <input class="form-control mat-date-picker" [matDatepicker]="tagRegis" (click)="tagRegis.open()"
-                      formControlName="tagRegis" [readonly]="!IsTagItem" [disabled]="IsTagItem">
-                    <mat-datepicker #tagRegis></mat-datepicker>
-                    <span class="input-group-btn mat-icon-picker">
-                      <button class="btn btn-default" type="button" (click)="tagRegis.open()" [disabled]="IsTagItem">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </span>
-                  </div>
-                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagRegis" [disabled]="IsTagItem">
-                  </my-date-picker-th> -->
+                  <thai-mat-datepicker id="tagRegis" formControlName="tagRegis" disabled="{{IsTagItem}}">
+                  </thai-mat-datepicker>
                 </div>
               </div>
               <div class="row  m-b-sm">
                 <label class="col-md-5 control-label">ทะเบียนหมดอายุ</label>
                 <div class="col-md-7">
-                  <div class="input-group">
-                    <input class="form-control mat-date-picker" [matDatepicker]="tagExpire" (click)="tagExpire.open()"
-                      formControlName="tagExpire" [readonly]="!IsTagItem" [disabled]="IsTagItem">
-                    <mat-datepicker #tagExpire></mat-datepicker>
-                    <span class="input-group-btn mat-icon-picker">
-                      <button class="btn btn-default" type="button" (click)="tagExpire.open()" [disabled]="IsTagItem">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </span>
-                  </div>
-                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="tagExpire" [disabled]="IsTagItem">
-                  </my-date-picker-th> -->
+                  <thai-mat-datepicker id="tagExpire" formControlName="tagExpire" disabled="{{IsTagItem}}">
+                  </thai-mat-datepicker>
                 </div>
               </div>
             </td>
@@ -120,35 +100,15 @@
               <div class="row  m-b-sm">
                 <label class="col-md-5 control-label">วันทำ พ.ร.บ.</label>
                 <div class="col-md-7">
-                  <div class="input-group">
-                    <input class="form-control mat-date-picker" [matDatepicker]="prbRegis" (click)="prbRegis.open()"
-                      formControlName="prbRegis" [readonly]="!IsActItem" [disabled]="IsActItem">
-                    <mat-datepicker #prbRegis></mat-datepicker>
-                    <span class="input-group-btn mat-icon-picker">
-                      <button class="btn btn-default" type="button" (click)="prbRegis.open()" [disabled]="IsActItem">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </span>
-                  </div>
-                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbRegis" [disabled]="IsActItem">
-                  </my-date-picker-th> -->
+                  <thai-mat-datepicker id="prbRegis" formControlName="prbRegis" disabled={{IsActItem}}>
+                  </thai-mat-datepicker>
                 </div>
               </div>
               <div class="row  m-b-sm">
                 <label class="col-md-5 control-label">พ.ร.บ. หมดอายุ</label>
                 <div class="col-md-7">
-                  <div class="input-group">
-                    <input class="form-control mat-date-picker" [matDatepicker]="prbExpire" (click)="prbExpire.open()"
-                      formControlName="prbExpire" [readonly]="!IsActItem" [disabled]="IsActItem">
-                    <mat-datepicker #prbExpire disabled="false"></mat-datepicker>
-                    <span class="input-group-btn mat-icon-picker">
-                      <button class="btn btn-default" type="button" (click)="prbExpire.open()" [disabled]="IsActItem">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </span>
-                  </div>
-                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="prbExpire">
-                  </my-date-picker-th> -->
+                  <thai-mat-datepicker id="prbExpire" formControlName="prbExpire" disabled={{IsActItem}}>
+                  </thai-mat-datepicker>
                 </div>
               </div>
             </td>
@@ -175,35 +135,15 @@
               <div class="row  m-b-sm">
                 <label class="col-md-5 control-label">วันทำประกัน</label>
                 <div class="col-md-7">
-                  <div class="input-group">
-                    <input class="form-control mat-date-picker" [matDatepicker]="warRegis" (click)="warRegis.open()"
-                      formControlName="warRegis" [readonly]="!IsWarItem" [disabled]="IsWarItem">
-                    <mat-datepicker #warRegis disabled="false"></mat-datepicker>
-                    <span class="input-group-btn mat-icon-picker">
-                      <button class="btn btn-default" type="button" (click)="warRegis.open()" [disabled]="IsWarItem">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </span>
-                  </div>
-                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="warRegis" [disabled]="IsWarItem">
-                  </my-date-picker-th> -->
+                  <thai-mat-datepicker id="warRegis" formControlName="warRegis" disabled={{IsWarItem}}>
+                  </thai-mat-datepicker>
                 </div>
               </div>
               <div class="row  m-b-sm">
                 <label class="col-md-5 control-label">ประกันหมดอายุ</label>
                 <div class="col-md-7">
-                  <div class="input-group">
-                    <input class="form-control mat-date-picker" [matDatepicker]="warExpire" (click)="warExpire.open()"
-                      formControlName="warExpire" [readonly]="!IsWarItem" [disabled]="IsWarItem">
-                    <mat-datepicker #warExpire disabled="false"></mat-datepicker>
-                    <span class="input-group-btn mat-icon-picker">
-                      <button class="btn btn-default" type="button" (click)="warExpire.open()" [disabled]="IsWarItem">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </span>
-                  </div>
-                  <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="warExpire" [disabled]="IsWarItem">
-                  </my-date-picker-th> -->
+                  <thai-mat-datepicker id="warExpire" formControlName="warExpire" disabled={{IsWarItem}}>
+                  </thai-mat-datepicker>
                 </div>
               </div>
             </td>

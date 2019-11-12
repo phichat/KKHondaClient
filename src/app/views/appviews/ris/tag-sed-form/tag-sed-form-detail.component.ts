@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TagSedConfig } from './tag-sed.config';

@@ -3,7 +3,7 @@ export interface IPayment {
   discountPrice?: number;
   totalPaymentPrice?: number;
   accBankId?: number;
-  paymentDate?: Date;
+  paymentDate?: Date | string;
   documentRef?: string;
   options: {
     invalid: boolean;

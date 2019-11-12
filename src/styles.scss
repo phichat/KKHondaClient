@@ -8,19 +8,6 @@
 $fontSize: 14px;
 $fontColor: #676a6c;
 
-.form-control[readonly].mat-date-picker {
-  cursor: pointer !important;
-  background-color: #fff !important;
-}
-
-.input-group-btn.mat-icon-picker {
-  button {
-    font-size: 16px !important;
-    padding: 5px 8px !important;
-    border-radius: unset;
-  }
-}
-
 .payment-type {
   margin: auto;
   padding: 5px;

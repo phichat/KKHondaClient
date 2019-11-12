@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { CarRegisService } from 'app/services/ris';
 declare var toastr: any;
 

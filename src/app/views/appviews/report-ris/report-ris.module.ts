@@ -4,8 +4,7 @@ import { RegisTagComponent } from './regis-tag/regis-tag.component';
 import { RegisVehicleTaxComponent } from './regis-vehicle-tax/regis-vehicle-tax.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 
 @NgModule({
   declarations: [
@@ -17,9 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-
-    MatNativeDateModule,
-    MatDatepickerModule
+    ThaiMatDatepickerModule
   ]
 })
 export class ReportRisModule { }

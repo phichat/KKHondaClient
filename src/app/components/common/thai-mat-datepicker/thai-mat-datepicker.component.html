@@ -1,0 +1,16 @@
+<div class="input-group" [ngClass]="{'has-error': errorState}">
+  <input #inputdp class="form-control mat-date-picker" [matDatepicker]="dp" (dateInput)="addEvent('input', $event)"
+    (click)="dp.open()" [value]="value" [id]="id" [readonly]="!disabled" [disabled]="disabled" [placeholder]="placeholder"
+    [required]="required">
+  <mat-datepicker #dp disabled="false"></mat-datepicker>
+  <span class="input-group-btn mat-icon-picker">
+    <ng-container *ngIf="inputdp.value">
+      <button class="btn btn-default" type="button" [disabled]="disabled" (click)="clear()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+    </ng-container>
+    <button class="btn btn-default" type="button" (click)="dp.open()" [disabled]="disabled">
+      <i class="fa fa-calendar" aria-hidden="true"></i>
+    </button>
+  </span>
+</div>

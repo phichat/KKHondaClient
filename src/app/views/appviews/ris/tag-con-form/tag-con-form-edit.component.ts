@@ -8,9 +8,8 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { UserService } from 'app/services/users';
 import { RisLocalStoreage as LS, UserForRis as EURIS } from 'app/entities/ris.entities';
 import { message } from 'app/app.message';
-import { getDateMyDatepicker } from 'app/app.config';
 import { CarRegisService } from 'app/services/ris';
-import { BehaviorSubject } from 'rxjs';
+import { setZeroHours } from 'app/app.config';
 
 declare var toastr: any;
 
@@ -128,7 +127,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
 
     tagRegis = {
       ...tagRegis,
-      bookingDate: getDateMyDatepicker(tagRegis.bookingDate)
+      bookingDate: setZeroHours(tagRegis.bookingDate)
     }
 
     const form = {

@@ -9,12 +9,13 @@ import { MyDatePickerOptions, getDateMyDatepicker, setZeroHours, appConfig } fro
 })
 export class RegisTagComponent implements OnInit {
 
+  formGroup: FormGroup;
+  myForm: FormGroup;
+
   constructor(
     private fb: FormBuilder
   ) {
   }
-
-  formGroup: FormGroup;
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -23,16 +24,17 @@ export class RegisTagComponent implements OnInit {
     })
   }
 
-  public myDatePickerOptions = MyDatePickerOptions;
-
   onSubmit() {
     let f = { ...this.formGroup.value };
 
-    f.sDate = setZeroHours(f.sDate);
-    f.eDate = setZeroHours(f.eDate);
+    console.log(f);
+
     
-    const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisTag=true`;
-    window.open(url, '_blank');
+    // f.sDate = setZeroHours(f.sDate);
+    // f.eDate = setZeroHours(f.eDate);
+
+    // const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisTag=true`;
+    // window.open(url, '_blank');
 
   }
 

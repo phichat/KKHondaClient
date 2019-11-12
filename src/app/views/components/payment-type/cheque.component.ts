@@ -5,6 +5,7 @@ import { IBankingDetail } from 'app/interfaces/banking';
 import { BankingService } from 'app/services/masters';
 import { IPayment, IPaymentInput } from 'app/interfaces/payment.interface';
 import { mergeMap, map } from 'rxjs/operators';
+import { setZeroHours } from 'app/app.config';
 
 @Component({
   selector: 'app-payment-type-cheque',
@@ -49,7 +50,7 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
         discountPrice: 0,
         totalPaymentPrice: o.paymentPrice,
         accBankId: o.accBankId,
-        paymentDate: this.getDateMyDatepicker(o.paymentDate),
+        paymentDate: setZeroHours(o.paymentDate),
         documentRef: o.documentRef,
         options: {
           invalid: this.formGroup.invalid,

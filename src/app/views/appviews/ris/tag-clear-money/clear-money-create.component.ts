@@ -242,7 +242,6 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       });
     listConItem = listConItem.map(o => {
       const obj = { ...o };
-      // obj.dateReceipt = setZeroHours(getDateMyDatepicker(obj.dateReceipt as any));
       obj.dateReceipt = setZeroHours(obj.dateReceipt as Date);
       return obj;
     })

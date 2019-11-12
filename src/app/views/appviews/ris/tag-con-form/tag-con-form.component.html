@@ -28,16 +28,8 @@
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-lg-4 control-label is-required">วันที่ทำรายการ</label>
               <div class="col-lg-8">
-                <div class="input-group">
-                  <input class="form-control mat-date-picker" readonly [matDatepicker]="dp1" (click)="dp1.open()"
-                    formControlName="bookingDate">
-                  <mat-datepicker #dp1 disabled="false"></mat-datepicker>
-                  <span class="input-group-btn mat-icon-picker" (click)="dp1.open()">
-                    <button class="btn btn-default" type="button">
-                      <i class="fa fa-calendar" aria-hidden="true"></i>
-                    </button>
-                  </span>
-                </div>
+                <thai-mat-datepicker id="dp" formControlName="bookingDate">
+                </thai-mat-datepicker>
               </div>
             </div>
           </div>

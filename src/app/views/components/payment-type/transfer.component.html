@@ -9,8 +9,7 @@
     <label class="col-lg-4 control-label is-required">วันที่โอน</label>
     <div class="col-lg-8">
       <ng-container *ngIf="!(disabledForm | async); else elsePayDate">
-        <my-date-picker-th [options]="myDatePickerOptions" formControlName="paymentDate">
-        </my-date-picker-th>
+          <thai-mat-datepicker id="dp" formControlName="paymentDate"></thai-mat-datepicker>
       </ng-container>
       <ng-template #elsePayDate>
         <span class="form-control disabled">{{displayLocalDate(formGroup.get('paymentDate').value)}}</span>

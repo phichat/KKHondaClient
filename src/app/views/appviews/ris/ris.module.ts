@@ -24,6 +24,7 @@ import { ReceiveDepositListComponent } from './receive-deposit-list/receive-depo
 import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 
 
 @NgModule({
@@ -52,6 +53,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     NgSelectModule,
     MyDatePickerTHModule,
     PaymentTypeModule,
+
+    ThaiMatDatepickerModule,
 
     MatNativeDateModule,
     MatDatepickerModule

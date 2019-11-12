@@ -9,7 +9,6 @@ import { ClearMoneyConfig } from './clear-money.config';
 import { IRevListRes, ISedRes, IRevWithSedItem } from 'app/interfaces/ris';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, combineLatest } from 'rxjs';
-import { DropDownModel } from 'app/models/drop-down-model';
 import { ReasonService } from 'app/services/masters';
 import { RevRegisService, SedRegisService } from 'app/services/ris';
 declare var toastr: any;

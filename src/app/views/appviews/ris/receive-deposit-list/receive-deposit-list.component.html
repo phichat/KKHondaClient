@@ -36,16 +36,7 @@
           <div class="col-xs-6 col-lg-6">
             <label class="col-lg-4 control-label">วันที่ชำระเงิน</label>
             <div class="col-lg-8">
-              <div class="input-group">
-                <input class="form-control mat-date-picker" readonly [matDatepicker]="dp" (click)="dp.open()"
-                  formControlName="paymentDate">
-                <mat-datepicker #dp disabled="false"></mat-datepicker>
-                <span class="input-group-btn mat-icon-picker" (click)="dp.open()">
-                  <button class="btn btn-default" type="button">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </button>
-                </span>
-              </div>
+              <thai-mat-datepicker id="dp" formControlName="paymentDate"></thai-mat-datepicker>
             </div>
           </div>
         </div>

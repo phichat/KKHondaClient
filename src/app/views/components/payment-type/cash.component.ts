@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/co
 import { PaymentTypeConfig } from './paymey-type.config';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IPayment } from 'app/interfaces/payment.interface';
+import { setZeroHours } from 'app/app.config';
 
 @Component({
   selector: 'app-payment-type-cash',
@@ -47,7 +48,7 @@ export class CashComponent extends PaymentTypeConfig implements OnInit, AfterVie
         paymentPrice: o.paymentPrice,
         discountPrice: o.discount,
         totalPaymentPrice: this.totalPaymentPrice,
-        paymentDate: this.getDateMyDatepicker(o.paymentDate),
+        paymentDate: setZeroHours(o.paymentDate),
         documentRef: null,
         options: {
           invalid: this.formGroup.invalid,

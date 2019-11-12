@@ -4,8 +4,8 @@ import { CashComponent } from './cash.component';
 import { ChequeComponent } from './cheque.component';
 import { TransferComponent } from './transfer.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
-    MyDatePickerTHModule
+    ThaiMatDatepickerModule,
   ],
   exports: [
     CashComponent,

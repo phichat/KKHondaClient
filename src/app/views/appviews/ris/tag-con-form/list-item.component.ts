@@ -1,7 +1,7 @@
 import { OnInit, Component, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormArray, FormGroup } from '@angular/forms';
 import { ListItemConfig } from './list-item.config';
-import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { mergeMap, map } from 'rxjs/operators';
 import { combineLatest, of, zip } from 'rxjs';
 import { RisLocalStoreage as LS, UserForRis as EURIS, ExpensesType as EXPT, ExpensesTag as EXPTag } from 'app/entities/ris.entities';
@@ -64,18 +64,18 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
       tagNo: new FormControl(null),
       province: new FormControl(null),
       branchId: new FormControl(null),
-      tagRegis: new FormControl({ myDate: null }),
-      tagExpire: new FormControl({ myDate: null }),
+      tagRegis: new FormControl(null),
+      tagExpire: new FormControl(null),
       prbNo: new FormControl(null),
       prbCompany: new FormControl(null),
-      prbRegis: new FormControl({ myDate: null }),
-      prbExpire: new FormControl({ myDate: null }),
+      prbRegis: new FormControl(null),
+      prbExpire: new FormControl(null),
       commitNo: new FormControl(null),
-      commitExpire: new FormControl({ myDate: null }),
+      commitExpire: new FormControl(null),
       warNo: new FormControl(null),
       warCompany: new FormControl(null),
-      warRegis: new FormControl({ myDate: null }),
-      warExpire: new FormControl({ myDate: null })
+      warRegis: new FormControl(null),
+      warExpire: new FormControl(null)
     });
 
     this.setExpenseForm();
@@ -105,8 +105,8 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
       this.setExpenseForm();
     });
-    
-    const observe = zip(
+
+    const observe = combineLatest(
       this.s_province.DropDown(),
       this.s_insure.Dropdown()
     ).pipe(
@@ -417,23 +417,23 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
   private emitValueTagHistory(value: any) {
     let obj = { ...value };
-    const tagRegis = getDateMyDatepicker(obj.tagRegis);
-    const tagExpire = getDateMyDatepicker(obj.tagExpire);
-    const prbRegis = getDateMyDatepicker(obj.prbRegis);
-    const prbExpire = getDateMyDatepicker(obj.prbExpire);
-    const commitExpire = getDateMyDatepicker(obj.commitExpire);
-    const warRegis = getDateMyDatepicker(obj.warRegis);
-    const warExpire = getDateMyDatepicker(obj.warExpire);
+    const tagRegis = setZeroHours(obj.tagRegis);
+    const tagExpire = setZeroHours(obj.tagExpire);
+    const prbRegis = setZeroHours(obj.prbRegis);
+    const prbExpire = setZeroHours(obj.prbExpire);
+    const commitExpire = setZeroHours(obj.commitExpire);
+    const warRegis = setZeroHours(obj.warRegis);
+    const warExpire = setZeroHours(obj.warExpire);
 
     obj = {
       ...obj,
-      tagRegis: tagRegis ? setZeroHours(tagRegis) : null,
-      tagExpire: tagExpire ? setZeroHours(tagExpire) : null,
-      prbRegis: prbRegis ? setZeroHours(prbRegis) : null,
-      prbExpire: prbExpire ? setZeroHours(prbExpire) : null,
-      commitExpire: commitExpire ? setZeroHours(commitExpire) : null,
-      warRegis: warRegis ? setZeroHours(warRegis) : null,
-      warExpire: warExpire ? setZeroHours(warExpire) : null
+      tagRegis: tagRegis ? tagRegis : null,
+      tagExpire: tagExpire ? tagExpire : null,
+      prbRegis: prbRegis ? prbRegis : null,
+      prbExpire: prbExpire ? prbExpire : null,
+      commitExpire: commitExpire ? commitExpire : null,
+      warRegis: warRegis ? warRegis : null,
+      warExpire: warExpire ? warExpire : null
     }
     this.TagHistory.emit(obj);
   }

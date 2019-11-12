@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { appConfig, getDateMyDatepicker, setZeroHours } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { TagSedConfig } from './tag-sed.config';
