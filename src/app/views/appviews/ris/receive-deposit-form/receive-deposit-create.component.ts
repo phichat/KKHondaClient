@@ -46,6 +46,7 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
       paymentPrice: new FormControl(null, Validators.required),
       discountPrice: new FormControl(null),
       totalPaymentPrice: new FormControl(null, Validators.required),
+      documentRef: new FormControl(null),
       accBankId: new FormControl(null),
       paymentDate: new FormControl(null, Validators.required),
       createBy: new FormControl(this.mUser.id, Validators.required),

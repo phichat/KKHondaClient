@@ -1,14 +1,4 @@
-export enum PaymentType {
-    Cash = 1,
-    Transfer = 2,
-    Cheque = 3
-}
 
-export const PaymentTypeList: any[] = [
-    { id: PaymentType.Cash, desc: "เงินสด" },
-    { id: PaymentType.Transfer, desc: "โอน" },
-    { id: PaymentType.Cheque, desc: "เช็ค" },
-];
 
 export enum PaymentStatus {
     Cancel = 0,         // ยกเลิก

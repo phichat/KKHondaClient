@@ -1,10 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { ModelUser } from 'app/models/users';
+import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
 import { LoaderService } from 'app/core/loader/loader.service';

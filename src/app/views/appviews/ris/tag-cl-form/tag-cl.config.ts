@@ -4,6 +4,7 @@ import { DropDownModel } from 'app/models/drop-down-model';
 import { ClStatus } from 'app/entities/ris.entities';
 import { RisConfig } from '../ris.config';
 import { IUserResCookie } from 'app/interfaces/users';
+import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
 
 export class TagClConfig extends RisConfig {
     get AlList(): FormArray {
@@ -22,4 +23,6 @@ export class TagClConfig extends RisConfig {
     public loading: number;
     public balancePriceState: number;
     public ClStatus = ClStatus;
+    PaymentTypeList = PaymentTypeList;
+    PaymentType = PaymentType;
 }

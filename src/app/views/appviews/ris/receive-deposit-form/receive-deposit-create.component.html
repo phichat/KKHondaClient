@@ -178,32 +178,27 @@
             <div class="form-group">
               <label class="col-lg-4 control-label is-required">ประเภทชำระ</label>
               <div class="col-lg-8">
-                <div class="radio radio-info radio-inline">
-                  <input required type="radio" formControlName="paymentType" id="paymentType0" value=1>
-                  <label for="paymentType0">เงินสด</label>
-                </div>
-                <div class="radio radio-info radio-inline">
-                  <input required type="radio" formControlName="paymentType" id="paymentType1" value=2>
-                  <label for="paymentType1">เงินโอน</label>
-                </div>
-                <div class="radio radio-info radio-inline">
-                  <input required type="radio" formControlName="paymentType" id="paymentType2" value=3>
-                  <label for="paymentType2">เช็ค</label>
-                </div>
+                  <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                      <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
+                      <label for="pt{{i}}">{{item.desc}}</label>
+                    </div>
               </div>
             </div>
           </div>
 
           <div [ngSwitch]="formGroup.get('paymentType').value">
-            <ng-container *ngSwitchCase="1">
-              <app-payment-type-cash (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
-            </ng-container>
-            <ng-container *ngSwitchCase="2">
-              <app-payment-type-transfer (Payment$)="formPaymentChange($event)"></app-payment-type-transfer>
-            </ng-container>
-            <ng-container *ngSwitchCase="3">
-              <app-payment-type-cheque (Payment$)="formPaymentChange($event)"></app-payment-type-cheque>
-            </ng-container>
+              <ng-container *ngSwitchCase="PaymentType.Cash">
+                  <app-payment-type-cash (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
+                </ng-container>
+                <ng-container *ngSwitchCase="PaymentType.Transfer">
+                  <app-payment-type-transfer (Payment$)="formPaymentChange($event)"></app-payment-type-transfer>
+                </ng-container>
+                <ng-container *ngSwitchCase="PaymentType.Cheque">
+                  <app-payment-type-cheque (Payment$)="formPaymentChange($event)"></app-payment-type-cheque>
+                </ng-container>
+                <ng-container *ngSwitchCase="PaymentType.CreditCard">
+                  <app-payment-type-credit-card (Payment$)="formPaymentChange($event)"></app-payment-type-credit-card>
+                </ng-container>
           </div>
         </div>
       </div>

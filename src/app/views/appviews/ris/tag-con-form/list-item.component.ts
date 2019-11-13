@@ -265,13 +265,13 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
   private addHistoryFromApi(item: any) {
     let his = { ...item };
-    his.tagRegis = this.setDateMyDatepicker(his.tagRegis);
-    his.tagExpire = this.setDateMyDatepicker(his.tagExpire);
-    his.prbRegis = this.setDateMyDatepicker(his.prbRegis);
-    his.prbExpire = this.setDateMyDatepicker(his.prbExpire);
-    his.commitExpire = this.setDateMyDatepicker(his.commitExpire);
-    his.warRegis = this.setDateMyDatepicker(his.warRegis);
-    his.warExpire = this.setDateMyDatepicker(his.warExpire);
+    // his.tagRegis = this.setDateMyDatepicker(his.tagRegis);
+    // his.tagExpire = this.setDateMyDatepicker(his.tagExpire);
+    // his.prbRegis = this.setDateMyDatepicker(his.prbRegis);
+    // his.prbExpire = this.setDateMyDatepicker(his.prbExpire);
+    // his.commitExpire = this.setDateMyDatepicker(his.commitExpire);
+    // his.warRegis = this.setDateMyDatepicker(his.warRegis);
+    // his.warExpire = this.setDateMyDatepicker(his.warExpire);
 
     this.formCarHistory.patchValue({ ...his });
     this.chRef.detectChanges();

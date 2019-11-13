@@ -6,12 +6,14 @@ import { TransferComponent } from './transfer.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
+import { CreditCardComponent } from './credit-card.component';
 
 @NgModule({
   declarations: [
     CashComponent,
     ChequeComponent,
-    TransferComponent
+    TransferComponent,
+    CreditCardComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
   exports: [
     CashComponent,
     ChequeComponent,
-    TransferComponent
+    TransferComponent,
+    CreditCardComponent
   ]
 })
 export class PaymentTypeModule { }

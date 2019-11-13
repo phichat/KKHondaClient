@@ -54,10 +54,7 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
     MyDatePickerTHModule,
     PaymentTypeModule,
 
-    ThaiMatDatepickerModule,
-
-    MatNativeDateModule,
-    MatDatepickerModule
+    ThaiMatDatepickerModule
   ],
   providers: [
     ClearMoneyService,

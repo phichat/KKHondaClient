@@ -5,6 +5,7 @@ import { AlStatus } from 'app/entities/ris.entities';
 import { RisConfig } from '../ris.config';
 import { IUserResCookie } from 'app/interfaces/users';
 import { Input } from '@angular/core';
+import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
 
 export class TagAlConfig extends RisConfig {
     get SedList(): FormArray {
@@ -22,8 +23,10 @@ export class TagAlConfig extends RisConfig {
     public formGroup: FormGroup;
     public loading: number;
     public AlStatus = AlStatus;
-    
+
     public outStandingBalanceState: number;
     public borrowMoneyState: number;
     public price2RemainState: number;
+    PaymentType = PaymentType;
+    PaymentTypeList = PaymentTypeList;
 }

@@ -6,8 +6,9 @@ import { IClDepositRes } from 'app/interfaces/ris';
 import { LoadingEntities } from 'app/entities/loading.entities';
 import * as $ from 'jquery';
 import { setLocalDate, setZeroHours } from 'app/app.config';
-import { ReceiveClStatus, ExpensesTag, ReceiveClStatusList, PaymentTypeList, ExpensesTagList } from 'app/entities/ris.entities';
+import { ReceiveClStatus, ExpensesTag, ReceiveClStatusList, ExpensesTagList } from 'app/entities/ris.entities';
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { PaymentTypeList } from 'app/entities/general.entities';
 
 @Component({
   selector: 'app-receive-deposit-list',

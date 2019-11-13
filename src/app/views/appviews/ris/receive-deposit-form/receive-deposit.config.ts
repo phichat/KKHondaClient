@@ -7,6 +7,7 @@ import { ICarRegisClDeposit } from 'app/interfaces/ris';
 import { IUserResCookie } from 'app/interfaces/users';
 import { LoadingEntities } from 'app/entities/loading.entities';
 import { setLocalDate } from 'app/app.config';
+import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
 
 export class ReceiveDepositConfig {
   formGroup: FormGroup;
@@ -14,6 +15,8 @@ export class ReceiveDepositConfig {
   EXPTag = ExpensesTag;
   LoadingEntities = LoadingEntities;
   displayLocalDate = setLocalDate;
+  PaymentTypeList = PaymentTypeList;
+  PaymentType = PaymentType;
   dataTable: any;
   mUser: IUserResCookie;
   checkedAll: boolean;
