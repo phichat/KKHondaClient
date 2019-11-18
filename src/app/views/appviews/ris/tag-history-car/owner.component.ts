@@ -1,12 +1,12 @@
 import { OnInit, Component, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { TahHistoryConfig } from './tag-history-car.config';
 import { FormGroup, FormControl } from '@angular/forms';
-import { distinctUntilChanged, tap, debounceTime, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 import { CustomerService } from 'app/services/customers';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { ICustomerOutput } from './customer-output.interface';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
 
 @Component({
@@ -80,7 +80,8 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
       }),
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap(term => term ? this.s_cust.getByKey(term) : of([]))
+      switchMap(term => term ? this.s_cust.getByKey(term) : of([])),
+      catchError(this.onCatch)
     ).subscribe((x: DropDownModel[]) => {
       this.chRef.markForCheck();
       this.searchCustLoading = false;
@@ -91,5 +92,9 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
       this.searchCustLoadingTxt = '';
       this.CustDropDown = [];
     });
+  }
+
+  private onCatch(error: any, caught: Observable<any>): Observable<any> {
+    return Observable.throw(error);
   }
 }

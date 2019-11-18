@@ -6,6 +6,7 @@ import { RisConfig } from '../ris.config';
 import { IUserResCookie } from 'app/interfaces/users';
 import { Input } from '@angular/core';
 import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class TagAlConfig extends RisConfig {
     get SedList(): FormArray {
@@ -29,4 +30,6 @@ export class TagAlConfig extends RisConfig {
     public price2RemainState: number;
     PaymentType = PaymentType;
     PaymentTypeList = PaymentTypeList;
+
+    PaymentData = new BehaviorSubject(null);
 }

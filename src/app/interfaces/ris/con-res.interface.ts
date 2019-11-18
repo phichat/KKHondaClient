@@ -78,6 +78,13 @@ export interface ICarRegisRes {
     reason: string;
     remark: string;
     revNo: string;
+
+    paymentPrice: number,
+    discountPrice?: number,
+    totalPaymentPrice: number,
+    accBankId?: number,
+    paymentDate: Date,
+    documentRef: string
 }
 
 export interface ICarRegisItemRes {

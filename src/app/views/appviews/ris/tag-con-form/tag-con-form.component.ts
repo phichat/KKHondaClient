@@ -8,6 +8,7 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { setZeroHours } from 'app/app.config';
 import { CarRegisService } from 'app/services/ris';
+import { IPayment } from 'app/interfaces/payment.interface';
 declare var toastr: any;
 
 @Component({
@@ -20,6 +21,14 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
   ngOnDestroy(): void {
     this.TagListItem$.next(null);
   }
+
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +45,8 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       'progressBar': true,
     }
     this.mUser = this.s_user.cookies;
+    this.formPayment = this.paymentData;
+    this.PaymentData.next(this.paymentData);
   }
 
   ngOnInit() {
@@ -58,6 +69,14 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       price2: new FormControl(null),
       price3: new FormControl(null),
       totalPrice: new FormControl(null),
+
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(null),
+      documentRef: new FormControl(null),
+
       remark: new FormControl(null),
       ownerCode: new FormControl(null, Validators.required),
       ownerName: new FormControl(null, Validators.required),
@@ -65,6 +84,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       visitorName: new FormControl(null, Validators.required),
       province: new FormControl(null),
       tagNo: new FormControl(null),
+      paymentType: new FormControl('1', Validators.required)
     });
 
     this.TagListItem$.subscribe(x => {
@@ -84,7 +104,16 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
         vatPrice1: vatPrice1,
         netPrice1: netPrice1,
         totalPrice: totalPrice
-      })
+      });
+
+      const discountPrice = this.formPayment ? this.formPayment.discountPrice : 0;
+      this.formPayment = {
+        ...this.formPayment, 
+        paymentPrice: netPrice1,
+        discountPrice: discountPrice,
+        totalPaymentPrice: netPrice1 - discountPrice
+      }
+      this.PaymentData.next(this.formPayment);
       this.chRef.detectChanges();
     });
 
@@ -104,6 +133,18 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
         this.s_loader.onEnd()
         this.chRef.detectChanges();
       })
+  }
+
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
+    });
   }
 
   onSubmit() {

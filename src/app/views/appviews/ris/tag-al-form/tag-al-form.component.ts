@@ -20,6 +20,15 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     this.destroyDatatable();
   }
 
+  formPayment: IPayment;
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
   constructor(
     private fb: FormBuilder,
     private s_user: UserService,
@@ -35,7 +44,6 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     }
     this.mUser = this.s_user.cookies;
   }
-  formPayment: IPayment;
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -65,7 +73,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     });
 
     this.loadingSedList();
-
+    this.PaymentData.next(this.paymentData);
   }
 
   loadingSedList() {
@@ -95,6 +103,13 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
           branchId: this.mUser.branch,
           paymentType: '1'
         });
+
+        this.formPayment = {
+          ...this.formPayment,
+          paymentPrice: this.price2RemainState
+        }
+
+        this.PaymentData.next(this.formPayment);
       })
 
       this.reInitDatatable();

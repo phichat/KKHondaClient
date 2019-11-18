@@ -6,6 +6,7 @@ import { IBankingDetail } from 'app/interfaces/banking';
 import { IPayment, IPaymentInput } from 'app/interfaces/payment.interface';
 import { mergeMap, map } from 'rxjs/operators';
 import { setZeroHours } from 'app/app.config';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-payment-type-credit-card',
@@ -68,6 +69,7 @@ export class CreditCardComponent extends PaymentTypeConfig implements OnInit {
       const observe = this.$Data
         .pipe(
           mergeMap(x => {
+            if (!x.accBankId) return of(x);
             const getBookBank = (id: number) => this.s_bank.GetBookBankById(`${id}`).pipe(
               map(o => {
                 return {

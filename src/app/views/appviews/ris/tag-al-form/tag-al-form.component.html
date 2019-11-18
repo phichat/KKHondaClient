@@ -169,16 +169,16 @@
 
                 <div [ngSwitch]="formGroup.get('paymentType').value">
                   <ng-container *ngSwitchCase="PaymentType.Cash">
-                    <app-payment-type-cash (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
+                    <app-payment-type-cash [$Data]="PaymentData" (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
                   </ng-container>
                   <ng-container *ngSwitchCase="PaymentType.Transfer">
-                    <app-payment-type-transfer (Payment$)="formPaymentChange($event)"></app-payment-type-transfer>
+                    <app-payment-type-transfer [$Data]="PaymentData" (Payment$)="formPaymentChange($event)"></app-payment-type-transfer>
                   </ng-container>
                   <ng-container *ngSwitchCase="PaymentType.Cheque">
-                    <app-payment-type-cheque (Payment$)="formPaymentChange($event)"></app-payment-type-cheque>
+                    <app-payment-type-cheque [$Data]="PaymentData" (Payment$)="formPaymentChange($event)"></app-payment-type-cheque>
                   </ng-container>
                   <ng-container *ngSwitchCase="PaymentType.CreditCard">
-                    <app-payment-type-credit-card (Payment$)="formPaymentChange($event)"></app-payment-type-credit-card>
+                    <app-payment-type-credit-card [$Data]="PaymentData" (Payment$)="formPaymentChange($event)"></app-payment-type-credit-card>
                   </ng-container>
                 </div>
               </div>

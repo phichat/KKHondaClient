@@ -10,6 +10,7 @@ import { RisLocalStoreage as LS, UserForRis as EURIS } from 'app/entities/ris.en
 import { message } from 'app/app.message';
 import { CarRegisService } from 'app/services/ris';
 import { setZeroHours } from 'app/app.config';
+import { IPayment } from 'app/interfaces/payment.interface';
 
 declare var toastr: any;
 
@@ -19,6 +20,17 @@ declare var toastr: any;
   styleUrls: ['./tag-con-form.component.scss']
 })
 export class TagConFormEditComponent extends TagConFormConfig implements OnInit {
+
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
+  private isRregist: boolean = false;
+  private isSale: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +44,19 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     super()
 
     this.mUser = this.s_user.cookies;
+    switch (this.mUser.gId) {
+      case EURIS.Regist:
+        this.isRregist = true;
+        this.paymentData.options.disabled = true;
+        break;
+
+      case EURIS.Sale:
+        this.isSale = true;
+        this.paymentData.options.disabled = false;
+        break;
+    }
+    this.formPayment = this.paymentData;
+    this.PaymentData.next(this.paymentData);
   }
   private code: string;
 
@@ -41,7 +66,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     this.formGroup = this.fb.group({
       bookingId: new FormControl(null),
       bookingNo: new FormControl(null),
-      bookingDate: new FormControl(null),
+      bookingDate: new FormControl({value: null, disabled: this.isRregist}),
       status1: new FormControl(null),
       status2: new FormControl(null),
       statusDesc: new FormControl(null),
@@ -67,7 +92,15 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       visitorCode: new FormControl(null, Validators.required),
       visitorName: new FormControl(null, Validators.required),
       province: new FormControl(null),
-      tagNo: new FormControl(null)
+      tagNo: new FormControl(null),
+
+      paymentType: new FormControl({ value: null, disabled: this.paymentData.options.disabled }),
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(null),
+      documentRef: new FormControl(null),
     });
 
     this.activeRoute.params.pipe(
@@ -82,9 +115,19 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       this.$Status2.next(o.status2);
       this.formGroup.patchValue({
         ...o,
-        updateBy: this.mUser.id,
-        bookingDate: this.setDateMyDatepicker(o['bookingDate'])
+        paymentType: `${o.paymentType}`,
+        updateBy: this.mUser.id
       });
+      this.formPayment = {
+        ...this.formPayment,
+        paymentDate: o.paymentDate,
+        paymentPrice: o.netPrice1,
+        discountPrice: o.discountPrice,
+        totalPaymentPrice: o.totalPaymentPrice,
+        accBankId: o.accBankId,
+        documentRef: o.documentRef
+      }
+      this.PaymentData.next(this.formPayment);
       this.$BookingId.next(o['bookingId']);
       this.s_loader.onEnd();
     });
@@ -108,14 +151,38 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
         vatPrice1: vatPrice1,
         netPrice1: netPrice1,
         totalPrice: totalPrice
-      })
+      });
+
+      const discountPrice = this.formPayment ? this.formPayment.discountPrice : 0;
+      this.formPayment = {
+        ...this.formPayment,
+        // paymentDate: this.formPayment.paymentDate,
+        paymentPrice: netPrice1,
+        discountPrice: discountPrice,
+        totalPaymentPrice: netPrice1 - discountPrice,
+        // accBankId: this.formPayment.accBankId,
+        // documentRef: this.formPayment.documentRef
+      }
+      this.PaymentData.next(this.formPayment);
       this.chRef.detectChanges();
     });
 
   }
 
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
+    });
+  }
+
   onSubmit() {
-    let tagRegis = { ...this.formGroup.value };
+    let tagRegis = { ...this.formGroup.getRawValue() };
     const tagHistory = {
       ...this.TagHistory$.value,
       ownerCode: tagRegis.ownerCode,
@@ -136,7 +203,7 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       tagListItem,
       trashTagListItem
     };
-    
+
     this.s_loader.showLoader();
     this.s_carRegis.Update(form)
       .pipe(

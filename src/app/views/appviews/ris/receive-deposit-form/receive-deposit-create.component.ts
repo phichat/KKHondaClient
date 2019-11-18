@@ -23,6 +23,14 @@ declare var toastr: any;
 })
 export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implements OnInit {
 
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
   constructor(
     private fb: FormBuilder,
     private s_CarRegis: CarRegisService,
@@ -55,6 +63,8 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
       remark: new FormControl(null),
       conList: this.fb.array([])
     });
+    this.formPayment = this.paymentData;
+    this.PaymentData.next(this.paymentData);
   }
 
   insureDropdown: DropDownModel[];
@@ -86,6 +96,7 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
 
       let observe: Observable<ICarRegisClDeposit[]>;
 
+      this.loading = this.LoadingEntities.loading;
       if (x == this.EXPTag.EXP10003) {
         observe = this.s_CarRegis.CarRegisReceiveAct();
 
@@ -99,7 +110,6 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
             this.ConList.removeAt(0);
           this.destroyDatatable();
           this.checkedAll = false;
-          this.loading = this.LoadingEntities.loading;
         }),
       ).subscribe(o => {
         if (!o.length) {
@@ -117,6 +127,11 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
     });
 
     this.ConList.valueChanges.subscribe((o: any[]) => {
+      this.paymentData = {
+        ...this.paymentData,
+        paymentPrice: this.total
+      };
+      this.PaymentData.next(this.paymentData);
       this.checkedAll = o.filter(x => x['IS_CHECKED'] == false).length ? false : true;
     })
   }

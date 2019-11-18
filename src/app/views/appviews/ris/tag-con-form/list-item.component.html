@@ -161,9 +161,7 @@
             <thead>
               <tr>
                 <th>
-                  <h3 class="text-navy">
-                    {{itemRegis.get('itemName').value}}
-                  </h3>
+                  <h3 class="text-navy">{{itemRegis.get('itemName').value}}</h3>
                 </th>
                 <th class="text-center" width="15%">
                   <h5>เงินรับฝาก</h5>
@@ -171,12 +169,20 @@
                 <th class="text-center" width="10%">
                   <h5>คิดภาษี</h5>
                 </th>
-                <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create">
-                  <h5>ค่าใช่จ่าย</h5>
-                </th>
-                <th class="text-center" width="15%" *ngIf="Mode != ActionMode.Create">
-                  <h5>ค่าใช่จ่าย(เบิกเพิ่ม)</h5>
-                </th>
+
+                <ng-container *ngIf="equalRis">
+                  <th class="text-center" width="15%">
+                    <h5>ค่าใช่จ่าย</h5>
+                  </th>
+                  <th *ngIf="expTag == EXPTag.EXP10001 || expTag == EXPTag.EXP10002; else elseTagHead"
+                    class="text-center" width="15%">
+                    <h5>ค่าใช่จ่าย(เบิกเพิ่ม)</h5>
+                  </th>
+                  <ng-template #elseTagHead>
+                    <td width="15%"></td>
+                  </ng-template>
+                </ng-container>
+
                 <th class="text-center" width="10%" *ngIf="Mode != ActionMode.Detail">
                   จัดการ
                 </th>
@@ -204,14 +210,21 @@
                       <label for="itemIsVat{{expTag}}{{j}}"></label>
                     </div>
                   </td>
-                  <td *ngIf="Mode != ActionMode.Create">
-                    <input type="number" min="0" step="0.01" formControlName="itemPrice2"
-                      class="form-control text-right">
-                  </td>
-                  <td *ngIf="Mode != ActionMode.Create">
-                    <input type="number" min="0" step="0.01" formControlName="itemPrice3"
-                      class="form-control text-right">
-                  </td>
+
+                  <ng-container *ngIf="equalRis">
+                    <td>
+                      <input type="number" min="0" step="0.01" formControlName="itemPrice2"
+                        class="form-control text-right">
+                    </td>
+                    <td *ngIf="expTag == EXPTag.EXP10001 || expTag == EXPTag.EXP10002; else elseTagBody">
+                      <input type="number" min="0" step="0.01" formControlName="itemPrice3"
+                        class="form-control text-right">
+                    </td>
+                    <ng-template #elseTagBody>
+                      <td></td>
+                    </ng-template>
+                  </ng-container>
+
                   <td *ngIf="Mode != ActionMode.Detail" style="vertical-align: middle;" class="text-center">
                     <a href="javaScript:void(0);" class="btn btn-default btn-xs" type="button"
                       (click)="onRemoveExpenseItem(j, itemRegis)">
@@ -222,13 +235,12 @@
 
             </tbody>
             <ng-container *ngIf="Mode != ActionMode.Detail">
-              <ng-container *ngIf="(Status2 | async) == null">
-                <!-- (Status1 | async) == ConStatus1.Received || (Status1 | async) == null -->
+              <ng-container *ngIf="(Status2 | async) == null || (expTag ==  EXPTag.EXP10003 || expTag == EXPTag.EXP10004)">
                 <tfoot [formGroup]="getFormExpense(expTag)">
                   <tr class="bg-muted">
                     <td>
                       <ng-select [items]="expenses" bindLabel="expensesDescription" bindValue="expensesDescription"
-                        groupBy="expensesTypeDesc" (change)="onSelectExpenses($event, getFormExpense(expTag))"
+                        groupBy="expensesTypeDesc" (change)="onSelectExpenses($event, getFormExpense(expTag), expTag)"
                         placeholder="ค่าใช้จ่าย{{itemRegis.get('itemName').value}}" formControlName="expItem">
                         <ng-template ng-optgroup-tmp let-item="item">
                           <strong>{{item.expensesTypeDesc}}</strong>
@@ -249,14 +261,21 @@
                         <label for="expIsVat{{expTag}}{{i}}"></label>
                       </div>
                     </td>
-                    <td *ngIf="Mode != ActionMode.Create">
-                      <input type="number" min="0" step="0.01" formControlName="expPrice2"
-                        class="form-control text-right">
-                    </td>
-                    <td *ngIf="Mode != ActionMode.Create">
-                      <input type="number" min="0" step="0.01" formControlName="expPrice3"
-                        class="form-control text-right">
-                    </td>
+
+                    <ng-container *ngIf="equalRis">
+                      <td>
+                        <input type="number" min="0" step="0.01" formControlName="expPrice2"
+                          class="form-control text-right">
+                      </td>
+                      <td *ngIf="expTag == EXPTag.EXP10001 || expTag == EXPTag.EXP10002; else elseTagFoot">
+                        <input type="number" min="0" step="0.01" formControlName="expPrice3"
+                          class="form-control text-right">
+                      </td>
+                      <ng-template #elseTagFoot>
+                        <td></td>
+                      </ng-template>
+                    </ng-container>
+
                     <td style="vertical-align: middle;" class="text-center">
                       <button class="btn btn-xs btn-outline btn-primary" type="button"
                         [disabled]="!getFormExpense(expTag).get('expItem').value"

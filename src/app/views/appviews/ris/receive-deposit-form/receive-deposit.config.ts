@@ -8,6 +8,7 @@ import { IUserResCookie } from 'app/interfaces/users';
 import { LoadingEntities } from 'app/entities/loading.entities';
 import { setLocalDate } from 'app/app.config';
 import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class ReceiveDepositConfig {
   formGroup: FormGroup;
@@ -21,6 +22,8 @@ export class ReceiveDepositConfig {
   mUser: IUserResCookie;
   checkedAll: boolean;
   loading: number;
+
+  PaymentData = new BehaviorSubject(null);
 
   get ConList(): FormArray {
     return this.formGroup.get('conList') as FormArray;

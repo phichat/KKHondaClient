@@ -18,12 +18,9 @@ import { components as TagConForm } from './tag-con-form';
 import { components as TagClearMoney } from './tag-clear-money';
 import { components as ReceiveDeposit } from './receive-deposit-form';
 import { ClearMoneyService } from './tag-clear-money/clear-money.service';
-import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { services as RisService } from 'app/services/ris';
 import { ReceiveDepositListComponent } from './receive-deposit-list/receive-deposit-list.component';
 import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 
 
@@ -51,7 +48,6 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
-    MyDatePickerTHModule,
     PaymentTypeModule,
 
     ThaiMatDatepickerModule

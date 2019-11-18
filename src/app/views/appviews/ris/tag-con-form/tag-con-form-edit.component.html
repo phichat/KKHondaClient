@@ -29,8 +29,8 @@
           <div class="col-xs-6 col-lg-6">
             <div class="form-group"><label class="col-md-4 control-label">วันที่ทำรายการ</label>
               <div class="col-md-8">
-                <my-date-picker-th [options]="myDatePickerOptions" formControlName="bookingDate">
-                </my-date-picker-th>
+                <thai-mat-datepicker id="dp" formControlName="bookingDate">
+                </thai-mat-datepicker>
               </div>
             </div>
           </div>
@@ -109,8 +109,8 @@
         <div class="row form-group">
           <div class="col-xs-12 text-center">
             <div class="form-group">
-              <button class="btn btn-info" type="button" data-toggle="modal"
-                data-target="#carHistory" (click)="openHistory()">ประวัติรถ</button>
+              <button class="btn btn-info" type="button" data-toggle="modal" data-target="#carHistory"
+                (click)="openHistory()">ประวัติรถ</button>
             </div>
           </div>
         </div>
@@ -124,12 +124,13 @@
                 <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
               </div>
               <div class="modal-body">
-                <app-tag-history-car [$Mode]="ActionMode.Edit" [$BookingId]="$CarHistoryBookingId" (HistoryCar$)="historyCarChange($event)"></app-tag-history-car>
+                <app-tag-history-car [$Mode]="ActionMode.Edit" [$BookingId]="$CarHistoryBookingId"
+                  (HistoryCar$)="historyCarChange($event)"></app-tag-history-car>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                  [disabled]="$HistoryCar.invalid" (click)="confirmHistory()">ตกลง</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="$HistoryCar.invalid"
+                  (click)="confirmHistory()">ตกลง</button>
               </div>
             </div>
           </div>
@@ -141,29 +142,55 @@
     <app-list-item [BookingId]="$BookingId" [Status1]="$Status1" [Status2]="$Status2" [Mode]="ActionMode.Edit"
       (TagListItem)="TagListItem$.next($event)" (TagHistory)="TagHistory$.next($event)"></app-list-item>
 
-    <table class="table invoice-total">
-      <tbody>
-        <tr>
-          <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
-          <td>{{formGroup.get('netPrice1').value | number:'1.2-2':'en-US'}}</td>
-        </tr>
-        <tr>
-          <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
-          <td>{{formGroup.get('price2').value | number:'1.2-2':'en-US'}}</td>
-        </tr>
-        <tr>
-          <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
-          <td>{{formGroup.get('price3').value | number:'1.2-2':'en-US'}}</td>
-        </tr>
-        <tr>
-          <td><strong>ยอดรวมทั้งหมด :</strong></td>
-          <td>{{formGroup.get('totalPrice').value | number:'1.2-2':'en-US'}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <hr>
+    <div class="row">
+      <div class="col-lg-7"></div>
+      <div class="col-lg-5">
+
+        <div class="row form-group">
+          <div class="">
+            <label class="col-md-4 control-label">ประเภทชำระ</label>
+            <div class="col-md-8">
+              <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
+                <label for="pt{{i}}">{{item.desc}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-8">
+            <div *ngIf="paymentPriceNotEqualNetprice" class="alert alert-danger" role="alert">
+              "ยอดชำระเงิน" ต้องเท่ากับ "ยอดเงินรับฝาก"
+            </div>
+          </div>
+        </div>
+
+        <div [ngSwitch]="formGroup.get('paymentType').value">
+          <ng-container *ngSwitchCase="PaymentType.Cash">
+            <app-payment-type-cash [$Data]="PaymentData" (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
+          </ng-container>
+          <ng-container *ngSwitchCase="PaymentType.Transfer">
+            <app-payment-type-transfer [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+            </app-payment-type-transfer>
+          </ng-container>
+          <ng-container *ngSwitchCase="PaymentType.Cheque">
+            <app-payment-type-cheque [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+            </app-payment-type-cheque>
+          </ng-container>
+          <ng-container *ngSwitchCase="PaymentType.CreditCard">
+            <app-payment-type-credit-card [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+            </app-payment-type-credit-card>
+          </ng-container>
+        </div>
+      </div>
+    </div>
 
     <div class="text-right form-group">
-      <button class="btn btn-success" type="submit" [disabled]="formGroup.invalid">บันทึกรายการ</button>
+      <button class="btn btn-success" type="submit"
+        [disabled]="formGroup.invalid || formPayment.options.invalid">บันทึกรายการ</button>
     </div>
 
   </form>

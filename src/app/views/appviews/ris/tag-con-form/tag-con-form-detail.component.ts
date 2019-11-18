@@ -12,6 +12,7 @@ import { message } from 'app/app.message';
 import { UserForRis as EURIS } from 'app/entities/ris.entities';
 import { CarRegisService } from 'app/services/ris';
 import { ReasonService } from 'app/services/masters';
+import { IPayment } from 'app/interfaces/payment.interface';
 declare var toastr: any;
 
 @Component({
@@ -22,6 +23,14 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
   ngOnDestroy(): void {
     this.$BookingId.next(null);
   }
+
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: false,
+      disabled: true
+    }
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +45,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
     super()
     this.mUser = this.s_user.cookies;
     this.isSeller = this.mUser.gId == EURIS.Sale;
+    this.PaymentData.next(this.paymentData);
   }
   isSeller: boolean;
   public code: string;
@@ -67,8 +77,16 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       visitorName: new FormControl(null),
       ownerName: new FormControl(null),
       province: new FormControl(null),
-      tagNo: new FormControl(null)
-    })
+      tagNo: new FormControl(null),
+
+      paymentType: new FormControl({ value: null, disabled: true }),
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(null),
+      documentRef: new FormControl(null),
+    });
 
     this.activeRoute.params.pipe(
       tap(() => this.s_loader.showLoader()),
@@ -93,8 +111,20 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       this.reasonDropdown = o.reason;
       this.formGroup.patchValue({
         ...conItem,
+        paymentType: `${conItem.paymentType}`,
         updateBy: this.mUser.id
       });
+      
+      this.paymentData = {
+        ...this.paymentData,
+        paymentDate: conItem.paymentDate,
+        paymentPrice: conItem.netPrice1,
+        discountPrice: conItem.discountPrice,
+        totalPaymentPrice: conItem.totalPaymentPrice,
+        accBankId: conItem.accBankId,
+        documentRef: conItem.documentRef
+      }
+      this.PaymentData.next(this.paymentData);
       this.$BookingId.next(conItem['bookingId']);
       this.$Status1.next(conItem['status1']);
 

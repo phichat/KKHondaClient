@@ -40,6 +40,8 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     super();
     this.destroy();
     this.mUser = this.s_user.cookies;
+    this.equalRis = this.mUser.gId == EURIS.Regist;
+    this.equalSale = this.mUser.gId == EURIS.Sale;
     this.disableNotEqualSale = this.mUser.gId != EURIS.Sale;
     this.disableNotEqualRis = this.mUser.gId != EURIS.Regist;
 
@@ -238,25 +240,42 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
     const checkMode = this.Mode == this.ActionMode.Detail;
     const disabledIsExpenses = this.expType.Expenses == item.itemType;
-    const disabledIsPayment = item.paymentStatus == 1;
+    // const disabledIsPayment = item.paymentStatus == 1;
+    let disabledItemPrice2: boolean;
+    let disabledItemPrice1: boolean;
+    let disabledItemPrice3: boolean;
+    switch (item.itemTag) {
+      case EXPTag.EXP10001:
+      case EXPTag.EXP10002:
+        disabledItemPrice1 = (this.disableNotEqualSale || this.disableNotEqualReceive);
+        disabledItemPrice2 = (this.disableNotEqualRis || this.disableIsEqualSend1);
+        disabledItemPrice3 = (this.disableNotEqualRis || this.disableIsEqualSend2)
+        break;
+      default:
+        disabledItemPrice1 = (this.disableNotEqualSale || item.paymentStatus == 1);
+        disabledItemPrice2 = (this.disableNotEqualRis || item.paymentStatus == 1);
+        disabledItemPrice3 = (this.disableNotEqualRis || item.paymentStatus == 1);
+        break;
+    }
+
     this.disabledHistoryForm(item.itemTag, checkMode ? true : false);
     return this.fb.group({
       ...item,
       itemNetPrice1: new FormControl({
         value: item.itemNetPrice1,
-        disabled: (checkMode || this.disabledItemNetPrice1) ? true : false
+        disabled: (checkMode || disabledItemPrice1) ? true : false
       }),
       itemIsVat: new FormControl({
         value: item.itemVatPrice1 > 0 && true,
-        disabled: (checkMode || this.disabledItemVatPrice1) ? true : false
+        disabled: (checkMode || disabledItemPrice1) ? true : false
       }),
       itemPrice2: new FormControl({
         value: item.itemPrice2,
-        disabled: (checkMode || this.disabledItemPrice2 || disabledIsExpenses || disabledIsPayment) ? true : false
+        disabled: (checkMode || disabledIsExpenses || disabledItemPrice2) ? true : false
       }),
       itemPrice3: new FormControl({
         value: item.itemPrice3,
-        disabled: (checkMode || this.disabledItemPrice3 || disabledIsExpenses || disabledIsPayment) ? true : false
+        disabled: (checkMode || disabledIsExpenses || disabledItemPrice3) ? true : false
       }),
       itemPriceTotal: item.itemNetPrice1 + item.itemPrice2 + item.itemPrice3,
       children: this.fb.array([])
@@ -265,13 +284,6 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
 
   private addHistoryFromApi(item: any) {
     let his = { ...item };
-    // his.tagRegis = this.setDateMyDatepicker(his.tagRegis);
-    // his.tagExpire = this.setDateMyDatepicker(his.tagExpire);
-    // his.prbRegis = this.setDateMyDatepicker(his.prbRegis);
-    // his.prbExpire = this.setDateMyDatepicker(his.prbExpire);
-    // his.commitExpire = this.setDateMyDatepicker(his.commitExpire);
-    // his.warRegis = this.setDateMyDatepicker(his.warRegis);
-    // his.warExpire = this.setDateMyDatepicker(his.warExpire);
 
     this.formCarHistory.patchValue({ ...his });
     this.chRef.detectChanges();
@@ -304,6 +316,8 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   onAddExpItem(formGroup: FormGroup, parentForm: FormArray) {
     const itemTag = parentForm.at(0).get('itemCode').value;
     const exp = formGroup.getRawValue();
+    console.log(exp);
+
     const fg = this.fb.group({
       runId: 0,
       itemCode: exp.expitemCode,
@@ -346,20 +360,28 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
     });
   }
 
-  onSelectExpenses(item: IExpensesOtherRisRes, expFormGroup: FormGroup) {
+  onSelectExpenses(item: IExpensesOtherRisRes, expFormGroup: FormGroup, expTag: string) {
     if (!item) {
       expFormGroup.reset();
       return;
     }
     const ele = item ? item : null;
     const isInternalCost = item.expensesType == EXPT.InternalCost;
+    let expPrice2 = this.disabledItemPrice2 == true ? null : (isInternalCost ? ele.expensesAmount : null);
+    let expPrice3 = this.disabledItemPrice3 == true ? null : (isInternalCost ? ele.expensesAmount : null);
+
+    if (expTag == EXPTag.EXP10003 || expTag == EXPTag.EXP10004) {
+      expPrice2 = (isInternalCost ? ele.expensesAmount : null);
+      expPrice3 = null;
+    }
+
     expFormGroup.patchValue({
       expitemCode: ele.expensesCode,
       expItemType: ele.expensesType,
       expPrice1: isInternalCost ? null : ele.expensesAmount,
       expNetPrice1: isInternalCost ? null : ele.expensesAmount,
-      expPrice2: this.disabledItemPrice2 == true ? null : (isInternalCost ? ele.expensesAmount : null),
-      expPrice3: this.disabledItemPrice3 == true ? null : (isInternalCost ? ele.expensesAmount : null)
+      expPrice2,
+      expPrice3
     });
   }
 

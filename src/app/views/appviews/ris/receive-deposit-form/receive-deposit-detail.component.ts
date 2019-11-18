@@ -57,7 +57,6 @@ export class ReceiveDepositDetailComponent extends ReceiveDepositConfig implemen
   }
   ReceiveClStatus = ReceiveClStatus;
   reasonDropdown: DropDownModel[];
-  PaymentData = new BehaviorSubject(null);
   id: number;
 
   ngOnInit() {

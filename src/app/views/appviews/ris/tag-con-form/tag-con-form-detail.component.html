@@ -160,26 +160,51 @@
       <app-list-item [BookingId]="$BookingId" [Status1]="$Status1" [Mode]="ActionMode.Detail">
       </app-list-item>
 
-      <table class="table invoice-total m-t-sm">
-        <tbody>
-          <tr>
-            <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
-            <td>{{formGroup.get('netPrice1').value | number:'1.2-2':'en-US'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
-            <td>{{formGroup.get('price2').value | number:'1.2-2':'en-US'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
-            <td>{{formGroup.get('price3').value | number:'1.2-2':'en-US'}}</td>
-          </tr>
-          <tr>
-            <td><strong>ยอดรวมทั้งหมด :</strong></td>
-            <td>{{formGroup.get('totalPrice').value | number:'1.2-2':'en-US'}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <hr>
+      <div class="row">
+        <div class="col-lg-7"></div>
+        <div class="col-lg-5">
+  
+          <div class="row form-group">
+            <div class="">
+              <label class="col-md-4 control-label">ประเภทชำระ</label>
+              <div class="col-md-8">
+                <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                  <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
+                  <label for="pt{{i}}">{{item.desc}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-8">
+            <div *ngIf="paymentMoreThenBalancePrice" class="alert alert-danger" role="alert">
+              "ยอดรับคืน" ต้องไม่มากกว่า "ยอดค้างชำระ"
+            </div>
+          </div>
+        </div> -->
+  
+          <div [ngSwitch]="formGroup.get('paymentType').value">
+            <ng-container *ngSwitchCase="PaymentType.Cash">
+              <app-payment-type-cash [$Data]="PaymentData"></app-payment-type-cash>
+            </ng-container>
+            <ng-container *ngSwitchCase="PaymentType.Transfer">
+              <app-payment-type-transfer [$Data]="PaymentData">
+              </app-payment-type-transfer>
+            </ng-container>
+            <ng-container *ngSwitchCase="PaymentType.Cheque">
+              <app-payment-type-cheque [$Data]="PaymentData">
+              </app-payment-type-cheque>
+            </ng-container>
+            <ng-container *ngSwitchCase="PaymentType.CreditCard">
+              <app-payment-type-credit-card [$Data]="PaymentData">
+              </app-payment-type-credit-card>
+            </ng-container>
+          </div>
+        </div>
+      </div>
 
       <div class="row m-t-md form-group" *ngIf="formGroup.get('status1').value != ConStatus1.Cancel">
         <div class="col-sm-6">
@@ -188,7 +213,7 @@
             แก้ไข
           </button>​
         </div>
-        
+
         <div class="col-sm-6 text-right" *ngIf="formGroup.get('status2').value == null">
           <ng-container *ngIf="isSeller">
             <button class="btn btn-danger" type="button" [disabled]="formGroup.invalid" (click)="cancel()">

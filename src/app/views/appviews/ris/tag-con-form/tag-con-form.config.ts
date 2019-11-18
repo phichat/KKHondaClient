@@ -3,6 +3,8 @@ import { DropDownModel } from 'app/models/drop-down-model';
 import { RisConfig } from '../ris.config';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IUserResCookie } from 'app/interfaces/users';
+import { PaymentType, PaymentTypeList } from 'app/entities/general.entities';
+import { IPayment } from 'app/interfaces/payment.interface';
 
 export class TagConFormConfig extends RisConfig {
 
@@ -11,6 +13,9 @@ export class TagConFormConfig extends RisConfig {
     dataTable: any;
     loading: number;
     reasonDropdown: DropDownModel[];
+
+    PaymentType = PaymentType;
+    PaymentTypeList = PaymentTypeList;
 
     $Car = new BehaviorSubject<any>(null);
 
@@ -25,6 +30,12 @@ export class TagConFormConfig extends RisConfig {
     $ENo = new Subject<string>();
 
     $HistoryCar: any = { invalid: true };
+    formPayment: IPayment;
+    PaymentData = new BehaviorSubject(null);
+
+    get paymentPriceNotEqualNetprice(): boolean {
+        return this.formGroup.get('netPrice1').value != this.formGroup.get('paymentPrice').value
+    }
 
     historyCarChange(event: any) {
         this.$HistoryCar = { ...event };

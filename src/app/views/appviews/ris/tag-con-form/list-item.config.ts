@@ -21,7 +21,10 @@ export class ListItemConfig extends TagConFormConfig {
   public provinceDropdown: DropDownModel[];
   public insureDropdown: DropDownModel[];
   expType = ExpensesType;
+  EXPTag = EXPTag;
 
+  equalSale: boolean;
+  equalRis: boolean;
   disableNotEqualSale: boolean;
   disableNotEqualRis: boolean;
   disableNotEqualReceive: boolean = true;
@@ -83,8 +86,8 @@ export class ListItemConfig extends TagConFormConfig {
       expVatPrice1: new FormControl(null),
       expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
       expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
-      expPrice2: new FormControl({ value: null, disabled: this.disabledItemPrice2 ? true : false }),
-      expPrice3: new FormControl({ value: null, disabled: this.disabledItemPrice3 ? true : false })
+      expPrice2: new FormControl(null),
+      expPrice3: new FormControl(null)
     })
     this.formExpensesEXP10004 = new FormGroup({
       expitemCode: new FormControl(null),
@@ -95,8 +98,8 @@ export class ListItemConfig extends TagConFormConfig {
       expVatPrice1: new FormControl(null),
       expNetPrice1: new FormControl({ value: null, disabled: this.disableNotEqualSale ? true : false }),
       expIsVat: new FormControl({ value: false, disabled: this.disableNotEqualSale ? true : false }),
-      expPrice2: new FormControl({ value: null, disabled: this.disabledItemPrice2 ? true : false }),
-      expPrice3: new FormControl({ value: null, disabled: this.disabledItemPrice3 ? true : false })
+      expPrice2: new FormControl(null),
+      expPrice3: new FormControl(null)
     })
   }
 
