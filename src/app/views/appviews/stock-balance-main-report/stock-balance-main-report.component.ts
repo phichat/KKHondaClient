@@ -17,7 +17,7 @@ import {
 })
 export class StockBalanceMainReportComponent implements OnInit {
 
-  url: string = `${appConfig.reportUrl}/MCS/indexMCS2.aspx` + "?ProductSellingProfit=true";
+  url: string = `${appConfig.reportUrl}/MCS/indexMCS2.aspx` + "?StockBalanceMain=true";
   urlSafe: SafeResourceUrl;
 
   constructor(public sanitizer: DomSanitizer) { }
