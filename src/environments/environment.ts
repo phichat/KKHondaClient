@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:53076/api'
-  // apiUrl: 'http://203.154.126.61/kk-honda-api/api'
+  apiUrl: 'http://localhost:53076/api',
+  reportUrl: 'http://localhost:58874',
+  apikkWeb: 'http://localhost:58874/backoffice'
 };
