@@ -29,14 +29,7 @@ export class SummaryDepositByDateComponent implements OnInit {
 
   onPrint(form: any) {
     const fm = <SummaryDepositByDate>form.value;
-    let strParameter = "?StockBalance=true"; // page;
-
-    //วันที่
-    const sDate = (fm.isTypeDate == '1' ? "" : fm.sDate);
-    const eDate = (fm.isTypeDate == '1' ? "" : fm.eDate);
-    strParameter += "&isDate=" + fm.isTypeDate;
-    strParameter += "&strStartDate=" + (sDate ? setZeroHours(getDateMyDatepicker(sDate)) : '');
-    strParameter += "&strEndDate=" + (eDate ? setZeroHours(getDateMyDatepicker(eDate)) : '');
+    let strParameter = "?SummaryDepositByDate=true"; // page;
 
     window.open(`${appConfig.reportUrl}/MCS/indexMCS2.aspx` + strParameter, '_blank');
   }

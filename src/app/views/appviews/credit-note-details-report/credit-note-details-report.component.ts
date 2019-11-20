@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CreditNoteDetailsReport } from './credit-note-details-report';
 import {
   mapDropDownnToAutoComplete,
@@ -16,9 +17,13 @@ import {
 })
 export class CreditNoteDetailsReportComponent implements OnInit {
 
-  constructor() { }
+  url: string = `${appConfig.reportUrl}/MCS/indexMCS2.aspx` + "?CreditNoteDetailsReport=true";
+  urlSafe: SafeResourceUrl;
+
+  constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
   }
 
   onPrint(form: any) {

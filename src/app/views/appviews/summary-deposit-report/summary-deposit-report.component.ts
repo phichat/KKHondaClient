@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SummaryDepositReport } from './summary-deposit-report';
 import {
   mapDropDownnToAutoComplete,
@@ -16,10 +17,15 @@ import {
 })
 export class SummaryDepositReportComponent implements OnInit {
 
-  constructor() { }
+  url: string = `${appConfig.reportUrl}/MCS/indexMCS2.aspx` + "?SummaryDepositReport=true";
+  urlSafe: SafeResourceUrl;
+
+  constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
   }
+
 
   onPrint(form: any) {
     // const fm = <SummaryDepositReport>form.value;

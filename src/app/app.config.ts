@@ -4,8 +4,8 @@ import { AutoCompleteModel } from './models/auto-complete-model';
 import { environment } from 'environments/environment';
 
 export const appConfig = {
-    reportUrl: 'http://203.154.126.61/kk-honda-report',
-    apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice',
+    reportUrl: 'http://localhost:58874', //'http://203.154.126.61/kk-honda-report',
+    apikkWeb: 'http://localhost:58874/backoffice', //'http://203.154.126.61/KK-Honda-Web/backoffice',
     apiUrl: environment.apiUrl
 }
 
