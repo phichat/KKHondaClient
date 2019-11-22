@@ -31,6 +31,8 @@ import { SummaryDepositReportModule } from './summary-deposit-report/summary-dep
 import { ServiceCheckReportModule } from './service-check-report/service-check-report.module';
 import { CreditNoteDetailsReportModule } from './credit-note-details-report/credit-note-details-report.module';
 import { StockBalanceMainReportModule } from './stock-balance-main-report/stock-balance-main-report.module';
+import { ReportRefundBookingModule } from './report-refund-booking/report-refund-booking.module';
+import { ReportTopProductModule } from './report-top-product/report-top-product.module';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { StockBalanceMainReportModule } from './stock-balance-main-report/stock-
     SummaryDepositReportModule,
     ServiceCheckReportModule,
     CreditNoteDetailsReportModule,
-    StockBalanceMainReportModule
+    StockBalanceMainReportModule,
+    ReportRefundBookingModule,
+    ReportTopProductModule
   ],
   exports: [
     // IcheckDirective

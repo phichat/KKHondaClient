@@ -400,6 +400,13 @@
                             <span class="nav-label">รายงานการจองรถ</span>
                         </a>
                     </li>
+                   
+                    <li [ngClass]="{active: activeRoute('refund-report')}">
+                        <a [routerLink]="['/report/refund-report']">
+                            <span class="nav-label">รายงานคืนการจอง</span>
+                        </a>
+                    </li>
+
                     <li [ngClass]="{active: activeRoute('credit-note')}">
                         <a [routerLink]="['/report/credit-note']">
                             <span class="nav-label">รายงานการรับคืนสินค้า</span>
@@ -450,6 +457,12 @@
                     <li [ngClass]="{active: activeRoute('service-check-report')}">
                         <a [routerLink]="['/report/service-check-report']">
                             <span class="nav-label">รายงานการซ่อมที่ยังดำเนินการ</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('report-top-product')}">
+                        <a [routerLink]="['/report/report-top-product']">
+                            <span class="nav-label">รายงานยอดขายสินค้า TOP</span>
                         </a>
                     </li>
 
