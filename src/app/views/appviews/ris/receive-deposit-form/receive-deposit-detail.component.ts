@@ -117,7 +117,7 @@ export class ReceiveDepositDetailComponent extends ReceiveDepositConfig implemen
 
   print() {
     const receiptNo = this.formGroup.get('receiptNo').value;
-    const url = `${appConfig.reportUrl}/RIS/index.aspx?clNo=${receiptNo}&formClDeposit=true`;
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?receiptNo=${receiptNo}&formClDeposit=true`;
     window.open(url, '_blank');
   }
 }
