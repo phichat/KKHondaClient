@@ -12,6 +12,7 @@ import { ReceiveClStatus } from 'app/entities/ris.entities';
 import { IClDepositDetail, IClDepositCancel } from 'app/interfaces/ris';
 import { BehaviorSubject } from 'rxjs';
 import { ReasonService } from 'app/services/masters';
+import { appConfig } from 'app/app.config';
 
 declare var toastr: any;
 @Component({
@@ -36,6 +37,7 @@ export class ReceiveDepositDetailComponent extends ReceiveDepositConfig implemen
     }
     this.mUser = this.s_user.cookies;
     this.formGroup = this.fb.group({
+      receiptNo: new FormControl({ value: null, disabled: true }),
       expenseTag: new FormControl({ value: null, disabled: true }),
       insuranceName: new FormControl({ value: null, disabled: true }),
       paymentType: new FormControl({ value: null, disabled: true }),
@@ -111,5 +113,11 @@ export class ReceiveDepositDetailComponent extends ReceiveDepositConfig implemen
         toastr.success(message.canceled);
         this.route.navigate(['ris/receive-deposit-list']);
       }, () => toastr.error(message.failed));
+  }
+
+  print() {
+    const receiptNo = this.formGroup.get('receiptNo').value;
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?clNo=${receiptNo}&formClDeposit=true`;
+    window.open(url, '_blank');
   }
 }

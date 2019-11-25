@@ -12,6 +12,8 @@
     </ol>
   </div>
   <div class="col-lg-2 text-right pull-right">
+    <button class="btn btn-success m-t-md" type="button" (click)="print()">
+    <i class="fa fa-print"></i> ใบจ่ายเงิน</button>
     <h3>&nbsp;</h3>
   </div>
 </div>
@@ -129,6 +131,15 @@
 
           <div class="row form-group">
             <div class="form-group">
+              <label class="col-lg-4 control-label is-required">เลขที่ใบชำระเงิน</label>
+              <div class="col-lg-8">
+                <input type="text" formControlName="receiptNo" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="form-group">
               <label class="col-lg-4 control-label is-required">ชื่อบริษัท</label>
               <div class="col-lg-8">
                 <input type="text" formControlName="insuranceName" class="form-control">
@@ -201,6 +212,9 @@
             </ng-container>
             <ng-container *ngSwitchCase="PaymentType.Cheque">
               <app-payment-type-cheque [$Data]="PaymentData"></app-payment-type-cheque>
+            </ng-container>
+            <ng-container *ngSwitchCase="PaymentType.CreditCard">
+              <app-payment-type-credit-card [$Data]="PaymentData"></app-payment-type-credit-card>
             </ng-container>
             <ng-container *ngSwitchCase="PaymentType.CreditCard">
               <app-payment-type-credit-card [$Data]="PaymentData"></app-payment-type-credit-card>
