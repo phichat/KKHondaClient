@@ -51,6 +51,8 @@ import { SummaryDepositReportComponent } from './views/appviews/summary-deposit-
 import { ServiceCheckReportComponent } from './views/appviews/service-check-report/service-check-report.component';
 import { CreditNoteDetailsReportComponent } from './views/appviews/credit-note-details-report/credit-note-details-report.component';
 import { StockBalanceMainReportComponent} from './views/appviews/stock-balance-main-report/stock-balance-main-report.component';
+import { ReportRefundBookingComponent} from './views/appviews/report-refund-booking/report-refund-booking.component';
+import { ReportTopProductComponent} from './views/appviews/report-top-product/report-top-product.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -96,9 +98,9 @@ export const ROUTES: Routes = [
     path: 'report', component: BasicLayoutComponent,
     children: [
       { path: 'booking', component: ReportBookingComponent },
+      { path: 'refund-report', component: ReportRefundBookingComponent},
       { path: 'credit-note', component: ReportCreditNoteComponent },
       { path: 'sale-report', component: ReportSaleComponent },
-
       { path: 'summary-sale-report-by-type', component:SummarySaleReportByTypeComponent},
       { path: 'summary-stock-balance', component:SummaryStockBalanceComponent},
       { path: 'contract-grade-payment', component:ContractGradePaymentComponent},
@@ -106,6 +108,7 @@ export const ROUTES: Routes = [
       { path: 'product-selling-profit-report', component:ProductSellingProfitReportComponent},
       { path: 'summary-deposit-report', component:SummaryDepositReportComponent},
       { path: 'service-check-report', component:ServiceCheckReportComponent},
+      { path: 'report-top-product', component:ReportTopProductComponent},
       { path: 'credit-note-details-report', component:CreditNoteDetailsReportComponent},
       { path: 'stock-balance-main-report', component:StockBalanceMainReportComponent},
       
