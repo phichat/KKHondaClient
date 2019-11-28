@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReportSaleComponent } from './report-sale.component';
+import { CommissionEventService } from './commission-event.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CommissionEventComponent } from './commission-event.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { ReportSaleService} from './report-sale.service';
+
 @NgModule({
-  declarations: [ReportSaleComponent],
+  declarations: [
+    CommissionEventComponent
+  ],
   imports: [
     CommonModule,
     BrowserModule,
@@ -17,9 +20,9 @@ import { ReportSaleService} from './report-sale.service';
     ReactiveFormsModule,
     MyDatePickerTHModule,
     NgSelectModule
-  ],
+  ], 
   providers: [
-    ReportSaleService
+    CommissionEventService
   ]
 })
-export class ReportSaleModule { }
+export class CommissionEventModule { }

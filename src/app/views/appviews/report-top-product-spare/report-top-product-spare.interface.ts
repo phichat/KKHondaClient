@@ -1,7 +1,7 @@
 import { AutoCompleteModel } from 'app/models/auto-complete-model';
 import { IMyDateModel } from 'mydatepicker-th';
 
-export class ReportSale {
+export class ReportTopProductSpare {
     branchType: string;
     branchId: AutoCompleteModel[];
 
@@ -11,13 +11,20 @@ export class ReportSale {
     design: AutoCompleteModel[];
     color: AutoCompleteModel[];
 
-    isSellName: string;
-    SellId: AutoCompleteModel[];
+    bookingName: string;
+    bookingNameId: string;
+    regisNameId: string;
 
-    isPaymentType: string;
-    paymentTypeId: string;
+    selltype: string;
+    selltypeId: string;
 
-    isSellDate: string;
+    topRank:string;
+
+    bookingDate: string;
     sDate: IMyDateModel;
     eDate: IMyDateModel;
+
+    RefundbookingReceiveDate: string;
+    sRefundbookingReceiveDate: IMyDateModel;
+    eRefundbookingReceiveDate: IMyDateModel;
 }

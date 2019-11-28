@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReportSaleComponent } from './report-sale.component';
+import { TaxSaleSpareService } from './tax-sale-spare.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { TaxSaleSpareComponent } from './tax-sale-spare.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { ReportSaleService} from './report-sale.service';
+
 @NgModule({
-  declarations: [ReportSaleComponent],
+  declarations: [
+    TaxSaleSpareComponent
+  ],
   imports: [
     CommonModule,
     BrowserModule,
@@ -17,9 +20,9 @@ import { ReportSaleService} from './report-sale.service';
     ReactiveFormsModule,
     MyDatePickerTHModule,
     NgSelectModule
-  ],
+  ], 
   providers: [
-    ReportSaleService
+    TaxSaleSpareService
   ]
 })
-export class ReportSaleModule { }
+export class TaxSaleSpareModule { }

@@ -418,9 +418,9 @@
                         </a>
                     </li>
 
-                    <li [ngClass]="{active: activeRoute('summary-sale-report-by-type')}">
-                        <a [routerLink]="['/report/summary-sale-report-by-type']">
-                            <span class="nav-label">รายงานสรุปยอดขายแยกประเภท</span>
+                    <li [ngClass]="{active: activeRoute('summary-report-by-type')}">
+                        <a [routerLink]="['/report/summary-report-by-type']">
+                            <span class="nav-label">รายงานสรุปยอดขายแยกประเภท (รถ)</span>
                         </a>
                     </li>
 
@@ -450,7 +450,7 @@
 
                     <li [ngClass]="{active: activeRoute('summary-deposit-report')}">
                         <a [routerLink]="['/report/summary-deposit-report']">
-                            <span class="nav-label">รายงานเงินมัดจำแยกประเภท (รถ) </span>
+                            <span class="nav-label">รายงานเงินมัดจำ (แยกประเภท) อะไหล่</span>
                         </a>
                     </li>
 
@@ -462,7 +462,13 @@
 
                     <li [ngClass]="{active: activeRoute('report-top-product')}">
                         <a [routerLink]="['/report/report-top-product']">
-                            <span class="nav-label">รายงานยอดขายสินค้า TOP</span>
+                            <span class="nav-label">จัดอันดับยอดขายสินค้า (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('report-top-spare')}">
+                        <a [routerLink]="['/report/report-top-spare']">
+                            <span class="nav-label">จัดอันดับยอดขายสินค้า (อะไหล่)</span>
                         </a>
                     </li>
 
@@ -475,6 +481,36 @@
                     <li [ngClass]="{active: activeRoute('stock-balance-main-report')}">
                         <a [routerLink]="['/report/stock-balance-main-report']">
                             <span class="nav-label">รายงานสินค้าคงเหลือ</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('commission-sale')}">
+                        <a [routerLink]="['/report/commission-sale']">
+                            <span class="nav-label">รายงานค่าคอมมิชชั่น ตามใบขาย</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('commission-event')}">
+                        <a [routerLink]="['/report/commission-event']">
+                            <span class="nav-label">รายงานค่าคอมมิชชั่น ตามกิจกรรมขาย</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('tax-purchase')}">
+                        <a [routerLink]="['/report/tax-purchase']">
+                            <span class="nav-label">รายงานภาษีซื้อ</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('tax-sale')}">
+                        <a [routerLink]="['/report/tax-sale']">
+                            <span class="nav-label">รายงานภาษีขาย (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('tax-sale-spare')}">
+                        <a [routerLink]="['/report/tax-sale-spare']">
+                            <span class="nav-label">รายงานภาษีขาย (อะไหล่)</span>
                         </a>
                     </li>
                     <!-- <li>
