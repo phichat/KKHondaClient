@@ -71,13 +71,7 @@ export class ReportSaleComponent implements OnInit {
     }
 
     //ยี่ห้อ รุ่น แบบ สี
-<<<<<<< HEAD
     const brandTypeId = (fm.brandType == '1' || !fm.brandTypeId ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
-=======
-    // fm.brandTypeId.reduce()
-
-    const brandTypeId = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
->>>>>>> feature/Report_Menu
     const version = (fm.brandType == '1' || !fm.version ? 0 : mapAutoCompleteIdToString(fm.version));
     const design = (fm.brandType == '1' || !fm.design ? 0 : mapAutoCompleteIdToString(fm.design));
     const color = (fm.brandType == '1' || !fm.color ? 0 : mapAutoCompleteIdToString(fm.color));

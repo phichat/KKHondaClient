@@ -59,14 +59,12 @@ export class RegisTagComponent implements OnInit {
   onSubmit() {
     let f = { ...this.formGroup.value };
 
-    console.log(f);
+    f.sDate = setZeroHours(f.sDate) || '';
+    f.eDate = setZeroHours(f.eDate) || '';
+    f.paymentType = f.paymentType || 0;
 
-
-    // f.sDate = setZeroHours(f.sDate);
-    // f.eDate = setZeroHours(f.eDate);
-
-    // const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisTag=true`;
-    // window.open(url, '_blank');
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?paymentType=${f.paymentType}&sDate=${f.sDate}&eDate=${f.eDate}&formRegisTag=true`;
+    window.open(url, '_blank');
 
   }
 

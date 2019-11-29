@@ -407,6 +407,18 @@
                         </a>
                     </li>
 
+                    <li [ngClass]="{active: activeRoute('summary-deposit-report')}">
+                        <a [routerLink]="['/report/summary-deposit-report']">
+                            <span class="nav-label">เงินมัดจำแยกประเภท (อะไหล่)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('summary-deposit-by-date')}">
+                        <a [routerLink]="['/report/summary-deposit-by-date']">
+                            <span class="nav-label">การรับ-คืนเงินมัดจำลูกค้า แยกประเภท (อะไหล่) </span>
+                        </a>
+                    </li>
+
                     <!-- <li [ngClass]="{active: activeRoute('credit-note')}">
                         <a [routerLink]="['/report/credit-note']">
                             <span class="nav-label">การรับคืนสินค้า</span>
@@ -414,53 +426,31 @@
                     </li> -->
                     <li [ngClass]="{active: activeRoute('sale-report')}">
                         <a [routerLink]="['/report/sale-report']">
-                            <span class="nav-label">ยอดขายรวม</span>
+                            <span class="nav-label">ยอดขายรวม (รถ)</span>
                         </a>
                     </li>
 
-<<<<<<< HEAD
                     <li [ngClass]="{active: activeRoute('summary-sale-report-by-type')}">
                         <a [routerLink]="['/report/summary-sale-report-by-type']">
-                            <span class="nav-label">สรุปยอดขายแยกประเภท</span>
-=======
-                    <li [ngClass]="{active: activeRoute('summary-report-by-type')}">
-                        <a [routerLink]="['/report/summary-report-by-type']">
-                            <span class="nav-label">รายงานสรุปยอดขายแยกประเภท (รถ)</span>
->>>>>>> feature/Report_Menu
-                        </a>
-                    </li>
-
-                    <li [ngClass]="{active: activeRoute('summary-stock-balance')}">
-                        <a [routerLink]="['/report/summary-stock-balance']">
-                            <span class="nav-label">สินค้าคงเหลือ (ขาย) </span>
-                        </a>
-                    </li>
-
-                    <li [ngClass]="{active: activeRoute('contract-grade-payment')}">
-                        <a [routerLink]="['/report/contract-grade-payment']">
-                            <span class="nav-label">ประวัติการชำระและเกรดสัญญา </span>
-                        </a>
-                    </li>
-
-                    <li [ngClass]="{active: activeRoute('summary-deposit-by-date')}">
-                        <a [routerLink]="['/report/summary-deposit-by-date']">
-                            <span class="nav-label">การรับ-คืนเงินมัดจำลูกค้า (แยกประเภท) </span>
+                            <span class="nav-label">สรุปยอดขาย แยกประเภท (รถ)</span>
                         </a>
                     </li>
 
                     <li [ngClass]="{active: activeRoute('product-selling-profit-report')}">
                         <a [routerLink]="['/report/product-selling-profit-report']">
-                            <span class="nav-label">ยอดขายสินค้า - แสดงกำไร </span>
+                            <span class="nav-label">ยอดขายสินค้า-แสดงกำไร (อะไหล่)</span>
                         </a>
                     </li>
 
-                    <li [ngClass]="{active: activeRoute('summary-deposit-report')}">
-                        <a [routerLink]="['/report/summary-deposit-report']">
-<<<<<<< HEAD
-                            <span class="nav-label">เงินมัดจำแยกประเภท (รถ) </span>
-=======
-                            <span class="nav-label">รายงานเงินมัดจำ (แยกประเภท) อะไหล่</span>
->>>>>>> feature/Report_Menu
+                    <li [ngClass]="{active: activeRoute('summary-stock-balance')}">
+                        <a [routerLink]="['/report/summary-stock-balance']">
+                            <span class="nav-label">สินค้าคงเหลือขาย (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('contract-grade-payment')}">
+                        <a [routerLink]="['/report/contract-grade-payment']">
+                            <span class="nav-label">ประวัติการชำระและเกรดสัญญา</span>
                         </a>
                     </li>
 
@@ -472,9 +462,6 @@
 
                     <li [ngClass]="{active: activeRoute('report-top-product')}">
                         <a [routerLink]="['/report/report-top-product']">
-<<<<<<< HEAD
-                            <span class="nav-label">อันดับยอดขายสินค้า</span>
-=======
                             <span class="nav-label">จัดอันดับยอดขายสินค้า (รถ)</span>
                         </a>
                     </li>
@@ -482,7 +469,6 @@
                     <li [ngClass]="{active: activeRoute('report-top-spare')}">
                         <a [routerLink]="['/report/report-top-spare']">
                             <span class="nav-label">จัดอันดับยอดขายสินค้า (อะไหล่)</span>
->>>>>>> feature/Report_Menu
                         </a>
                     </li>
 
@@ -494,7 +480,7 @@
 
                     <li [ngClass]="{active: activeRoute('stock-balance-main-report')}">
                         <a [routerLink]="['/report/stock-balance-main-report']">
-                            <span class="nav-label">สินค้าคงเหลือ</span>
+                            <span class="nav-label">สินค้าคงเหลือ (อะไหล่)</span>
                         </a>
                     </li>
 
