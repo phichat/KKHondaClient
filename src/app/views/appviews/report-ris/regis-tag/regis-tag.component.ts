@@ -12,6 +12,8 @@ export class RegisTagComponent implements OnInit {
   formGroup: FormGroup;
   myForm: FormGroup;
 
+  finance: string;
+
   constructor(
     private fb: FormBuilder
   ) {
@@ -19,8 +21,38 @@ export class RegisTagComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.fb.group({
-      sDate: new FormControl(null, Validators.required),
-      eDate: new FormControl(null, Validators.required)
+      paymentType: new FormControl('0'),
+      // financeChecked: new FormControl({ value: '0', disabled: true }),
+      // financeId: new FormControl({ value: null, disabled: true }),
+      sellDateChecked: new FormControl('0'),
+      sDate: new FormControl({ value: null, disabled: true }),
+      eDate: new FormControl({ value: null, disabled: true })
+    });
+
+    this.formGroup.get('sellDateChecked').valueChanges.subscribe(x => {
+      if (x == '0') {
+        this.formGroup.get('sDate').disable();
+        this.formGroup.get('eDate').disable();
+      } else {
+        this.formGroup.get('sDate').enable();
+        this.formGroup.get('eDate').enable();
+      }
+    })
+
+    // this.formGroup.get('paymentType').valueChanges.subscribe(x => {
+    //   if (x !== '2') {
+    //     this.formGroup.get('financeChecked').disable();
+    //   } else {
+    //     this.formGroup.get('financeChecked').enable();
+    //   }
+    // })
+
+    this.formGroup.get('financeChecked').valueChanges.subscribe(x => {
+      if (x == '0') {
+        this.formGroup.get('financeId').disable();
+      } else {
+        this.formGroup.get('financeId').enable();
+      }
     })
   }
 
@@ -29,7 +61,7 @@ export class RegisTagComponent implements OnInit {
 
     console.log(f);
 
-    
+
     // f.sDate = setZeroHours(f.sDate);
     // f.eDate = setZeroHours(f.eDate);
 

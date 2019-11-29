@@ -5,6 +5,7 @@ import { RegisVehicleTaxComponent } from './regis-vehicle-tax/regis-vehicle-tax.
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    ThaiMatDatepickerModule
+    ThaiMatDatepickerModule,
+    NgSelectModule
   ]
 })
 export class ReportRisModule { }
