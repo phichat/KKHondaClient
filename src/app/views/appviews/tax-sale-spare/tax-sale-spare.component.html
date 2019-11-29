@@ -1,0 +1,146 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายงานภาษีขาย</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>รายงานภาษีขาย</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <form class="form-horizontal" action="" #fm="ngForm" (ngSubmit)="onPrint(fm)" style="margin-bottom: 15em;">
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">สาขา</label>
+      <div class="col-sm-4">
+        <div class="radio radio-info">
+          <input id="branch1" type="radio" name="branchType" value="1" [(ngModel)]="formModel.branchType">
+          <label for="branch1">ทั้งหมด</label>
+        </div>
+        <div class="radio radio-info">
+          <input id="branch2" type="radio" name="branchType" value="2" [(ngModel)]="formModel.branchType">
+          <label for="branch2">สาขา</label>
+        </div>
+        <ng-select [items]="ACBranch" [hideSelected]="true" multiple="true" bindLabel="name" name="branchId"
+          [(ngModel)]="formModel.branchId" placeholder="เลือกสาขา" [disabled]="formModel.branchType == '1'">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">เลือกเงื่อนไข</label>
+      <div class="col-sm-2">
+        <div class="radio radio-info">
+          <input id=reportType1 type="radio" name="reportType" value="1" checked [(ngModel)]="formModel.reportType">
+          <label for=reportType1>ช่วงวันที่บันทึก</label>
+        </div>
+        <div class="radio radio-info">
+          <input id=reportType2 type="radio" name="reportType" value="2" checked [(ngModel)]="formModel.reportType">
+          <label for=reportType2>ช่วงวันที่ในใบกำกับภาษี</label>
+        </div>
+        <div class="radio radio-info">
+          <input id=reportType3 type="radio" name="reportType" value="3" checked [(ngModel)]="formModel.reportType" [attr.disabled]="true">
+          <label for=reportType3>ช่วงวันที่รายงานภาษี</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">วันที่</label>
+      <div class="col-sm-8">
+
+        <div class="radio radio-info">
+          <input id=dateType1 type="radio" name="dateType" value="1" checked [(ngModel)]="formModel.dateType">
+          <label for=dateType1>เดือนภาษี</label>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+
+            <!-- <my-date-picker-th [options]="myDatePickerOptions" name="dateMonth" [(ngModel)]="formModel.dateMonth"
+                [disabled]="formModel.dateType == '2'"></my-date-picker-th> -->
+
+            <select class="form-control" id="ddldateMonth" name="dateMonth" [(ngModel)]="formModel.dateMonth"
+              [disabled]="formModel.dateType == '2'">
+
+              <option value="01">มกราคม</option>
+              <option value="02">กุมภาพันธ์</option>
+              <option value="03">มีนาคม</option>
+              <option value="04">เมษายน</option>
+              <option value="05">พฤษภาคม</option>
+              <option value="06">มิถุนายน</option>
+              <option value="07">กรกฎาคม</option>
+              <option value="08">สิงหาคม</option>
+              <option value="09">กันยายน</option>
+              <option value="10">ตุลาคม</option>
+              <option value="11">พฤศจิกายน</option>
+              <option value="12">ธันวาคม</option>
+            </select>
+
+          </div>
+          <label for="inputEmail3" class="col-md-1">ปี</label>
+          <div class="col-md-2">
+
+            <select class="form-control" id="ddldateYear" name="dateYear" [(ngModel)]="formModel.dateYear"
+              [disabled]="formModel.dateType == '2'">
+
+              <option value="2017">2560</option>
+              <option value="2018">2561</option>
+              <option value="2019">2562</option>
+              <option value="2020">2563</option>
+              <option value="2021">2564</option>
+              <option value="2022">2565</option>
+              <option value="2023">2566</option>
+              <option value="2024">2567</option>
+              <option value="2025">2568</option>
+              <option value="2026">2569</option>
+              <option value="2027">2570</option>
+              <option value="2028">2571</option>
+              <option value="2029">2572</option>
+              <option value="2030">2573</option>
+              <option value="2031">2574</option>
+              <option value="2032">2575</option>
+              <option value="2033">2576</option>
+              <option value="2034">2577</option>
+              <option value="2035">2578</option>
+              <option value="2036">2579</option>
+              <option value="2037">2580</option>
+              <option value="2038">2581</option>
+              <option value="2039">2582</option>
+              <option value="2040">2583</option>
+            </select>
+
+          </div>
+        </div>
+
+        <div class="radio radio-info">
+          <input id=dateType2 type="radio" name="dateType" value="2" [(ngModel)]="formModel.dateType">
+          <label for=dateType2>ตั้งแต่</label>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <my-date-picker-th [options]="myDatePickerOptions" name="sDate" [(ngModel)]="formModel.sDate"
+              [disabled]="formModel.dateType == '1'"></my-date-picker-th>
+          </div>
+          <label for="inputEmail3" class="col-md-1">ถึง</label>
+          <div class="col-md-4">
+            <my-date-picker-th [options]="myDatePickerOptions" name="eDate" [(ngModel)]="formModel.eDate"
+              [disabled]="formModel.dateType == '1'"></my-date-picker-th>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button id="btnReport" type="submit" class="btn btn-success">พิมพ์</button>
+      </div>
+    </div>
+  </form>
+</div>

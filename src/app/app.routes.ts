@@ -53,6 +53,12 @@ import { CreditNoteDetailsReportComponent } from './views/appviews/credit-note-d
 import { StockBalanceMainReportComponent} from './views/appviews/stock-balance-main-report/stock-balance-main-report.component';
 import { ReportRefundBookingComponent} from './views/appviews/report-refund-booking/report-refund-booking.component';
 import { ReportTopProductComponent} from './views/appviews/report-top-product/report-top-product.component';
+import { ReportTopProductSpareComponent} from './views/appviews/report-top-product-spare/report-top-product-spare.component';
+import { CommissionSaleComponent} from './views/appviews/commission-sale/commission-sale.component';
+import { CommissionEventComponent} from './views/appviews/commission-event/commission-event.component';
+import { TaxPurchaseComponent} from './views/appviews/tax-purchase/tax-purchase.component';
+import { TaxSaleComponent} from './views/appviews/tax-sale/tax-sale.component';
+import { TaxSaleSpareComponent} from './views/appviews/tax-sale-spare/tax-sale-spare.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -101,7 +107,7 @@ export const ROUTES: Routes = [
       { path: 'refund-report', component: ReportRefundBookingComponent},
       { path: 'credit-note', component: ReportCreditNoteComponent },
       { path: 'sale-report', component: ReportSaleComponent },
-      { path: 'summary-sale-report-by-type', component:SummarySaleReportByTypeComponent},
+      { path: 'summary-report-by-type', component:SummarySaleReportByTypeComponent},
       { path: 'summary-stock-balance', component:SummaryStockBalanceComponent},
       { path: 'contract-grade-payment', component:ContractGradePaymentComponent},
       { path: 'summary-deposit-by-date', component:SummaryDepositByDateComponent},
@@ -109,8 +115,15 @@ export const ROUTES: Routes = [
       { path: 'summary-deposit-report', component:SummaryDepositReportComponent},
       { path: 'service-check-report', component:ServiceCheckReportComponent},
       { path: 'report-top-product', component:ReportTopProductComponent},
+      { path: 'report-top-spare', component:ReportTopProductSpareComponent},
+      
       { path: 'credit-note-details-report', component:CreditNoteDetailsReportComponent},
       { path: 'stock-balance-main-report', component:StockBalanceMainReportComponent},
+      { path: 'commission-sale', component:CommissionSaleComponent},
+      { path: 'commission-event', component:CommissionEventComponent},
+      { path: 'tax-purchase', component:TaxPurchaseComponent},
+      { path: 'tax-sale', component:TaxSaleComponent},
+      { path: 'tax-sale-spare', component:TaxSaleSpareComponent},
       
     ], canActivate: [GuardGuard]
   },

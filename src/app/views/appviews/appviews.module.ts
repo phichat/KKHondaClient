@@ -33,6 +33,12 @@ import { CreditNoteDetailsReportModule } from './credit-note-details-report/cred
 import { StockBalanceMainReportModule } from './stock-balance-main-report/stock-balance-main-report.module';
 import { ReportRefundBookingModule } from './report-refund-booking/report-refund-booking.module';
 import { ReportTopProductModule } from './report-top-product/report-top-product.module';
+import { ReportTopProductSpareModule } from './report-top-product-spare/report-top-product-spare.module';
+import { CommissionSaleModule } from './commission-sale/commission-sale.module';
+import { CommissionEventModule } from './commission-event/commission-event.module';
+import { TaxPurchaseModule } from './tax-purchase/tax-purchase.module';
+import { TaxSaleModule } from './tax-sale/tax-sale.module';
+import { TaxSaleSpareModule } from './tax-sale-spare/tax-sale-spare.module';
 
 @NgModule({
   declarations: [
@@ -63,7 +69,13 @@ import { ReportTopProductModule } from './report-top-product/report-top-product.
     CreditNoteDetailsReportModule,
     StockBalanceMainReportModule,
     ReportRefundBookingModule,
-    ReportTopProductModule
+    ReportTopProductModule,
+    ReportTopProductSpareModule,
+    CommissionSaleModule,
+    CommissionEventModule,
+    TaxPurchaseModule,
+    TaxSaleModule,
+    TaxSaleSpareModule,
   ],
   exports: [
     // IcheckDirective

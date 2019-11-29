@@ -8,16 +8,16 @@ import {
   mapAutoCompleteIdToString
 }
   from 'app/app.config';
-import { ReportTopProductService } from './report-top-product.service';
+import { ReportTopProductSpareService } from './report-top-product-spare.service';
 import { AutoCompleteModel } from 'app/models/auto-complete-model';
-import { ReportTopProduct } from './report-top-product.interface';
+import { ReportTopProductSpare } from './report-top-product-spare.interface';
 
 @Component({
-  selector: 'app-report-top-product',
-  templateUrl: './report-top-product.component.html',
-  styleUrls: ['./report-top-product.component.scss']
+  selector: 'app-report-top-product-spare',
+  templateUrl: './report-top-product-spare.component.html',
+  styleUrls: ['./report-top-product-spare.component.scss']
 })
-export class ReportTopProductComponent implements OnInit {
+export class ReportTopProductSpareComponent implements OnInit {
 
   ACBranch: AutoCompleteModel[];
   ACProductType: AutoCompleteModel[];
@@ -29,10 +29,10 @@ export class ReportTopProductComponent implements OnInit {
 
   myDatePickerOptions = MyDatePickerOptions;
 
-  formModel = new ReportTopProduct();
+  formModel = new ReportTopProductSpare();
 
   constructor(
-    private s_ReportRefundBooking: ReportTopProductService
+    private s_ReportRefundBooking: ReportTopProductSpareService
   ) {
   }
 
@@ -69,9 +69,9 @@ export class ReportTopProductComponent implements OnInit {
 
 
   onPrint(form: any) {
-    let strParameter = "?ReportTopProduct=true"; // page
+    let strParameter = "?ReportTopProductSpare=true"; // page
 
-    const fm = <ReportTopProduct>form.value;
+    const fm = <ReportTopProductSpare>form.value;
 
     //สาขา
     strParameter += "&branchType=" + fm.branchType;
@@ -81,29 +81,12 @@ export class ReportTopProductComponent implements OnInit {
       strParameter += "&branchId=" + mapAutoCompleteIdToString(fm.branchId);
     }
 
-    // // สถานะใบจอง
-    // const selltypeId = (fm.selltype == '1' ? "" : fm.selltypeId);
-    // strParameter += "&selltype=" + (fm.selltype == '1' ? "" : fm.selltype);
-    // strParameter += "&selltypeId=" + (selltypeId || "");
-
     //วันที่ขาย
     const sDate = (fm.bookingDate == '1' ? "" : fm.sDate);
     const eDate = (fm.bookingDate == '1' ? "" : fm.eDate);
     strParameter += "&bookingDate=" + (fm.bookingDate == '1' ? "" : fm.bookingDate);
     strParameter += "&sDate=" + (sDate ? setZeroHours(getDateMyDatepicker(sDate)) : '');
     strParameter += "&eDate=" + (eDate ? setZeroHours(getDateMyDatepicker(eDate)) : '');
-
-    //ยี่ห้อ รุ่น แบบ สี
-    // fm.brandTypeId.reduce()
-    const brandTypeId = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
-    const version = (fm.brandType == '1' || !fm.version ? 0 : mapAutoCompleteIdToString(fm.version));
-    const design = (fm.brandType == '1' || !fm.design ? 0 : mapAutoCompleteIdToString(fm.design));
-    const color = (fm.brandType == '1' || !fm.color ? 0 : mapAutoCompleteIdToString(fm.color));
-    strParameter += "&brandType=" + fm.brandType;
-    strParameter += "&brandTypeId=" + (brandTypeId || 0);
-    strParameter += "&version=" + (version || 0);
-    strParameter += "&design=" + (design || 0);
-    strParameter += "&color=" + (color || 0);
 
     //Top Rank
     const topRank = (fm.topRank == '' ? '0' : fm.topRank);

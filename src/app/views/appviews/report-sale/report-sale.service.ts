@@ -8,7 +8,7 @@ import { AutoCompleteModel } from 'app/models/auto-complete-model';
 import { DropDownModel } from 'app/models/drop-down-model';
 
 @Injectable()
-export class ReportTopProductService {
+export class ReportSaleService {
 
   constructor(
     private http: HttpClient,
