@@ -28,7 +28,7 @@
           <input id="branch2" type="radio" name="branchType" value="2" [(ngModel)]="formModel.branchType">
           <label for="branch2">สาขา</label>
         </div>
-        <ng-select [items]="ACBranch" [hideSelected]="true" multiple="true" bindLabel="name" name="branchId"
+        <ng-select [items]="AC_Branch" [hideSelected]="true" multiple="true" bindLabel="name" name="branchId"
           [(ngModel)]="formModel.branchId" placeholder="เลือกสาขา" [disabled]="formModel.branchType == '1'">
         </ng-select>
       </div>
