@@ -5,6 +5,7 @@ import { EntityType, ActionMode } from 'app/entities/general.entities';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { setLocalDate } from 'app/app.config';
 import { Subject } from 'rxjs';
+import { ICarHistory } from 'app/interfaces/ris';
 
 export class TahHistoryConfig extends RisConfig {
     formGroup: FormGroup;
@@ -27,6 +28,7 @@ export class TahHistoryConfig extends RisConfig {
     @Input() $Mode: ActionMode;
     @Input() $ENo: Subject<string>;
     @Input() $FNo: Subject<string>;
+    @Input() $HistoryCar: Subject<ICarHistory>;
     @Output() HistoryCar$ = new EventEmitter();
 
 }

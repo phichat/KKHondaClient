@@ -9,6 +9,7 @@ import { UserService } from 'app/services/users';
 import { ExpenseOtherService, CarListItemService, CarHistoryService } from 'app/services/ris';
 import { IExpensesOtherRisRes, IConItem } from 'app/interfaces/ris';
 import { ProvinceService, InsuranceService } from 'app/services/masters';
+import { ITag } from './tag.interface';
 
 @Component({
   selector: 'app-list-item',
@@ -138,28 +139,12 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
           this.expenses = exp.filter(o => o.expensesType == EXPT.InternalCost);
         }
 
-        if (this.Car) {
-          this.Car.subscribe(o => {
-            if (!o) return;
-            if (o.freeTag == 1) {
-              this.checkBoxEXP10001
-              const item = x.find(x => x.expensesCode == EXPTag.EXP10001);
-              this.checkBoxEXP10001.nativeElement.checked = true;
-              this.addFreeItem(item, EXPTag.EXP10001);
-            }
-            if (o.freeAct == 1) {
-              const item = x.find(x => x.expensesCode == EXPTag.EXP10003);
-              this.checkBoxEXP10003.nativeElement.checked = true;
-              this.addFreeItem(item, EXPTag.EXP10003);
-            }
-            if (o.freeWarranty == 1) {
-              const item = x.find(x => x.expensesCode == EXPTag.EXP10004);
-              this.checkBoxEXP10004.nativeElement.checked = true;
-              this.addFreeItem(item, EXPTag.EXP10004);
-            }
+        if (this.Car)
+          this.carSubscribe(x);
 
-          });
-        }
+        if (this.Tag) 
+          this.tagSubscribe();
+
       }, () => this.loading = 2);
 
       this.formGroup.valueChanges.subscribe(() => this.emitValue(this.formGroup.getRawValue()));
@@ -184,6 +169,40 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
         this.addHistoryFromApi(x.history);
       })
     }
+  }
+
+  carSubscribe(x: any) {
+    this.Car.subscribe(o => {
+      if (!o) return;
+      if (o.freeTag == 1) {
+        this.checkBoxEXP10001
+        const item = x.find(x => x.expensesCode == EXPTag.EXP10001);
+        this.checkBoxEXP10001.nativeElement.checked = true;
+        this.addFreeItem(item, EXPTag.EXP10001);
+      }
+      if (o.freeAct == 1) {
+        const item = x.find(x => x.expensesCode == EXPTag.EXP10003);
+        this.checkBoxEXP10003.nativeElement.checked = true;
+        this.addFreeItem(item, EXPTag.EXP10003);
+      }
+      if (o.freeWarranty == 1) {
+        const item = x.find(x => x.expensesCode == EXPTag.EXP10004);
+        this.checkBoxEXP10004.nativeElement.checked = true;
+        this.addFreeItem(item, EXPTag.EXP10004);
+      }
+    });
+  }
+
+  tagSubscribe() {
+    this.Tag.subscribe(o => {
+      if (!o) return;
+      this.formCarHistory.patchValue({
+        tagNo: o.tagNo,
+        tagRegis: o.tagRegis,
+        tagExpire: o.tagExpire,
+        province: o.province
+      })
+    })
   }
 
   private addListItemFromApi(list: IConItem[]) {
@@ -316,7 +335,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   onAddExpItem(formGroup: FormGroup, parentForm: FormArray) {
     const itemTag = parentForm.at(0).get('itemCode').value;
     const exp = formGroup.getRawValue();
-    console.log(exp);
+    // console.log(exp);
 
     const fg = this.fb.group({
       runId: 0,

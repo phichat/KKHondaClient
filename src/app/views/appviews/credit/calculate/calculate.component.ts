@@ -1,12 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, EventEmitter, ElementRef, DoCheck, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalculateModel, ContractModel } from '../../../../models/credit';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
 import { CalculateService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-import * as Inputmask from 'inputmask';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
+import { setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 import { distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { DropdownTemplate } from 'app/models/drop-down-model';
@@ -54,7 +53,6 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     userModel: IUserResCookie;
     bookingNo: string;
     mode: string;
-    myDatePickerOptions = MyDatePickerOptions;
 
     engineTypeahead = new EventEmitter<string>();
     engineDropdown: Array<DropdownTemplate> = new Array<DropdownTemplate>();
@@ -105,7 +103,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.model.depositPrice = 0;
                 this.model.bookDeposit = 0;
                 // this.model.dueDate = 5;
-                this.model.firstPayment = setDateMyDatepicker(new Date());
+                this.model.firstPayment = new Date();
                 this.model.interest = 0;
                 this.model.remain = 0;
                 this.model.sellTypeId = 4;
@@ -211,10 +209,10 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
             });
     }
 
-    onChangeDueDate(event: IMyDateModel) {
-        this.model.firstPayment = event;
-        this.instalmentCalculate();
-    }
+    // onChangeDueDate(event:) {
+    //     this.model.firstPayment = event;
+    //     this.instalmentCalculate();
+    // }
 
     onLoadCaculateData(calculateId: number) {
         this._calcService.GetById(calculateId.toString())
@@ -222,7 +220,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const firstPayment = p.creditCalculate.firstPayment;
                 this.model = p.creditCalculate;
-                this.model.firstPayment = setDateMyDatepicker(new Date(firstPayment));
+                this.model.firstPayment = new Date(firstPayment);
                 this.model.typePayment = this.model.typePayment.toString();
                 this.contractModel = p.creditContract;
                 this.contractItemModel = p.creditContractItem;
@@ -242,7 +240,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     onChangeDepositPrice() {
         // เงินดาวน์ (%)
         // เงินดาวน์ * 100 / มูลค่าสินค้า
-        this.model.deposit = ((currencyToFloat(this.model.depositPrice.toString()) * 100) / this.model.outStandingPrice);
+        this.model.deposit =  currencyToFloat(((this.model.depositPrice * 100) / this.model.outStandingPrice).toFixed(2));
         const depositPrice = currencyToFloat(this.model.depositPrice.toString());
         const priceOutDeposit = (this.outStandingPriceState + this.bookDepositState);
         this.model.netPrice = priceOutDeposit - depositPrice;
@@ -283,7 +281,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
         const __interest = this.model.interest || 0;
 
         if (this.model.bookingPaymentType == 4 && this.model.instalmentEnd != undefined) {
-            let firstPay = new Date(getDateMyDatepicker(this.model.firstPayment));
+            let firstPay = new Date(this.model.firstPayment);
             firstPay.setDate(firstPay.getDate() + __instalmentEnd);
             this.tempDueDate.nativeElement.value = setLocalDate(firstPay.toISOString());
         }
@@ -382,8 +380,8 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     async onSubmit(f: any) {
         let form = {...this.model};
-        const firstPayment = getDateMyDatepicker(form.firstPayment);
-        form.firstPayment = setZeroHours(firstPayment);
+        // const firstPayment = form.firstPayment;
+        form.firstPayment = setZeroHours(form.firstPayment);
 
         if (this.mode === 'create') {
             await this.onCreate(form);

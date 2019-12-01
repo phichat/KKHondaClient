@@ -6,7 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageLoadWarpperService } from '../../../../services/common/page-load-warpper.service';
 import { RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MyDatePickerTHModule } from 'mydatepicker-th';
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
+import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
     ReactiveFormsModule,
     RouterModule,
     NgSelectModule,
-    MyDatePickerTHModule
+    PaymentTypeModule,
+    ThaiMatDatepickerModule
   ],
   declarations: [PaymentComponent],
   providers: [

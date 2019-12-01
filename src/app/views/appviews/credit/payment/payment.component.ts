@@ -2,13 +2,18 @@ import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ChangeDetectionStr
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
-import { setLocalDate, currencyToFloat, setZeroHours, MyDatePickerOptions, getDateMyDatepicker } from 'app/app.config';
-import { ModelUser } from '../../../../models/users';
+import { setLocalDate, currencyToFloat, setZeroHours, appConfig } from 'app/app.config';
 import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
 import * as $ from 'jquery';
 import { IUserResCookie } from 'app/interfaces/users';
+import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { ExpenseOtherService } from 'app/services/ris/expense-other.service';
+import { ExpensesType as EXPT } from 'app/entities/ris.entities';
 
 declare var toastr: any;
 
@@ -18,26 +23,40 @@ declare var toastr: any;
   styleUrls: ['./payment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PaymentComponent implements OnInit, OnDestroy {
 
   user: IUserResCookie;
   asyncUser: any;
   notPayment = 13; // ยังไม่ชำระ
 
   CurrencyToFloat = currencyToFloat;
-  myDatePickerOptions = MyDatePickerOptions;
 
+  PaymentType = PaymentType;
+  PaymentTypeList = PaymentTypeList;
   setLocalDate = setLocalDate
   checkSelectPaymentItem: boolean = true;
   contractModel: Contract = new Contract();
   bookingModel: Booking = new Booking();
   isPayModel: IsPay = new IsPay();
   isOutstandingModel: IsOutstanding = new IsOutstanding();
-  paymentModel: PaymentFG = new PaymentFG();
   contractItemModel: ContractItem[] = [];
   bankingsDropdown = new Array<DropDownModel>();
   statusDropdown = new Array<DropDownModel>();
   dataTable: any;
+
+  expenses: any[] = [];
+
+  formGroup: FormGroup;
+
+  PaymentData = new BehaviorSubject(null);
+  formPayment: IPayment;
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -45,28 +64,64 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     private chRef: ChangeDetectorRef,
     private _userService: UserService,
     private router: Router,
+    private fb: FormBuilder,
+    private s_expense: ExpenseOtherService,
   ) {
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+    this.user = this._userService.cookies;
   }
 
   ngOnInit() {
-    this._activatedRoute.params.subscribe(async param => {
+    this.formGroup = this.fb.group({
+      contractId: new FormControl(null),
+      outstanding: new FormControl(null),
+      dueDate: new FormControl(null),
+      payDate: new FormControl(null),
+      revenueStamp: new FormControl(null),
+      payNetPrice: new FormControl(null),
+      fineSume: new FormControl(null),
+      fineSumeOther: new FormControl(null),
+      payeer: new FormControl(null),
+      balanceNetPrice: new FormControl(null),
+      remark: new FormControl(null),
+      updateBy: new FormControl(null),
+      branchId: new FormControl(null),
+      totalPrice: new FormControl(null),
+      status: new FormControl(null),
+
+      paymentType: new FormControl('1'),
+
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(null),
+      documentRef: new FormControl(null),
+
+
+    });
+
+    this.s_expense.GetAll().subscribe(x => {
+      this.expenses = x.filter(o => o.expensesType == EXPT.Expenses);
+    });
+
+    this._activatedRoute.params.subscribe(param => {
       if (param['id']) {
         this._paymentService.GetByContractId(param['id'])
           .subscribe((res) => {
             this.loadCreditPayment(res);
           });
-
-        this.asyncUser = this._userService.currentData;
-        this._userService.currentData.subscribe(u => {
-          this.user = u;
-        });
-
       };
+    });
+
+    this.formGroup.get('paymentType').valueChanges.subscribe(x => {
+      this.setFormPaymentType(this.formGroup.get('totalPrice').value);
     })
+
+    this.PaymentData.next(this.paymentData);
   }
 
   ngOnDestroy(): void {
@@ -84,11 +139,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     let table: any = $('table');
     this.dataTable = table.DataTable({
       scrollX: true,
-      // scrollY: '50vh',
-      scrollCollapse: true,
-      // paging: false,
-      // searching: false,
-      // info: false
+      scrollCollapse: true
     });
   }
 
@@ -104,11 +155,9 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isPayModel = item.isPay ? item.isPay : new IsPay();
     this.isOutstandingModel = item.isOutstanding ? item.isOutstanding : new IsOutstanding();
     this.bankingsDropdown = item.bankingsDropdown;
-    // this.statusDropdown = item.statusDropdown;
 
     this.instalmentCount = 0;
     this.contractItemModel = [];
-    this.paymentModel = new PaymentFG();
 
     item.contractItem.map(res => {
       this.contractItemModel.push({
@@ -117,7 +166,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         contractItemId: res.contractItemId,
         contractId: item.contract.contractId,
         instalmentNo: res.instalmentNo,
-        dueDate: (res.dueDate),
+        dueDate: res.dueDate,
         payDate: res.payDate,
         balanceNetPrice: res.balanceNetPrice,
         payNetPrice: res.payNetPrice,
@@ -135,27 +184,22 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.chRef.markForCheck();
 
-    // setTimeout(() => {
-    //   this.reInitDatatable();
-    // }, 500);
-
     const outstandingPrice = this.contractItemModel
       .reduce((accumulator, current) => {
         return accumulator + (current.remainNetPrice + current.fineSumRemain + current.fineSumeOther);
       }, 0)
 
-    this.paymentModel.contractId = item.contract.contractId;
-    this.paymentModel.payeer = this.user.id.toString();
-    this.paymentModel.updateBy = this.user.id.toString();
-    this.paymentModel.branchId = this.user.branch;
-    this.paymentModel.payDate = { myDate: null };
-    this.paymentModel.outstanding = outstandingPrice;
+    this.formGroup.patchValue({
+      contractId: item.contract.contractId,
+      payeer: this.user.id.toString(),
+      updateBy: this.user.id.toString(),
+      branchId: this.user.branch,
+      payDate: null,
+      outstanding: outstandingPrice
+    })
 
     this.reInitDatatable();
     this.chRef.detectChanges();
-  }
-
-  ngAfterViewInit() {
   }
 
   instalmentCount: number = 0;
@@ -172,18 +216,30 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         return accumulator + (current.remainNetPrice);
       }, 0);
 
-    this.paymentModel.fineSume = fineSumRemain;
-    this.paymentModel.balanceNetPrice = balanceNetPrice;
-    this.paymentModel.payNetPrice = balanceNetPrice;
-    this.paymentModel.totalPrice = (this.paymentModel.revenueStamp | 0) + balanceNetPrice + fineSumRemain;
-    this.paymentModel.payDate = { myDate: null };
+    this.formGroup.patchValue({
+      fineSume: fineSumRemain,
+      balanceNetPrice: balanceNetPrice,
+      payNetPrice: balanceNetPrice,
+      totalPrice: balanceNetPrice + fineSumRemain,
+      payDate: null
+    });
+
+    this.setFormPaymentType(this.formGroup.get('totalPrice').value);
   }
 
-  onSubmit(value: any) {
-    let f = Object.assign({}, this.paymentModel) as PaymentFG;
+  setFormPaymentType(x: number) {
+    this.formPayment = {
+      ...this.formPayment,
+      paymentPrice: x
+    }
+    this.PaymentData.next(this.formPayment);
+  }
+
+  onSubmit() {
+    let f = { ...this.formGroup.getRawValue() } as PaymentFG;
     if (f.outstanding == 0) return;
 
-    f.payDate = getDateMyDatepicker(f.payDate).toISOString();
+    f.payDate = setZeroHours(f.payDate);
     const creditContractItem = this.contractItemModel
       .filter(x => x.isSlect == true)
       .map(x => {
@@ -201,7 +257,6 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
       this._paymentService.PaymentTerm(frm).subscribe((x) => {
         toastr.success(message.created);
-        
         this.loadCreditPayment(x);
       }, () => {
         toastr.error(message.failed);
@@ -239,14 +294,11 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onPrint(value: any) {
-
     if (value.invoice) {
-      window.open(`http://203.154.126.61/KK-Honda-Web/backoffice/php/print_tax_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`)
-
+      window.open(`${appConfig.apikkWeb}/php/print_tax_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`);
     }
-
     if (value.receipt) {
-      window.open(`http://203.154.126.61/KK-Honda-Web/backoffice/php/print_receive_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`);
+      window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`);
     }
   }
 
@@ -257,17 +309,32 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onCalculate() {
-    const payNetPrice = this.paymentModel.payNetPrice | 0;
-    const fineSum = this.paymentModel.fineSume | 0;
-    const fineSumOther = this.paymentModel.fineSumeOther | 0;
-    const disCountPrice = this.paymentModel.disCountPrice | 0;
-    const revenueStamp = this.paymentModel.revenueStamp | 0;
-
-    this.paymentModel.totalPrice = (revenueStamp + payNetPrice + fineSum + fineSumOther) - disCountPrice;
-    this.paymentModel.disCountRate = (disCountPrice * 100) / payNetPrice;
+    let x = this.formGroup.value;
+    const payNetPrice = x.payNetPrice | 0;
+    const fineSum = x.fineSume | 0;
+    const fineSumOther = x.fineSumeOther | 0;
+    const revenueStamp = x.revenueStamp | 0;
+    const totalPrice = (revenueStamp + payNetPrice + fineSum + fineSumOther);
+    this.formGroup.patchValue({ totalPrice });
+    this.setFormPaymentType(totalPrice);
+    // - disCountPrice;
+    // x.disCountRate = (disCountPrice * 100) / payNetPrice;
   }
 
   getTime(d: Date): number {
     return (new Date(d)).getTime();
   }
+
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
+    });
+  }
+
 }

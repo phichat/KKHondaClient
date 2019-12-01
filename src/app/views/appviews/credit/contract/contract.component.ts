@@ -8,7 +8,7 @@ import { CustomerService } from '../../../../services/customers';
 import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MyDatePickerOptions, setDateMyDatepicker, getDateMyDatepicker, setZeroHours, setLocalDate } from '../../../../app.config';
+import { setZeroHours, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
 import { BookingModel } from '../../../../models/selling';
 import { message } from 'app/app.message';
@@ -39,13 +39,11 @@ export class ContractComponent implements OnInit, OnDestroy {
     contractHireDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGurantor1Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGurantor2Dropdown: Array<DropDownModel> = new Array<DropDownModel>();
-    relationDropdown: Array<DropDownModel> = new Array<DropDownModel>();
+    // relationDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractGroupDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     contractTypeDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     zoneDropdown: Array<DropDownModel> = new Array<DropDownModel>();
     branchDropdown: Array<DropDownModel> = new Array<DropDownModel>();
-
-    myDatePickerOptions = MyDatePickerOptions;
 
     mode: string;
 
@@ -78,11 +76,11 @@ export class ContractComponent implements OnInit, OnDestroy {
                 this._contractService.getById(p.contractId).subscribe(res => {
                     const o = res.json();
                     this.userDropdown = o.userDropdown;
-                    this.contractMateDropdown = o.contractMateDropdown;
-                    this.contractHireDropdown = o.contractHireDropdown;
-                    this.contractGurantor1Dropdown = o.contractGurantor1Dropdown;
-                    this.contractGurantor2Dropdown = o.contractGurantor2Dropdown;
-                    this.relationDropdown = o.relationDropdown;
+                    // this.contractMateDropdown = o.contractMateDropdown;
+                    // this.contractHireDropdown = o.contractHireDropdown;
+                    // this.contractGurantor1Dropdown = o.contractGurantor1Dropdown;
+                    // this.contractGurantor2Dropdown = o.contractGurantor2Dropdown;
+                    // this.relationDropdown = o.relationDropdown;
                     this.contractGroupDropdown = o.contractGroupDropdown;
                     this.contractTypeDropdown = o.contractTypeDropdown;
                     this.statusDropdown = o.statusDropdown;
@@ -119,7 +117,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractItemModel = o.creditContractItem;
 
                     if (this.bookingModel.bookingPaymentType == 4) {
-                        let firstPay = new Date(getDateMyDatepicker(o.creditCalculate.firstPayment));
+                        let firstPay = new Date(o.creditCalculate.firstPayment);
                         firstPay.setDate(firstPay.getDate() + o.creditCalculate.instalmentEnd);
                         this.tempDueDate = setLocalDate(firstPay.toISOString());
                     }
@@ -129,7 +127,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.calculateModel = o.creditCalculate;
 
                     if (p.mode === 'create') {
-                        this.contractModel.contractDate = (o.creditContract.contractDate == null && setDateMyDatepicker(new Date()));
+                        this.contractModel.contractDate = (o.creditContract.contractDate == null && new Date());
                         this._userService.currentData.subscribe(u => {
                             this.contractModel.createdBy = u.id.toString();
                             this.contractModel.checkedBy = u.id.toString();
@@ -137,7 +135,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                             this.contractModel.keeperBy = u.id.toString();
                         })
                     } else {
-                        this.contractModel.contractDate = setDateMyDatepicker(new Date(this.contractModel.contractDate));
+                        this.contractModel.contractDate = new Date(this.contractModel.contractDate);
                         this._userService.currentData.subscribe(u => {
                             this.contractModel.updateBy = u.id.toString();
                         });
@@ -224,7 +222,7 @@ export class ContractComponent implements OnInit, OnDestroy {
             this.contractGurantor1Unload();
         });
     }
-    
+
     contractGurantor1Unload() {
         this.contractGurantor1Loading = false;
         this.contractGurantor1LoadingTxt = '';
@@ -249,17 +247,17 @@ export class ContractComponent implements OnInit, OnDestroy {
             this.contractGurantor2Unload();
         });
     }
-    contractGurantor2Unload(){
+    contractGurantor2Unload() {
         this.contractGurantor2Loading = false;
         this.contractGurantor2LoadingTxt = '';
     }
 
-    async onSubmit() {
-        const contractDate = getDateMyDatepicker(this.contractModel.contractDate);
-        this.contractModel.contractDate = setZeroHours(contractDate);
+    onSubmit() {
+        // const contractDate = this.contractModel.contractDate;
+        this.contractModel.contractDate = setZeroHours(this.contractModel.contractDate);
 
         if (this.mode === 'create') {
-            await this._contractService.Create(this.contractModel, this.bookingModel).subscribe(
+            this._contractService.Create(this.contractModel, this.bookingModel).subscribe(
                 () => {
                     this.router.navigate(['credit/payment', this.contractModel.contractId]);
                 },
@@ -268,7 +266,7 @@ export class ContractComponent implements OnInit, OnDestroy {
                 }
             );
         } else if (this.mode === 'edit') {
-            await this._contractService.Edit(this.contractModel, this.bookingModel).subscribe(
+            this._contractService.Edit(this.contractModel, this.bookingModel).subscribe(
                 () => {
                     this.router.navigate(['credit/contract-list/active']);
                 },
@@ -279,7 +277,7 @@ export class ContractComponent implements OnInit, OnDestroy {
         }
     }
 
-    onChangeContractDate(event: IMyDateModel) {
-        this.contractModel.contractDate = event;
-    }
+    // onChangeContractDate(event: IMyDateModel) {
+    //     this.contractModel.contractDate = event;
+    // }
 }

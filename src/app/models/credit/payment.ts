@@ -25,12 +25,17 @@ export class PaymentFG {
     remark: string;
     updateBy: string;
     branchId: number;
-    documentRef: string;
     disCountPrice: number;
     disCountRate: number;
     totalPrice: number;
     status: number;
-    bankCode: string;
+    
+    paymentPrice: number;
+    discountPrice: number;
+    totalPaymentPrice: number;
+    accBankId: number;
+    paymentDate: Date;
+    documentRef: string;
 }
 
 export class Contract {

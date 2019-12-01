@@ -31,9 +31,9 @@ import { PageloaderModule } from '../pageloader/pageloader.module';
 import { PageloaderService } from '../pageloader/pageloader.component';
 import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { PaymentModule } from './payment/payment.module';
-import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { ContractListCloseContractComponent } from './contract-list/contract-list-close-contract.component';
 import { ContractListOtherContractComponent } from './contract-list/contract-list-other-contract.component';
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 
 @NgModule({
   imports: [
@@ -43,7 +43,7 @@ import { ContractListOtherContractComponent } from './contract-list/contract-lis
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
-    MyDatePickerTHModule,
+    ThaiMatDatepickerModule,
     IboxtoolsModule,
     RptCutOffSaleModule,
     RptDelayedInterestModule,

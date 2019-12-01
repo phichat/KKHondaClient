@@ -55,10 +55,10 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       bookingDate: new FormControl(null, Validators.required),
       status1: new FormControl(1),
       createDate: new FormControl(new Date()),
-      createBy: new FormControl(null),
+      createBy: new FormControl(this.mUser.id, Validators.required),
       updateDate: new FormControl(null),
-      updateBy: new FormControl(null),
-      branchId: new FormControl(null),
+      updateBy: new FormControl(this),
+      branchId: new FormControl(this.mUser.branchId, Validators.required),
       reasonCode: new FormControl(null),
       eNo: new FormControl(null, Validators.required),
       fNo: new FormControl(null, Validators.required),
@@ -132,7 +132,15 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
         });
         this.s_loader.onEnd()
         this.chRef.detectChanges();
+      });
+
+    this.TagHistory$.subscribe(x => {
+      if (!x) return; 
+      this.formGroup.patchValue({
+        tagNo: x.tagNo,
+        province: x.province
       })
+    })
   }
 
   formPaymentChange(event: IPayment) {
@@ -174,6 +182,9 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       tagListItem: listItem
     };
 
+    console.log(form);
+    
+
     this.s_loader.showLoader();
     this.s_carRegis.Post(form)
       .pipe(
@@ -188,4 +199,5 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     this.$FNo.next(this.formGroup.get('fNo').value);
     this.$ENo.next(this.formGroup.get('eNo').value);
   }
+  
 }

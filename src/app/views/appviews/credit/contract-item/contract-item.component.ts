@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, DoCheck, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, DoCheck, OnDestroy } from '@angular/core';
 import { ContractItemModel } from '../../../../models/credit';
 import { CalculateService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
-import { getDateMyDatepicker, setLocalDate } from '../../../../app.config';
+import { setLocalDate } from '../../../../app.config';
 
 declare var $: any;
 declare var footable: any;
@@ -55,7 +55,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                 const vatUp = 1 + (p.nowVat / 100);
                 // กรณีขายเชื่อ จะเซ็ตระยะเวลาผ่อนชำระให้เป็น 1 งวด
                 const instalmentEnd = p.bookingPaymentType != 4 ? p.instalmentEnd : 1;
-                const firstPay = getDateMyDatepicker(p.firstPayment);
+                const firstPay = p.firstPayment;
 
                 // เงินจองถอด vat
                 const depositPriceExcVat = (this.currencyToFloat(p.depositPrice) / vatUp);

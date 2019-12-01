@@ -6,6 +6,7 @@ import { ActionMode } from 'app/entities/general.entities';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { ExpensesTag as EXPTag, ExpensesType } from 'app/entities/ris.entities';
 import { IExpensesOtherRisRes } from 'app/interfaces/ris';
+import { ITag } from './tag.interface';
 
 
 export class ListItemConfig extends TagConFormConfig {
@@ -164,5 +165,7 @@ export class ListItemConfig extends TagConFormConfig {
   @Input() Car?: BehaviorSubject<any>;
   @Input() Mode: ActionMode;
   @Output() TagListItem = new EventEmitter<any[]>();
+
+  @Input() Tag?: BehaviorSubject<ITag>;
   @Output() TagHistory = new EventEmitter<any[]>();
 }

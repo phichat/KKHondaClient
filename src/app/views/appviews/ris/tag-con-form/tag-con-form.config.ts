@@ -5,6 +5,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { IUserResCookie } from 'app/interfaces/users';
 import { PaymentType, PaymentTypeList } from 'app/entities/general.entities';
 import { IPayment } from 'app/interfaces/payment.interface';
+import { ITag } from './tag.interface';
 
 export class TagConFormConfig extends RisConfig {
 
@@ -29,6 +30,7 @@ export class TagConFormConfig extends RisConfig {
     $FNo = new Subject<string>();
     $ENo = new Subject<string>();
 
+    $Tag = new BehaviorSubject<ITag>(null);
     $HistoryCar: any = { invalid: true };
     formPayment: IPayment;
     PaymentData = new BehaviorSubject(null);
@@ -39,6 +41,12 @@ export class TagConFormConfig extends RisConfig {
 
     historyCarChange(event: any) {
         this.$HistoryCar = { ...event };
+        this.$Tag.next({
+            tagNo: event.tagNo,
+            tagRegis: event.tagRegis,
+            tagExpire: event.tagExpire,
+            province: event.province
+        });
     }
 
     confirmHistory() {

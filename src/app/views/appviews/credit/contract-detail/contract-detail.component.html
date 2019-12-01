@@ -214,12 +214,12 @@
                                         <div class="row">
                                             <div class="col-md-6 m-b-sm">
                                                 <strong> ราคาสินค้า (รวม VAT)</strong>
-                                                {{calculateModel.netPrice | number}}
+                                                {{calculateModel.netPrice | number:'1.2-2':'en-US'}}
                                             </div>
                                             <div class="col-md-6 m-b-sm">
                                                 <strong>เงินดาวน์</strong>
-                                                {{calculateModel.depositPrice | number}} ({{calculateModel.deposit |
-                                                number}}%)
+                                                {{calculateModel.depositPrice | number:'1.2-2':'en-US'}} ({{calculateModel.deposit |
+                                                number:'1.2-2':'en-US'}}%)
                                             </div>
                                             <div class="col-md-6 m-b-sm">
                                                 <strong>ระยะเวลาผ่อนชำระ</strong>
@@ -230,15 +230,15 @@
                                             </div>
                                             <div class="col-md-6 m-b-sm">
                                                 <strong>อัตราดอกเบี้ย/เดือน</strong>
-                                                {{calculateModel.interest | number}}%
+                                                {{calculateModel.interest | number:'1.2-2':'en-US'}}%
                                             </div>
                                             <div class="col-md-6 m-b-sm">
                                                 <strong>ยอดจัด (รวม VAT)</strong>
-                                                {{calculateModel.remain | number}}
+                                                {{calculateModel.remain | number:'1.2-2':'en-US'}}
                                             </div>
                                             <div class="col-md-6 m-b-sm">
                                                 <strong>ค่างวด (รวม VAT)</strong>
-                                                {{calculateModel.instalmentPrice | number}}
+                                                {{calculateModel.instalmentPrice | number:'1.2-2':'en-US'}}
                                             </div>
                                             <div class="col-md-6 m-b-sm">
                                                 <strong>ชำระงวดแรก</strong>

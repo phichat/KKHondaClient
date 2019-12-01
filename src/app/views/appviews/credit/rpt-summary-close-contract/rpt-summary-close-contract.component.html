@@ -27,14 +27,19 @@
             <div class="row form-group">
                 <label for="sDate" class="col-sm-2">ปิดสัญญาวันที่ :</label>
                 <div class="col-sm-3">
-                    <my-date-picker-th name="endContractDateStart" ngModel [options]="myDatePickerOptions" required></my-date-picker-th>
+                    <thai-mat-datepicker id="dp1" name="endContractDateStart" ngModel required>
+                    </thai-mat-datepicker>
+                    <!-- <my-date-picker-th name="endContractDateStart" ngModel [options]="myDatePickerOptions" required></my-date-picker-th> -->
                     <!-- <input type="date" name="endContractDateStart" id="sDate" ngModel class="form-control from-control-sm" required> -->
                 </div>
             </div>
             <div class="row form-group">
                 <label for="eDate" class="col-sm-2">ถึงวันที่ :</label>
                 <div class="col-sm-3">
-                    <my-date-picker-th name="endContractDateEnd" ngModel [options]="myDatePickerOptions" required></my-date-picker-th>
+                    <thai-mat-datepicker id="dp2" name="endContractDateEnd" ngModel required>
+                    </thai-mat-datepicker>
+                    <!-- <my-date-picker-th name="endContractDateEnd" ngModel [options]="myDatePickerOptions" required>
+                    </my-date-picker-th> -->
                     <!-- <input type="date" name="endContractDateEnd" id="eDate" ngModel class="form-control from-control-sm" required> -->
                 </div>
             </div>

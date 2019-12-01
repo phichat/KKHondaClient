@@ -3,23 +3,23 @@ export interface ICarHistory {
   branchId: number;
   carId: number;
   carNo: string;
-  commitExpire: Date;
+  commitExpire?: Date;
   commitNo: string;
   eNo: string;
   fNo: string;
   owner: string;
   prbCompany: string;
-  prbRegis: Date;
-  prbExpire: Date;
+  prbRegis?: Date;
+  prbExpire?: Date;
   prbNo: string;
   province: string;
   tagNo: string;
-  tagRegis: Date;
-  tagExpire: Date;
+  tagRegis?: Date;
+  tagExpire?: Date;
   visitor: string;
   warCompany: string;
-  warRegis: Date;
-  warExpire: Date;
+  warRegis?: Date;
+  warExpire?: Date;
   warNo: string;
 }
 
