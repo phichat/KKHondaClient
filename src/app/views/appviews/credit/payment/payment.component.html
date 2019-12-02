@@ -86,7 +86,7 @@
     <div class="ibox-content">
       <div class="row">
         <div class="col-sm-12">
-          <table class="table table-striped table-bordered table-sm table-hover" style="width: 120%;">
+          <table class="table table-striped table-bordered table-sm table-hover set-dataTable" style="width: 100%;">
             <thead>
               <tr>
                 <th class="text-center">เลือก</th>
@@ -98,8 +98,8 @@
                 <th class="">ค่าปรับอื่นๆ</th>
                 <th class="text-center">ยอดคงค้าง</th>
                 <th class="text-center">สถานะ</th>
-                <th class="text-center">เลขที่ใบกำกับภาษี</th>
-                <th class="text-center">วันที่ชำระ</th>
+                <!-- <th class="text-center">เลขที่ใบกำกับภาษี</th> -->
+                <!-- <th class="text-center">วันที่ชำระ</th> -->
               </tr>
             </thead>
             <tbody>
@@ -130,20 +130,20 @@
                 <td class="text-right" [attr.data-order]="item.fineSumRemain">
                   {{item.fineSumRemain | number:'1.2-2':'en-US'}}
                 </td>
-                <td class="text-right" [attr.data-order]="item.fineSumeOther">
-                  {{item.fineSumeOther | number:'1.2-2':'en-US'}}
+                <td class="text-right" [attr.data-order]="item.fineSumOther">
+                  {{item.fineSumOther | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-right"
-                  [attr.data-order]="(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther)">
-                  {{(item.remainNetPrice + item.fineSumRemain + item.fineSumeOther) | number:'1.2-2':'en-US'}}
+                  [attr.data-order]="(item.remainNetPrice + item.fineSumRemain + item.fineSumOther)">
+                  {{(item.remainNetPrice + item.fineSumRemain + item.fineSumOther) | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-center" [ngSwitch]="item.status">
                   <span *ngSwitchCase="11" class="text-navy">{{item.statusDesc}}</span>
                   <span *ngSwitchCase="12" class="text-warning">{{item.statusDesc}}</span>
                   <span *ngSwitchCase="13" class="text-danger">{{item.statusDesc}}</span>
                 </td>
-                <td class="text-center">{{item.taxInvoiceNo}}</td>
-                <td class="text-center" [attr.data-order]="getTime(item.payDate)">{{setLocalDate(item.payDate)}}</td>
+                <!-- <td class="text-center">{{item.taxInvoiceNo}}</td> -->
+                <!-- <td class="text-center" [attr.data-order]="getTime(item.payDate)">{{setLocalDate(item.payDate)}}</td> -->
               </tr>
             </tbody>
           </table>
@@ -153,120 +153,151 @@
       <div class="hr-line-dashed"></div>
 
       <form class="form-horizontal" autocomplete="off" action="" [formGroup]="formGroup">
-        <div class="row form-group">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a data-toggle="tab" href="#tab-his-1">ฟอร์ชำระเงิน</a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#tab-his-2">ตารางแสดงภาระหนี้</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div id="tab-his-1" class="tab-pane active">
+              <div class="panel-body">
+                <div class="row form-group">
 
-          <div class="col-md-6">
+                  <div class="col-md-6">
 
-            <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">ยอดคงค้าง</label>
-              <div class="col-sm-8">
-                <span
-                  class="form-control disabled">{{formGroup.get('outstanding').value | number:'1.2-2':'en-US'}}</span>
-              </div>
-            </div>
-            <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">ผู้รับเงิน</label>
-              <div class="col-sm-8">
-                <span class="form-control disabled">{{user.fullName}}</span>
-              </div>
-            </div>
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 control-label">ยอดคงค้าง</label>
+                      <div class="col-sm-8">
+                        <span
+                          class="form-control disabled">{{formGroup.get('outstanding').value | number:'1.2-2':'en-US'}}</span>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 control-label">ผู้รับเงิน</label>
+                      <div class="col-sm-8">
+                        <span class="form-control disabled">{{user.fullName}}</span>
+                      </div>
+                    </div>
 
-            <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">จำนวน</label>
-              <div class="col-sm-8">
-                <span class="form-control disabled">{{instalmentCount}} งวด</span>
-              </div>
-            </div>
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 control-label">จำนวน</label>
+                      <div class="col-sm-8">
+                        <span class="form-control disabled">{{instalmentCount}} งวด</span>
+                      </div>
+                    </div>
 
-            <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">ค่าปรับล่าช้า</label>
-              <div class="col-sm-8">
-                <span class="form-control disabled">{{formGroup.get('fineSume').value | number:'1.2-2':'en-US'}}</span>
-              </div>
-            </div>
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 control-label">ค่าปรับล่าช้า</label>
+                      <div class="col-sm-8">
+                        <span
+                          class="form-control disabled">{{formGroup.get('fineSum').value | number:'1.2-2':'en-US'}}</span>
+                      </div>
+                    </div>
 
-            <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">ค่าปรับอื่นๆ</label>
-              <div class="col-sm-8">
-                <input (keyup)="onCalculate();" type="text" formControlName="fineSumeOther" class="form-control"
-                  [disabled]="checkSelectPaymentItem" placeholder="0.00">
-              </div>
-            </div>
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 control-label">ค่าปรับอื่นๆ</label>
+                      <div class="col-sm-8">
+                        <input (keyup)="onCalculate();" type="text" formControlName="fineSumOther" class="form-control"
+                          [disabled]="checkSelectPaymentItem" placeholder="0.00">
+                      </div>
+                    </div>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">อากรแสตมป์</label>
-              <div class="col-md-8">
-                <input (keyup)="onCalculate();" type="text" formControlName="revenueStamp" class="form-control"
-                  [disabled]="checkSelectPaymentItem" placeholder="0.00">
-              </div>
-            </div>
+                    <div class="row form-group">
+                      <label for="" class="col-md-4 control-label">อากรแสตมป์</label>
+                      <div class="col-md-8">
+                        <input (keyup)="onCalculate();" type="text" formControlName="revenueStamp" class="form-control"
+                          [disabled]="checkSelectPaymentItem" placeholder="0.00">
+                      </div>
+                    </div>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">ค่างวด</label>
-              <div class="col-md-8">
-                <span
-                  class="form-control disabled">{{formGroup.get('payNetPrice').value | number:'1.2-2':'en-US'}}</span>
-              </div>
-            </div>
+                    <div class="row form-group">
+                      <label for="" class="col-md-4 control-label">ค่างวด</label>
+                      <div class="col-md-8">
+                        <span
+                          class="form-control disabled">{{formGroup.get('payNetPrice').value | number:'1.2-2':'en-US'}}</span>
+                      </div>
+                    </div>
 
-            <div class="row form-group">
-              <label for="" class="col-md-4 control-label">ยอดที่ต้องชำระ</label>
-              <div class="col-md-8">
-                <span
-                  class="form-control disabled">{{formGroup.get('totalPrice').value | number:'1.2-2':'en-US'}}</span>
-              </div>
-            </div>
-          </div>
+                    <div class="row form-group">
+                      <label for="" class="col-md-4 control-label">ยอดที่ต้องชำระ</label>
+                      <div class="col-md-8">
+                        <span
+                          class="form-control disabled">{{formGroup.get('totalPrice').value | number:'1.2-2':'en-US'}}</span>
+                      </div>
+                    </div>
+                  </div>
 
-          <div class="col-md-6">
-            <div class="row form-group">
-              <div class="">
-                <label class="col-md-4 control-label">ประเภทชำระ</label>
-                <div class="col-md-8">
-                  <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
-                    <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
-                    <label for="pt{{i}}">{{item.desc}}</label>
+                  <div class="col-md-6">
+                    <!-- <div class="row form-group">
+                              <label for="" class="col-md-4 control-label is-required">ผู้มาติดต่อชำระ</label>
+                              <div class="col-md-8">
+                                <input type="text" formControlName="paymentName" class="form-control">
+                              </div>
+                            </div> -->
+
+                    <div class="row form-group">
+                      <div class="">
+                        <label class="col-md-4 control-label">ประเภทชำระ</label>
+                        <div class="col-md-8">
+                          <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                            <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
+                            <label for="pt{{i}}">{{item.desc}}</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div [ngSwitch]="formGroup.get('paymentType').value">
+                      <ng-container *ngSwitchCase="PaymentType.Cash">
+                        <app-payment-type-cash [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+                        </app-payment-type-cash>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="PaymentType.Transfer">
+                        <app-payment-type-transfer [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+                        </app-payment-type-transfer>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="PaymentType.Cheque">
+                        <app-payment-type-cheque [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+                        </app-payment-type-cheque>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="PaymentType.CreditCard">
+                        <app-payment-type-credit-card [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+                        </app-payment-type-credit-card>
+                      </ng-container>
+                    </div>
+
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 control-label">บันทึกเพิ่มเติม
+                      </label>
+                      <div class="col-sm-8">
+                        <textarea class="form-control form-control-sm" formControlName="remark" rows="3"
+                          [disabled]="checkSelectPaymentItem"></textarea>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
             </div>
-
-            <div [ngSwitch]="formGroup.get('paymentType').value">
-              <ng-container *ngSwitchCase="PaymentType.Cash">
-                <app-payment-type-cash [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
-                </app-payment-type-cash>
-              </ng-container>
-              <ng-container *ngSwitchCase="PaymentType.Transfer">
-                <app-payment-type-transfer [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
-                </app-payment-type-transfer>
-              </ng-container>
-              <ng-container *ngSwitchCase="PaymentType.Cheque">
-                <app-payment-type-cheque [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
-                </app-payment-type-cheque>
-              </ng-container>
-              <ng-container *ngSwitchCase="PaymentType.CreditCard">
-                <app-payment-type-credit-card [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
-                </app-payment-type-credit-card>
-              </ng-container>
-            </div>
-
-            <div class="row form-group">
-              <label for="" class="col-sm-4 control-label">บันทึกเพิ่มเติม
-              </label>
-              <div class="col-sm-8">
-                <textarea class="form-control form-control-sm" formControlName="remark" rows="3"
-                  [disabled]="checkSelectPaymentItem"></textarea>
+            <div id="tab-his-2" class="tab-pane">
+              <div class="panel-body">
+                <app-contract-item [contractItemModel]="[]" [debitTable]="debitTable" ></app-contract-item>
               </div>
             </div>
-
           </div>
         </div>
+
 
         <hr class="hr-dashed">
 
         <div class="row form-group text-right">
           <div class="col-sm-12">
-            <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid || checkSelectPaymentItem"
+            <button type="button" class="btn btn-primary"
+              [disabled]="formGroup.invalid || checkSelectPaymentItem || formPayment.options.invalid"
               (click)="onSubmit()">บันทึก</button>
             <button type="button" class="btn" (click)="onCanclePayment()">ยกเลิก</button>
           </div>
@@ -311,7 +342,7 @@
               <div class="col-lg-7">
                 <select name="contractItemId" class="form-control form-control-sm" required ngModel>
                   <option *ngFor="let item of contractItemModel" [value]="item.contractItemId"
-                    [disabled]="item.payDate == null">
+                    [disabled]="item.status == 13">
                     <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
                     <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
                   </option>

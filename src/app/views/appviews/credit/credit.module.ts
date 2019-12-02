@@ -30,10 +30,13 @@ import { RptPaymentHistoryModule } from './rpt-payment-history/rpt-payment-histo
 import { PageloaderModule } from '../pageloader/pageloader.module';
 import { PageloaderService } from '../pageloader/pageloader.component';
 import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
-import { PaymentModule } from './payment/payment.module';
+// import { PaymentModule } from './payment/payment.module';
 import { ContractListCloseContractComponent } from './contract-list/contract-list-close-contract.component';
 import { ContractListOtherContractComponent } from './contract-list/contract-list-other-contract.component';
 import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
+import { PaymentComponent } from './payment/payment.component';
+import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
+import { PaymentService } from 'app/services/credit/payment.service';
 
 @NgModule({
   imports: [
@@ -51,7 +54,7 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
     RptOutstandingModule,
     RptPaymentHistoryModule,
     PageloaderModule,
-    PaymentModule
+    PaymentTypeModule,
   ],
   declarations: [
     CreditComponent,
@@ -69,12 +72,13 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
     ExDetailFreeComponent,
     RptSummaryCloseContractComponent,
     ContractListCloseContractComponent,
-    ContractListOtherContractComponent
+    ContractListOtherContractComponent,
+    PaymentComponent
   ],
   providers: [
     SellActivityService,
     BookingService,
-    // CreditService,
+    PaymentService,
     UserService,
     CalculateService,
     ContractItemService,

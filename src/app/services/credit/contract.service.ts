@@ -11,7 +11,7 @@ export class ContractService {
 
     constructor(
         private httpService: HttpService
-        ) { }
+    ) { }
 
     GetActive() {
         const apiUrl = `${this.url}/Active`;
@@ -39,6 +39,12 @@ export class ContractService {
         return this.httpService.get(api, { params });
     }
 
+    GetContractItem(contractId: string, refNo: string) {
+        const api = `${this.url}/GetContractItem`;
+        const params = { contractId, refNo };
+        return this.httpService.get(api, { params });
+    }
+
     Detail(contractId: string) {
         const apiURL = `${this.url}/Detail`;
         const params = { contractId };
@@ -46,14 +52,14 @@ export class ContractService {
     }
 
     Edit(creditContract: ContractModel, booking: BookingModel) {
-        const params = {contract: creditContract, booking};
+        const params = { contract: creditContract, booking };
         const apiURL = `${this.url}/Edit`;
 
         return this.httpService.post(apiURL, params);
     }
 
     Create(creditContract: ContractModel, booking: BookingModel) {
-        const params = {contract: creditContract, booking};
+        const params = { contract: creditContract, booking };
         const apiURL = `${this.url}/Create`;
 
         return this.httpService.post(apiURL, params);

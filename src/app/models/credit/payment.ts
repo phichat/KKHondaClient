@@ -18,8 +18,8 @@ export class PaymentFG {
     payDate: any;
     revenueStamp: number;
     payNetPrice: number;
-    fineSume: number;
-    fineSumeOther: number;
+    fineSum: number;
+    fineSumOther: number;
     payeer: string;
     balanceNetPrice: number;
     remark: string;
@@ -87,7 +87,7 @@ export class ContractItem {
     paymentType: number;
     fineSum: number;
     fineSumRemain: number;
-    fineSumeOther: number;
+    fineSumOther: number;
     remark: string;
     payeer: string;
     status: number;

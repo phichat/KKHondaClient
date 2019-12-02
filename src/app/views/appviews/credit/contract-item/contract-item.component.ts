@@ -3,6 +3,7 @@ import { ContractItemModel } from '../../../../models/credit';
 import { CalculateService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
 import { setLocalDate } from '../../../../app.config';
+import { Subject, combineLatest } from 'rxjs';
 
 declare var $: any;
 declare var footable: any;
@@ -25,6 +26,8 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
     private subDest: any;
 
     @Input() contractItemModel: ContractItemModel[];
+    @Input() debitTable?: Subject<ContractItemModel[]>;
+
 
     constructor(
         private chRef: ChangeDetectorRef,
@@ -44,8 +47,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
 
     ngOnInit() {
         if (this.contractItemModel.length === 0) {
-            this.subDest = this._calService.currentData.subscribe(p => {
-
+            this._calService.currentData.subscribe(p => {
                 if (p.instalmentEnd == undefined || !p.instalmentEnd) return;
 
                 this.chRef.markForCheck();
@@ -91,8 +93,8 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                         } else {
                             // กรณีขายเชื่อ
                             // เอา ระยะเวลาผ่อนชำระ(เครดิต วัน) มากำหนดวันกำหนดชำระ
-                           const __instalmentEnd = parseInt((p.instalmentEnd as any).toString());
-                           d.setDate(d.getDate() + __instalmentEnd);
+                            const __instalmentEnd = parseInt((p.instalmentEnd as any).toString());
+                            d.setDate(d.getDate() + __instalmentEnd);
                         }
 
                         dueDate = d;
@@ -155,6 +157,15 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                 this.setTotal();
             })
         }
+
+        if (this.debitTable != null) {
+            this.debitTable.subscribe(x => {
+                if (!x.length) return;
+                this.chRef.markForCheck();
+                this.contractItemModel = x;
+                this.setTotal();
+            })
+        }
     }
 
     ngDoCheck() {
@@ -186,7 +197,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
         });
 
         this.contractItemModel.map((o, i) => {
-            const preIndex = (i === 0) ? 0 : i - 1; 
+            const preIndex = (i === 0) ? 0 : i - 1;
 
             if (i == 1) {
                 // ดอกเบี้ยเงินต้นคงเหลือ
