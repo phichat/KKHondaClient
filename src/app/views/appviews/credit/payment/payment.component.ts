@@ -15,8 +15,9 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ExpenseOtherService } from 'app/services/ris/expense-other.service';
 import { ContractItemModel } from 'app/models/credit/contract-item-model';
 import { mergeMap, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, combineLatest } from 'rxjs';
 import { ContractService } from 'app/services/credit/contract.service';
+import { IContractTransactionReceipt } from 'app/models/credit';
 
 declare var toastr: any;
 
@@ -42,6 +43,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   isPayModel: IsPay = new IsPay();
   isOutstandingModel: IsOutstanding = new IsOutstanding();
   contractItemModel: ContractItem[] = [];
+  receiptList: IContractTransactionReceipt[];
   debitTable = new BehaviorSubject<ContractItemModel[]>([]);
   bankingsDropdown = new Array<DropDownModel>();
   statusDropdown = new Array<DropDownModel>();
@@ -113,17 +115,21 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     this._activatedRoute.params.subscribe(param => {
       if (param['id']) {
-        this._paymentService.GetByContractId(param['id']).pipe(
-          mergeMap((x) => {
-            const refNo = x.contract.refNo;
-            return this.s_contract.GetContractItem(param['id'], refNo).pipe(
-              map(o => { return { payment: x, contractItem: o.json() } })
-            );
+        const api1 = this._paymentService.GetByContractId(param['id']);
+        const api2 = this._paymentService.GetReceiptByContractId(param['id']);
+        const api3 = this.s_contract.GetContractItem(param['id']);
+
+        const observe = combineLatest(api1, api2, api3).pipe(
+          map(x => {
+            return { payment: x[0], receipt: x[1], contractItem: x[2] }
           })
-        ).subscribe(x => {
+        );
+
+        observe.subscribe(x => {
           this.chRef.markForCheck();
           this.loadCreditPayment(x.payment);
           this.debitTable.next(x.contractItem);
+          this.receiptList = x.receipt;
         });
       };
     });
@@ -225,7 +231,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         fineSumRemain += current.fineSumRemain;
         return accumulator + (current.remainNetPrice);
       }, 0);
-    console.log(fineSumRemain);
 
     this.formGroup.patchValue({
       fineSum: fineSumRemain,
@@ -316,11 +321,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   onPrint(value: any) {
+    const tax = this.receiptList.find(x => x.transactionId == value.transactionId);
     if (value.invoice) {
-      window.open(`${appConfig.apikkWeb}/php/print_tax_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`);
+      window.open(`${appConfig.apikkWeb}/php/print_tax_3.php?booking_id=${value.bookingId}&tax_inv_no=${tax.taxInvNo}`);
     }
     if (value.receipt) {
-      window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&contract_item_id=${value.contractItemId}`);
+      window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&receipt_no=${tax.receiptNo}`);
     }
   }
 

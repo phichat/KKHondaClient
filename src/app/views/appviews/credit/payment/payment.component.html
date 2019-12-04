@@ -285,7 +285,7 @@
             </div>
             <div id="tab-his-2" class="tab-pane">
               <div class="panel-body">
-                <app-contract-item [contractItemModel]="[]" [debitTable]="debitTable" ></app-contract-item>
+                <app-contract-item [contractItemModel]="[]" [debitTable]="debitTable"></app-contract-item>
               </div>
             </div>
           </div>
@@ -310,7 +310,7 @@
   <div class="modal inmodal" id="frmPrint" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-sm">
       <div class="modal-content animated fadeIn">
-        <form class="form-horizontal" action="" #fm="ngForm" (ngSubmit)="onPrint(fm.value)">
+        <form class="form-horizontal" action="" #fm="ngForm">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">×</span>
@@ -338,20 +338,18 @@
                   </label>
                 </div>
               </div>
-              <label for="" class="col-lg-5">งวดที่รับชำระ</label>
+              <label for="" class="col-lg-5">เลขที่ใบกำกับภาษี</label>
               <div class="col-lg-7">
-                <select name="contractItemId" class="form-control form-control-sm" required ngModel>
-                  <option *ngFor="let item of contractItemModel" [value]="item.contractItemId"
-                    [disabled]="item.status == 13">
-                    <span *ngIf="item.instalmentNo == 0">เงินดาวน์</span>
-                    <span *ngIf="item.instalmentNo > 0">{{item.instalmentNo}}</span>
+                <select name="transactionId" class="form-control form-control-sm" required ngModel>
+                  <option *ngFor="let item of receiptList" [value]="item.transactionId">
+                    {{item.taxInvNo}}
                   </option>
                 </select>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="fm.invalid">ตกลง</button>
+            <button (click)="onPrint(fm.value)" class="btn btn-primary" [disabled]="fm.invalid">ตกลง</button>
           </div>
         </form>
       </div>

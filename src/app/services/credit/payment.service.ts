@@ -5,6 +5,7 @@ import { Payment } from 'app/models/credit/payment';
 import { HttpService } from 'app/core/http.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { IContractTransactionReceipt } from 'app/models/credit';
 
 @Injectable()
 export class PaymentService {
@@ -21,10 +22,15 @@ export class PaymentService {
   constructor(
     private http: HttpClient,
     private httpService: HttpService
-    ) { }
+  ) { }
 
   GetByContractId(id: string): Observable<Payment> {
     const api = `${this.url}/${id}`;
+    return this.httpService.get(api).pipe(map(x => x.json()));
+  }
+
+  GetReceiptByContractId(contractId: string): Observable<IContractTransactionReceipt[]> {
+    const api = `${this.url}/${contractId}`;
     return this.httpService.get(api).pipe(map(x => x.json()));
   }
 

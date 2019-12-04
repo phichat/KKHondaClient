@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ContractModel } from '../../models/credit';
+import { ContractModel, ContractItemModel } from '../../models/credit';
 import { BookingModel } from '../../models/selling';
 import { HttpService } from 'app/core/http.service';
 import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ContractService {
@@ -39,10 +40,10 @@ export class ContractService {
         return this.httpService.get(api, { params });
     }
 
-    GetContractItem(contractId: string, refNo: string) {
+    GetContractItem(contractId: string): Observable<ContractItemModel[]> {
         const api = `${this.url}/GetContractItem`;
-        const params = { contractId, refNo };
-        return this.httpService.get(api, { params });
+        const params = { contractId };
+        return this.httpService.get(api, { params }).pipe(map(x => x.json()));
     }
 
     Detail(contractId: string) {
