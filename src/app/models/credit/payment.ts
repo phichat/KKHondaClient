@@ -75,7 +75,7 @@ export class IsOutstanding {
 }
 
 export class ContractItem {
-    isSlect: boolean;
+    isSelect: boolean;
     contractItemId: number;
     contractId: number;
     taxInvoiceNo: string;

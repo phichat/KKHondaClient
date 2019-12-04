@@ -1,23 +1,16 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
-import { Payment, ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
-import { setLocalDate, currencyToFloat, setZeroHours, appConfig } from 'app/app.config';
+import { Payment, IsPay, IsOutstanding, PaymentFG, ContractItem } from 'app/models/credit/payment';
+import { setLocalDate, setZeroHours, appConfig } from 'app/app.config';
 import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
-import { DropDownModel } from 'app/models/drop-down-model';
-import * as $ from 'jquery';
-import { IUserResCookie } from 'app/interfaces/users';
-import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
 import { IPayment } from 'app/interfaces/payment.interface';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ExpenseOtherService } from 'app/services/ris/expense-other.service';
-import { ContractItemModel } from 'app/models/credit/contract-item-model';
-import { mergeMap, map } from 'rxjs/operators';
-import { of, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import { ContractService } from 'app/services/credit/contract.service';
-import { IContractTransactionReceipt } from 'app/models/credit';
+import { PaymentConfig } from './payment.config';
 
 declare var toastr: any;
 
@@ -27,34 +20,8 @@ declare var toastr: any;
   styleUrls: ['./payment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaymentComponent implements OnInit, OnDestroy {
+export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy {
 
-  user: IUserResCookie;
-  asyncUser: any;
-  notPayment = 13; // ยังไม่ชำระ
-
-  CurrencyToFloat = currencyToFloat;
-  PaymentType = PaymentType;
-  PaymentTypeList = PaymentTypeList;
-  setLocalDate = setLocalDate
-  checkSelectPaymentItem: boolean = true;
-  contractModel: Contract = new Contract();
-  bookingModel: Booking = new Booking();
-  isPayModel: IsPay = new IsPay();
-  isOutstandingModel: IsOutstanding = new IsOutstanding();
-  contractItemModel: ContractItem[] = [];
-  receiptList: IContractTransactionReceipt[] = [];
-  debitTable = new BehaviorSubject<ContractItemModel[]>([]);
-  bankingsDropdown = new Array<DropDownModel>();
-  statusDropdown = new Array<DropDownModel>();
-  dataTable: any;
-
-  // expenses: any[] = [];
-
-  formGroup: FormGroup;
-
-  PaymentData = new BehaviorSubject(null);
-  formPayment: IPayment;
   private paymentData: IPayment = {
     paymentPrice: null,
     options: {
@@ -72,6 +39,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private s_contract: ContractService,
   ) {
+    super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -80,6 +48,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.instalmentGroup = this.fb.group({
+      instalment: this.fb.array([])
+    });
+
     this.formGroup = this.fb.group({
       contractId: new FormControl(null, Validators.required),
       outstanding: new FormControl(null),
@@ -97,6 +69,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
       totalPrice: new FormControl(null, Validators.required),
       status: new FormControl(null),
 
+      cutBalance: new FormControl(null),
+      discountInterest: new FormControl(null),
+
       instalmentNo: new FormControl(null),
       paymentName: new FormControl(null),
       paymentType: new FormControl('1', Validators.required),
@@ -108,10 +83,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
       documentRef: new FormControl(null),
 
     });
-
-    // this.s_expense.GetAll().subscribe(x => {
-    //   this.expenses = x.filter(o => o.expensesType == EXPT.Expenses);
-    // });
 
     this._activatedRoute.params.subscribe(param => {
       if (param['id']) {
@@ -136,33 +107,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     this.formGroup.get('paymentType').valueChanges.subscribe(x => {
       this.setFormPaymentType(this.formGroup.get('totalPrice').value);
-    })
+    });
 
     this.PaymentData.next(this.paymentData);
   }
 
   ngOnDestroy(): void {
     this.destroyDatatable();
-  }
-
-  destroyDatatable() {
-    if (this.dataTable) {
-      this.dataTable.destroy()
-      this.dataTable = null
-    }
-  }
-
-  private initDatatable(): void {
-    let table: any = $('table.set-dataTable');
-    this.dataTable = table.DataTable({
-      scrollX: true,
-      scrollCollapse: true
-    });
-  }
-
-  private reInitDatatable(): void {
-    this.destroyDatatable();
-    setTimeout(() => this.initDatatable(), 0)
   }
 
   loadCreditPayment(item: Payment) {
@@ -173,60 +124,49 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.isOutstandingModel = item.isOutstanding ? item.isOutstanding : new IsOutstanding();
 
     this.instalmentCount = 0;
-    this.contractItemModel = [];
-
-    item.contractItem.map(res => {
-      this.contractItemModel.push({
-        isSlect: false,
-        taxInvoiceNo: res.taxInvoiceNo,
-        contractItemId: res.contractItemId,
-        contractId: item.contract.contractId,
-        instalmentNo: res.instalmentNo,
-        dueDate: res.dueDate,
-        payDate: res.payDate,
-        balanceNetPrice: res.balanceNetPrice,
-        payNetPrice: res.payNetPrice,
-        paymentType: res.paymentType,
-        fineSum: res.fineSum || 0,
-        fineSumRemain: res.fineSumRemain || 0,
-        fineSumOther: res.fineSumOther || 0,
-        remark: res.remark,
-        payeer: this.user.id.toString(),
-        status: res.status,
-        statusDesc: res.statusDesc,
-        remainNetPrice: res.remainNetPrice
-      })
+    this.chRef.markForCheck();
+    const contractItem = item.contractItem.map(res => {
+      return {
+        ...res,
+        isSelect: false,
+        fineSum: res.fineSum | 0,
+        fineSumRemain: res.fineSumRemain | 0,
+        fineSumOther: res.fineSumOther | 0,
+        payeer: this.user.id.toString()
+      }
     });
 
-    this.chRef.markForCheck();
+    this.setItemFormArray(contractItem, this.instalmentGroup, 'instalment');
+    this.reInitDatatable();
 
-    const outstandingPrice = this.contractItemModel
-      .reduce((accumulator, current) => {
-        return accumulator + (current.remainNetPrice + current.fineSumRemain + current.fineSumOther);
-      }, 0)
+    const outstandingPrice = contractItem
+      .reduce((a, c) => a += (c.remainNetPrice + c.fineSumRemain + c.fineSumOther), 0)
 
     this.formGroup.patchValue({
       contractId: item.contract.contractId,
       payeer: this.user.id.toString(),
       updateBy: this.user.id.toString(),
       branchId: this.user.branch,
-      payDate: null,
       outstanding: outstandingPrice
     })
-
-    this.reInitDatatable();
     this.chRef.detectChanges();
+  }
+
+  private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
+    if (array !== undefined && array.length) {
+      const itemFGs = array.map(item => this.fb.group(item));
+      const itemFormArray = this.fb.array(itemFGs);
+      fg.setControl(formControl, itemFormArray);
+    }
   }
 
   instalmentCount: number = 0;
   setFormPayment() {
-    this.instalmentCount = this.contractItemModel
-      .filter(item => item.isSlect == true)
-      .length;
-
+    const instalmentList = this.InstalmentList.value as ContractItem[];
+    const instalmentNo = instalmentList.filter(x => x.isSelect == true).map(x => x.instalmentNo);
     let fineSumRemain = 0;
-    const balanceNetPrice = this.contractItemModel
-      .filter(item => item.isSlect == true)
+    const balanceNetPrice = instalmentList
+      .filter(item => item.isSelect == true)
       .reduce((accumulator, current) => {
         fineSumRemain += current.fineSumRemain;
         return accumulator + (current.remainNetPrice);
@@ -237,7 +177,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
       balanceNetPrice: balanceNetPrice,
       payNetPrice: balanceNetPrice,
       totalPrice: balanceNetPrice + fineSumRemain,
-      payDate: null
+      cutBalance: null,
+      discountInterest: null,
+      instalmentNo
     });
 
     this.setFormPaymentType(this.formGroup.get('totalPrice').value);
@@ -256,8 +198,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (f.outstanding == 0) return;
 
     f.payDate = setZeroHours(f.payDate);
-    const creditContractItem = this.contractItemModel
-      .filter(x => x.isSlect == true)
+    let creditContractItem = (this.InstalmentList.value as ContractItem[])
+      .filter(x => x.isSelect == true)
       .map(x => {
         return {
           instalmentNo: x.instalmentNo,
@@ -310,10 +252,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       }
       this._paymentService.CancelContractTerm(params).subscribe(() => {
         toastr.success(message.canceled);
-        // setTimeout(() => {
-        //   this.reInitDatatable();
-        // }, 500);
-        setTimeout(() => location.reload(), 800);
+        setTimeout(() => location.reload(), 400);
       }, (err) => {
         toastr.error(err);
       })
@@ -328,13 +267,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
     window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&receipt_no=${value.receiptNo}`);
   }
 
-  changeSelectPaymentItem() {
-    let select = this.contractItemModel.filter(x => x.isSlect == true);
-    const instalmentNo = select.map(x => x.instalmentNo);
-    this.formGroup.patchValue({ instalmentNo });
-    this.checkSelectPaymentItem = select.length > 0 ? false : true;
-  }
-
   onCalculate() {
     let x = this.formGroup.value;
     const payNetPrice = x.payNetPrice | 0;
@@ -344,8 +276,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
     const totalPrice = (revenueStamp + payNetPrice + fineSum + fineSumOther);
     this.formGroup.patchValue({ totalPrice });
     this.setFormPaymentType(totalPrice);
-    // - disCountPrice;
-    // x.disCountRate = (disCountPrice * 100) / payNetPrice;
   }
 
   getTime(d: Date): number {
@@ -362,6 +292,35 @@ export class PaymentComponent implements OnInit, OnDestroy {
       paymentDate: event.paymentDate,
       documentRef: event.documentRef
     });
+  }
+
+  contractClosing() {
+    this.debitTable.subscribe(x => {
+      const instalmentList = this.InstalmentList.value as ContractItem[];
+      const item = instalmentList
+        .filter(o => o.status != 11)
+        .sort((a, b) => a.instalmentNo - b.instalmentNo)[0];
+
+      const discountInterest = x.find(o => o.instalmentNo == item.instalmentNo).discountInterest;
+      let cutBalance = instalmentList.reduce((a, c) => a += c.remainNetPrice, 0);
+      cutBalance -= discountInterest;
+
+      this.formGroup.patchValue({
+        cutBalance,
+        discountInterest,
+        payNetPrice: cutBalance
+      });
+
+      for (let i = 0; i < instalmentList.length; i++) {
+        if (instalmentList[i].status != 11) {
+          this.InstalmentList.at(i).patchValue({
+            isSelect: true
+          })
+        }
+      }
+
+      this.onCalculate();
+    })
   }
 
 }
