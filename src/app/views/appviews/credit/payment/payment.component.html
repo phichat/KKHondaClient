@@ -1,5 +1,5 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-10">
+  <div class="col-lg-8">
     <h2>บันทึกการชำระเงิน</h2>
     <ol class="breadcrumb">
       <li>
@@ -14,10 +14,15 @@
       </li>
     </ol>
   </div>
-  <div class="col-lg-2 text-right pull-right">
-    <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrint">
+  <div class="col-lg-4 text-right pull-right">
+    <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrintTax">
       <i class="fa fa-print"></i>
-      พิมพ์
+      ใบกำกับภาษี
+    </button>
+    &nbsp;
+    <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrintReceipt">
+      <i class="fa fa-print"></i>
+      ใบเสร็จรับเงิน
     </button>
   </div>
 </div>
@@ -305,54 +310,79 @@
       </form>
     </div>
   </div>
+</div>
 
 
-  <div class="modal inmodal" id="frmPrint" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content animated fadeIn">
-        <form class="form-horizontal" action="" #fm="ngForm">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              <span aria-hidden="true">×</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <!-- <i class="fa fa-clock-o modal-icon"></i> -->
-            <h4 class="modal-title">พิมพ์</h4>
-            <p>ใบเสร็จรับเงิน - ใบกำกับภาษี</p>
-          </div>
+<div class="modal inmodal" id="frmPrintTax" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content animated fadeIn">
+      <form class="form-horizontal" action="" #frmPrintTax="ngForm">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <!-- <i class="fa fa-clock-o modal-icon"></i> -->
+          <h4 class="modal-title">พิมพ์</h4>
+          <p>ใบกำกับภาษี</p>
+        </div>
 
-          <div class="modal-body">
-            <input type="hidden" name="bookingId" [(ngModel)]="contractModel.bookingId">
-            <div class="row">
-              <div class="col-lg-12 m-b-md">
-                <div class="checkbox checkbox-info checkbox-inline">
-                  <input type="checkbox" value="receipt" id="rpt1" name="receipt" ngModel>
-                  <label for="rpt1">
-                    <strong>ใบเสร็จรับเงิน</strong>
-                  </label>
-                </div>
-                <div class="checkbox checkbox-info checkbox-inline">
-                  <input type="checkbox" value="invoice" id="rpt2" name="invoice" ngModel>
-                  <label for="rpt2">
-                    <strong>ใบกำกับภาษี</strong>
-                  </label>
-                </div>
-              </div>
-              <label for="" class="col-lg-5">เลขที่ใบกำกับภาษี</label>
-              <div class="col-lg-7">
-                <select name="transactionId" class="form-control form-control-sm" required ngModel>
-                  <option *ngFor="let item of receiptList" [value]="item.transactionId">
-                    {{item.taxInvNo}}
-                  </option>
-                </select>
-              </div>
+        <div class="modal-body">
+          <input type="hidden" name="bookingId" [(ngModel)]="contractModel.bookingId">
+          <div class="row">
+            <label for="" class="col-lg-4">เลขที่</label>
+            <div class="col-lg-8">
+              <select name="taxInvNo" class="form-control form-control-sm" required ngModel>
+                <option value="" disabled></option>
+                <option *ngFor="let item of receiptList" [value]="item.taxInvNo">
+                  {{item.taxInvNo}}
+                </option>
+              </select>
             </div>
           </div>
-          <div class="modal-footer">
-            <button (click)="onPrint(fm.value)" class="btn btn-primary" [disabled]="fm.invalid">ตกลง</button>
+        </div>
+        <div class="modal-footer">
+          <button (click)="onPrintTax(frmPrintTax.value)" class="btn btn-primary"
+            [disabled]="frmPrintTax.invalid">ตกลง</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="frmPrintReceipt" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content animated fadeIn">
+      <form class="form-horizontal" action="" #fmReceipt="ngForm">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <!-- <i class="fa fa-clock-o modal-icon"></i> -->
+          <h4 class="modal-title">พิมพ์</h4>
+          <p>ใบเสร็จรับเงิน</p>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="bookingId" [(ngModel)]="contractModel.bookingId">
+          <div class="row">
+            <label for="" class="col-lg-4">เลขที่</label>
+            <div class="col-lg-8">
+              <select name="receiptNo" class="form-control form-control-sm" required ngModel>
+                <option value="" disabled></option>
+                <option *ngFor="let item of receiptList" [value]="item.receiptNo">
+                  {{item.receiptNo}}
+                </option>
+              </select>
+            </div>
           </div>
-        </form>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="onPrintReceipt(fmReceipt.value)" class="btn btn-primary"
+            [disabled]="fmReceipt.invalid">ตกลง</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

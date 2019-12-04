@@ -43,7 +43,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   isPayModel: IsPay = new IsPay();
   isOutstandingModel: IsOutstanding = new IsOutstanding();
   contractItemModel: ContractItem[] = [];
-  receiptList: IContractTransactionReceipt[];
+  receiptList: IContractTransactionReceipt[] = [];
   debitTable = new BehaviorSubject<ContractItemModel[]>([]);
   bankingsDropdown = new Array<DropDownModel>();
   statusDropdown = new Array<DropDownModel>();
@@ -320,14 +320,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPrint(value: any) {
-    const tax = this.receiptList.find(x => x.transactionId == value.transactionId);
-    if (value.invoice) {
-      window.open(`${appConfig.apikkWeb}/php/print_tax_3.php?booking_id=${value.bookingId}&tax_inv_no=${tax.taxInvNo}`);
-    }
-    if (value.receipt) {
-      window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&receipt_no=${tax.receiptNo}`);
-    }
+  onPrintTax(value: any) {
+    window.open(`${appConfig.apikkWeb}/php/print_tax_3.php?booking_id=${value.bookingId}&tax_inv_no=${value.taxInvNo}`);
+  }
+
+  onPrintReceipt(value: any) {
+    window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&receipt_no=${value.receiptNo}`);
   }
 
   changeSelectPaymentItem() {

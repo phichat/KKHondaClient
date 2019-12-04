@@ -30,8 +30,9 @@ export class PaymentService {
   }
 
   GetReceiptByContractId(contractId: string): Observable<IContractTransactionReceipt[]> {
-    const api = `${this.url}/${contractId}`;
-    return this.httpService.get(api).pipe(map(x => x.json()));
+    const api = `${this.url}/GetReceiptByContractId`;
+    const params = { contractId };
+    return this.httpService.get(api, { params }).pipe(map(x => x.json()));
   }
 
   CancelContractTerm(param: any): Observable<Payment> {
