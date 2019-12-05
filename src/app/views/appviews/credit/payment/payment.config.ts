@@ -6,10 +6,11 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ContractItemModel } from 'app/models/credit/contract-item-model';
 import { IContractTransactionReceipt } from 'app/models/credit';
 import { setLocalDate, currencyToFloat } from 'app/app.config';
-import { ContractItem, Contract, Booking, IsPay, IsOutstanding } from 'app/models/credit/payment';
+import { ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
 import { FormGroup, FormArray } from '@angular/forms';
 import { IPayment } from 'app/interfaces/payment.interface';
 import * as $ from 'jquery';
+import { Observable } from 'rxjs';
 
 export class PaymentConfig {
   user: IUserResCookie;
@@ -20,7 +21,7 @@ export class PaymentConfig {
   PaymentType = PaymentType;
   PaymentTypeList = PaymentTypeList;
   setLocalDate = setLocalDate
-  checkSelectPaymentItem: boolean = true;
+  // checkSelectPaymentItem: boolean = true;
   contractModel: Contract = new Contract();
   bookingModel: Booking = new Booking();
   isPayModel: IsPay = new IsPay();
@@ -28,19 +29,44 @@ export class PaymentConfig {
   contractItemModel: ContractItem[] = [];
   receiptList: IContractTransactionReceipt[] = [];
   debitTable = new BehaviorSubject<ContractItemModel[]>([]);
+  reasonDropdown: Observable<DropDownModel[]>;
   bankingsDropdown = new Array<DropDownModel>();
   statusDropdown = new Array<DropDownModel>();
   dataTable: any;
 
   formGroup: FormGroup;
-
   instalmentGroup: FormGroup;
 
   PaymentData = new BehaviorSubject(null);
   formPayment: IPayment;
 
+  contractItemId: number;
+  promptMsg: string;
+
+  get IsCutBalance(): boolean {
+    const fg = this.formGroup.value as PaymentFG;
+    return fg.cutBalance > 0 && fg.paymentPrice > fg.cutBalance;
+  }
+
+  get PaymentIncorrent(): boolean {
+    const fg = this.formGroup.value as PaymentFG;
+    const cutBalance = fg.paymentPrice > fg.cutBalance;
+    const outstanding = fg.paymentPrice > fg.outstanding;
+    return fg.cutBalance > 0 ? cutBalance : outstanding;
+  }
+
   get InstalmentList(): FormArray {
     return this.instalmentGroup.get('instalment') as FormArray;
+  }
+
+  get InstalmentListIsSelect(): ContractItem[] {
+    return (this.InstalmentList.value as ContractItem[]).filter(x => x.isSelect == true);
+  }
+
+  get IsPay(): boolean {
+    const fg = this.InstalmentList.value as ContractItem[]
+    const pay = fg.filter(x => x.status == 11).length;
+    return fg.length == pay;
   }
 
   destroyDatatable() {

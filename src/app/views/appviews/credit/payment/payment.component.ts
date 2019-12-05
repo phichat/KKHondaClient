@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { ContractService } from 'app/services/credit/contract.service';
 import { PaymentConfig } from './payment.config';
+import { ReasonService } from 'app/services/masters/reason.service';
 
 declare var toastr: any;
 
@@ -38,6 +39,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     private router: Router,
     private fb: FormBuilder,
     private s_contract: ContractService,
+    private s_reason: ReasonService,
   ) {
     super();
     toastr.options = {
@@ -102,6 +104,8 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
           this.debitTable.next(x.contractItem);
           this.receiptList = x.receipt;
         });
+
+        this.reasonDropdown = this.s_reason.DropDown();
       };
     });
 
@@ -162,11 +166,9 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
 
   instalmentCount: number = 0;
   setFormPayment() {
-    const instalmentList = this.InstalmentList.value as ContractItem[];
-    const instalmentNo = instalmentList.filter(x => x.isSelect == true).map(x => x.instalmentNo);
+    const instalmentNo = this.InstalmentListIsSelect.map(x => x.instalmentNo);
     let fineSumRemain = 0;
-    const balanceNetPrice = instalmentList
-      .filter(item => item.isSelect == true)
+    const balanceNetPrice = this.InstalmentListIsSelect
       .reduce((accumulator, current) => {
         fineSumRemain += current.fineSumRemain;
         return accumulator + (current.remainNetPrice);
@@ -198,17 +200,15 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     if (f.outstanding == 0) return;
 
     f.payDate = setZeroHours(f.payDate);
-    let creditContractItem = (this.InstalmentList.value as ContractItem[])
-      .filter(x => x.isSelect == true)
-      .map(x => {
-        return {
-          instalmentNo: x.instalmentNo,
-          contractItemId: x.contractItemId,
-          contractId: x.contractId,
-          fineSum: x.fineSum,
-          fineSumRemain: x.fineSumRemain
-        }
-      });
+    let creditContractItem = this.InstalmentListIsSelect.map(x => {
+      return {
+        instalmentNo: x.instalmentNo,
+        contractItemId: x.contractItemId,
+        contractId: x.contractId,
+        fineSum: x.fineSum,
+        fineSumRemain: x.fineSumRemain
+      }
+    });
 
     const frm = {
       ...f,
@@ -216,6 +216,8 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       fineSumOther: f.fineSumOther || 0,
       discountPrice: f.discountPrice || 0,
       revenueStamp: f.revenueStamp || 0,
+      cutBalance: f.cutBalance || 0,
+      discountInterest: f.discountInterest || 0,
       payDate: f.paymentDate,
       creditContractItem
     };
@@ -223,10 +225,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
       this._paymentService.PaymentTerm(frm).subscribe((x) => {
         toastr.success(message.created);
-        // this.loadCreditPayment(x);
-        setTimeout(() => {
-          location.reload();
-        }, 400);
+        setTimeout(() => location.reload(), 400);
       }, () => {
         toastr.error(message.failed);
       });
@@ -239,24 +238,24 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     }
   }
 
-  onCancel(contractItemId: string, instalmentNo: number) {
-    const instalment = instalmentNo == 0 ? 'ค่างวด' : `ครั้งที่ ${instalmentNo}`;
-    const p = prompt(`ยืนยันการยกเลิกรายการรับชำระ ${instalment} หรือไม่\nระบุหมายเหตุ:`);
-    if (p === '') {
-      alert('กรุณาระบุหมายเหตุของการยกเลิก!')
-    } else if (p !== '' && p !== null) {
-      const params = {
-        contractItemId: contractItemId,
-        remark: p,
-        updateBy: this.user.id.toString()
-      }
-      this._paymentService.CancelContractTerm(params).subscribe(() => {
-        toastr.success(message.canceled);
-        setTimeout(() => location.reload(), 400);
-      }, (err) => {
-        toastr.error(err);
-      })
+  onCancel(contractItemId: number, instalmentNo: number) {
+    const instalment = instalmentNo == 0 ? 'เงินดาวน์' : `ค่างวดที่ ${instalmentNo}`;
+    this.contractItemId = contractItemId;
+    this.promptMsg = `ยืนยันการยกเลิกรายการรับชำระ ${instalment} หรือไม่`;
+  }
+
+  onConfirmCancel(frm: any) {
+    const params = {
+      contractItemId: frm.contractItemId,
+      reason: frm.reason,
+      updateBy: this.user.id.toString()
     }
+    this._paymentService.CancelContractTerm(params).subscribe(() => {
+      toastr.success(message.canceled);
+      setTimeout(() => location.reload(), 400);
+    }, (err) => {
+      toastr.error(err);
+    })
   }
 
   onPrintTax(value: any) {
@@ -296,6 +295,8 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
 
   contractClosing() {
     this.debitTable.subscribe(x => {
+      this.setFormPayment();
+
       const instalmentList = this.InstalmentList.value as ContractItem[];
       const item = instalmentList
         .filter(o => o.status != 11)
@@ -318,7 +319,6 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
           })
         }
       }
-
       this.onCalculate();
     })
   }

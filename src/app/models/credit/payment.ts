@@ -29,6 +29,9 @@ export class PaymentFG {
     disCountRate: number;
     totalPrice: number;
     status: number;
+
+    cutBalance: number;
+    discountInterest: number;
     
     paymentPrice: number;
     discountPrice: number;
