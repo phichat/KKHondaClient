@@ -17,6 +17,8 @@ export class PaymentConfig {
   asyncUser: any;
   notPayment = 13; // ยังไม่ชำระ
 
+  contractStatus: number;
+
   CurrencyToFloat = currencyToFloat;
   PaymentType = PaymentType;
   PaymentTypeList = PaymentTypeList;
@@ -63,10 +65,9 @@ export class PaymentConfig {
     return (this.InstalmentList.value as ContractItem[]).filter(x => x.isSelect == true);
   }
 
-  get IsPay(): boolean {
-    const fg = this.InstalmentList.value as ContractItem[]
-    const pay = fg.filter(x => x.status == 11).length;
-    return fg.length == pay;
+  get IsSuccess(): boolean {
+    const fg = this.formGroup.get('status').value;
+    return fg == 29 || fg == 30;
   }
 
   destroyDatatable() {

@@ -48,6 +48,7 @@ export class Contract {
     refNo: string;
     contractNo: string;
     contractDate: any;
+    contractStatus: number;
     statusDesc: string;
     contractHire: string;
     saleName: string;

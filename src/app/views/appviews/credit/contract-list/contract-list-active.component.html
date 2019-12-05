@@ -45,8 +45,10 @@
                 <tbody>
                     <tr *ngFor="let item of contractListModel">
                         <td class="text-center" [ngSwitch]="item.bookingPaymentType">
-                            <div *ngSwitchCase="3" style="margin:auto; padding:5px; color:#fff; background:#1E90FF;">เช่าซื้อ</div>
-                            <div *ngSwitchCase="4" style="margin:auto; padding:5px; color:#fff; background:#6A5ACD;">ขายเชื่อ</div>
+                            <div *ngSwitchCase="3" style="margin:auto; padding:5px; color:#fff; background:#1E90FF;">
+                                เช่าซื้อ</div>
+                            <div *ngSwitchCase="4" style="margin:auto; padding:5px; color:#fff; background:#6A5ACD;">
+                                ขายเชื่อ</div>
                         </td>
                         <td>{{item.contractNo}}</td>
                         <td [ngClass]="{'text-navy': item.contractStatus == 32, 
@@ -58,21 +60,30 @@
                                 รายละเอียด</a>
                         </td>
                         <td [ngSwitch]="item.contractStatus">
-                            <a *ngSwitchCase="32" (click)="gotoCreateContract(item.contractId)" class="btn btn-success btn-xs">
+                            <a *ngSwitchCase="32" (click)="gotoCreateContract(item.contractId)"
+                                class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 อนุมัติสัญญา
                             </a>
-                            <a *ngSwitchDefault (click)="gotoEditContract(item.contractId)" class="btn btn-success btn-xs">
+                            <a *ngSwitchDefault (click)="gotoEditContract(item.contractId)"
+                                class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขสัญญา
                             </a>
                         </td>
-                        <td [ngSwitch]="item.contractStatus">
-                            <a *ngSwitchCase="31" (click)="gotoPayment(item.contractId)" class="btn btn-primary btn-outline btn-xs">
+                        <td [ngSwitch]="true">
+                            <a *ngSwitchCase="item.contractStatus == 29 || item.contractStatus == 30" (click)="gotoPayment(item.contractId)"
+                                class="btn btn-info btn-outline btn-xs">
+                                <i class="fa fa-history"></i>
+                                ประวัติการชำระ
+                            </a>
+                            <a *ngSwitchCase="item.contractStatus == 31" (click)="gotoPayment(item.contractId)"
+                                class="btn btn-primary btn-outline btn-xs">
                                 <i class="fa fa-money"></i>
                                 ชำระค่างวด
                             </a>
-                            <a *ngSwitchCase="32" (click)="gotoReviceCalculate(item.calculateId)" class="btn btn-success btn-xs">
+                            <a *ngSwitchCase="item.contractStatus == 32" (click)="gotoReviceCalculate(item.calculateId)"
+                                class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไขค่างวด
                             </a>

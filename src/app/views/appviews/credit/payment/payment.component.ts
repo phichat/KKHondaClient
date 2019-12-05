@@ -148,6 +148,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
 
     this.formGroup.patchValue({
       contractId: item.contract.contractId,
+      status: item.contract.contractStatus,
       payeer: this.user.id.toString(),
       updateBy: this.user.id.toString(),
       branchId: this.user.branch,
@@ -233,9 +234,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
   }
 
   onCanclePayment() {
-    if (confirm('ยืนยันการยกเลิกการทำรายการรับชำระหรือไม่')) {
-      this.router.navigate(['credit/contract-list/active'])
-    }
+    this.router.navigate(['credit/contract-list/active'])
   }
 
   onCancel(contractItemId: number, instalmentNo: number) {
