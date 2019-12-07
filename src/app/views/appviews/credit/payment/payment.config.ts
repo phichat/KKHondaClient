@@ -11,13 +11,14 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { IPayment } from 'app/interfaces/payment.interface';
 import * as $ from 'jquery';
 import { Observable } from 'rxjs';
+import { GroupPage } from 'app/entities/group-page.entities';
 
 export class PaymentConfig {
   user: IUserResCookie;
   asyncUser: any;
   notPayment = 13; // ยังไม่ชำระ
 
-  contractStatus: number;
+  GroupPage = GroupPage
 
   CurrencyToFloat = currencyToFloat;
   PaymentType = PaymentType;
@@ -38,6 +39,8 @@ export class PaymentConfig {
 
   formGroup: FormGroup;
   instalmentGroup: FormGroup;
+  cancelFormGroup: FormGroup;
+  validCancelFormGroup: FormGroup;
 
   PaymentData = new BehaviorSubject(null);
   formPayment: IPayment;
@@ -55,6 +58,15 @@ export class PaymentConfig {
     const cutBalance = fg.paymentPrice > fg.cutBalance;
     const outstanding = fg.paymentPrice > fg.outstanding;
     return fg.cutBalance > 0 ? cutBalance : outstanding;
+  }
+
+  get IsNotDownPayment(): boolean {
+    const contractItem = (this.InstalmentList.value as ContractItem[])
+      .sort((a, b) => a.instalmentNo - b.instalmentNo)[0];
+      
+    if (!contractItem) return true;
+
+    return contractItem.status != 11 ? true : false;
   }
 
   get InstalmentList(): FormArray {

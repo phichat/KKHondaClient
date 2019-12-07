@@ -12,6 +12,7 @@ import { combineLatest } from 'rxjs';
 import { ContractService } from 'app/services/credit/contract.service';
 import { PaymentConfig } from './payment.config';
 import { ReasonService } from 'app/services/masters/reason.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 declare var toastr: any;
 
@@ -47,6 +48,20 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       'progressBar': true,
     }
     this.user = this._userService.cookies;
+
+    this.cancelFormGroup = this.fb.group({
+      contractId: new FormControl(null, Validators.required),
+      receiptNo: new FormControl(null, Validators.required),
+      reason: new FormControl(null, Validators.required),
+      approveBy: new FormControl(null),
+      confirm: new FormControl(false)
+    });
+
+    this.validCancelFormGroup = this.fb.group({
+      gid: new FormControl(null, Validators.required),
+      userName: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required)
+    });
   }
 
   ngOnInit() {
@@ -153,13 +168,24 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       updateBy: this.user.id.toString(),
       branchId: this.user.branch,
       outstanding: outstandingPrice
-    })
+    });
+    this.cancelFormGroup.patchValue({
+      contractId: item.contract.contractId
+    });
     this.chRef.detectChanges();
   }
 
-  private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
+  private setItemFormArray(array: ContractItem[], fg: FormGroup, formControl: string) {
     if (array !== undefined && array.length) {
-      const itemFGs = array.map(item => this.fb.group(item));
+      const firstItem = array.sort((a, b) => a.instalmentNo - b.instalmentNo)[0];
+      // disable checkbox ถ้ายังไม่ชำระเงินดาวน์
+      const itemFGs = array.map(item => {
+        const disabledCheckbox = (firstItem.status != 11 && item.instalmentNo != 0)
+        return this.fb.group({
+          ...item,
+          isSelect: new FormControl({ value: item.isSelect, disabled: disabledCheckbox })
+        })
+      });
       const itemFormArray = this.fb.array(itemFGs);
       fg.setControl(formControl, itemFormArray);
     }
@@ -237,24 +263,59 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     this.router.navigate(['credit/contract-list/active'])
   }
 
-  onCancel(contractItemId: number, instalmentNo: number) {
-    const instalment = instalmentNo == 0 ? 'เงินดาวน์' : `ค่างวดที่ ${instalmentNo}`;
-    this.contractItemId = contractItemId;
-    this.promptMsg = `ยืนยันการยกเลิกรายการรับชำระ ${instalment} หรือไม่`;
+  onCancel() {
+    const valid = this.validCancelFormGroup.value;
+    const api1 = this._userService.LeaderValidate(valid.gid, valid.userName, valid.password);
+    api1.subscribe(x => {
+      const param = { ...this.cancelFormGroup.getRawValue(), approveBy: x }
+      const api2 = this._paymentService.CancelContractTerm(param);
+      api2.subscribe(o => {
+        toastr.success(message.canceled);
+        setTimeout(() => location.reload(), 400);
+      }, () => {
+        toastr.error(message.cancelFail)
+      });
+
+    }, (x: HttpErrorResponse) => {
+      if (x.status == 403) {
+        toastr.error('ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง');
+      } else {
+        toastr.error(x.statusText);
+      }
+    });
   }
 
-  onConfirmCancel(frm: any) {
-    const params = {
-      contractItemId: frm.contractItemId,
-      reason: frm.reason,
-      updateBy: this.user.id.toString()
+  onConfirmCancel(value: boolean) {
+    let receiptNo = this.cancelFormGroup.get('receiptNo');
+    let reason = this.cancelFormGroup.get('reason');
+    if (value) {
+      receiptNo.disable();
+      reason.disable();
+    } else {
+      receiptNo.enable();
+      reason.enable();
     }
-    this._paymentService.CancelContractTerm(params).subscribe(() => {
-      toastr.success(message.canceled);
-      setTimeout(() => location.reload(), 400);
-    }, (err) => {
-      toastr.error(err);
-    })
+    if (!value) {
+      this.validCancelFormGroup.reset();
+      this.validCancelFormGroup.patchValue({
+        branchId: this.user.branchId
+      });
+    }
+    this.cancelFormGroup.patchValue({
+      confirm: value
+    });
+    // this.chRef.detectChanges();
+    // const params = {
+    //   contractItemId: frm.contractItemId,
+    //   reason: frm.reason,
+    //   updateBy: this.user.id.toString()
+    // }
+    // this._paymentService.CancelContractTerm(params).subscribe(() => {
+    //   toastr.success(message.canceled);
+    //   setTimeout(() => location.reload(), 400);
+    // }, (err) => {
+    //   toastr.error(err);
+    // })
   }
 
   onPrintTax(value: any) {
@@ -320,6 +381,23 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       }
       this.onCalculate();
     })
+  }
+
+  undoContractClosing() {
+    this.formGroup.patchValue({
+      cutBalance: null,
+      discountInterest: null,
+      payNetPrice: null
+    });
+    const instalmentList = this.InstalmentList.value as ContractItem[];
+    for (let i = 0; i < instalmentList.length; i++) {
+      if (instalmentList[i].status != 11) {
+        this.InstalmentList.at(i).patchValue({
+          isSelect: false
+        })
+      }
+    }
+    this.onCalculate();
   }
 
 }

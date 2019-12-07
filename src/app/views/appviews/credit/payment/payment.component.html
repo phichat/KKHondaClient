@@ -1,5 +1,5 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-8">
+  <div class="col-lg-6">
     <h2>บันทึกการชำระเงิน</h2>
     <ol class="breadcrumb">
       <li>
@@ -14,13 +14,18 @@
       </li>
     </ol>
   </div>
-  <div class="col-lg-4 text-right pull-right">
-    <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrintTax">
+  <div class="col-lg-6 text-right pull-right">
+    <h3>&nbsp;</h3>
+    <button type="button" class="btn btn-outline btn-danger btn-sm" data-toggle="modal" data-target="#frmPrompt">
+      <i class="fa fa-ban" aria-hidden="true"></i> ยกเลิกใบเสร็จ
+    </button>
+    &nbsp;
+    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#frmPrintTax">
       <i class="fa fa-print"></i>
       ใบกำกับภาษี
     </button>
     &nbsp;
-    <button type="button" class="btn btn-success m-t-md" data-toggle="modal" data-target="#frmPrintReceipt">
+    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#frmPrintReceipt">
       <i class="fa fa-print"></i>
       ใบเสร็จรับเงิน
     </button>
@@ -123,11 +128,6 @@
                   [attr.data-order]="item.get('instalmentNo').value">
                   <ng-container *ngSwitchCase="11">
                     <i class="fa fa-check text-navy" aria-hidden="true"></i>
-                    <!-- <button type="button" class="btn btn-danger btn-xs"
-                      (click)="onCancel(item.get('contractItemId').value, item.get('instalmentNo').value)"
-                      data-toggle="modal" data-target="#frmPrompt">
-                      <i class="fa fa-times"></i> ยกเลิก
-                    </button> -->
                   </ng-container>
                   <ng-container *ngSwitchDefault>
                     <div class="checkbox checkbox-info checkbox-inline">
@@ -176,13 +176,24 @@
     <div class="col-md-4">
       <form class="" autocomplete="off" action="" [formGroup]="formGroup">
         <div>
+
           <div class="row form-group">
-            <div for="" class="col-md-4"></div>
+            <div for="" class="col-md-4">
+            </div>
             <div class="col-md-8">
-              <button type="button" class="btn btn-primary btn-sm" (click)="contractClosing()" [disabled]="IsSuccess">
-                <i class="fa fa-handshake-o" aria-hidden="true"></i> ปิดสัญญา
-              </button>&nbsp;
-              <button type="button" class="btn btn-outline btn-link btn-sm" data-toggle="modal" data-target="#frmDebit">
+              <ng-container *ngIf="formGroup.get('cutBalance').value <= 0; else elseClosing">
+                <button type="button" class="btn btn-primary btn-sm" (click)="contractClosing()"
+                  [disabled]="IsSuccess || IsNotDownPayment">
+                  <i class="fa fa-handshake-o" aria-hidden="true"></i> ปิดสัญญา
+                </button>
+              </ng-container>
+              <ng-template #elseClosing>
+                <button type="button" class="btn btn-primary btn-sm" (click)="undoContractClosing()">
+                  <i class="fa fa-undo" aria-hidden="true"></i> ยกเลิก
+                </button>
+              </ng-template>
+              &nbsp;
+              <button type="button" class="btn btn-outline btn-link btn-xs" data-toggle="modal" data-target="#frmDebit">
                 <i class="fa fa-info-circle" aria-hidden="true"></i> ตารางภาระหนี้
               </button>
             </div>
@@ -520,12 +531,9 @@
           <div class="row">
             <label for="" class="col-lg-4">เลขที่</label>
             <div class="col-lg-8">
-              <select name="taxInvNo" class="form-control form-control-sm" required ngModel>
-                <option value="" disabled></option>
-                <option *ngFor="let item of receiptList" [value]="item.taxInvNo">
-                  {{item.taxInvNo}}
-                </option>
-              </select>
+              <ng-select required [items]="receiptList" bindValue="taxInvNo" bindLabel="taxInvNo" name="taxInvNo"
+                ngModel>
+              </ng-select>
             </div>
           </div>
         </div>
@@ -557,12 +565,9 @@
           <div class="row">
             <label for="" class="col-lg-4">เลขที่</label>
             <div class="col-lg-8">
-              <select name="receiptNo" class="form-control form-control-sm" required ngModel>
-                <option value="" disabled></option>
-                <option *ngFor="let item of receiptList" [value]="item.receiptNo">
-                  {{item.receiptNo}}
-                </option>
-              </select>
+              <ng-select required [items]="receiptList" bindValue="receiptNo" bindLabel="receiptNo" name="receiptNo"
+                ngModel>
+              </ng-select>
             </div>
           </div>
         </div>
@@ -584,27 +589,94 @@
             <span aria-hidden="true">×</span>
             <span class="sr-only">Close</span>
           </button>
-          <h2>ยืนยันการทำรายการ</h2>
-          <h4 class="text-danger">{{promptMsg}}</h4>
+          <h4 class="modal-title">ยกเลิกใบเสร็จ</h4>
+          <!-- <h4 class="text-danger">{{promptMsg}}</h4> -->
         </div>
 
         <div class="modal-body">
 
-          <input type="hidden" name="contractItemId" [(ngModel)]="contractItemId">
-          <div class="row">
-            <label for="" class="col-md-3 control-label is-required">สาเหตุในการยกเลิก</label>
-            <div class="col-md-9">
-              <ng-select required [items]="reasonDropdown | async" bindValue="text" bindLabel="text" name="reason"
-                ngModel>
-              </ng-select>
+          <form action="" [formGroup]="cancelFormGroup">
+            <div class="row form-group">
+              <label for="" class="col-md-3 control-label is-required">เลขที่ใบเสร็จ</label>
+              <div class="col-md-9">
+                <ng-select [items]="receiptList" bindValue="receiptNo" bindLabel="receiptNo"
+                  formControlName="receiptNo">
+                </ng-select>
+              </div>
             </div>
-          </div>
+            <div class="row form-group">
+              <label for="" class="col-md-3 control-label is-required">สาเหตุในการยกเลิก</label>
+              <div class="col-md-9">
+                <ng-select [items]="reasonDropdown | async" bindValue="text" bindLabel="text" formControlName="reason">
+                </ng-select>
+              </div>
+            </div>
+            <div class="row form-group" *ngIf="cancelFormGroup.get('confirm').value == false">
+              <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-primary btn-outline btn-sm" [disabled]="cancelFormGroup.invalid"
+                  (click)="onConfirmCancel(true)">
+                  <i class="fa fa-check" aria-hidden="true"></i>
+                  ตกลง
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <ng-container *ngIf="cancelFormGroup.get('confirm').value == true">
+            <hr class="hr-dashed">
+            <h4 class="m-b-md">ยืนยันการยกเลิก</h4>
+            <form action="" [formGroup]="validCancelFormGroup">
+              <div class="row form-group mb-sm">
+                <label for="" class="col-md-3 control-label is-required">โดย</label>
+                <div class="col-md-9">
+                  <div class="radio radio-info">
+                    <input type="radio" formControlName="gid" id="posit1" value="GroupPage.MANAGER_SITE_DEPARTMENT">
+                    <label for="posit1">ผู้จัดการสาขา</label>
+                  </div>
+                  <div class="radio radio-info">
+                    <input type="radio" formControlName="gid" id="posit2" value="GroupPage.DEBTOR_DEPARTMENT">
+                    <label for="posit2">เจ้าหน้าที่ฝ่ายลูกหนี้</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group mb-sm">
+                <label for="" class="col-md-3 control-label is-required">ชื่อผู้ใช้</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="userName" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="" class="col-md-3 control-label is-required">รหัสผ่าน</label>
+                <div class="col-md-9">
+                  <input type="password" formControlName="password" class="form-control">
+                </div>
+              </div>
+              <!-- <div class="row form-group">
+                <div class="col-md-12 text-right">
+                  <button type="button" class="btn btn-primary btn-outline btn-sm"
+                    [disabled]="validCancelFormGroup.invalid">
+                    <i class="fa paper-plane-o" aria-hidden="true"></i>
+                    ยืนยัน
+                  </button>
+                  &nbsp;
+                  <button type="button" class="btn btn-default" (click)="onConfirmCancel(false)">
+                    ยกเลิก
+                  </button>
+                </div>
+              </div> -->
+            </form>
+          </ng-container>
         </div>
-        <div class="modal-footer">
-          <button type="button" (click)="onConfirmCancel(fmPrompt.value)" class="btn btn-primary"
-            [disabled]="fmPrompt.invalid">ตกลง</button>
+        <div class="modal-footer" *ngIf="cancelFormGroup.get('confirm').value == true">
+          <button type="button" class="btn btn-primary" [disabled]="validCancelFormGroup.invalid" (click)="onCancel()">
+            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+            ยืนยัน
+          </button>
           &nbsp;
-          <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-default" (click)="onConfirmCancel(false)">
+            <i class="fa fa-undo" aria-hidden="true"></i>
+            ยกเลิก
+          </button>
         </div>
       </form>
     </div>

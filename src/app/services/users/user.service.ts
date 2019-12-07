@@ -4,7 +4,9 @@ import { getCookie, appConfig } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IUserResCookie } from 'app/interfaces/users';
 import { Observable } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap, map, finalize } from 'rxjs/operators';
+import { HttpService } from 'app/core/http.service';
+import { LoaderService } from 'app/core/loader/loader.service';
 
 @Injectable()
 export class UserService {
@@ -28,7 +30,11 @@ export class UserService {
   currentData = new BehaviorSubject<IUserResCookie>(null);
   // currentData = this.dataSource.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private s_http: HttpService,
+    private s_loader: LoaderService,
+  ) {
 
     if (isDevMode()) {
       this.getUserById('6119').subscribe(x => {
@@ -106,6 +112,12 @@ export class UserService {
     const params = { id };
 
     return this.http.get<IUserResCookie>(apiURL, { headers: this.getHeaders(), params });
+  }
+
+  LeaderValidate(gid: string, userName: string, password: string): Observable<number> {
+    const apiURL = `${this.url}/LeaderValidate`;
+    const params = { gid, userName, password };
+    return this.http.get<number>(apiURL, { headers: this.getHeaders(), params });
   }
 
   private onCatch(error: any, caught: Observable<any>): Observable<any> {

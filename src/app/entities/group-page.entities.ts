@@ -1,0 +1,4 @@
+export enum GroupPage {
+  MANAGER_SITE_DEPARTMENT = 6,
+  DEBTOR_DEPARTMENT = 14
+}
