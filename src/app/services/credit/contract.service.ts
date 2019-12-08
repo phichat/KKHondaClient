@@ -4,6 +4,7 @@ import { BookingModel } from '../../models/selling';
 import { HttpService } from 'app/core/http.service';
 import { map } from 'rxjs/internal/operators/map';
 import { Observable } from 'rxjs';
+import { ISpContractHps } from 'app/interfaces/credit';
 
 @Injectable()
 export class ContractService {
@@ -32,6 +33,12 @@ export class ContractService {
     GetOtherContract() {
         const apiUrl = `${this.url}/OtherContract`;
         return this.httpService.get(apiUrl).pipe(map(x => x.json()));
+    }
+
+    SearchContract(form: any): Observable<ISpContractHps[]> {
+        const apiUrl = `${this.url}/SearchContract`;
+        const params = { ...form };
+        return this.httpService.get(apiUrl, { params }).pipe(map(x => x.json()));
     }
 
     getById(id: string) {

@@ -8,14 +8,14 @@ import {
   CalculateComponent,
   ContractDetailComponent,
   ContractCanceledComponent
-} from './views/appviews/credit';
-import { ContractListActiveComponent } from './views/appviews/credit/contract-list/contract-list-active.component';
-import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
-import { RptSummaryCloseContractComponent } from './views/appviews/credit/rpt-summary-close-contract/rpt-summary-close-contract.component';
+} from './views/appviews/hps';
+import { ContractListActiveComponent } from './views/appviews/hps/contract-list/contract-list-active.component';
+import { ContractListCanceledComponent } from './views/appviews/hps/contract-list/contract-list-canceled.component';
+import { RptSummaryCloseContractComponent } from './views/appviews/hps/rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
-import { PaymentComponent } from './views/appviews/credit/payment/payment.component';
-import { ContractListCloseContractComponent } from './views/appviews/credit/contract-list/contract-list-close-contract.component';
-import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
+import { PaymentComponent } from './views/appviews/hps/payment/payment.component';
+import { ContractListCloseContractComponent } from './views/appviews/hps/contract-list/contract-list-close-contract.component';
+import { ContractListOtherContractComponent } from './views/appviews/hps/contract-list/contract-list-other-contract.component';
 import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';

@@ -92,6 +92,7 @@ export class PaymentConfig {
   public initDatatable(): void {
     let table: any = $('table.set-dataTable');
     this.dataTable = table.DataTable({
+      deferRender: true,
       scrollX: true,
       scrollCollapse: true,
       searching: false,

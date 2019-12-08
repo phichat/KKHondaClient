@@ -14,7 +14,7 @@ import { SparklineModule } from '../../components/charts/sparkline';
 import { StarterComponent } from './starter/starter.component';
 
 import { FormsModule } from '@angular/forms';
-import { CreditModule } from './credit/credit.module';
+import { CreditModule } from './hps/credit.module';
 import { CustomerService } from '../../services/customers';
 import { ReportBookingModule } from './report-booking/report-booking.module';
 import { ReportCreditNoteModule } from './report-credit-note/report-credit-note.module';
