@@ -8,14 +8,14 @@ import {
   CalculateComponent,
   ContractDetailComponent,
   ContractCanceledComponent
-} from './views/appviews/credit';
-import { ContractListActiveComponent } from './views/appviews/credit/contract-list/contract-list-active.component';
-import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
-import { RptSummaryCloseContractComponent } from './views/appviews/credit/rpt-summary-close-contract/rpt-summary-close-contract.component';
+} from './views/appviews/hps';
+import { ContractListActiveComponent } from './views/appviews/hps/contract-list/contract-list-active.component';
+import { ContractListCanceledComponent } from './views/appviews/hps/contract-list/contract-list-canceled.component';
+import { RptSummaryCloseContractComponent } from './views/appviews/hps/rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
-import { PaymentComponent } from './views/appviews/credit/payment/payment.component';
-import { ContractListCloseContractComponent } from './views/appviews/credit/contract-list/contract-list-close-contract.component';
-import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
+import { PaymentComponent } from './views/appviews/hps/payment/payment.component';
+import { ContractListCloseContractComponent } from './views/appviews/hps/contract-list/contract-list-close-contract.component';
+import { ContractListOtherContractComponent } from './views/appviews/hps/contract-list/contract-list-other-contract.component';
 import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';
@@ -37,8 +37,28 @@ import { TagConFormEditComponent } from './views/appviews/ris/tag-con-form/tag-c
 import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money-list/tag-clear-money-list.component';
 import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
-import { ReportBalanceStock1Component } from './views/appviews/report-balance-stock/report-balance-stock1.component';
-import { ReportBalanceStock2Component } from './views/appviews/report-balance-stock/report-balance-stock2.component';
+import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
+import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
+import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
+import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
+
+import { SummarySaleReportByTypeComponent } from './views/appviews/summary-sale-report-by-type/summary-sale-report-by-type.component';
+import { SummaryStockBalanceComponent } from './views/appviews/summary-stock-balance/summary-stock-balance.component';
+import { ContractGradePaymentComponent } from './views/appviews/contract-grade-payment/contract-grade-payment.component';
+import { SummaryDepositByDateComponent } from './views/appviews/summary-deposit-by-date/summary-deposit-by-date.component';
+import { ProductSellingProfitReportComponent } from './views/appviews/product-selling-profit-report/product-selling-profit-report.component';
+import { SummaryDepositReportComponent } from './views/appviews/summary-deposit-report/summary-deposit-report.component';
+import { ServiceCheckReportComponent } from './views/appviews/service-check-report/service-check-report.component';
+import { CreditNoteDetailsReportComponent } from './views/appviews/credit-note-details-report/credit-note-details-report.component';
+import { StockBalanceMainReportComponent} from './views/appviews/stock-balance-main-report/stock-balance-main-report.component';
+import { ReportRefundBookingComponent} from './views/appviews/report-refund-booking/report-refund-booking.component';
+import { ReportTopProductComponent} from './views/appviews/report-top-product/report-top-product.component';
+import { ReportTopProductSpareComponent} from './views/appviews/report-top-product-spare/report-top-product-spare.component';
+import { CommissionSaleComponent} from './views/appviews/commission-sale/commission-sale.component';
+import { CommissionEventComponent} from './views/appviews/commission-event/commission-event.component';
+import { TaxPurchaseComponent} from './views/appviews/tax-purchase/tax-purchase.component';
+import { TaxSaleComponent} from './views/appviews/tax-sale/tax-sale.component';
+import { TaxSaleSpareComponent} from './views/appviews/tax-sale-spare/tax-sale-spare.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -84,10 +104,27 @@ export const ROUTES: Routes = [
     path: 'report', component: BasicLayoutComponent,
     children: [
       { path: 'booking', component: ReportBookingComponent },
+      { path: 'refund-report', component: ReportRefundBookingComponent},
       { path: 'credit-note', component: ReportCreditNoteComponent },
       { path: 'sale-report', component: ReportSaleComponent },
-      { path: 'balance-stock1', component: ReportBalanceStock1Component },
-      { path: 'balance-stock2', component: ReportBalanceStock2Component }
+      { path: 'summary-report-by-type', component:SummarySaleReportByTypeComponent},
+      { path: 'summary-stock-balance', component:SummaryStockBalanceComponent},
+      { path: 'contract-grade-payment', component:ContractGradePaymentComponent},
+      { path: 'summary-deposit-by-date', component:SummaryDepositByDateComponent},
+      { path: 'product-selling-profit-report', component:ProductSellingProfitReportComponent},
+      { path: 'summary-deposit-report', component:SummaryDepositReportComponent},
+      { path: 'service-check-report', component:ServiceCheckReportComponent},
+      { path: 'report-top-product', component:ReportTopProductComponent},
+      { path: 'report-top-spare', component:ReportTopProductSpareComponent},
+      
+      { path: 'credit-note-details-report', component:CreditNoteDetailsReportComponent},
+      { path: 'stock-balance-main-report', component:StockBalanceMainReportComponent},
+      { path: 'commission-sale', component:CommissionSaleComponent},
+      { path: 'commission-event', component:CommissionEventComponent},
+      { path: 'tax-purchase', component:TaxPurchaseComponent},
+      { path: 'tax-sale', component:TaxSaleComponent},
+      { path: 'tax-sale-spare', component:TaxSaleSpareComponent},
+      
     ], canActivate: [GuardGuard]
   },
   {
@@ -111,7 +148,14 @@ export const ROUTES: Routes = [
       { path: 'clear-money-list', component: TagClearMoneyListComponent },
       { path: 'clear-money/:mode', component: ClearMoneyCreateComponent },
       { path: 'clear-money/:mode/:code', component: ClearMoneyCreateComponent },
-      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent }
+      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent },
+      { path: 'receive-deposit-list', component: ReceiveDepositListComponent },
+      { path: 'receive-deposit-create', component: ReceiveDepositCreateComponent },
+      { path: 'receive-deposit-detail/:id', component: ReceiveDepositDetailComponent },
+      { path: 'rpt-regis-tag', component: RegisTagComponent },
+      { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
+
+
     ], canActivate: [GuardGuard]
   },
 

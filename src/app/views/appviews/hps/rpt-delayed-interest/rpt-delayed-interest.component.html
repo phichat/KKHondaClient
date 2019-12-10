@@ -1,0 +1,39 @@
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th>งวดที่</th>
+            <th>วันที่ครบกำหนด</th>
+            <th>ค่างวด</th>
+            <th>ดอดเบี้ยล่าช้า</th>
+            <th>ยอดคงค้าง</th>
+            <th>จำนวนวัน</th>
+            <th>หมายเหตุ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of delayedInterest;">
+            <td>{{item.instalmentNo}}</td>
+            <td>{{item.dueDate}}</td>
+            <td>{{item.balance | number:'1.2-2':'en-US'}}</td>
+            <td [ngClass]="{'text-warning':item.fineSum > 0}">{{item.fineSum | number:'1.2-2':'en-US'}}</td>
+            <td [ngClass]="{'text-danger':item.outstanding > 0}">{{item.outstanding | number:'1.2-2':'en-US'}}</td>
+            <td>{{item.delayDueDate}}</td>
+            <td>{{item.remark}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <label class="col-md-2">ยอดรวม ด/บ :</label>
+    <div class="col-md-1 ">{{totalFineSum | number:'1.2-2':'en-US'}}</div>
+    <label class="col-md-2">ยอดรับชำระ :</label>
+    <div class="col-md-1 ">{{totalPayFineSum | number:'1.2-2':'en-US'}}</div>
+    <label class="col-md-2">ยอดคงค้าง :</label>
+    <div class="col-md-1 ">{{totalOutstanding  | number:'1.2-2':'en-US'}}</div>
+</div>
+<!-- <div class="row">
+    <label class="col-md-3">ยอดปรับ :</label>
+    <div class="col-md-2"></div>
+    <label class="col-md-3">ยอดสุทธิ :</label>
+    <div class="col-md-2"></div>
+</div> -->

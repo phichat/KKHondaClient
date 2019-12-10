@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
 import { BookingDetailModel } from './bookingDetail.model';
+import { setLocalDate } from 'app/app.config';
 
 @Component({
    selector: 'app-booking',
@@ -16,6 +17,7 @@ export class BookingComponent implements OnInit, AfterViewInit {
 
    dataTable: any;
    isUpdateChart: boolean | false;
+   setLocalDate = setLocalDate;
 
    public color: any = ['#1C84C6', '#1ab394', '#ff3333'];
    public legends: any = [];
@@ -57,7 +59,9 @@ export class BookingComponent implements OnInit, AfterViewInit {
    public bookingType: BookingType[];
    public bookingDetail: BookingDetailModel[];
 
-   constructor(private dashBookingService: BookingService, private chRef: ChangeDetectorRef) { }
+   constructor(
+      private dashBookingService: BookingService,
+      private chRef: ChangeDetectorRef) { }
 
    ngOnInit() {
       const date = new Date(), y = date.getFullYear(), m = date.getMonth();
@@ -65,6 +69,7 @@ export class BookingComponent implements OnInit, AfterViewInit {
       const endDate = (new Date()).toISOString();
 
       this.dashBookingService.GetByCon(startDate, endDate).subscribe(res => {
+         this.chRef.markForCheck();
          this.bookingDetail = res.bookingDetail;
          this.RenderChart(res);
       });
@@ -156,23 +161,25 @@ export class BookingComponent implements OnInit, AfterViewInit {
             totalPriceCredit2 += item.bookSellPrice;
          })
 
-      // let result = [...res.bookingType.map(item => item.branchName)];
-      // result = result.sort().reduce((accumulator, current) => {
-      //    const length = accumulator.length
-      //    if (length === 0 || accumulator[length - 1] !== current) {
-      //       accumulator.push(current);
-      //    }
-      //    return accumulator;
-      // }, [])
+      let result = [...res.bookingType.map(item => item.branchName)];
+      let _xaxisTricks = result.sort().reduce((accumulator, current, index) => {
+         const length = accumulator.length
+         if (length === 0 || accumulator[length - 1] !== current) {
+            accumulator.push([index, current]);
+         }
+         return accumulator;
+      }, [])
 
       // let _xaxisTricks = []
       // result.map((item, i) => {
       //    _xaxisTricks.push([i, item])
       // })
 
-      // this.xaxisTricks = _xaxisTricks;
+      this.xaxisTricks = _xaxisTricks;
 
-      // this.flotOptions.xaxis.ticks = _xaxisTricks;
+      console.log(_xaxisTricks);
+      
+      this.flotOptions.xaxis.ticks = _xaxisTricks;
 
       this.flotDataset = [
          {
@@ -216,6 +223,8 @@ export class BookingComponent implements OnInit, AfterViewInit {
       ]
 
       this.onDetectTable();
+
+      this.chRef.detectChanges();
    }
 
    private reduceArray(array: any[]) {

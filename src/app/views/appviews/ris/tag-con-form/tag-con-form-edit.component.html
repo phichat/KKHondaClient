@@ -17,22 +17,26 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-  <div class="ibox float-e-margins">
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>บันทึกการส่งเรื่องดำเนินการ</h5>
+      </div>
       <div class="ibox-content">
-        <h3>บันทึกการส่งเรื่องดำเนินการ</h3>
-        <div class="hr-line-dashed"></div>
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-lg-3 control-label">วันที่ทำรายการ</label>
-              <div class="col-lg-9">
-                <span class="form-control disabled">{{displayLocalDate(formGroup.get('createDate').value)}}</span>
+            <div class="form-group"><label class="col-md-4 control-label">วันที่ทำรายการ</label>
+              <div class="col-md-8">
+                <thai-mat-datepicker id="dp" formControlName="bookingDate">
+                </thai-mat-datepicker>
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-lg-3 control-label">พนักงาน</label>
-              <div class="col-lg-9">
+            <div class="form-group"><label class="col-md-4 control-label">พนักงาน</label>
+              <div class="col-md-8">
                 <span class="form-control disabled">{{formGroup.get('createName').value}}</span>
               </div>
             </div>
@@ -41,16 +45,16 @@
 
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-lg-3 control-label">หมายเลขเครื่อง</label>
-              <div class="col-lg-9">
-                <span class="form-control disabled">{{formGroup.get('eNo').value}}</span>
+            <div class="form-group"><label class="col-md-4 control-label is-required">หมายเลขเครื่อง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="eNo" readonly />
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-lg-3 control-label">หมายเลขตัวถัง</label>
-              <div class="col-lg-9">
-                <span class="form-control disabled">{{formGroup.get('fNo').value}}</span>
+            <div class="form-group"><label class="col-md-4 control-label is-required">หมายเลขตัวถัง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="fNo" readonly />
               </div>
             </div>
           </div>
@@ -58,15 +62,44 @@
 
         <div class="row form-group">
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-lg-3 control-label">หมายเหตุ</label>
-              <div class="col-lg-9">
+            <div class="form-group"><label class="col-md-4 control-label">เลขทะเบียน</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="tagNo" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">จังหวัด</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="province" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label is-required">ผู้ถือกรรมสิทธิ</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="ownerName" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label is-required">ผู้ติดต่อ</label>
+              <div class="col-md-8"><input type="text" class="form-control" formControlName="visitorName" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="form-group"><label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
                 <textarea formControlName="remark" rows="1" class="form-control"></textarea>
               </div>
             </div>
           </div>
           <div class="col-xs-6 col-lg-6">
-            <div class="form-group"><label class="col-lg-3 control-label">สถานะ</label>
-              <div class="col-lg-9">
+            <div class="form-group"><label class="col-md-4 control-label">สถานะ</label>
+              <div class="col-md-8">
                 <span class="form-control disabled">{{formGroup.get('statusDesc').value}}</span>
               </div>
             </div>
@@ -76,68 +109,89 @@
         <div class="row form-group">
           <div class="col-xs-12 text-center">
             <div class="form-group">
-              <button class="btn btn-info" type="button" data-toggle="modal"
-                data-target="#carHistory">ประวัติรถ</button>
+              <button class="btn btn-info" type="button" data-toggle="modal" data-target="#carHistory"
+                (click)="openHistory()">ประวัติรถ</button>
             </div>
           </div>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="carHistory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="carHistory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog _dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
               </div>
               <div class="modal-body">
-                <app-tag-history-car></app-tag-history-car>
+                <app-tag-history-car [$Mode]="ActionMode.Edit" [$BookingId]="$CarHistoryBookingId"
+                  (HistoryCar$)="historyCarChange($event)"></app-tag-history-car>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="$HistoryCar.invalid"
+                  (click)="confirmHistory()">ตกลง</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <br>
 
-      <div class="ibox-content">
-        <h3>รายละเอียด</h3>
-        <div class="hr-line-dashed"></div>
+    <app-list-item [BookingId]="$BookingId" [Status1]="$Status1" [Status2]="$Status2" [Mode]="ActionMode.Edit"
+      (TagListItem)="TagListItem$.next($event)" (TagHistory)="TagHistory$.next($event)"></app-list-item>
 
-        <app-list-item [BookingId]="$BookingId" [BookingStatus]="$BookingStatus" [Mode]="ActionMode.Edit"
-          (TagListItem)="TagListItem$.next($event)" (TagHistory)="TagHistory$.next($event)"></app-list-item>
+    <hr>
+    <div class="row">
+      <div class="col-lg-7"></div>
+      <div class="col-lg-5">
 
-        <div class="hr-line-dashed"></div>
+        <div class="row form-group">
+          <div class="">
+            <label class="col-md-4 control-label">ประเภทชำระ</label>
+            <div class="col-md-8">
+              <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
+                <label for="pt{{i}}">{{item.desc}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <table class="table invoice-total">
-          <tbody>
-            <tr>
-              <td><strong>ยอดรวมเงินนำฝาก :</strong></td>
-              <td>{{formGroup.get('price1').value | number:'1.2-2'}}</td>
-            </tr>
-            <tr>
-              <td><strong>ยอดรวมภาษี :</strong></td>
-              <td>{{formGroup.get('vatPrice1').value | number:'1.2-2'}}</td>
-            </tr>
-            <tr>
-              <td><strong>ยอดรวมเงินที่ต้องยืม :</strong></td>
-              <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
-            </tr>
-            <tr>
-              <td><strong>ยอดรวมทั้งหมด :</strong></td>
-              <td>{{formGroup.get('totalPrice').value | number:'1.2-2'}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-8">
+            <div *ngIf="paymentPriceNotEqualNetprice" class="alert alert-danger" role="alert">
+              "ยอดชำระเงิน" ต้องเท่ากับ "ยอดเงินรับฝาก"
+            </div>
+          </div>
+        </div>
 
-        <div class="hr-line-dashed"></div>
-
-        <div class="text-right">
-          <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+        <div [ngSwitch]="formGroup.get('paymentType').value">
+          <ng-container *ngSwitchCase="PaymentType.Cash">
+            <app-payment-type-cash [$Data]="PaymentData" (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
+          </ng-container>
+          <ng-container *ngSwitchCase="PaymentType.Transfer">
+            <app-payment-type-transfer [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+            </app-payment-type-transfer>
+          </ng-container>
+          <ng-container *ngSwitchCase="PaymentType.Cheque">
+            <app-payment-type-cheque [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+            </app-payment-type-cheque>
+          </ng-container>
+          <ng-container *ngSwitchCase="PaymentType.CreditCard">
+            <app-payment-type-credit-card [$Data]="PaymentData" (Payment$)="formPaymentChange($event)">
+            </app-payment-type-credit-card>
+          </ng-container>
         </div>
       </div>
+    </div>
 
-    </form>
-  </div>
+    <div class="text-right form-group">
+      <button class="btn btn-success" type="submit"
+        [disabled]="formGroup.invalid || formPayment.options.invalid">บันทึกรายการ</button>
+    </div>
+
+  </form>
 </div>

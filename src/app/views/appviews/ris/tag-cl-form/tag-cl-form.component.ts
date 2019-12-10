@@ -1,14 +1,14 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { ModelUser } from 'app/models/users';
-import { FormArray, FormControl, FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { DropDownModel } from 'app/models/drop-down-model';
-import { appConfig } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { AlRegisService, ClRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -20,22 +20,22 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_alRegis: AlRegisService,
+    private s_clRegis: ClRegisService
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
-    }
+    };
+    this.mUser = this.s_user.cookies;
   }
   checkedAll: boolean;
-  mUser: ModelUser;
   bankingsDropdown = new Array<DropDownModel>();
-
-  @ViewChild("receivePrice") inputReceivePrice: ElementRef;
+  formPayment: IPayment;
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -45,39 +45,35 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       refundId: new FormControl(null),
       refundName: new FormControl(null),
       balancePrice: new FormControl(null),
-      receivePrice: new FormControl(null),
+      // receivePrice: new FormControl(null, Validators.required),
+      paymentPrice: new FormControl(null, Validators.required),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null, Validators.required),
       netPrice: new FormControl(null),
-      bankCode: new FormControl(null),
+      accBankId: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentDate: new FormControl(null),
+      paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
-      createDate: new FormControl(null),
+      createDate: new FormControl(null, Validators.required),
       createBy: new FormControl(null),
       remark: new FormControl(null),
       AlList: this.fb.array([])
     });
 
-    const bank = `${appConfig.apiUrl}/Bank/DropDown`;
-    this.http.get(bank).subscribe((x: any[]) => {
-      this.chRef.markForCheck();
-      this.bankingsDropdown = x;
-      this.chRef.detectChanges();
-    });
-
     this.loadingAlList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.mUser = x;
-      this.chRef.detectChanges();
-    });
   }
 
   loadingAlList() {
-    const carList = `${appConfig.apiUrl}/Ris/Al/NormalList`;
-    this.http.get(carList).subscribe((x: any[]) => {
-      if (!x.length) { this.loading = 1; return }
+    this.s_alRegis.NormalList().subscribe((x: any[]) => {
+
+      if (!x.length) {
+        this.loading = 1;
+        while (this.AlList.length)
+          this.AlList.removeAt(0);
+        return;
+      };
+
       const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false }], []);
       this.setItemFormArray(res, this.formGroup, 'AlList');
       this.chRef.markForCheck();
@@ -90,14 +86,13 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
           refundId: rec ? rec.createBy : null,
           refundName: rec ? rec.createName : null,
           balancePrice: this.balancePriceState,
-          receivePrice: this.balancePriceState,
+          // receivePrice: this.balancePriceState,
           netPrice: rec ? rec.netPrice : null,
-          createDate: new Date(),
+          // createDate: new Date(),
           createBy: this.mUser.id,
           branchId: this.mUser.branch,
           paymentType: '1'
         });
-        this.onChangeReceivePrice(this.balancePriceState);
       });
 
       this.reInitDatatable();
@@ -109,7 +104,6 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       if (index == i) {
         const val = this.AlList.at(index).get('IS_CHECKED').value;
         this.AlList.at(index).get('IS_CHECKED').patchValue(!val);
-        if (!val == true) this.inputReceivePrice.nativeElement.focus();
       } else {
         this.AlList.at(index).get('IS_CHECKED').patchValue(false);
       }
@@ -124,9 +118,22 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
     }
   }
 
-  onChangeReceivePrice(value: number) {
-    let price = this.balancePriceState - value;
-    this.formGroup.get('balancePrice').patchValue(price);
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    let balancePrice = this.balancePriceState - (event.totalPaymentPrice ? event.totalPaymentPrice : 0);
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef,
+      balancePrice: balancePrice
+    });
+  }
+
+  get paymentMoreThenBalancePrice(): boolean {
+    return this.formGroup.get('totalPaymentPrice').value > this.balancePriceState
   }
 
   onSubmit() {
@@ -137,20 +144,23 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       refundId: f.refundId,
       refundName: f.refundName,
       balancePrice: f.balancePrice,
-      receivePrice: f.receivePrice,
+      paymentPrice: f.paymentPrice,
+      discountPrice: f.discountPrice,
+      totalPaymentPrice: f.paymentPrice,
+      accBankId: f.accBankId,
+      paymentDate: f.paymentDate,
+      documentRef: f.documentRef,
       netPrice: f.netPrice,
       bankCode: f.bankCode,
-      documentRef: f.documentRef,
       paymentType: f.paymentType,
       branchId: f.branchId,
-      createDate: (f.createDate as Date).toISOString(),
+      createDate: setZeroHours(f.createDate),
       createBy: f.createBy,
       remark: f.remark,
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Cl`;
-    this.http.post(url, f).pipe(
+    this.s_clRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);

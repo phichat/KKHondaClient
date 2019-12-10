@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { appConfig } from 'app/app.config';
 import { TagClListConfig } from './tag-con-list.config';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { CarRegisService } from 'app/services/ris';
 
 @Component({
   selector: 'app-tag-con-list',
@@ -14,24 +14,40 @@ export class TagConListComponent extends TagClListConfig implements OnInit, OnDe
   }
 
   constructor(
-    private http: HttpClient
+    private fb: FormBuilder,
+    private s_carRegis: CarRegisService
   ) {
-    super()
-   }
+    super();
+    this.formSearch = this.fb.group({
+      bookingNo: new FormControl(null),
+      revNo: new FormControl(null),
+      status1: new FormControl(null),
+      status2: new FormControl(null),
+      eNo: new FormControl(null),
+      fNo: new FormControl(null),
+    });
+  }
 
   ngOnInit() {
-    const url = `${appConfig.apiUrl}/Ris/All`
-    this.http.get(url).subscribe((x: any[]) => {
-      if (!x.length) {
-        this.loading = 1;
-        return;
-      };
-      this.conList = x;
 
-      this.reInitDatatable();
-    }, () => {
-      this.loading = 2;
-    });
+  }
+
+  onSearch() {
+    let form = this.formSearch.value;
+    // form = JSON.stringify(form);  
+    this.loading = 0;
+    this.s_carRegis.SearchRegisList(form)
+      .subscribe(x => {
+        if (!x.length) {
+          this.loading = 1;
+          return;
+        };
+        this.conList = x;
+
+        this.reInitDatatable();
+      }, () => {
+        this.loading = 2;
+      });
   }
 
 }

@@ -5,6 +5,7 @@ import { IConItemRes, IConItemOutput } from 'app/interfaces/ris';
 import { FormGroup, FormArray } from '@angular/forms';
 import { LoadingEntities } from 'app/entities/loading.entities';
 import { ModelUser } from 'app/models/users/user';
+import { IUserResCookie } from 'app/interfaces/users';
 
 export class ListConItemDetailConfig extends RisConfig {
     @Input() $ConNo: BehaviorSubject<string>;
@@ -13,7 +14,7 @@ export class ListConItemDetailConfig extends RisConfig {
     // public ConItemList: Observable<IConItemRes[]>;
     public loading: number;
     public formGroup: FormGroup;
-    public mUser: ModelUser;
+    public mUser: IUserResCookie;
 
     get ConListItem(): FormArray {
         return this.formGroup.get('ConListItem') as FormArray;

@@ -21,11 +21,81 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
+  <div class="ibox">
+    <div class="ibox-title">
+      <h3>ค้นหาข้อมูลบันทึกคืนเงิน</h3>
+    </div>
+    <div class="ibox-content">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบส่งเรื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="sedNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบยืม</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="alNo">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบคืน</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="clNo">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้คืนเงิน</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="refundName">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้รับคืน</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="createName">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">วันที่ทำรายการ</label>
+            <div class="col-lg-8">
+              <thai-mat-datepicker id="dp" formControlName="createDate"></thai-mat-datepicker>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">สถานะ</label>
+            <div class="col-lg-8">
+              <select formControlName="status" class="form-control">
+                <option value=""></option>
+                <option [value]="item.id" *ngFor="let item of ClStatusList">{{item.desc}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <form class="form-horizontal" style="margin-bottom: 15em;">
-        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
           <thead>
             <tr>
               <th class="text-center">ลำดับ</th>
@@ -37,21 +107,28 @@
               <th>สถานะ</th>
               <th class="text-right">เงินยืมคงเหลือ</th>
               <th class="text-right">เงินคืน</th>
-              <!-- <th class="text-right">จำนวนเงินยืม</th> -->
               <th>ผู้ดำเนินการ (คืนเงิน)</th>
               <th>ผู้รับคืน</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="clList.length == 0; else else_tr;">
-              <td colspan="10" class="text-center">
+              <td colspan="11" class="text-center">
                 <div [ngSwitch]="loading">
-                  <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
-                  <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
-                  <div *ngSwitchDefault>
+                  <div *ngSwitchCase="1">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>ไม่มีข้อมูล</p>
+                  </div>
+                  <div *ngSwitchCase="2">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>มีบางอย่างผิดพลาด</p>
+                  </div>
+                  <div *ngSwitchCase="0">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <br>
-                    <span class="mt-2">รอสักครู่...</span>
+                    <p>รอสักครู่...</p>
                   </div>
                 </div>
               </td>
@@ -73,9 +150,9 @@
                   'text-danger': item.status == ClStatus.Cancel,
                   'text-navy': item.status == ClStatus.Normal
                 }">{{item.statusDesc}}</td>
-                <td class="text-right">{{item.balancePrice | number:'1.2-2'}}</td>
-                <td class="text-right">{{item.receivePrice | number:'1.2-2'}}</td>
-                <!-- <td class="text-right">{{item.netPrice | number:'1.2-2'}}</td> -->
+                <td class="text-right">{{item.balancePrice | number:'1.2-2':'en-US'}}</td>
+                <td class="text-right" style="background-color: #d9edf7;">
+                  {{item.totalPaymentPrice | number:'1.2-2':'en-US'}}</td>
                 <td>{{item.refundName}}</td>
                 <td>{{item.createName}}</td>
               </tr>

@@ -1,16 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { tap, distinctUntilChanged, debounceTime, switchMap, finalize, mergeMap, map, delay } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime, switchMap, finalize, mergeMap, map } from 'rxjs/operators';
 import { ClearMoneyConfig } from './clear-money.config';
-import { of, combineLatest, merge } from 'rxjs';
+import { of } from 'rxjs';
 import { ISedRes, IConItemOutput, IConRes, IAlRes, IConItemRes, IConItemDocRes, IRevListRes, IRevWithSedItem } from 'app/interfaces/ris';
 import { ClearMoneyService } from './clear-money.service';
 import { message } from 'app/app.message';
-import { getDateMyDatepicker, setZeroHours } from 'app/app.config';
+import { setZeroHours, leftPad, yy_th, mm } from 'app/app.config';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RevRegisService, SedRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 
@@ -26,19 +27,25 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
     private activeRoute: ActivatedRoute,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
-    private s_cloarMoney: ClearMoneyService
+    private s_cloarMoney: ClearMoneyService,
+    private s_revRegis: RevRegisService,
+    private s_sedRegis: SedRegisService,
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
+  }
+
+  get balanceNotEqueaReceive(): boolean {
+    return this.formGroup.get('totalClBalancePrice').value != this.formGroup.get('totalClReceivePrice').value
   }
 
   ngOnInit(): void {
@@ -63,48 +70,35 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       totalPrice2: new FormControl(0),
       totalIncome: new FormControl(0),
       totalClBalancePrice: new FormControl(0),
-      totalClReceivePrice: new FormControl(0),
+      totalClReceivePrice: new FormControl(0, Validators.required),
       totalExpenses: new FormControl(0),
       totalAccruedExpense: new FormControl(0),
       status: new FormControl(1)
     });
 
     this.activeRoute.params
-      .pipe(
-        mergeMap((x) => {
-          return combineLatest(of(x), this.s_user.currentData).pipe(
-            map(o => {
-              return {
-                params: o[0],
-                curretUser: o[1]
-              };
-            })
-          );
-        })
-      ).subscribe(x => {
+      .subscribe(x => {
         this.chRef.markForCheck();
-        if (x.curretUser == null) return;
-        this.mode = x.params.mode;
-        this.code = x.params.code ? x.params.code : null;
-        switch (x.params.mode) {
+
+        this.mode = x.mode;
+        this.code = x.code ? x.code : null;
+        switch (x.mode) {
           case this.ActionMode.Create.toString():
             this.searchSed();
+            this.setSedDropDown();
             this.formGroup.patchValue({
-              createBy: x.curretUser.id,
-              createName: x.curretUser.fullName,
+              createBy: this.mUser.id,
+              createName: this.mUser.fullName,
               createDate: new Date(),
-              branchId: x.curretUser.branch
+              branchId: this.mUser.branch
             })
             break;
 
           case this.ActionMode.Edit.toString():
-            const params = { revNo: this.code };
-            this.http.get(`${this.risUrl}/Rev/GetByRevNo`, { params }).pipe(
+            this.s_revRegis.GetByRevNo(this.code).pipe(
               tap(() => this.s_loader.showLoader()),
               mergeMap((rev: IRevListRes) => {
-                const params = { sedNo: rev.sedNo };
-                const url = `${this.risUrl}/Sed/GetBySedNo`;
-                return this.http.get(url, { params }).pipe(
+                return this.s_sedRegis.GetBySedNo(rev.sedNo).pipe(
                   map((sed: ISedRes) => {
                     return {
                       revItem: rev,
@@ -115,7 +109,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
               }),
               finalize(() => this.s_loader.onEnd())
             ).subscribe((o: IRevWithSedItem) => {
-              o.revItem.updateBy = x.curretUser.id;
+              o.revItem.updateBy = this.mUser.id;
               o.revItem.updateDate = new Date();
               o.revItem.sedCreateName = o.sedItem.createName
               this.formGroup.patchValue({ ...o.revItem });
@@ -147,7 +141,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
 
     this.formGroup.get('totalClReceivePrice').valueChanges.subscribe((receive: number) => {
       const balance = this.formGroup.get('totalClBalancePrice').value;
-      const totalPrice2 = this.formGroup.get('totalPrice2').value;
+      // const totalPrice2 = this.formGroup.get('totalPrice2').value;
       // let receivePrice = this.clReceivePriceState == parseFloat(receive)
       //   ? parseFloat(receive)
       //   : this.clReceivePriceState + (parseFloat(receive) || 0);
@@ -163,7 +157,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
         const cutBalance = x.reduce((a, c) => a += c.cutBalance, 0);
         const price1 = x.reduce((a, c) => a += c.price1, 0);
         const vatPrice1 = x.reduce((a, c) => a += c.vatPrice1, 0);
-        const price2 = x.reduce((a, c) => a += c.price2, 0);
+        const price2 = x.reduce((a, c) => a += (c.price2 + c.price3), 0);
         const netPrice = x.reduce((a, c) => a += (c.price1 + c.vatPrice1), 0);
         this.formGroup.patchValue({
           totalPrice1: price1,
@@ -181,7 +175,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       const fgValue = this.formGroup.value;
       const cutBalance = fgValue.totalCutBalance;
       const totalExpenses = this.calExpenses(balance, cutBalance);
-      const receive = x.reduce((a, c) => a += c.receivePrice, 0);
+      // const receive = x.reduce((a, c) => a += c.receivePrice, 0);
       // this.clReceivePriceState = receive;
       this.formGroup.patchValue({
         totalClBalancePrice: this.mode == this.ActionMode.Edit ? fgValue.totalClBalancePrice : balance.toFixed(2),
@@ -238,7 +232,6 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     }
 
     this.s_loader.showLoader();
-    const url = `${this.risUrl}/REV`;
     listItemDoc = listItemDoc
       .filter(x => x.isReceive != null)
       .map(x => {
@@ -249,8 +242,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       });
     listConItem = listConItem.map(o => {
       const obj = { ...o };
-      // obj.dateReceipt = setZeroHours(getDateMyDatepicker(obj.dateReceipt as any));
-      obj.dateReceipt = setZeroHours(obj.dateReceipt);
+      obj.dateReceipt = setZeroHours(obj.dateReceipt as Date);
       return obj;
     })
     const f = {
@@ -259,7 +251,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       tagConListItem: listConItem,
       tagListItemDoc: listItemDoc
     }
-    this.http.post(url, f).pipe(
+    this.s_revRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);
@@ -286,6 +278,21 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
     });
   }
 
+  setSedDropDown() {
+    let branch = this.mUser.branchId.toString();
+    branch = leftPad(branch, 2, '0');
+    const term = `SED${branch}${yy_th}${mm}`;
+    this.s_sedRegis.GetByTermSedNo(term)
+      .subscribe(x => {
+        this.sedDropDown = x;
+        this.sedDropDown.map(item => {
+          item.text = item.sedNo;
+          item.value = item.sedNo;
+        }, () => {
+          this.sedDropDown = [];
+        })
+      })
+  }
 
   searchSed() {
     this.searchTypeahead.pipe(
@@ -297,7 +304,7 @@ export class ClearMoneyCreateComponent extends ClearMoneyConfig implements OnIni
       distinctUntilChanged(),
       switchMap(term =>
         term
-          ? this.http.get<ISedRes[]>(`${this.risUrl}/Sed/GetByTermSedNo`, { params: { term } })
+          ? this.s_sedRegis.GetByTermSedNo(term)
           : of([])
       )
     ).subscribe((x: ISedRes[]) => {

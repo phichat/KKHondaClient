@@ -19,7 +19,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
 
-  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup">
 
 
     <div class="ibox float-e-margins">
@@ -28,9 +28,9 @@
         <div class="row">
           <div class="col-xs-6 col-lg-6">
             <div class="form-group">
-              <label class="col-lg-3 control-label">วันที่ทำรายการ</label>
+              <label class="col-lg-3 control-label is-required">วันที่ทำรายการ</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{displayLocalDate(formGroup.get('createDate').value)}}</span>
+                  <thai-mat-datepicker id="dp" formControlName="createDate"></thai-mat-datepicker>
               </div>
             </div>
           </div>
@@ -46,9 +46,10 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-3 control-label">ยอดค้างทั้งสิ้น</label>
+              <label class="col-lg-3 control-label">ยอดค้างชำระ</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{formGroup.get('balancePrice').value | number:'1.2-2'}}</span>
+                <span
+                  class="form-control disabled">{{formGroup.get('balancePrice').value | number:'1.2-2':'en-US'}}</span>
               </div>
             </div>
           </div>
@@ -56,7 +57,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label">ผู้รับคืน</label>
               <div class="col-lg-9">
-                <span class="form-control disabled">{{mUser?.name}}</span>
+                <span class="form-control disabled">{{mUser?.fullName}}</span>
               </div>
             </div>
             <div class="form-group">
@@ -75,14 +76,14 @@
         <div class="ibox float-e-margins">
           <div class="ibox-content">
             <div class="table-responsive">
-              <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+              <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
                 <thead>
                   <tr>
                     <th class="text-center">ลำดับ</th>
                     <th></th>
                     <th>เลขที่ใบยืม</th>
                     <th>วันที่ยืม</th>
-                    <th class="text-right">เงินยืมคงเหลือ</th>
+                    <th class="text-right">ค้างชำระ</th>
                     <th class="text-right">เงินคืน</th>
                     <th class="text-right">จำนวนเงินยืม</th>
                   </tr>
@@ -90,15 +91,23 @@
                 <tbody formArrayName="AlList">
                   <tr *ngIf="AlList.length == 0; else else_tr;">
                     <td colspan="7" class="text-center">
-                        <div [ngSwitch]="loading">
-                            <div *ngSwitchCase="1">ไม่มีข้อมูล</div>
-                            <div *ngSwitchCase="2">มีบางอย่างผิดพลาด</div>
-                            <div *ngSwitchDefault>
-                              <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                              <br>
-                              <span class="mt-2">รอสักครู่...</span>
-                            </div>
-                          </div>
+                      <div [ngSwitch]="loading">
+                        <div *ngSwitchCase="1">
+                          <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                          <br>
+                          <p>ไม่มีข้อมูล</p>
+                        </div>
+                        <div *ngSwitchCase="2">
+                          <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                          <br>
+                          <p>มีบางอย่างผิดพลาด</p>
+                        </div>
+                        <div *ngSwitchDefault>
+                          <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                          <br>
+                          <p>รอสักครู่...</p>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                   <ng-template #else_tr>
@@ -113,9 +122,9 @@
                       </td>
                       <td>{{item.get('alNo').value}}</td>
                       <td>{{displayLocalDate(item.get('createDate').value)}}</td>
-                      <td class="text-right">{{item.get('balancePrice')?.value | number:'1.2-2'}}</td>
-                      <td class="text-right">{{item.get('receivePrice')?.value | number:'1.2-2'}}</td>
-                      <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2'}}</td>
+                      <td class="text-right">{{item.get('balancePrice')?.value | number:'1.2-2':'en-US'}}</td>
+                      <td class="text-right">{{item.get('totalPaymentPrice')?.value | number:'1.2-2':'en-US'}}</td>
+                      <td class="text-right">{{item.get('netPrice')?.value | number:'1.2-2':'en-US'}}</td>
                     </tr>
                   </ng-template>
 
@@ -123,101 +132,45 @@
               </table>
             </div>
 
-            <!-- <div class="tabs-container">
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a data-toggle="tab" href="#tab1">
-                    รายการรถ
-                  </a>
-                </li>
-                <li>
-                  <a data-toggle="tab" href="#tab2">
-                    รายงานเงินยืม
-                  </a>
-                </li>
-              </ul>
-              <div class="tab-content" style="height: 240px; overflow:scroll;">
-                <div id="tab1" class="tab-pane active">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-                <div id="tab2" class="tab-pane">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <br>
-            <div class="tabs-container">
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a data-toggle="tab" href="#tab1_1">
-                    รายเรื่องย่อยที่รับคืน
-                  </a>
-                </li>
-                <li>
-                  <a data-toggle="tab" href="#tab1_2">
-                    เอกสาร/สิ่งที่รับคืน
-                  </a>
-                </li>
-              </ul>
-              <div class="tab-content">
-                <div id="tab1_1" class="tab-pane active">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-                <div id="tab1_2" class="tab-pane">
-                  <div class="panel-body" style="height: 240px; overflow:scroll;">
-                  </div>
-                </div>
-              </div>
-            </div> -->
             <hr>
             <div class="row">
-              <div class="col-lg-5"></div>
-              <div class="col-lg-7">
-                <div class="form-group">
-                  <label class="col-lg-6 control-label">ประเภทชำระ</label>
-                  <div class="col-lg-6">
+              <div class="col-lg-7"></div>
+              <div class="col-lg-5">
 
-                    <div class="radio radio-info radio-inline">
-                      <input type="radio" formControlName="paymentType" id="paymentType0" value=1>
-                      <label for="paymentType0">เงินสด</label>
-                    </div>
-                    <div class="radio radio-info radio-inline">
-                      <input type="radio" formControlName="paymentType" id="paymentType1" value=2>
-                      <label for="paymentType1">เงินโอน</label>
-                    </div>
-                  </div>
-                </div>
                 <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label"
-                    [ngClass]="{'is-required': formGroup.get('paymentType').value == '2'}">
-                    ธนาคาร
-                  </label>
-                  <div class="col-sm-6">
-                    <ng-select [required]="formGroup.get('paymentType').value == '2'" [items]="bankingsDropdown"
-                      bindValue="value" bindLabel="text" formControlName="bankCode">
-                    </ng-select>
+                  <div class="">
+                    <label class="col-md-4 control-label">ประเภทชำระ</label>
+                    <div class="col-md-8">
+                      <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                        <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}}>
+                        <label for="pt{{i}}">{{item.desc}}</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="row form-group">
-                  <label for="" class="col-sm-6 control-label"
-                    [ngClass]="{'is-required': formGroup.get('paymentType').value == '2'}">
-                    หมายเลขอ้างอิง
-                  </label>
-                  <div class="col-sm-6 text-right">
-                    <input type="text" formControlName="documentRef"
-                      [required]="formGroup.get('paymentType').value == '2'" class="form-control"
-                      [readOnly]="formGroup.get('paymentType').value == '1'">
+
+                <div class="row">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-8">
+                    <div *ngIf="paymentMoreThenBalancePrice" class="alert alert-danger" role="alert">
+                      "ยอดรับคืน" ต้องไม่มากกว่า "ยอดค้างชำระ"
+                    </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-lg-6 control-label is-required">ยอดรับคืนเงิน</label>
-                  <div class="col-lg-6">
-                    <input type="number" class="form-control" #receivePrice formControlName="receivePrice"
-                      (keyup)="onChangeReceivePrice(receivePrice.value)" />
-                  </div>
+
+                <div [ngSwitch]="formGroup.get('paymentType').value">
+                  <ng-container *ngSwitchCase="PaymentType.Cash">
+                    <app-payment-type-cash (Payment$)="formPaymentChange($event)"></app-payment-type-cash>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="PaymentType.Transfer">
+                    <app-payment-type-transfer (Payment$)="formPaymentChange($event)"></app-payment-type-transfer>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="PaymentType.Cheque">
+                    <app-payment-type-cheque (Payment$)="formPaymentChange($event)"></app-payment-type-cheque>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="PaymentType.CreditCard">
+                    <app-payment-type-credit-card (Payment$)="formPaymentChange($event)"></app-payment-type-credit-card>
+                  </ng-container>
                 </div>
               </div>
             </div>
@@ -228,7 +181,8 @@
 
     <div class="row">
       <div class="col-lg-12 text-right">
-        <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+        <button class="btn btn-success" type="button" (click)="onSubmit()"
+          [disabled]="formGroup.invalid || paymentMoreThenBalancePrice || formPayment.options.invalid">บันทึกรายการ</button>
       </div>
     </div>
   </form>

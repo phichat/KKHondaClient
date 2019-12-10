@@ -20,9 +20,58 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-  <div class="ibox float-e-margins">
+  <div class="ibox">
+    <div class="ibox-title">
+      <h3>ค้นหาข้อมูลบันทึกรับคืนเรื่องจากการดำเนินการ</h3>
+    </div>
     <div class="ibox-content">
-      <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบส่งเรื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="sedNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">วันที่ส่งเรื่อง</label>
+            <div class="col-lg-8">
+              <thai-mat-datepicker id="dp" formControlName="createDate"></thai-mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้ดำเนินการ</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="createName">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">สถานะ</label>
+            <div class="col-lg-8">
+              <select formControlName="status" class="form-control">
+                <option value=""></option>
+                <option [value]="item.id" *ngFor="let item of SedStatusList">{{item.desc}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="ibox">
+    <div class="ibox-content">
+      <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
         <thead>
           <tr>
             <th class="text-center">ลำดับ</th>
@@ -31,15 +80,17 @@
             <th>วันที่ส่งเรื่อง</th>
             <th>ผู้ดำเนินการ</th>
             <th>สถานะ</th>
-            <th class="text-right">เงินที่ต้องส่งรวมภาษี</th>
-            <th class="text-right">เงินที่ต้องยืม</th>
+            <th class="text-right">เงินรับฝาก</th>
+            <th class="text-right">ค่าใช้จ่าย</th>
+            <th class="text-right">ค่าใช้จ่าย(เบิกเพิ่ม)</th>
+            <th class="text-right">รวมค่าใช้จ่าย</th>
             <th class="text-right">เงินยืม</th>
             <th>หมายเหตุ</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngIf="SedList.length == 0; else else_tr;">
-            <td colspan="9" class="text-center">
+            <td colspan="12" class="text-center">
               <div [ngSwitch]="loading">
                 <div *ngSwitchCase="1">
                   <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -51,7 +102,7 @@
                   <br>
                   <p>มีบางอย่างผิดพลาด</p>
                 </div>
-                <div *ngSwitchDefault>
+                <div *ngSwitchCase="0">
                   <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                   <br>
                   <p>รอสักครู่...</p>
@@ -81,13 +132,19 @@
                 {{item.statusDesc}}
               </td>
               <td class="text-right" [attr.data-order]="item.netPrice1">
-                {{item.netPrice1 | number:'1.2-2'}}
+                {{item.netPrice1 | number:'1.2-2':'en-US'}}
               </td>
               <td class="text-right" [attr.data-order]="item.price2">
-                {{item.price2 | number:'1.2-2'}}
+                {{item.price2 | number:'1.2-2':'en-US'}}
+              </td>
+              <td class="text-right" [attr.data-order]="item.price3">
+                {{item.price3 | number:'1.2-2':'en-US'}}
+              </td>
+              <td class="text-right" style="background-color: #d9edf7;" [attr.data-order]="item.price2 + item.price3">
+                {{item.price2 + item.price3 | number:'1.2-2':'en-US'}}
               </td>
               <td class="text-right" [attr.data-order]="item.borrowMoney">
-                {{item.borrowMoney | number:'1.2-2'}}
+                {{item.borrowMoney | number:'1.2-2':'en-US'}}
               </td>
               <td>{{item.remark}}</td>
             </tr>

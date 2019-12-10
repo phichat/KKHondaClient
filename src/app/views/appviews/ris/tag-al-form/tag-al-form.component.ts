@@ -1,12 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { appConfig } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { TagAlConfig } from './tag-al.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize } from 'rxjs/operators';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { AlRegisService, SedRegisService } from 'app/services/ris';
 declare var toastr: any;
 
 @Component({
@@ -19,21 +20,30 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
     this.destroyDatatable();
   }
 
+  formPayment: IPayment;
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_alRegis: AlRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
   }
-
-  @ViewChild("paymentPrice") inputPaymentPrice: ElementRef;
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -44,39 +54,31 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       sendingPrice: new FormControl(null),
       remainPrice: new FormControl(null),
       price2Remain: new FormControl(null),
-      paymentPrice: new FormControl(null),
+      price1: new FormControl(null),
+      netPrice1: new FormControl(null),
       price2: new FormControl(null),
-      bankCode: new FormControl(null),
+      price3: new FormControl(null),
+      paymentDate: new FormControl(null),
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
-      createDate: new FormControl(null),
+      createDate: new FormControl(null, Validators.required),
       createBy: new FormControl(null),
       remark: new FormControl(null),
       SedList: this.fb.array([])
     });
 
-    const bank = `${appConfig.apiUrl}/Bank/DropDown`;
-    this.http.get(bank).subscribe((x: any[]) => {
-      this.chRef.markForCheck();
-      this.bankingsDropdown = x;
-      this.chRef.detectChanges();
-    });
-
     this.loadingSedList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.mUser = x;
-      this.chRef.detectChanges();
-    });
+    this.PaymentData.next(this.paymentData);
   }
 
   loadingSedList() {
-    const sedList = `${appConfig.apiUrl}/Ris/Sed/NormalList`;
 
-    this.http.get(sedList).subscribe((x: any[]) => {
+    this.s_sedRegis.NormalList().subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
         while (this.SedList.length)
@@ -96,12 +98,18 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
           borrowerName: rec ? rec.createName : null,
           paymentPrice: rec ? rec.price2Remain : null,
           price2: rec ? rec.price2 : null,
-          createDate: new Date(),
+          // createDate: new Date(),
           createBy: this.mUser.id,
           branchId: this.mUser.branch,
           paymentType: '1'
         });
-        this.onChangePaymentPrice(this.inputPaymentPrice.nativeElement.value);
+
+        this.formPayment = {
+          ...this.formPayment,
+          paymentPrice: this.price2RemainState
+        }
+
+        this.PaymentData.next(this.formPayment);
       })
 
       this.reInitDatatable();
@@ -115,28 +123,30 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       if (index == i) {
         const val = this.SedList.at(index).get('IS_CHECKED').value;
         this.SedList.at(index).get('IS_CHECKED').patchValue(!val);
-        if (!val == true) this.inputPaymentPrice.nativeElement.focus();
       } else {
         this.SedList.at(index).get('IS_CHECKED').patchValue(false);
       }
     }
   }
 
-  onChangePaymentPrice(value: number) {
-    let price = this.price2RemainState - value;
-    // this.formGroup.get('price2').value - value;
-    this.formGroup.get('price2Remain').patchValue(price);
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    // debugger
+    let price2Remain = this.price2RemainState - (event.totalPaymentPrice ? event.totalPaymentPrice : 0);
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef,
+      price2Remain: price2Remain
+    });
   }
 
-  // togglePaymentType(value: number) {
-  //   if (value == 1) {
-  //     this.formGroup.get('bankCode').disable;
-  //     this.formGroup.get('documentRef').disable;
-  //   } else {
-  //     this.formGroup.get('bankCode').enable;
-  //     this.formGroup.get('documentRef').enable;
-  //   }
-  // }
+  get paymentMoreThenPrice2Remain(): boolean {
+    return this.formGroup.get('totalPaymentPrice').value > this.price2RemainState
+  }
 
   private setItemFormArray(array: any[], fg: FormGroup, formControl: string) {
     if (array !== undefined && array.length) {
@@ -153,18 +163,20 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       sedNo: f.sedNo,
       price2Remain: f.price2Remain,
       paymentPrice: f.paymentPrice,
-      bankCode: f.bankCode,
+      discountPrice: f.discountPrice,
+      totalPaymentPrice: f.paymentPrice,
+      paymentDate: f.paymentDate,
+      accBankId: f.accBankId,
       documentRef: f.documentRef,
       paymentType: f.paymentType,
       branchId: f.branchId,
-      createDate: (f.createDate as Date).toISOString(),
+      createDate: setZeroHours(f.createDate),
       createBy: f.createBy,
       remark: f.remark
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Al`;
-    this.http.post(url, f).pipe(
+    this.s_alRegis.Post(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);

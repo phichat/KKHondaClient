@@ -12,7 +12,7 @@ export class ReportSale {
     color: AutoCompleteModel[];
 
     isSellName: string;
-    SellId: string;
+    SellId: AutoCompleteModel[];
 
     isPaymentType: string;
     paymentTypeId: string;

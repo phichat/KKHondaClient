@@ -1,11 +1,10 @@
 import { OnInit, Component, ChangeDetectorRef } from '@angular/core';
 import { ListConItemConfig } from './list-con-item.config';
-import { HttpClient } from '@angular/common/http';
 import { mergeMap, tap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { IConRes } from 'app/interfaces/ris';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ClearMoneyService } from './clear-money.service';
+import { CarRegisService } from 'app/services/ris';
 
 @Component({
   selector: 'app-list-con-item-component',
@@ -14,10 +13,9 @@ import { ClearMoneyService } from './clear-money.service';
 export class ListConItemComponent extends ListConItemConfig implements OnInit {
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private chRef: ChangeDetectorRef,
-    private s_clearMoney: ClearMoneyService
+    private s_carRegis: CarRegisService
   ) {
     super();
     this.formGroup = this.fb.group({
@@ -30,14 +28,15 @@ export class ListConItemComponent extends ListConItemConfig implements OnInit {
       tap(() => {
         this.loading = this.LoadEnt.loading;
         this.destroyDatatable();
+        this.selectCon(null);
         while (this.ConList.length) this.ConList.removeAt(0);
       }),
       mergeMap(x => {
         if (x == null) return of([]);
-        const params = { conListNo: x.conList };
-        return this.http.get<IConRes[]>(`${this.risUrl}/GetByConNoList`, { params })
+        const conListNo = x.conList.split(",");
+        return this.s_carRegis.GetByConNoListReceiveTag(conListNo)
           .pipe(
-            map(o => o.reduce((a, c) => [...a, { ...c, sedNo: x.sedNo }], []))
+            map(o => o.reduce((a, c) => [...a, { ...c, sedNo: x.sedNo }], [])),
           );
       })
     ).subscribe((x: IConRes[]) => {

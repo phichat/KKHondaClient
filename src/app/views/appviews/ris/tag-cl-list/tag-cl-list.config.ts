@@ -1,10 +1,13 @@
 
 import { setLocalDate } from 'app/app.config';
-import { ClStatus } from 'app/entities/ris.entities';
+import { ClStatus, ClStatusList } from 'app/entities/ris.entities';
 import { RisConfig } from '../ris.config';
+import { FormGroup } from '@angular/forms';
 
 export class TagClListConfig extends RisConfig {
-    public loading: number;
-    public ClStatus = ClStatus;
-    public clList: any[] = [];
+    loading: number;
+    ClStatus = ClStatus;
+    ClStatusList = ClStatusList;
+    clList: any[] = [];
+    formSearch: FormGroup;
 }

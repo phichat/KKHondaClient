@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
@@ -9,6 +9,10 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, mapTo } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropDownModel } from 'app/models/drop-down-model';
+import { IPaymentInput, IPayment } from 'app/interfaces/payment.interface';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReasonService } from 'app/services/masters';
+import { AlRegisService, SedRegisService } from 'app/services/ris';
 declare var toastr: any;
 
 @Component({
@@ -22,19 +26,25 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
+    private s_reason: ReasonService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private s_alRegis: AlRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
+    this.s_reason.DropDown().subscribe(x => this.reasonDropdown = x);
   }
+
+  PaymentData = new BehaviorSubject(null);
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -50,43 +60,28 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
       bankCode: new FormControl(null),
       bankName: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentType: new FormControl({ value: null, disabled: true }),
       branchId: new FormControl(null),
       createDate: new FormControl(null),
       createBy: new FormControl(null),
       createName: new FormControl(null),
-      updateBy: new FormControl(null),
+      updateBy: new FormControl(this.mUser.id, Validators.required),
       remark: new FormControl(null),
-      reason: new FormControl(null),
+      reason: new FormControl(null, Validators.required),
       status: new FormControl(null),
       statusDesc: new FormControl(null),
       SedList: this.fb.array([])
     });
 
-    const url = `${appConfig.apiUrl}/Reason/DropDown`;
-    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
-
     this.loadingSedList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.formGroup.patchValue({
-        updateBy: x.id
-      });
-      this.chRef.detectChanges();
-    });
   }
 
   loadingSedList() {
     this.activeRoute.params.subscribe(x => {
-      const GetByAlNo = `${appConfig.apiUrl}/Ris/Al/GetByAlNo`;
-      const GetBySedNo = `${appConfig.apiUrl}/Ris/Sed/GetBySedNo`;
-      const params = { alNo: x['code'] }
-      this.http.get(GetByAlNo, { params })
+      this.s_alRegis.GetByAlNo(x['code'])
         .pipe(
           mergeMap((al) => {
-            const getConNo = (p: any) => this.http.get(GetBySedNo, { params: { sedNo: al['sedNo'] } })
+            const getConNo = (p: any) => this.s_sedRegis.GetBySedNo(al['sedNo'])
               .pipe(
                 tap(sed => p['SedList'] = [sed]),
                 mapTo(p)
@@ -95,6 +90,20 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
           })
         ).subscribe((x: any) => {
 
+          const paymentData: IPayment = {
+            paymentPrice: x.paymentPrice,
+            discountPrice: x.discount,
+            totalPaymentPrice: x.totalPaymentPrice,
+            paymentDate: x.paymentDate,
+            accBankId: x.accBankId,
+            documentRef: x.documentRef,
+            options: {
+              invalid: false,
+              disabled: true
+            }
+          }
+          this.PaymentData.next(paymentData);
+
           this.formGroup.patchValue({
             alNo: x.alNo,
             borrowerName: x.borrowerName,
@@ -102,6 +111,8 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
             remainPrice: x.remainPrice,
             price2Remain: x.price2Remain,
             paymentPrice: x.paymentPrice,
+            price1: x.price1,
+            netPrice1: x.netPrice1,
             price2: x.price2,
             bankName: x.bankName,
             documentRef: x.documentRef,
@@ -149,12 +160,16 @@ export class TagAlFormDetailComponent extends TagAlConfig implements OnInit, OnD
     }
 
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Al/Cancel`;
-    this.http.post(url, f).pipe(
+    this.s_alRegis.Cancel(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);
       this.router.navigate(['ris/al-list']);
     }, () => toastr.error(message.failed));
+  }
+
+  printAl() {
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?alNo=${this.formGroup.get('alNo').value}&userId=${this.formGroup.get('updateBy').value}&formAl=true`;
+    window.open(url, '_blank');
   }
 }

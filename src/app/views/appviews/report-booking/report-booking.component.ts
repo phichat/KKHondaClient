@@ -84,10 +84,11 @@ export class ReportBookingComponent implements OnInit {
 
     //ยี่ห้อ รุ่น แบบ สี
     // fm.brandTypeId.reduce()
+    
     const brandTypeId = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
-    const version = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.version));
-    const design = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.design));
-    const color = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.color));
+    const version = (fm.brandType == '1' || !fm.version ? 0 : mapAutoCompleteIdToString(fm.version));
+    const design = (fm.brandType == '1' || !fm.design ? 0 : mapAutoCompleteIdToString(fm.design));
+    const color = (fm.brandType == '1' || !fm.color ? 0 : mapAutoCompleteIdToString(fm.color));
     strParameter += "&brandType=" + fm.brandType;
     strParameter += "&brandTypeId=" + (brandTypeId || 0);
     strParameter += "&version=" + (version || 0);

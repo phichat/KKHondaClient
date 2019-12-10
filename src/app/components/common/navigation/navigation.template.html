@@ -22,6 +22,12 @@
                 </div>
             </li>
 
+            <li>
+                <a href="http://www.account.hondakkikorat.com/">
+                    <i class="fa fa-cloud" aria-hidden="true"></i> My Account
+                </a>
+            </li>
+
             <li [ngClass]="{active: activeRoute('dashboards')}">
                 <a href="#">
                     <i class="fa fa-signal"></i>
@@ -34,6 +40,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-cog"></i>
@@ -63,6 +70,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-cubes"></i>
@@ -117,6 +125,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-cubes"></i>
@@ -136,6 +145,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-user"></i>
@@ -150,6 +160,7 @@
                     </li>
                 </ul>
             </li>
+
             <li [ngClass]="{active: activeRoute('credit')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-shopping-cart"></i>
@@ -179,10 +190,10 @@
                     </li>
                     <li [ngClass]="{active: activeRoute('active')}">
                         <a [routerLink]="['/credit/contract-list/active']">
-                            <span class="nav-label">รายการสัญญา</span>
+                            <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('close-contract')}">
+                    <!-- <li [ngClass]="{active: activeRoute('close-contract')}">
                         <a [routerLink]="['/credit/contract-list/close-contract']">
                             <span class="nav-label">รายการปิดสัญญา</span>
                         </a>
@@ -196,9 +207,10 @@
                         <a [routerLink]="['/credit/contract-list/other-contract']">
                             <span class="nav-label">รายการสัญญา อื่นๆ</span>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-shopping-cart"></i>
@@ -228,6 +240,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-exchange"></i>
@@ -247,6 +260,7 @@
                     </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-cogs"></i>
@@ -277,6 +291,7 @@
 
                 </ul>
             </li>
+
             <li [ngClass]="{active: activeRoute('ris')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-tags"></i>
@@ -289,6 +304,7 @@
                             <span class="nav-label">รายการรอจดทะเบียน</span>
                         </a>
                     </li>
+                    <hr class="menu-divider">
                     <li [ngClass]="{'active': 
                     activeRoute('con-list') || 
                     activeRoute('con-form-create') ||
@@ -296,6 +312,14 @@
                     activeRoute('con-form-detail')}">
                         <a [routerLink]="['/ris/con-list']">
                             <span class="nav-label">รับเรื่องดำเนินการ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': 
+                    activeRoute('receive-deposit-list') || 
+                    activeRoute('receive-deposit-create') ||
+                    activeRoute('receive-deposit-detail')}">
+                        <a [routerLink]="['/ris/receive-deposit-list']">
+                            <span class="nav-label">บันทึกรับชำระเงินรับฝาก</span>
                         </a>
                     </li>
                     <li [ngClass]="{'active': 
@@ -330,8 +354,20 @@
                             <span class="nav-label">รับคืนเรื่องจากการดำเนินการ</span>
                         </a>
                     </li>
+                    <hr class="menu-divider">
+                    <li [ngClass]="{active: activeRoute('rpt-regis-tag')}">
+                        <a [routerLink]="['/ris/rpt-regis-tag']">
+                            <span class="nav-label">รายงานจดทะเบียนรถใหม่</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('rpt-regis-vehicle-tax')}">
+                        <a [routerLink]="['/ris/rpt-regis-vehicle-tax']">
+                            <span class="nav-label">รายงานต่อทะเบียน</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-users"></i>
@@ -351,6 +387,7 @@
                     </li>
                 </ul>
             </li>
+
             <li [ngClass]="{active: activeRoute('report')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-file-o"></i>
@@ -360,17 +397,120 @@
                 <ul class="nav nav-second-level collapse">
                     <li [ngClass]="{active: activeRoute('booking')}">
                         <a [routerLink]="['/report/booking']">
-                            <span class="nav-label">รายงานการจองรถ</span>
+                            <span class="nav-label">การจองรถ</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('credit-note')}">
+                   
+                    <li [ngClass]="{active: activeRoute('refund-report')}">
+                        <a [routerLink]="['/report/refund-report']">
+                            <span class="nav-label">คืนการจอง</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('summary-deposit-report')}">
+                        <a [routerLink]="['/report/summary-deposit-report']">
+                            <span class="nav-label">เงินมัดจำแยกประเภท (อะไหล่)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('summary-deposit-by-date')}">
+                        <a [routerLink]="['/report/summary-deposit-by-date']">
+                            <span class="nav-label">การรับ-คืนเงินมัดจำลูกค้า แยกประเภท (อะไหล่) </span>
+                        </a>
+                    </li>
+
+                    <!-- <li [ngClass]="{active: activeRoute('credit-note')}">
                         <a [routerLink]="['/report/credit-note']">
-                            <span class="nav-label">รายงานการรับคืนสินค้า</span>
+                            <span class="nav-label">การรับคืนสินค้า</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li [ngClass]="{active: activeRoute('sale-report')}">
                         <a [routerLink]="['/report/sale-report']">
-                            <span class="nav-label">รายงานยอดขายรวม</span>
+                            <span class="nav-label">ยอดขายรวม (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('summary-sale-report-by-type')}">
+                        <a [routerLink]="['/report/summary-sale-report-by-type']">
+                            <span class="nav-label">สรุปยอดขาย แยกประเภท (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('product-selling-profit-report')}">
+                        <a [routerLink]="['/report/product-selling-profit-report']">
+                            <span class="nav-label">ยอดขายสินค้า-แสดงกำไร (อะไหล่)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('summary-stock-balance')}">
+                        <a [routerLink]="['/report/summary-stock-balance']">
+                            <span class="nav-label">สินค้าคงเหลือขาย (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('contract-grade-payment')}">
+                        <a [routerLink]="['/report/contract-grade-payment']">
+                            <span class="nav-label">ประวัติการชำระและเกรดสัญญา</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('service-check-report')}">
+                        <a [routerLink]="['/report/service-check-report']">
+                            <span class="nav-label">การซ่อมที่ยังดำเนินการ</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('report-top-product')}">
+                        <a [routerLink]="['/report/report-top-product']">
+                            <span class="nav-label">จัดอันดับยอดขายสินค้า (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('report-top-spare')}">
+                        <a [routerLink]="['/report/report-top-spare']">
+                            <span class="nav-label">จัดอันดับยอดขายสินค้า (อะไหล่)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('credit-note-details-report')}">
+                        <a [routerLink]="['/report/credit-note-details-report']">
+                            <span class="nav-label">การลดหนี้</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('stock-balance-main-report')}">
+                        <a [routerLink]="['/report/stock-balance-main-report']">
+                            <span class="nav-label">สินค้าคงเหลือ (อะไหล่)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('commission-sale')}">
+                        <a [routerLink]="['/report/commission-sale']">
+                            <span class="nav-label">รายงานค่าคอมมิชชั่น ตามใบขาย</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('commission-event')}">
+                        <a [routerLink]="['/report/commission-event']">
+                            <span class="nav-label">รายงานค่าคอมมิชชั่น ตามกิจกรรมขาย</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('tax-purchase')}">
+                        <a [routerLink]="['/report/tax-purchase']">
+                            <span class="nav-label">รายงานภาษีซื้อ</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('tax-sale')}">
+                        <a [routerLink]="['/report/tax-sale']">
+                            <span class="nav-label">รายงานภาษีขาย (รถ)</span>
+                        </a>
+                    </li>
+
+                    <li [ngClass]="{active: activeRoute('tax-sale-spare')}">
+                        <a [routerLink]="['/report/tax-sale-spare']">
+                            <span class="nav-label">รายงานภาษีขาย (อะไหล่)</span>
                         </a>
                     </li>
                     <li [ngClass]="{active: activeRoute('balance-stock1')}">
@@ -405,31 +545,32 @@
                     </li>
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_stockreceive_m">
-                            <span class="nav-label">รายงานการบันทึกรับสินค้าเข้าคลัง (รถ)</span>
+                            <span class="nav-label">การบันทึกรับสินค้าเข้าคลัง (รถ)</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_stockreceive_p">
-                            <span class="nav-label">รายงานการบันทึกรับสินค้าเข้าคลัง (อะไหล่)</span>
+                            <span class="nav-label">การบันทึกรับสินค้าเข้าคลัง (อะไหล่)</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_booking">
-                            <span class="nav-label">รายงานจอง</span>
+                            <span class="nav-label">จอง</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_booking_cancel">
-                            <span class="nav-label">รายงานยกเลิกจอง</span>
+                            <span class="nav-label">ยกเลิกจอง</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_sell_m">
-                            <span class="nav-label">รายงานการขายรถ</span>
+                            <span class="nav-label">การขายรถ</span>
                         </a>
                     </li> -->
                 </ul>
             </li>
+
             <li>
                 <a href="javaScript:void(0);" (click)="signOut();">
                     <i class="fa fa-sign-out"></i>
