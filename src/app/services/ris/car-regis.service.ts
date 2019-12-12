@@ -4,6 +4,7 @@ import { appConfig } from 'app/app.config';
 import { ICarRegisRes, ICarRegisClDeposit, IConRes, ICarRegisWaitingTagRes } from 'app/interfaces/ris';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
+import { IBookingCarDetail } from 'app/interfaces/sellings';
 
 @Injectable({ providedIn: 'root' })
 export class CarRegisService {
@@ -20,7 +21,7 @@ export class CarRegisService {
       );
   }
 
-  GetCarBySellNo(sellNo: string) {
+  GetCarBySellNo(sellNo: string): Observable<IBookingCarDetail> {
     const params = { sellNo };
     const url = `${this.api}/GetCarBySellNo`;
     return this.httpClient.get(url, { params })

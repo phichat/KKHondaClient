@@ -7,6 +7,7 @@ import { DropDownModel } from 'app/models/drop-down-model';
 import { ExpensesTag as EXPTag, ExpensesType } from 'app/entities/ris.entities';
 import { IExpensesOtherRisRes } from 'app/interfaces/ris';
 import { ITag } from './tag.interface';
+import { IBookingCarDetail } from 'app/interfaces/sellings';
 
 
 export class ListItemConfig extends TagConFormConfig {
@@ -162,7 +163,7 @@ export class ListItemConfig extends TagConFormConfig {
   @Input() BookingId: BehaviorSubject<number>;
   @Input() Status1: BehaviorSubject<number>;
   @Input() Status2: BehaviorSubject<number>;
-  @Input() Car?: BehaviorSubject<any>;
+  @Input() Motobike?: BehaviorSubject<IBookingCarDetail>;
   @Input() Mode: ActionMode;
   @Output() TagListItem = new EventEmitter<any[]>();
 

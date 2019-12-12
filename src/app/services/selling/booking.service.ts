@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { appConfig } from '../../app.config';
 import { BookingModel, BookingListModel } from '../../models/selling';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpService } from 'app/core/http.service';
 import { Observable } from 'rxjs';
+import { IBookingCarDetail } from 'app/interfaces/sellings';
+import { appConfig } from 'app/app.config';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class BookingService {
 
-    private api = 'Selling/Booking';
+    private api = `${appConfig}/Selling/Booking`;
     private model = new BookingModel();
     private dataSource = new BehaviorSubject<BookingModel>(this.model);
 
@@ -32,6 +34,12 @@ export class BookingService {
         const apiURL = `${this.api}/GetById`;
         const params = { bookingId }
         return this.httpService.get(apiURL, { params });
+    }
+
+    GetBookingCarDetail(bookingId: string): Observable<IBookingCarDetail> {
+        const url = `${this.api}/GetBookingCarDetail`;
+        const params = { bookingId };
+        return this.httpService.get(url, { params }).pipe(map(x => x.json));
     }
 
 }

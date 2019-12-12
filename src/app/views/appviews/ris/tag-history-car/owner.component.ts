@@ -1,13 +1,14 @@
 import { OnInit, Component, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { TahHistoryConfig } from './tag-history-car.config';
 import { FormGroup, FormControl } from '@angular/forms';
-import { distinctUntilChanged, tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
+import { distinctUntilChanged, tap, debounceTime, switchMap, catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 import { CustomerService } from 'app/services/customers';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { ICustomerOutput } from './customer-output.interface';
-import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { Subject, BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ActionMode } from 'app/entities/general.entities';
+import { BookingPaymentType as BPaymentType } from 'app/entities/booking.entities';
 
 @Component({
   selector: 'app-owner',
@@ -18,6 +19,7 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
   @Output() CustCode$ = new EventEmitter<ICustomerOutput>();
   @Input() $OwnerCode = new BehaviorSubject<string>(null);
   @Input() $Mode: ActionMode;
+  @Input() $bookingPaymentType: Subject<number>;
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
@@ -56,7 +58,10 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
 
   getCustomerByCode(code: string) {
     this.s_cust.getCustomerByCode(code).subscribe((x: any) => {
-      const fullName = `${x.customerPrename}${x.customerName} ${x.customerSurname}`;
+      const preName = x.customerPrename ? x.customerPrename : '';
+      const name = x.customerName ? x.customerName : '';
+      const surName = x.customerSurname ? x.customerSurname : '';
+      const fullName = `${preName}${name} ${surName}`;
       this.CustCode$.emit({ code: code, fullName });
       this.formGroup.patchValue({
         typePersonal: x.typePersonal,

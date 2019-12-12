@@ -5,7 +5,7 @@ export enum ActionMode {
 }
 
 export enum EntityType {
-    Corperation = 'นิติบุคล',
+    Corperation = 'นิติบุคคล',
     Layman = 'บุคคลธรรมดา'
 }
 

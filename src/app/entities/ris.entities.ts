@@ -85,8 +85,8 @@ export enum RisLocalStoreage {
 }
 
 export enum UserForRis {
-    Sale = 1019,
-    Regist = 1029
+    Sale = 3,
+    Regist = 13
 }
 
 export enum ExpensesType {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { finalize, mergeMap, tap } from 'rxjs/operators';
+import { finalize, mergeMap, tap, map } from 'rxjs/operators';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
@@ -9,6 +9,7 @@ import { message } from 'app/app.message';
 import { setZeroHours } from 'app/app.config';
 import { CarRegisService } from 'app/services/ris';
 import { IPayment } from 'app/interfaces/payment.interface';
+import { empty } from 'rxjs';
 declare var toastr: any;
 
 @Component({
@@ -57,7 +58,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       createDate: new FormControl(new Date()),
       createBy: new FormControl(this.mUser.id, Validators.required),
       updateDate: new FormControl(null),
-      updateBy: new FormControl(this),
+      updateBy: new FormControl(null),
       branchId: new FormControl(this.mUser.branchId, Validators.required),
       reasonCode: new FormControl(null),
       eNo: new FormControl(null, Validators.required),
@@ -108,7 +109,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
 
       const discountPrice = this.formPayment ? this.formPayment.discountPrice : 0;
       this.formPayment = {
-        ...this.formPayment, 
+        ...this.formPayment,
         paymentPrice: netPrice1,
         discountPrice: discountPrice,
         totalPaymentPrice: netPrice1 - discountPrice
@@ -117,25 +118,32 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       this.chRef.detectChanges();
     });
 
-    this.activeRoute.params
-      .pipe(
-        tap(() => this.s_loader.showLoader()),
-        mergeMap(x => this.s_carRegis.GetCarBySellNo(x['code']))
-      ).subscribe(x => {
+    this.activeRoute.params.pipe(
+      map(x => !x['code'] ? empty() : x['code']),
+      mergeMap(x => {
+        if (x) return empty();
+        this.s_loader.showLoader();
+        return this.s_carRegis.GetCarBySellNo(x)
+      })
+    ).subscribe({
+      next: x => {
         this.chRef.markForCheck();
         if (!x) return;
-        this.$Car.next(x);
+        this.$Motobike.next(x);
         this.formGroup.patchValue({
           ...x,
-          branchId: this.mUser.branch,
-          createBy: this.mUser.id
+          eNo: x.engineNo,
+          fNo: x.frameNo
         });
-        this.s_loader.onEnd()
         this.chRef.detectChanges();
-      });
+      },
+      complete: () => {
+        this.s_loader.onEnd();
+      }
+    });
 
     this.TagHistory$.subscribe(x => {
-      if (!x) return; 
+      if (!x) return;
       this.formGroup.patchValue({
         tagNo: x.tagNo,
         province: x.province
@@ -182,9 +190,6 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       tagListItem: listItem
     };
 
-    console.log(form);
-    
-
     this.s_loader.showLoader();
     this.s_carRegis.Post(form)
       .pipe(
@@ -192,12 +197,13 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       ).subscribe(() => {
         toastr.success(message.created);
         this.router.navigate(['ris/con-list']);
-      }, () => toastr.error(message.failed));
+      }, (e) => {console.log(e); toastr.error(message.failed)});
   }
 
   openHistory() {
-    this.$FNo.next(this.formGroup.get('fNo').value);
-    this.$ENo.next(this.formGroup.get('eNo').value);
+    // this.activeRoute.params.subscribe(x => this.$SellNo.next(x['code']));
+    // this.$FNo.next(this.formGroup.get('fNo').value);
+    // this.$ENo.next(this.formGroup.get('eNo').value);
   }
-  
+
 }

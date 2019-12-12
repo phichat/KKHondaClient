@@ -18,7 +18,7 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form [formGroup]="formGroup">
     <div class="ibox float-e-margins">
       <div class="ibox-title">
         <h5>บันทึกการส่งเรื่องดำเนินการ</h5>
@@ -123,8 +123,8 @@
             <h4 class="modal-title" id="myModalLabel">ประวัติรถ</h4>
           </div>
           <div class="modal-body">
-            <app-tag-history-car [$Mode]="ActionMode.Create" [$BookingId]="$CarHistoryBookingId"
-              (HistoryCar$)="historyCarChange($event)" [$ENo]="$ENo" [$FNo]="$FNo"></app-tag-history-car>
+            <app-tag-history-car [$Mode]="ActionMode.Create" [$Motobike]="$Motobike"
+              (HistoryCar$)="historyCarChange($event)"></app-tag-history-car>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
@@ -135,7 +135,7 @@
       </div>
     </div>
 
-    <app-list-item [Car]="$Car" [Mode]="ActionMode.Create" [Status1]="$Status1" [Tag]="$Tag"
+    <app-list-item [Motobike]="$Motobike" [Mode]="ActionMode.Create" [Status1]="$Status1" [Tag]="$Tag"
       (TagListItem)="TagListItem$.next($event)" (TagHistory)="TagHistory$.next($event)">
     </app-list-item>
 
@@ -186,7 +186,7 @@
     </div>
 
     <div class="text-right m-t-md form-group">
-      <button class="btn btn-success" type="submit"
+      <button class="btn btn-success" type="button" (click)="onSubmit()"
         [disabled]="formGroup.invalid || TagListItem$.value.length == 0 || formPayment.options.invalid">
         บันทึกรายการ
       </button>
