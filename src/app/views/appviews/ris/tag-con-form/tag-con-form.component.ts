@@ -85,6 +85,10 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       visitorName: new FormControl(null, Validators.required),
       province: new FormControl(null),
       tagNo: new FormControl(null),
+      typeName: new FormControl(null),
+      brandName: new FormControl(null),
+      modelName: new FormControl(null),
+      colorName: new FormControl(null),
       paymentType: new FormControl('1', Validators.required)
     });
 
@@ -172,7 +176,11 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       eNo: f.eNo,
       fNo: f.fNo,
       ownerCode: f.ownerCode,
-      visitorCode: f.visitorCode
+      visitorCode: f.visitorCode,
+      typeName: f.typeName,
+      brandName: f.brandName,
+      modelName: f.modelName,
+      colorName: f.colorName,
     };
     let listItem = this.TagListItem$.value;
     listItem = listItem.reduce((a, c) => [...a, { ...c, runId: 0, bookingId: 0 }], []);

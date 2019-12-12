@@ -22,25 +22,25 @@
     <div class="hr-line-dashed"></div>
   </ng-container>
 
-  <section *ngIf="formGroup.get('typePersonal').value == EntityType.Corperation">
+  <section *ngIf="formGroup.get('typeCorporate').value == true">
 
-    <div class="row form-group">
+    <!-- <div class="row form-group">
       <div class="col-xs-6 col-lg-6">
         <div class="form-group">
           <label class="col-md-4 control-label">ประเภทบุคคล</label>
           <div class="col-md-8">
             <div class="radio radio-info radio-inline">
-              <input type="radio" id="ownerOS1" [value]="EntityType.Corperation" formControlName="typePersonal">
+              <input type="radio" id="ownerOS1" disabled checked>
               <label for="ownerOS1">{{EntityType.Corperation}}</label>
             </div>
             <div class="radio radio-info radio-inline">
-              <input type="radio" id="ownerOS2" [value]="EntityType.Layman" formControlName="typePersonal">
+              <input type="radio" id="ownerOS2" disabled>
               <label for="ownerOS2">{{EntityType.Layman}}</label>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="row form-group">
       <div class="col-xs-6 col-lg-6">
@@ -88,7 +88,25 @@
     </div>
   </section>
 
-  <section *ngIf="formGroup.get('typePersonal').value == EntityType.Layman">
+  <section *ngIf="formGroup.get('typePersonal').value == true">
+    <!-- <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">ประเภทบุคคล</label>
+          <div class="col-md-8">
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="ownerOS3" disabled>
+              <label for="ownerOS3">{{EntityType.Corperation}}</label>
+            </div>
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="ownerOS4" disabled checked>
+              <label for="ownerOS4">{{EntityType.Layman}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
     <div class="row form-group">
       <div class="col-xs-6 col-lg-6">
         <div class="form-group">

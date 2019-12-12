@@ -93,6 +93,10 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
       visitorName: new FormControl(null, Validators.required),
       province: new FormControl(null),
       tagNo: new FormControl(null),
+      typeName: new FormControl(null),
+      brandName: new FormControl(null),
+      modelName: new FormControl(null),
+      colorName: new FormControl(null),
 
       paymentType: new FormControl({ value: null, disabled: this.paymentData.options.disabled }),
       paymentPrice: new FormControl(null),
@@ -186,7 +190,11 @@ export class TagConFormEditComponent extends TagConFormConfig implements OnInit 
     const tagHistory = {
       ...this.TagHistory$.value,
       ownerCode: tagRegis.ownerCode,
-      visitorCode: tagRegis.visitorCode
+      visitorCode: tagRegis.visitorCode,
+      typeName: tagRegis.typeName,
+      brandName: tagRegis.brandName,
+      modelName: tagRegis.modelName,
+      colorName: tagRegis.colorName,
     };
     let tagListItem = this.TagListItem$.value;
     const trashTagListItem = (JSON.parse(localStorage.getItem(LS.TrashCarRegisListItem)) || []) as any[];

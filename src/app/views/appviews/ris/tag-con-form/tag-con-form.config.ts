@@ -43,6 +43,7 @@ export class TagConFormConfig extends RisConfig {
 
     historyCarChange(event: any) {
         this.$HistoryCar = { ...event };
+        
         this.$Tag.next({
             tagNo: event.tagNo,
             tagRegis: event.tagRegis,
@@ -61,7 +62,11 @@ export class TagConFormConfig extends RisConfig {
             visitorCode: event.visitorCode,
             visitorName: event.visitorName,
             province: event.province,
-            tagNo: event.tagNo
+            tagNo: event.tagNo,
+            typeName: event.typeName,
+            brandName: event.brandName,
+            modelName: event.modelName,
+            colorName: event.colorName,
         })
     }
 

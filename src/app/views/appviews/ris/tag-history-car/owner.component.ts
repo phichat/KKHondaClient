@@ -23,7 +23,8 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      typePersonal: new FormControl({ value: this.EntityType.Layman, disabled: true }),
+      typePersonal: new FormControl({ value: true, disabled: true }),
+      typeCorporate: new FormControl({ value: false, disabled: true }),
       sex: new FormControl({ value: null, disabled: true }),
       code: new FormControl({ value: null }),
       fullName: new FormControl({ value: null, disabled: true }),
@@ -65,6 +66,7 @@ export class OwnerComponent extends TahHistoryConfig implements OnInit {
       this.CustCode$.emit({ code: code, fullName });
       this.formGroup.patchValue({
         typePersonal: x.typePersonal,
+        typeCorporate: x.typeCorporate,
         sex: x.customerSex,
         code: x.customerCode,
         fullName: fullName,
