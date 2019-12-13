@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class BookingService {
 
-    private api = `${appConfig}/Selling/Booking`;
+    private api = `Selling/Booking`;
     private model = new BookingModel();
     private dataSource = new BehaviorSubject<BookingModel>(this.model);
 
