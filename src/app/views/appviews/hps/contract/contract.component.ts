@@ -9,9 +9,8 @@ import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { setZeroHours, setLocalDate } from '../../../../app.config';
-import { IMyDateModel } from 'mydatepicker-th';
-import { BookingModel } from '../../../../models/selling';
 import { message } from 'app/app.message';
+import { BookingModel } from 'app/models/selling';
 
 declare var toastr: any;
 

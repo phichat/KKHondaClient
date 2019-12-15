@@ -96,7 +96,7 @@ export class PaymentConfig {
       scrollX: true,
       scrollCollapse: true,
       searching: false,
-      pageLength: 25,
+      pageLength: 15,
     });
   }
 

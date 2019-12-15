@@ -5,6 +5,8 @@ import { HttpService } from 'app/core/http.service';
 import { map } from 'rxjs/internal/operators/map';
 import { Observable } from 'rxjs';
 import { ISpContractHps } from 'app/interfaces/credit';
+import { HttpClient } from '@angular/common/http';
+import { appConfig } from 'app/app.config';
 
 @Injectable()
 export class ContractService {
@@ -12,6 +14,7 @@ export class ContractService {
     private url = `Credit/Contract`;
 
     constructor(
+        private httpClient: HttpClient,
         private httpService: HttpService
     ) { }
 
@@ -48,9 +51,9 @@ export class ContractService {
     }
 
     GetContractItem(contractId: string): Observable<ContractItemModel[]> {
-        const api = `${this.url}/GetContractItem`;
+        const api = `${appConfig.apiUrl}/${this.url}/GetContractItem`;
         const params = { contractId };
-        return this.httpService.get(api, { params }).pipe(map(x => x.json()));
+        return this.httpClient.get<ContractItemModel[]>(api, { params });
     }
 
     Detail(contractId: string) {
