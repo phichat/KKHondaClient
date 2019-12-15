@@ -23,6 +23,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
   formPayment: IPayment;
   private paymentData: IPayment = {
     paymentPrice: null,
+    paymentDate: new Date(),
     options: {
       invalid: true,
       disabled: false
@@ -66,7 +67,7 @@ export class TagAlFormComponent extends TagAlConfig implements OnInit, OnDestroy
       documentRef: new FormControl(null),
       paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
-      createDate: new FormControl(null, Validators.required),
+      createDate: new FormControl(new Date(), Validators.required),
       createBy: new FormControl(null),
       remark: new FormControl(null),
       SedList: this.fb.array([])

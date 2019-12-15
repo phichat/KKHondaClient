@@ -25,6 +25,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
 
   private paymentData: IPayment = {
     paymentPrice: null,
+    paymentDate: new Date(),
     options: {
       invalid: true,
       disabled: false
@@ -53,7 +54,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
   ngOnInit() {
     this.formGroup = this.fb.group({
       bookingNo: new FormControl(null),
-      bookingDate: new FormControl(null, Validators.required),
+      bookingDate: new FormControl(new Date(), Validators.required),
       status1: new FormControl(1),
       createDate: new FormControl(new Date()),
       createBy: new FormControl(this.mUser.id, Validators.required),
@@ -125,7 +126,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     this.activeRoute.params.pipe(
       map(x => !x['code'] ? empty() : x['code']),
       mergeMap(x => {
-        if (x) return empty();
+        if (!x) return  empty();
         this.s_loader.showLoader();
         return this.s_carRegis.GetCarBySellNo(x)
       })

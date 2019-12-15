@@ -25,6 +25,7 @@ export class ReceiveDepositCreateComponent extends ReceiveDepositConfig implemen
 
   private paymentData: IPayment = {
     paymentPrice: null,
+    paymentDate: new Date(),
     options: {
       invalid: true,
       disabled: false
