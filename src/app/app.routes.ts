@@ -27,6 +27,7 @@ import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money
 import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
 import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
+import { RegisTagSecondHandComponent } from './views/appviews/report-ris/regis-tag-second-hand/regis-tag-second-hand.component';
 import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
 import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
 import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
@@ -142,8 +143,8 @@ export const ROUTES: Routes = [
       { path: 'receive-deposit-create', component: ReceiveDepositCreateComponent },
       { path: 'receive-deposit-detail/:id', component: ReceiveDepositDetailComponent },
       { path: 'rpt-regis-tag', component: RegisTagComponent },
-      { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
-
+      { path: 'rpt-regis-tag-second-hand', component: RegisTagSecondHandComponent },
+      
 
     ], canActivate: [GuardGuard]
   },
