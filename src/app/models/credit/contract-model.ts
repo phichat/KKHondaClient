@@ -11,6 +11,7 @@ export class ContractModel {
     public contractPoint: string;
     public contractGroup: string;
     public contractHire: string;
+    public contractOwner: string;
     public contractMate: string;
     public contractBooking: string;
     public contractGurantor1: string;

@@ -53,13 +53,23 @@ export class RegisTagSecondHandComponent implements OnInit {
     })
   }
 
-  public myDatePickerOptions = MyDatePickerOptions;
-
   onSubmit() {
     let f = { ...this.formGroup.value };
-    f.sDate = setZeroHours(f.sDate);
-    f.eDate = setZeroHours(f.eDate);
-    const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisTagSecondHand=true`;
+
+    f.sDate = setZeroHours(f.sDate) || '';
+    f.eDate = setZeroHours(f.eDate) || '';
+    f.paymentType = f.paymentType || 0;
+
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?paymentType=${f.paymentType}&sDate=${f.sDate}&eDate=${f.eDate}&formRegisTagSecondHand=true`;
     window.open(url, '_blank');
+
   }
+
+  // onSubmit() {
+  //   let f = { ...this.formGroup.value };
+  //   f.sDate = setZeroHours(f.sDate);
+  //   f.eDate = setZeroHours(f.eDate);
+  //   const url = `${appConfig.reportUrl}/RIS/index.aspx?sDate=${f.sDate}&eDate=${f.eDate}&formRegisTagSecondHand=true`;
+  //   window.open(url, '_blank');
+  // }
 }

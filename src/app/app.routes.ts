@@ -85,7 +85,9 @@ export const ROUTES: Routes = [
         ]
       },
       { path: 'detail', component: Hps.ContractDetailComponent },
-      { path: 'calculate', component: Hps.CalculateComponent },
+      { path: 'calculate-credit', component: Hps.CreditComponent },
+      { path: 'calculate-hps', component: Hps.HpsComponent },
+      { path: 'calculate-leasing', component: Hps.LeasingComponent },
       { path: 'rpt-sum-close-contract', component: Hps.RptSummaryCloseContractComponent },
       { path: 'payment/:id', component: Hps.PaymentComponent }
     ], canActivate: [GuardGuard]

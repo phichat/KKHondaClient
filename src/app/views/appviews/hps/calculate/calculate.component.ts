@@ -184,8 +184,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     onLoadBooking(bookingId: number) {
         this._bookingService.getById(bookingId.toString())
-            .subscribe(res => {
-                const p = <BookingModel>res.json();
+            .subscribe(p => {
 
                 this.outStandingPriceState = p.outStandingPrice;
 

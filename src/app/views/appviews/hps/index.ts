@@ -9,6 +9,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { ContractListCloseContractComponent } from './contract-list/contract-list-close-contract.component';
 import { ContractListOtherContractComponent } from './contract-list/contract-list-other-contract.component';
 import { components as CustomerContract } from './customer-contract';
+import { components as Calculate } from './calculate';
 
 export const components: any[] = [
   ContractComponent,
@@ -21,7 +22,8 @@ export const components: any[] = [
   PaymentComponent,
   ContractListCloseContractComponent,
   ContractListOtherContractComponent,
-  ...CustomerContract
+  ...CustomerContract,
+  ...Calculate
 ];
 
 export * from './contract/contract.component';
@@ -35,4 +37,5 @@ export * from './payment/payment.component';
 export * from './contract-list/contract-list-close-contract.component';
 export * from './contract-list/contract-list-other-contract.component';
 export * from './customer-contract';
+export * from  './calculate';
 

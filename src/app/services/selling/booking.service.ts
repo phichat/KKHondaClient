@@ -31,9 +31,9 @@ export class BookingService {
     }
 
     getById(bookingId: string) {
-        const apiURL = `${this.api}/GetById`;
+        const apiURL = `${appConfig.apiUrl}/${this.api}/GetById`;
         const params = { bookingId }
-        return this.httpService.get(apiURL, { params });
+        return this.http.get<BookingModel>(apiURL, { params });
     }
 
     GetBookingCarDetail(bookingId: string): Observable<IBookingCarDetail> {
