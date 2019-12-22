@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, DoCheck, OnDestroy } from '@angular/core';
 import { ContractItemModel } from '../../../../models/credit';
-import { CalculateService } from '../../../../services/credit';
+import { SaleService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
 import { setLocalDate } from '../../../../app.config';
 import { Subject, combineLatest } from 'rxjs';
@@ -31,7 +31,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
 
     constructor(
         private chRef: ChangeDetectorRef,
-        private _calService: CalculateService,
+        private _calService: SaleService,
         private _userService: UserService
     ) {
         // this.chRef.detach();

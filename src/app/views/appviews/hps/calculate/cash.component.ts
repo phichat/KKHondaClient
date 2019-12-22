@@ -1,36 +1,34 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { CalculateConfig } from './calculate.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
 import { SaleService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
-import { CalculateConfig } from './calculate.config';
-import { tap, distinctUntilChanged, debounceTime, switchMap, map } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
-import { setZeroHours } from 'app/app.config';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
+import { setLocalDate, setZeroHours } from 'app/app.config';
 import { message } from 'app/app.message';
 import { CustomerService } from 'app/services/customers';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { ILeasing, ILeasingInterest } from 'app/interfaces/credit/lesing-linterface';
-import { combineLatest } from 'rxjs';
 
 declare var toastr: any;
 
 @Component({
-  selector: 'app-leasing',
-  templateUrl: 'leasing.component.html'
+  selector: 'app-cash',
+  templateUrl: 'cash.component.html'
 })
 
-export class LeasingComponent extends CalculateConfig implements OnInit {
+export class CashComponent extends CalculateConfig implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
     private s_calculate: SaleService,
     private s_user: UserService,
+    private s_customer: CustomerService,
     private router: Router,
     private s_loader: LoaderService,
-    private chRef: ChangeDetectorRef,
-    private s_customer: CustomerService
+    private chRef: ChangeDetectorRef
   ) {
     super();
     toastr.options = {
@@ -42,14 +40,13 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   @ViewChild(ContractItemComponent) contractItem;
-  leasingList: ILeasing[];
-  interestList: ILeasingInterest[];
+  @ViewChild('tempDueDate') tempDueDate: ElementRef;
   outStandingPriceState = 0;
   bookDepositState = 0;
 
   ngOnInit() {
 
-    this._activatedRoute.queryParams.subscribe(p => {
+    this._activatedRoute.queryParams.subscribe(async p => {
       this.mode = p.mode;
 
       if (p.mode === 'edit' && p.calculateId) {
@@ -69,33 +66,18 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
         this.formCalculate.patchValue({
           bookingId: p.bookingId,
-          sellTypeId: 4,
-          sellAcitvityId: 25,
+          sellTypeId: 2,
+          sellAcitvityId: 2,
           saleBy: this.userModel.id
         });
       }
       this.searchEngine();
       this.searchcontractHire();
+      this.searchcontractOwner();
     });
-
-
-  }
-
-  selectItemLeasing = (e: ILeasing) => {
-    if (!e) return;
-    this.interestList = e.leasingIntList;
-    this.formCalculate.patchValue({ fiCode: e.leasingCode })
-    this.formCalculate.get('interest').reset();
-    this.instalmentCalculate();
-  };
-  selectItemInterest = (e: ILeasingInterest) => {
-    if (!e) return;
-    this.formCalculate.patchValue({ fiintId: e.fiintId });
-    this.instalmentCalculate();
   }
 
   selectItemEnging(e: any) {
-    if (!e) return;
     this.formCalculate.patchValue({
       engineNo: e ? e.engineNo : null,
       frameNo: e ? e.frameNo : null
@@ -129,6 +111,25 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     });
   }
 
+  searchcontractOwner() {
+    this.contractOwnerTypeahead.pipe(
+      tap(() => {
+        this.contractOwnerLoading = true;
+        this.contractOwnerLoadingTxt = message.loading;
+      }),
+      distinctUntilChanged(),
+      debounceTime(300),
+      switchMap(term => this.s_customer.getByKey(term))
+    ).subscribe(x => {
+      this.chRef.markForCheck();
+      this.contractOwnerDropdown = x;
+      this.contractOwnerUnload();
+    }, () => {
+      this.contractOwnerUnload();
+      this.contractOwnerDropdown = new Array<DropDownModel>();
+    });
+  }
+
   searchcontractHire() {
     this.contractHireTypeahead.pipe(
       tap(() => {
@@ -150,49 +151,37 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
   onLoadBooking(bookingId: number) {
     this.s_loader.showLoader();
-    const api1 = this.s_customer.GetLeasingByBranch(this.userModel.branchId.toString());
-    const api2 = this.s_booking.getById(bookingId.toString());
+    this.s_booking.getById(bookingId.toString()).subscribe(p => {
+      this.outStandingPriceState = p.outStandingPrice;
+      this.bookingNo = p.bookingNo;
+      this.bookDepositState = p.deposit;
 
-    const observe = combineLatest(api1, api2).pipe(
-      map(x => {
-        return { leasing: x[0], booking: x[1] };
+      this.formCalculate.patchValue({
+        outStandingPrice: p.outStandingPrice,
+        bookingPaymentType: p.bookingPaymentType,
+        bookDeposit: p.deposit,
+        nowVat: p.vat
       })
-    );
-    observe.subscribe({
-      next: (res) => {
-        this.leasingList = res.leasing;
-        const p = res.booking;
-        this.outStandingPriceState = p.outStandingPrice;
-        this.bookingNo = p.bookingNo;
-        this.bookDepositState = p.deposit;
 
+      if (this.formCalculate.get('returnDeposit').value == '0') {
         this.formCalculate.patchValue({
-          outStandingPrice: p.outStandingPrice,
-          bookingPaymentType: p.bookingPaymentType,
-          bookDeposit: p.deposit,
-          nowVat: p.vat
+          returnDepositPrice: p.deposit,
+          depositPrice: p.deposit
         })
-
-        if (this.formCalculate.get('returnDeposit').value == '0') {
-          this.formCalculate.patchValue({
-            returnDepositPrice: p.deposit,
-            depositPrice: p.deposit
-          })
-          this.onChangeDepositPrice();
-        } else {
-          this.formCalculate.patchValue({
-            netPrice: (p.outStandingPrice + p.deposit).toFixed(2)
-          });
-        }
-
-        this.instalmentCalculate();
-        this.s_booking.changeData(p);
-        this.s_loader.hideLoader();
-      },
-      error: () => {
-        this.s_loader.hideLoader();
-        toastr.error(message.error);
+        this.onChangeDepositPrice();
+      } else {
+        this.formCalculate.patchValue({
+          netPrice: (p.outStandingPrice + p.deposit).toFixed(2)
+        });
       }
+
+      this.instalmentCalculate();
+      this.s_booking.changeData(p);
+      this.s_loader.hideLoader();
+    }, 
+    () => {
+      this.s_loader.hideLoader();
+      toastr.error(message.error);
     });
   }
 
@@ -265,10 +254,16 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
   instalmentCalculate() {
 
-    let fg = this.formCalculate.value;
+    const fg = this.formCalculate.value;
 
-    const __instalmentEnd = fg.instalmentEnd || 0;
+    const __instalmentEnd = parseInt((fg.instalmentEnd || 0 as any).toString());
     const __interest = fg.interest || 0;
+
+    if (fg.instalmentEnd != undefined) {
+      let firstPay = new Date(fg.firstPayment);
+      firstPay.setDate(firstPay.getDate() + __instalmentEnd);
+      this.tempDueDate.nativeElement.value = setLocalDate(firstPay.toISOString());
+    }
 
     // จำนวนดอกเบี้ยที่ต้องชำระ
     fg.interestPrice = this.calInteratePriceByMonth(fg.netPrice, __interest, __instalmentEnd);
@@ -278,7 +273,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
     const interestP = this.calInstalmentPrice(fg.remain, __instalmentEnd);
-    fg.instalmentPrice = interestP //this.ceil10(interestP);
+    fg.instalmentPrice = this.ceil10(interestP);
 
     // จำนวนค่าภาษีมูลค่าเพิ่ม
     fg.vatPrice = this.calVatPrice(fg.instalmentPrice, fg.nowVat);
@@ -292,41 +287,19 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     // คำนวนอัตราดอกเบี้ยที่แท้จริงต่อปี
     fg.mrr = this.calMrr(fg.irr, __instalmentEnd);
 
-    fg = this.calCommission(fg);
-
-    this.formCalculate.patchValue({ ...fg });
+    this.formCalculate.patchValue({ ...fg })
     this.s_calculate.changeData(fg);
-    this.chRef.detectChanges();
-  }
-
-  calCommission(fg: any) {
-    if (fg.fiCode && fg.fiintId) {
-
-      let commission = this.interestList
-        .filter(x => x.fiintId == fg.fiintId)
-        .reduce((a, c) => [a, ...c.leasingComList], []);
-
-      commission = commission
-        .filter(x =>
-          (fg.deposit >= x.minDown && fg.deposit <= x.maxDown) &&
-          (fg.instalmentEnd >= x.minCtNo && fg.instalmentEnd <= x.maxCtNo)
-        );
-
-      if (commission.length) {
-        fg.fiComId = commission[0].ficomId;
-        fg.comPrice = commission[0].comPrice;
-      } else {
-        fg.fiComId = null;
-        fg.comPrice = 0;
-      }
-    }
-    return fg;
   }
 
   onSubmit() {
-    let form = {
-      calculate: this.formCalculate.getRawValue(),
-      contract: this.contractModel,
+    const fg = this.formCalculate.getRawValue();
+    const form = {
+      calculate: fg,
+      contract: { 
+        ...this.contractModel, 
+        contractOwner: fg.contractOwner, 
+        contractHire: fg.contractHire 
+      },
       contractItem: this.contractItem.contractItemModel
     };
     form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
@@ -383,4 +356,5 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
         }
       );
   }
+
 }

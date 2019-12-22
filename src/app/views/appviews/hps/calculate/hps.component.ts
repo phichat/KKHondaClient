@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
-import { CalculateService } from 'app/services/credit';
+import { SaleService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
 import { CalculateConfig } from './calculate.config';
 import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
-    private s_calculate: CalculateService,
+    private s_calculate: SaleService,
     private s_user: UserService,
     private router: Router,
     private s_loader: LoaderService,
@@ -66,7 +66,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
           bookingId: p.bookingId,
           sellTypeId: 4,
           sellAcitvityId: 25,
-          createBy: this.userModel.id
+          saleBy: this.userModel.id
         });
       }
       this.searchEngine();

@@ -1,4 +1,4 @@
-export class CalculateModel {
+export class SaleModel {
     public creditId: number;
     public bookingId: number;
     public typePayment: string;          
@@ -24,8 +24,8 @@ export class CalculateModel {
     public vatPrice: number;
     public irr: number;                  // internal return rate
     public mrr: number;                  // ดอกเบี้ยต่อปี
-    public createBy: number;
-    public createDate: Date;
+    public saleBy: number;
+    public saleDate: Date;
     public updateBy: number;
     public updateDate: string;
 

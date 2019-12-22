@@ -62,8 +62,8 @@ export class CalculateConfig {
     vatPrice: new FormControl(0),
     irr: new FormControl(0),                  // internal return rate
     mrr: new FormControl(0),                  // ดอกเบี้ยต่อปี
-    createBy: new FormControl(0),
-    createDate: new FormControl(new Date()),
+    saleBy: new FormControl(0),
+    saleDate: new FormControl(new Date()),
     updateBy: new FormControl(0),
     updateDate: new FormControl(''),
     bookingPaymentType: new FormControl(0),  // ประเภทการซื้อ 1=สด, 2=สินเชื่อ, 3=เช่าซื้อ, 4=ขายเชื่อ

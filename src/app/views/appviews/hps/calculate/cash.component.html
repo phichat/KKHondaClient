@@ -1,15 +1,13 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>งานขายไฟแนนซ์</h2>
+    <h2>คำนวณค่าใช้จ่าย</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">หน้าแรก</a>
       </li>
-      <li>
-        <span>เช่าซื้อ</span>
-      </li>
+      <li>ขายเชื่อ</li>
       <li class="active">
-        <strong>คำนวณค่างวด</strong>
+        <strong>คำนวณค่าใช้จ่าย</strong>
       </li>
     </ol>
   </div>
@@ -29,8 +27,8 @@
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ค้นหา</label>
                 <div class="col-md-8">
-                  <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" formControlName="logReceiveId"
-                    (change)="selectItemEnging($event)" dropdownPosition="auto" bindLabel="text" bindValue="value"
+                  <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" (change)="selectItemEnging($event)"
+                    formControlName="logReceiveId" dropdownPosition="auto" bindLabel="text" bindValue="value"
                     labelForId="model" [virtualScroll]="true" placeholder="ค้นหาเลขเครื่อง, เลขโครง"
                     [loading]="searchEngineLoading" [loadingText]="searchEngineLoadingTxt">
                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
@@ -62,6 +60,15 @@
                   </ng-select>
                 </div>
               </div>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
+                <div class="col-md-8">
+                  <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
+                    [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
+                    [loading]="contractOwnerLoading" [loadingText]="contractOwnerLoadingTxt">
+                  </ng-select>
+                </div>
+              </div>
               <hr class="hr-dashed">
 
               <div class="row form-group">
@@ -78,7 +85,7 @@
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
-                    <input type="number" required formControlName="depositPrice" class="form-control"
+                    <input type="number" required formControlName="depositPrice" class="form-control number"
                       (keyup)="onChangeDepositPrice(); instalmentCalculate();">
                     <span class="input-group-addon">บาท</span>
                   </div>
@@ -90,7 +97,7 @@
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
-                    <input type="number" required formControlName="deposit" class="form-control"
+                    <input type="number" required formControlName="deposit" class="form-control number-2-digit"
                       (keyup)="onChangeDeposit(); instalmentCalculate();">
                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                   </div>
@@ -132,77 +139,34 @@
                 </div>
               </div>
 
-              <div class="row form-group">
-                <label for="" class="col-md-4 control-label is-required">
-                  เลือกบริษัทไฟแนนซ์
-                </label>
-                <div class="col-md-8">
-                  <ng-select [items]="leasingList" bindValue="leasingCode" bindLabel="leasingName" required
-                    placeholder="เลือกบริษัทไฟแนนซ์" formControlName="contractOwner"
-                    (change)="selectItemLeasing($event)">
-                  </ng-select>
-                </div>
-              </div>
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">
-                  อัตราดอกเบี้ย/เดือน
-                </label>
-                <div class="col-md-8">
-                  <ng-select [items]="interestList" formControlName="interest" (change)="selectItemInterest($event)"
-                    dropdownPosition="auto" bindValue="fiintNo" bindLabel="fiintNo" [virtualScroll]="true"
-                    placeholder="เลือกอัตราดอกเบี้ย">
-                    <ng-template ng-option-tmp let-item="item">
-                     <b>ดอกเบี้ย {{item.fiintNo}}%</b><br>
-                      <ng-container *ngFor="let com of item.leasingComList">
-                        <small>
-                          <i style="padding-left: 14px;">เงื่อนไข</i>
-                          <ol style="padding-left: 26px;">
-                            <li>ดาวน์ {{com.minDown}} - {{com.maxDown}}%, ผ่อนชำระตั้งแต่ {{com.minCtNo}} - {{com.maxCtNo}} งวด</li>
-                            <ul style="padding-left: 24px;">
-                              <li>ค่าส่งเสริมการขาย {{com.comPrice | number:'1.2-2':'en-US'}}</li>
-                            </ul>
-                          </ol>
-                        </small>
-                      </ng-container>
-                      <hr class="hr-dashed m-t-xs m-b-xs">
-                    </ng-template>
-                  </ng-select>
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <label for="" class="col-md-4 control-label is-required">
-                  ระยะเวลาผ่อนชำระ
+                  เครดิต
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
                     <input type="number" id="" class="form-control" required formControlName="instalmentEnd"
                       (keyup)="instalmentCalculate()">
-                    <span class="input-group-addon">&nbsp;งวด</span>
+                    <span class="input-group-addon">&nbsp;วัน&nbsp;</span>
                   </div>
                 </div>
               </div>
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">
-                  ชำระงวดแรก
+                  วันที่นับเครดิต
                 </label>
-
                 <div class="col-md-8">
-                  <thai-mat-datepicker id="dp1" formControlName="firstPayment" (change)="instalmentCalculate();"
+                  <thai-mat-datepicker id="dp1" (change)="instalmentCalculate();" formControlName="firstPayment"
                     required></thai-mat-datepicker>
                 </div>
               </div>
 
-              <div class="row form-group ">
-                <label for="" class="col-md-4 control-label is-required">
-                  ชำระทุกวันที่
-                </label>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">กำหนดชำระ</label>
                 <div class="col-md-8">
-                  <ng-select [items]="dueDate" bindValue="value" bindLabel="text" required formControlName="dueDate"
-                    (change)="instalmentCalculate()">
-                  </ng-select>
+                  <input type="text" #tempDueDate class="form-control" readonly>
                 </div>
               </div>
 
@@ -217,49 +181,14 @@
               </div>
 
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ดอกเบี้ย (รวม VAT)</label>
-                <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('interestPrice').value | number:'1.2-2':'en-US'}}</span>
-                </div>
-              </div>
-
-              <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT)</label>
                 <div class="col-md-8">
                   <span
-                    class="form-control disabled">{{formCalculate.get('remain').value | number:'1.2-2':'en-US'}}</span>
+                    class="form-control disabled">{{formCalculate.get('remain').value | number:'1.0-0':'en-US'}}</span>
                 </div>
               </div>
 
-              <div class="row form-group">
-                <label for="" class="col-md-4 control-label">ค่างวด (รวม VAT)</label>
-                <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('instalmentPrice').value | number:'1.2-2':'en-US'}}</span>
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <label for="" class="col-md-4 control-label">
-                  ค่าส่งเสริมการขาย
-                </label>
-                <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('comPrice').value | number:'1.0-0':'en-US'}}</span>
-                </div>
-              </div>
-
-              <!-- <div class="row form-group">
-                <label for="" class="col-md-4 control-label">อัตราดอกเบีย/ปี</label>
-                <div class="col-md-8">
-                  <div class="input-group">
-                    <span
-                      class="form-control disabled">{{formCalculate.get('mrr').value | number:'1.2-2':'en-US'}}</span>
-                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
-                  </div>
-                </div>
-              </div> -->
+              <hr class="hr-dashed">
 
               <div class="row">
                 <div class="col-md-4"></div>

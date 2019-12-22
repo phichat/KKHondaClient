@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@an
 import { CalculateConfig } from './calculate.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
-import { CalculateService } from 'app/services/credit';
+import { SaleService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
 import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
@@ -24,7 +24,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
-    private s_calculate: CalculateService,
+    private s_calculate: SaleService,
     private s_user: UserService,
     private s_customer: CustomerService,
     private router: Router,
@@ -69,7 +69,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
           bookingId: p.bookingId,
           sellTypeId: 2,
           sellAcitvityId: 2,
-          createBy: this.userModel.id
+          saleBy: this.userModel.id
         });
       }
       this.searchEngine();

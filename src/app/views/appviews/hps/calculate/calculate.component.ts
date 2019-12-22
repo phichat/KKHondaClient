@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CalculateModel, ContractModel } from '../../../../models/credit';
+import { SaleModel, ContractModel } from '../../../../models/credit';
 import { BookingService } from '../../../../services/selling';
 import { UserService } from '../../../../services/users';
-import { CalculateService } from '../../../../services/credit';
+import { SaleService } from '../../../../services/credit';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import { setZeroHours, currencyToFloat, setLocalDate } from '../../../../app.config';
 import { IMyDateModel } from 'mydatepicker-th';
@@ -47,7 +47,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     outStandingPriceState = 0;
     bookDepositState = 0;
 
-    model: CalculateModel = new CalculateModel();
+    model: SaleModel = new SaleModel();
     contractModel: ContractModel = new ContractModel();
     contractItemModel = new Array<ContractModel>();
     userModel: IUserResCookie;
@@ -68,7 +68,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _bookingService: BookingService,
-        private _calcService: CalculateService,
+        private _calcService: SaleService,
         private _userService: UserService,
         private router: Router,
         // private pageloader: PageloaderService,
@@ -116,7 +116,7 @@ export class CalculateComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.chRef.markForCheck();
                         if (u) {
                             this.userModel = u;
-                            this.model.createBy = u.id;
+                            this.model.saleBy = u.id;
                             this.contractModel.branchId = u.branch;
                             this.contractModel.createBy = u.id;
                         }
