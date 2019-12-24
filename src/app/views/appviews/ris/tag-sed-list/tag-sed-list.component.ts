@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { appConfig, setZeroHours } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { TagSedListConfig } from './tag-sed-list.config';
 import { SedRegisService } from 'app/services/ris';
 import { FormBuilder, FormControl } from '@angular/forms';
@@ -22,9 +21,9 @@ export class TagSedListComponent extends TagSedListConfig implements OnInit {
   ) {
     super();
     this.formSearch = this.fb.group({
-      sedNo: new FormControl(null),
-      createDate: new FormControl(null),
-      createName: new FormControl(null),
+      sedNo: new FormControl(''),
+      createDate: new FormControl(''),
+      createName: new FormControl(''),
       status: new FormControl()
     })
   }

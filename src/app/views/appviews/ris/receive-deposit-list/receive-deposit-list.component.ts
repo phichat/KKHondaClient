@@ -22,12 +22,12 @@ export class ReceiveDepositListComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.formSearch = this.fb.group({
-      receiptNo: new FormControl(null),
-      paymentDate: new FormControl(null),
+      receiptNo: new FormControl(''),
+      paymentDate: new FormControl(''),
       expenseTag: this.fb.array([]),
       paymentType: this.fb.array([]),
-      createName: new FormControl(null),
-      status: new FormControl(null)
+      createName: new FormControl(''),
+      status: new FormControl('')
     });
   }
 

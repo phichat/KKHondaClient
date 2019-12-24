@@ -19,12 +19,12 @@ export class TagConListComponent extends TagClListConfig implements OnInit, OnDe
   ) {
     super();
     this.formSearch = this.fb.group({
-      bookingNo: new FormControl(null),
-      revNo: new FormControl(null),
-      status1: new FormControl(null),
-      status2: new FormControl(null),
-      eNo: new FormControl(null),
-      fNo: new FormControl(null),
+      bookingNo: new FormControl(''),
+      revNo: new FormControl(''),
+      status1: new FormControl(''),
+      status2: new FormControl(''),
+      eNo: new FormControl(''),
+      fNo: new FormControl(''),
     });
   }
 

@@ -11,7 +11,7 @@ export class ProvinceService {
 
   apiUrl = `${appConfig.apiUrl}/Master/MProvince`
 
-  DropDown() {
+  DropDown(): Observable<DropDownModel[]> {
     const url = `${this.apiUrl}/DropDown`;
     return this.httpClient.get<DropDownModel[]>(url)
       .pipe(

@@ -17,7 +17,7 @@ import { ContractItemComponent } from './contract-item/contract-item.component';
 import { ExDetailCustomerComponent } from './ex-detail-customer/ex-detail-customer.component';
 import { ExDetailMotobikeComponent } from './ex-detail-motobike/ex-detail-motobike.component';
 import { ExDetailAccessoryComponent } from './ex-detail-accessory/ex-detail-accessory.component';
-import { CalculateService, ContractItemService, ContractService, RptSummayCloseContractService } from '../../../services/credit';
+import { SaleService, ContractItemService, ContractService, RptSummayCloseContractService } from '../../../services/credit';
 import { ContractListCanceledComponent } from './contract-list/contract-list-canceled.component';
 import { ContractDetailComponent } from './contract-detail/contract-detail.component';
 import { ContractCanceledComponent } from './contract-canceled/contract-canceled.component';
@@ -37,6 +37,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { PaymentTypeModule } from 'app/views/components/payment-type/payment-type.module';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { components as CustomerContract } from './customer-contract';
+import { components as Calculate } from './calculate';
 
 @NgModule({
   imports: [
@@ -74,14 +75,15 @@ import { components as CustomerContract } from './customer-contract';
     ContractListCloseContractComponent,
     ContractListOtherContractComponent,
     PaymentComponent,
-    ...CustomerContract
+    ...CustomerContract,
+    ...Calculate
   ],
   providers: [
     SellActivityService,
     BookingService,
     PaymentService,
     UserService,
-    CalculateService,
+    SaleService,
     ContractItemService,
     ContractService,
     PageloaderService,

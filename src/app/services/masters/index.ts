@@ -6,3 +6,4 @@ export * from './contract-group.service';
 export * from './contract-type.service';
 export * from './m-status.service';
 export * from './zone.service';
+export * from './ampher.service';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingModel } from '../../../../models/selling';
-import { ContractDetailModel, CalculateModel } from '../../../../models/credit';
+import { ContractDetailModel, SaleModel } from '../../../../models/credit';
 import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../services/credit';
 import { BookingService } from '../../../../services/selling';
@@ -20,7 +20,7 @@ export class ContractDetailComponent implements OnInit {
 
     contractDetailModel: ContractDetailModel = new ContractDetailModel();
     bookingModel: BookingModel = new BookingModel();
-    calculateModel: CalculateModel = new CalculateModel();
+    SaleModel: SaleModel = new SaleModel();
     delayedInterest = new Array<DelayedInterestModel>()
     discount = new Array<DiscountModel>()
     outstanding = new Outstanding()
@@ -43,7 +43,7 @@ export class ContractDetailComponent implements OnInit {
                     this.contractDetailModel = p.creditContractDetail;
 
                     p.creditCalculate.firstPayment = setLocalDate(p.creditCalculate.firstPayment)
-                    this.calculateModel = p.creditCalculate;
+                    this.SaleModel = p.creditCalculate;
                     this.bookingModel = p.booking;
 
                     p.outstanding.nextDueDate = setLocalDate(p.outstanding.nextDueDate);

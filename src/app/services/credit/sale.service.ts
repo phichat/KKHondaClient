@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CalculateModel, ContractItemModel, ContractModel } from '../../models/credit';
+import { SaleModel, ContractItemModel, ContractModel } from '../../models/credit';
 import { appConfig } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
-export class CalculateService {
-    private model = new CalculateModel();
-    private dataSource = new BehaviorSubject<CalculateModel>(this.model);
-    private url = 'Credit/Calculates';
+export class SaleService {
+    private model = new SaleModel();
+    private dataSource = new BehaviorSubject<SaleModel>(this.model);
+    private url = 'Credit/Sale';
     private httpOptions = {
         headers: new HttpHeaders(
             {
@@ -26,7 +26,7 @@ export class CalculateService {
         private httpService: HttpService
     ) { }
 
-    changeData(data: CalculateModel) {
+    changeData(data: SaleModel) {
         this.dataSource.next(data)
     }
 
@@ -48,20 +48,20 @@ export class CalculateService {
             );
     }
 
-    Create(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
-        const params = { creditCalculate, creditContract, creditContactItem };
+    Create(sale: SaleModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
+        const params = { sale, creditContract, creditContactItem };
         const apiURL = `${this.url}/Create`;
         return this.httpService.post(apiURL, params);
     }
 
-    Edit(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
-        const params = { creditCalculate, creditContract, creditContactItem };
+    Edit(sale: SaleModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
+        const params = { sale, creditContract, creditContactItem };
         const apiURL = `${this.url}/Edit`;
         return this.httpService.post(apiURL, params);
     }
 
-    Revice(creditCalculate: CalculateModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
-        const params = { creditCalculate, creditContract, creditContactItem };
+    Revice(sale: SaleModel, creditContract: ContractModel, creditContactItem: ContractItemModel[]) {
+        const params = { sale, creditContract, creditContactItem };
         const apiURL = `${this.url}/Revice`;
         return this.httpService.post(apiURL, params);
     }

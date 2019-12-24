@@ -235,6 +235,7 @@
 
             </tbody>
             <ng-container *ngIf="Mode != ActionMode.Detail">
+                <!-- (Status2 | async) == null -->
               <ng-container *ngIf="(Status2 | async) == null || (expTag ==  EXPTag.EXP10003 || expTag == EXPTag.EXP10004)">
                 <tfoot [formGroup]="getFormExpense(expTag)">
                   <tr class="bg-muted">

@@ -7,12 +7,13 @@ import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
 import { IPayment } from 'app/interfaces/payment.interface';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { ContractService } from 'app/services/credit/contract.service';
 import { PaymentConfig } from './payment.config';
 import { ReasonService } from 'app/services/masters/reason.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoaderService } from 'app/core/loader/loader.service';
 
 declare var toastr: any;
 
@@ -26,6 +27,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
 
   private paymentData: IPayment = {
     paymentPrice: null,
+    paymentDate: new Date(),
     options: {
       invalid: true,
       disabled: false
@@ -41,6 +43,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     private fb: FormBuilder,
     private s_contract: ContractService,
     private s_reason: ReasonService,
+    private s_loader: LoaderService,
   ) {
     super();
     toastr.options = {
@@ -96,12 +99,14 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       discountPrice: new FormControl(null),
       totalPaymentPrice: new FormControl(null, Validators.required),
       accBankId: new FormControl(null),
-      paymentDate: new FormControl(null, Validators.required),
+      paymentDate: new FormControl(new Date(), Validators.required),
       documentRef: new FormControl(null),
 
     });
 
-    this._activatedRoute.params.subscribe(param => {
+    this._activatedRoute.params.pipe(
+      tap(() => this.s_loader.showLoader())
+    ).subscribe(param => {
       if (param['id']) {
         const api1 = this._paymentService.GetByContractId(param['id']);
         const api2 = this._paymentService.GetReceiptByContractId(param['id']);
@@ -113,11 +118,16 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
           })
         );
 
-        observe.subscribe(x => {
-          this.chRef.markForCheck();
-          this.loadCreditPayment(x.payment);
-          this.debitTable.next(x.contractItem);
-          this.receiptList = x.receipt;
+        observe.subscribe({
+          next: (x) => {
+            this.chRef.markForCheck();
+            this.loadCreditPayment(x.payment);
+            this.debitTable.next(x.contractItem);
+            this.receiptList = x.receipt;
+            this.s_loader.hideLoader()
+          },
+          complete: () => this.s_loader.hideLoader(),
+          error: () => this.s_loader.hideLoader()
         });
 
         this.reasonDropdown = this.s_reason.DropDown();

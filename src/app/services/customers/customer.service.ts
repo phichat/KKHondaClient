@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { appConfig } from '../../app.config';
 import { DropDownModel } from '../../models/drop-down-model';
 import { CustomerModel } from 'app/models/customers';
+import { ILeasing } from 'app/interfaces/credit/lesing-linterface';
 
 @Injectable()
 export class CustomerService {
 
-    private url = `${appConfig.apiUrl}/Customers`;
+    private url = `${appConfig.apiUrl}/Customers/Customer`;
 
     constructor(private http: HttpClient) { }
 
@@ -17,14 +18,20 @@ export class CustomerService {
     // }
 
     getByKey(term: string) {
-        const apiURL = `${this.url}/Customer/GetByKey`;
+        const apiURL = `${this.url}/GetByKey`;
         const params = { term };
         return this.http.get<DropDownModel[]>(apiURL, { params })
     }
 
     getCustomerByCode(custCode: string) {
-        const apiURL = `${this.url}/customer/GetCustomerByCode`;
+        const apiURL = `${this.url}/GetCustomerByCode`;
         const params = { custCode };
         return this.http.get<CustomerModel>(apiURL, { params });
     }
+
+    GetLeasingByBranch(branchId: string) {
+        const apiURL = `${this.url}/GetLeasingByBranch`;
+        const params = { branchId };
+        return this.http.get<ILeasing[]>(apiURL, { params })
+      }
 }

@@ -135,14 +135,15 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
         this.expenseServices = x.filter(o => o.expensesType == EXPT.Service);
         if (this.mUser.gId == EURIS.Sale) {
           this.expenses = exp.filter(o => o.expensesType != EXPT.InternalCost);
-        } else if (this.mUser.gId == EURIS.Regist) {
+        }
+        else if (this.mUser.gId == EURIS.Regist) {
           this.expenses = exp.filter(o => o.expensesType == EXPT.InternalCost);
         }
 
-        if (this.Car)
+        if (this.Motobike)
           this.carSubscribe(x);
 
-        if (this.Tag) 
+        if (this.Tag)
           this.tagSubscribe();
 
       }, () => this.loading = 2);
@@ -172,7 +173,7 @@ export class ListItemComponent extends ListItemConfig implements OnInit, OnDestr
   }
 
   carSubscribe(x: any) {
-    this.Car.subscribe(o => {
+    this.Motobike.subscribe(o => {
       if (!o) return;
       if (o.freeTag == 1) {
         this.checkBoxEXP10001

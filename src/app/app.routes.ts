@@ -3,19 +3,8 @@ import { Routes } from '@angular/router';
 import { StarterViewComponent } from './views/appviews/starterview.component';
 import { LoginComponent } from './views/appviews/login.component';
 import { BasicLayoutComponent } from './components/common/layouts/basicLayout.component';
-import {
-  ContractComponent,
-  CalculateComponent,
-  ContractDetailComponent,
-  ContractCanceledComponent
-} from './views/appviews/hps';
-import { ContractListActiveComponent } from './views/appviews/hps/contract-list/contract-list-active.component';
-import { ContractListCanceledComponent } from './views/appviews/hps/contract-list/contract-list-canceled.component';
-import { RptSummaryCloseContractComponent } from './views/appviews/hps/rpt-summary-close-contract/rpt-summary-close-contract.component';
+import * as Hps from './views/appviews/hps';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
-import { PaymentComponent } from './views/appviews/hps/payment/payment.component';
-import { ContractListCloseContractComponent } from './views/appviews/hps/contract-list/contract-list-close-contract.component';
-import { ContractListOtherContractComponent } from './views/appviews/hps/contract-list/contract-list-other-contract.component';
 import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';
@@ -38,6 +27,7 @@ import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money
 import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
 import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
+import { RegisTagSecondHandComponent } from './views/appviews/report-ris/regis-tag-second-hand/regis-tag-second-hand.component';
 import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
 import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
 import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
@@ -83,21 +73,24 @@ export const ROUTES: Routes = [
   {
     path: 'credit', component: BasicLayoutComponent,
     children: [
-      { path: 'contract', component: ContractComponent },
-      { path: 'contract-canceled', component: ContractCanceledComponent },
+      { path: 'contract', component: Hps.ContractComponent },
+      { path: 'contract-canceled', component: Hps.ContractCanceledComponent },
       {
         path: 'contract-list',
         children: [
-          { path: 'active', component: ContractListActiveComponent },
-          { path: 'canceled', component: ContractListCanceledComponent },
-          { path: 'close-contract', component: ContractListCloseContractComponent },
-          { path: 'other-contract', component: ContractListOtherContractComponent }
+          { path: 'active', component: Hps.ContractListActiveComponent },
+          { path: 'canceled', component: Hps.ContractListCanceledComponent },
+          { path: 'close-contract', component: Hps.ContractListCloseContractComponent },
+          { path: 'other-contract', component: Hps.ContractListOtherContractComponent }
         ]
       },
-      { path: 'detail', component: ContractDetailComponent },
-      { path: 'calculate', component: CalculateComponent },
-      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent },
-      { path: 'payment/:id', component: PaymentComponent }
+      { path: 'detail', component: Hps.ContractDetailComponent },
+      { path: 'calculate-credit', component: Hps.CreditComponent },
+      { path: 'calculate-hps', component: Hps.HpsComponent },
+      { path: 'calculate-leasing', component: Hps.LeasingComponent },
+      { path: 'calculate-cash', component: Hps.CashComponent },
+      { path: 'rpt-sum-close-contract', component: Hps.RptSummaryCloseContractComponent },
+      { path: 'payment/:id', component: Hps.PaymentComponent }
     ], canActivate: [GuardGuard]
   },
   {
@@ -153,8 +146,8 @@ export const ROUTES: Routes = [
       { path: 'receive-deposit-create', component: ReceiveDepositCreateComponent },
       { path: 'receive-deposit-detail/:id', component: ReceiveDepositDetailComponent },
       { path: 'rpt-regis-tag', component: RegisTagComponent },
-      { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
-
+      { path: 'rpt-regis-tag-second-hand', component: RegisTagSecondHandComponent },
+      
 
     ], canActivate: [GuardGuard]
   },

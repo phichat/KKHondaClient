@@ -55,7 +55,7 @@ export class TagClFormComponent extends TagClConfig implements OnInit {
       paymentDate: new FormControl(null),
       paymentType: new FormControl('1', Validators.required),
       branchId: new FormControl(null),
-      createDate: new FormControl(null, Validators.required),
+      createDate: new FormControl(new Date(), Validators.required),
       createBy: new FormControl(null),
       remark: new FormControl(null),
       AlList: this.fb.array([])

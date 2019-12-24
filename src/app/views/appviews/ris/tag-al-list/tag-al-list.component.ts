@@ -22,12 +22,12 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
   ) {
     super();
     this.formSearch = this.fb.group({
-      sedNo: new FormControl(null),
-      alNo: new FormControl(null),
-      borrowerName: new FormControl(null),
-      createName: new FormControl(null),
-      createDate: new FormControl(null),
-      status: new FormControl(null),
+      sedNo: new FormControl(''),
+      alNo: new FormControl(''),
+      borrowerName: new FormControl(''),
+      createName: new FormControl(''),
+      createDate: new FormControl(''),
+      status: new FormControl(''),
     })
   }
 

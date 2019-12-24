@@ -103,8 +103,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
             };
           })
         );
-      }),
-      finalize(() => this.s_loader.onEnd())
+      })
     ).subscribe(o => {
       this.chRef.markForCheck();
       const conItem = o.conItem;
@@ -127,7 +126,7 @@ export class TagConFormDetailComponent extends TagConFormConfig implements OnIni
       this.PaymentData.next(this.paymentData);
       this.$BookingId.next(conItem['bookingId']);
       this.$Status1.next(conItem['status1']);
-
+      this.s_loader.onEnd();
     });
   }
 

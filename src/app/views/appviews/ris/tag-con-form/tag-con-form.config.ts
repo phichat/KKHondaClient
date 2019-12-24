@@ -6,6 +6,7 @@ import { IUserResCookie } from 'app/interfaces/users';
 import { PaymentType, PaymentTypeList } from 'app/entities/general.entities';
 import { IPayment } from 'app/interfaces/payment.interface';
 import { ITag } from './tag.interface';
+import { IBookingCarDetail } from 'app/interfaces/sellings';
 
 export class TagConFormConfig extends RisConfig {
 
@@ -18,7 +19,7 @@ export class TagConFormConfig extends RisConfig {
     PaymentType = PaymentType;
     PaymentTypeList = PaymentTypeList;
 
-    $Car = new BehaviorSubject<any>(null);
+    $Motobike = new BehaviorSubject<IBookingCarDetail>(null);
 
     TagListItem$ = new BehaviorSubject<any[]>([]);
     TagHistory$ = new BehaviorSubject<any>(null);
@@ -27,8 +28,9 @@ export class TagConFormConfig extends RisConfig {
     $BookingId = new Subject<number>();
     $Status1 = new BehaviorSubject<number>(null);
     $Status2 = new BehaviorSubject<number>(null);
-    $FNo = new Subject<string>();
-    $ENo = new Subject<string>();
+    $SellNo = new Subject<string>();
+    // $FNo = new Subject<string>();
+    // $ENo = new Subject<string>();
 
     $Tag = new BehaviorSubject<ITag>(null);
     $HistoryCar: any = { invalid: true };
@@ -41,6 +43,7 @@ export class TagConFormConfig extends RisConfig {
 
     historyCarChange(event: any) {
         this.$HistoryCar = { ...event };
+        
         this.$Tag.next({
             tagNo: event.tagNo,
             tagRegis: event.tagRegis,
@@ -59,7 +62,11 @@ export class TagConFormConfig extends RisConfig {
             visitorCode: event.visitorCode,
             visitorName: event.visitorName,
             province: event.province,
-            tagNo: event.tagNo
+            tagNo: event.tagNo,
+            typeName: event.typeName,
+            brandName: event.brandName,
+            modelName: event.modelName,
+            colorName: event.colorName,
         })
     }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { CalculateModel, ContractModel, ContractItemModel } from '../../../../models/credit';
+import { SaleModel, ContractModel, ContractItemModel } from '../../../../models/credit';
 import { UserService } from '../../../../services/users';
 import { ContractService } from '../../../../services/credit';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,9 +9,8 @@ import { BookingService } from '../../../../services/selling';
 import { DropDownModel } from '../../../../models/drop-down-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { setZeroHours, setLocalDate } from '../../../../app.config';
-import { IMyDateModel } from 'mydatepicker-th';
-import { BookingModel } from '../../../../models/selling';
 import { message } from 'app/app.message';
+import { BookingModel } from 'app/models/selling';
 
 declare var toastr: any;
 
@@ -30,7 +29,7 @@ export class ContractComponent implements OnInit, OnDestroy {
 
     contractModel: ContractModel = new ContractModel();
     contractItemModel: Array<ContractItemModel> = new Array<ContractItemModel>();
-    calculateModel: CalculateModel = new CalculateModel();
+    SaleModel: SaleModel = new SaleModel();
     bookingModel: BookingModel = new BookingModel();
     customerFullName: string;
     userDropdown: Array<DropDownModel> = new Array<DropDownModel>();
@@ -117,14 +116,14 @@ export class ContractComponent implements OnInit, OnDestroy {
                     this.contractItemModel = o.creditContractItem;
 
                     if (this.bookingModel.bookingPaymentType == 4) {
-                        let firstPay = new Date(o.creditCalculate.firstPayment);
-                        firstPay.setDate(firstPay.getDate() + o.creditCalculate.instalmentEnd);
+                        let firstPay = new Date(o.sale.firstPayment);
+                        firstPay.setDate(firstPay.getDate() + o.sale.instalmentEnd);
                         this.tempDueDate = setLocalDate(firstPay.toISOString());
                     }
 
-                    o.creditCalculate.firstPayment = setLocalDate(o.creditCalculate.firstPayment);
+                    o.sale.firstPayment = setLocalDate(o.sale.firstPayment);
 
-                    this.calculateModel = o.creditCalculate;
+                    this.SaleModel = o.sale;
 
                     if (p.mode === 'create') {
                         this.contractModel.contractDate = (o.creditContract.contractDate == null && new Date());
