@@ -1,17 +1,17 @@
 import { EventEmitter } from '@angular/core';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { ContractModel } from 'app/models/credit';
 import { IUserResCookie } from 'app/interfaces/users';
 import { IMAmpher } from 'app/interfaces/masters';
 import { Observable } from 'rxjs';
-import { message } from 'app/app.message';
 
 export class CalculateConfig {
 
+  protected 
   mode: string;
   userModel: IUserResCookie;
-
+  
   dropdownLoadingTxt: string;
   // dropdownLoading: boolean;
 
@@ -82,6 +82,7 @@ export class CalculateConfig {
     frameNo: new FormControl(''),
 
     fiCode: new FormControl(null),
+    fiId: new FormControl(null),
     fiintId: new FormControl(null),
     fiComId: new FormControl(null),
     comPrice: new FormControl(0),

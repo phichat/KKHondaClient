@@ -52,7 +52,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     }
     this.user = this._userService.cookies;
 
-    this.cancelFormGroup = this.fb.group({
+    this.cancelReceiptFormGroup = this.fb.group({
       contractId: new FormControl(null, Validators.required),
       receiptNo: new FormControl(null, Validators.required),
       reason: new FormControl(null, Validators.required),
@@ -60,7 +60,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       confirm: new FormControl(false)
     });
 
-    this.validCancelFormGroup = this.fb.group({
+    this.validCancelReceiptFormGroup = this.fb.group({
       gid: new FormControl(null, Validators.required),
       userName: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required)
@@ -179,7 +179,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       branchId: this.user.branch,
       outstanding: outstandingPrice
     });
-    this.cancelFormGroup.patchValue({
+    this.cancelReceiptFormGroup.patchValue({
       contractId: item.contract.contractId
     });
     this.chRef.detectChanges();
@@ -273,12 +273,12 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     this.router.navigate(['credit/contract-list/active'])
   }
 
-  onCancel() {
-    const valid = this.validCancelFormGroup.value;
+  onCancelReceipt() {
+    const valid = this.validCancelReceiptFormGroup.value;
     const api1 = this._userService.LeaderValidate(valid.gid, valid.userName, valid.password);
     api1.subscribe(x => {
-      const param = { ...this.cancelFormGroup.getRawValue(), approveBy: x }
-      const api2 = this._paymentService.CancelContractTerm(param);
+      const param = { ...this.cancelReceiptFormGroup.getRawValue(), approveBy: x }
+      const api2 = this._paymentService.CancelReceiptNo(param);
       api2.subscribe(o => {
         toastr.success(message.canceled);
         setTimeout(() => location.reload(), 400);
@@ -295,9 +295,9 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     });
   }
 
-  onConfirmCancel(value: boolean) {
-    let receiptNo = this.cancelFormGroup.get('receiptNo');
-    let reason = this.cancelFormGroup.get('reason');
+  onConfirmCancelReceipt(value: boolean) {
+    let receiptNo = this.cancelReceiptFormGroup.get('receiptNo');
+    let reason = this.cancelReceiptFormGroup.get('reason');
     if (value) {
       receiptNo.disable();
       reason.disable();
@@ -306,26 +306,58 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       reason.enable();
     }
     if (!value) {
-      this.validCancelFormGroup.reset();
-      this.validCancelFormGroup.patchValue({
+      this.validCancelReceiptFormGroup.reset();
+      this.validCancelReceiptFormGroup.patchValue({
         branchId: this.user.branchId
       });
     }
-    this.cancelFormGroup.patchValue({
+    this.cancelReceiptFormGroup.patchValue({
       confirm: value
     });
-    // this.chRef.detectChanges();
-    // const params = {
-    //   contractItemId: frm.contractItemId,
-    //   reason: frm.reason,
-    //   updateBy: this.user.id.toString()
-    // }
-    // this._paymentService.CancelContractTerm(params).subscribe(() => {
-    //   toastr.success(message.canceled);
-    //   setTimeout(() => location.reload(), 400);
-    // }, (err) => {
-    //   toastr.error(err);
-    // })
+  }
+
+
+  onCancelTaxInv() {
+    const valid = this.validCancelReceiptFormGroup.value;
+    const api1 = this._userService.LeaderValidate(valid.gid, valid.userName, valid.password);
+    api1.subscribe(x => {
+      const param = { ...this.cancelReceiptFormGroup.getRawValue(), approveBy: x }
+      const api2 = this._paymentService.CancelTaxInvNo(param);
+      api2.subscribe(o => {
+        toastr.success(message.canceled);
+        setTimeout(() => location.reload(), 400);
+      }, () => {
+        toastr.error(message.cancelFail)
+      });
+
+    }, (x: HttpErrorResponse) => {
+      if (x.status == 403) {
+        toastr.error('ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง');
+      } else {
+        toastr.error(x.statusText);
+      }
+    });
+  }
+
+  onConfirmCancelTaxInv(value: boolean) {
+    let taxInvNo = this.cancelReceiptFormGroup.get('taxInvNo');
+    let reason = this.cancelReceiptFormGroup.get('reason');
+    if (value) {
+      taxInvNo.disable();
+      reason.disable();
+    } else {
+      taxInvNo.enable();
+      reason.enable();
+    }
+    if (!value) {
+      this.validCancelReceiptFormGroup.reset();
+      this.validCancelReceiptFormGroup.patchValue({
+        branchId: this.user.branchId
+      });
+    }
+    this.cancelReceiptFormGroup.patchValue({
+      confirm: value
+    });
   }
 
   onPrintTax(value: any) {

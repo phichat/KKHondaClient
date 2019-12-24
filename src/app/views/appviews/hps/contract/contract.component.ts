@@ -74,6 +74,10 @@ export class ContractComponent implements OnInit, OnDestroy {
             if (p.contractId) {
                 this._contractService.getById(p.contractId).subscribe(res => {
                     const o = res.json();
+
+                    const owner = this._customerService.getCustomerByCode(o.creditContract.contractOwner);
+                    const hire = this._customerService.getCustomerByCode(o.creditContract.contractHire);
+
                     this.userDropdown = o.userDropdown;
                     // this.contractMateDropdown = o.contractMateDropdown;
                     // this.contractHireDropdown = o.contractHireDropdown;

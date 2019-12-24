@@ -1,13 +1,13 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>คำนวณค่าใช้จ่าย</h2>
+    <h2>เงินสด</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">หน้าแรก</a>
       </li>
-      <li>ขายเงินสด</li>
+      <li>งานขาย</li>
       <li class="active">
-        <strong>ชำระเงิน</strong>
+        <strong>บันทึกการขาย</strong>
       </li>
     </ol>
   </div>
@@ -96,7 +96,7 @@
                 </div>
               </div>
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label is-required">อำเภอ</label>
+                <label for="" class="col-md-4 control-label is-required">เขต/อำเภอ</label>
                 <div class="col-md-8">
                   <ng-select required [items]="ampherDropdown | async" bindValue="amphorCode" bindLabel="amphorName"
                     formControlName="ownerAmpherCode" (change)="selectItemAmpher($event)">

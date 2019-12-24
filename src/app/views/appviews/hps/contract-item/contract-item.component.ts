@@ -3,10 +3,7 @@ import { ContractItemModel } from '../../../../models/credit';
 import { SaleService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
 import { setLocalDate } from '../../../../app.config';
-import { Subject, combineLatest } from 'rxjs';
-
-declare var $: any;
-declare var footable: any;
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-contract-item',
@@ -23,11 +20,8 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
     interestTotal: number;
     balanchVatTotal: number;
 
-    private subDest: any;
-
     @Input() contractItemModel: ContractItemModel[];
     @Input() debitTable?: Subject<ContractItemModel[]>;
-
 
     constructor(
         private chRef: ChangeDetectorRef,

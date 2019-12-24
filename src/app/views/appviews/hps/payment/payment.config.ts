@@ -39,8 +39,10 @@ export class PaymentConfig {
 
   formGroup: FormGroup;
   instalmentGroup: FormGroup;
-  cancelFormGroup: FormGroup;
-  validCancelFormGroup: FormGroup;
+  cancelReceiptFormGroup: FormGroup;
+  validCancelReceiptFormGroup: FormGroup;
+  cancelTaxInvFormGroup: FormGroup;
+  validCancelTaxInvFormGroup: FormGroup;
 
   PaymentData = new BehaviorSubject(null);
   formPayment: IPayment;

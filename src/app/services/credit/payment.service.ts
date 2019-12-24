@@ -35,9 +35,21 @@ export class PaymentService {
     return this.http.get<IContractTransactionReceipt[]>(api, { params });
   }
 
-  CancelContractTerm(param: any): Observable<Payment> {
+  // CancelContractTerm(param: any): Observable<Payment> {
+  //   const params = param;
+  //   const api = `${this.url}/CancelItemPayment`;
+  //   return this.httpService.post(api, params).pipe(map(x => x.json()));
+  // }
+
+  CancelReceiptNo(param: any): Observable<Payment> {
     const params = param;
-    const api = `${this.url}/CancelItemPayment`;
+    const api = `${this.url}/CancelReceiptNo`;
+    return this.httpService.post(api, params).pipe(map(x => x.json()));
+  }
+
+  CancelTaxInvNo(param: any): Observable<Payment> {
+    const params = param;
+    const api = `${this.url}/CancelTaxInvNo`;
     return this.httpService.post(api, params).pipe(map(x => x.json()));
   }
 
