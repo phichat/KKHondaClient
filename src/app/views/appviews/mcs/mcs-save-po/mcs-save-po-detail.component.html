@@ -1,0 +1,191 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-8">
+    <h2>บันทึกใบสั่งซื้อ</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>จัดซื้อ</li>
+      <li class="active">
+        <strong>บันทึกใบสั่งซื้อ</strong>
+      </li>
+    </ol>
+  </div>
+
+  <!-- <div class="col-lg-4 text-right pull-right">
+    <button class="btn btn-success m-t-md" type="button" (click)="printDeposit()">
+      <i class="fa fa-print"></i> ใบรับฝากเงิน</button>
+    &nbsp;
+    <button class="btn btn-success m-t-md" type="button" (click)="printPayment()">
+      <i class="fa fa-print"></i> ใบรับชำระเงิน</button>
+    <h3>&nbsp;</h3>
+  </div> -->
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 20em !important;">
+  <div class="ibox">
+
+    <form action="" [formGroup]="formGroup">
+      <div class="row">
+
+        <div class="col-lg-12">
+
+
+          <div class="row form-group">
+            <div class="form-group">
+              <label class="col-lg-4 control-label is-required">ชื่อบริษัท</label>
+              <div class="col-lg-8">
+                <input type="text" formControlName="supplier_name" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="form-group">
+              <label class="col-lg-4 control-label">หมายเหตุ</label>
+              <div class="col-lg-8">
+                <textarea class="form-control" rows="1" formControlName="remark"></textarea>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="hr-dashed">
+
+
+      <div class="row">
+        <div class="col-lg-12 text-right">
+          <button class="btn btn-success" type="button" (click)="addDetail()">
+            เพิ่มรายการ
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-lg-12">
+
+          <div class="ibox-content">
+            <table class="table table-bordered set-dataTable">
+              <thead>
+                <tr>
+                  <th class="text-center">ลำดับ</th>
+                  <th>ประเภท</th>
+                  <th>ยี่ห้อ</th>
+                  <th>รุ่น</th>
+                  <th>แบบ</th>
+                  <th>สี</th>
+                  <th>ราคา</th>
+                  <th>จำนวน</th>
+                  <th>ราคารวม</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="detail">
+                <tr *ngIf="DetailPo.length == 0; else else_tr;">
+                  <td colspan="9" class="text-center">
+                    <div [ngSwitch]="loading">
+                      <div *ngSwitchCase="LoadingEntities.noRecord">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>ไม่มีข้อมูล</p>
+                      </div>
+                      <div *ngSwitchCase="LoadingEntities.error">
+                        <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>มีบางอย่างผิดพลาด</p>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <p>รอสักครู่...</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <ng-template #else_tr>
+                  <tr *ngFor="let item of DetailPo.controls; let i=index;" [formGroupName]="i">
+                    <td class="text-center">{{i+1}}</td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="cat_name">
+                    </td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="brand_name">
+                    </td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="model_name">
+                    </td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="type_name">
+                    </td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="color_name">
+                    </td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="unit_price">
+                    </td>
+
+                    <td style="vertical-align: middle;" class="text-center">
+                      <input type="text" class="form-control" formControlName="unit_qty">
+                    </td>
+
+                    <!-- <td>{{item.get('cat_name').value}}</td>
+                    <td>{{item.get('brand_name').value}}</td>
+                    <td>{{item.get('model_name').value}}</td>
+                    <td>{{item.get('type_name').value}}</td>
+                    <td>{{item.get('color_name').value}}</td> -->
+
+                    <!-- <td class="text-right">{{item.get('unit_price').value | number:'1.2-2'}}</td>
+                    <td class="text-right">{{item.get('unit_qty').value | number:'1.2-2'}}</td> -->
+
+                    <td class="text-right">
+                      {{item.get('unit_price').value * item.get('unit_qty').value | number:'1.2-2'}}
+                    </td>
+
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+
+            <hr class="hr-dashed">
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr-dashed">
+
+      <div class="row">
+
+        <div class="col-lg-12">
+          <table class="table invoice-total m-t-sm">
+            <tbody>
+              <tr>
+                <td><strong>รวม :</strong></td>
+                <td>{{total_price | number:'1.2-2'}}</td>
+              </tr>
+              <tr>
+                <td><strong>VAT {{total_vat | number:'1.2-2'}}:</strong></td>
+                <td>{{total_vat_price | number:'1.2-2'}}</td>
+              </tr>
+              <tr>
+                <td><strong>ยอดที่ต้องชำระ :</strong></td>
+                <td>{{total_net_price | number:'1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

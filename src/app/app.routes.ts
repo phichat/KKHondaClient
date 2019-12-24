@@ -60,6 +60,40 @@ import { TaxPurchaseComponent} from './views/appviews/tax-purchase/tax-purchase.
 import { TaxSaleComponent} from './views/appviews/tax-sale/tax-sale.component';
 import { TaxSaleSpareComponent} from './views/appviews/tax-sale-spare/tax-sale-spare.component';
 
+import { McsSaveInvoiceListComponent} from './views/appviews/mcs/mcs-save-invoice/mcs-save-invoice-list.component';
+import { McsSaveInvoiceCreateComponent} from './views/appviews/mcs/mcs-save-invoice/mcs-save-invoice-create.component';
+import { McsSaveInvoiceDetailComponent} from './views/appviews/mcs/mcs-save-invoice/mcs-save-invoice-detail.component';
+
+import { McsSaveReceiptListComponent} from './views/appviews/mcs/mcs-save-receipt/mcs-save-receipt-list.component';
+import { McsSaveReceiptCreateComponent} from './views/appviews/mcs/mcs-save-receipt/mcs-save-receipt-create.component';
+import { McsSaveReceiptDetailComponent} from './views/appviews/mcs/mcs-save-receipt/mcs-save-receipt-detail.component';
+
+import { McsReportReceiveComponent} from './views/appviews/mcs/mcs-report-receive/mcs-report-receive.component';
+import { McsReportTaxPoComponent} from './views/appviews/mcs/mcs-report-tax-po/mcs-report-tax-po.component';
+
+import { PssSavePoListComponent} from './views/appviews/pss/pss-save-po/pss-save-po-list.component';
+import { PssSavePoCreateComponent} from './views/appviews/pss/pss-save-po/pss-save-po-create.component';
+import { PssSavePoDetailComponent} from './views/appviews/pss/pss-save-po/pss-save-po-detail.component';
+import { PssSavePoEditComponent} from './views/appviews/pss/pss-save-po/pss-save-po-edit.component';
+
+import { PssStockReceiveListComponent} from './views/appviews/pss/pss-stock-receive/pss-stock-receive-list.component';
+import { PssStockReceiveCreateComponent} from './views/appviews/pss/pss-stock-receive/pss-stock-receive-create.component';
+import { PssStockReceiveDetailComponent} from './views/appviews/pss/pss-stock-receive/pss-stock-receive-detail.component';
+
+import { PssReturnProductListComponent} from './views/appviews/pss/pss-return-product/pss-return-product-list.component';
+import { PssReturnProductCreateComponent} from './views/appviews/pss/pss-return-product/pss-return-product-create.component';
+import { PssReturnProductDetailComponent} from './views/appviews/pss/pss-return-product/pss-return-product-detail.component';
+import { PssReturnProductEditComponent} from './views/appviews/pss/pss-return-product/pss-return-product-edit.component';
+
+import { McsStockReceiveListComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-list.component';
+import { McsStockReceiveDetailComponent} from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-detail.component';
+import { McsStockReceiveCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-create.component';
+import { McsStockReceiveSingleCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-create.component';
+import { McsSavePoListComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-list.component';
+import { McsSavePoCreateComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-create.component';
+import { McsSavePoDetailComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-detail.component';
+import { McsSavePoEditComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-edit.component';
+
 export const ROUTES: Routes = [
   // Main redirect
   { path: '', redirectTo: 'starterview', pathMatch: 'full' },
@@ -156,6 +190,53 @@ export const ROUTES: Routes = [
       { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
 
 
+    ], canActivate: [GuardGuard]
+  },
+  {
+    path: 'mcs', component: BasicLayoutComponent,
+    children: [
+      // { path: 'mcs-save-po-list', component: McsSavePoListComponent },
+      // { path: 'mcs-save-po-create', component: McsSavePoCreateComponent },
+      // { path: 'mcs-save-po-detail/:code', component: McsSavePoDetailComponent },
+      // { path: 'mcs-save-po-edit/:code', component: McsSavePoEditComponent },
+
+      { path: 'mcs-stock-receive-list', component: McsStockReceiveListComponent },
+      { path: 'mcs-stock-receive-create', component: McsStockReceiveCreateComponent },
+      { path: 'mcs-stock-receive-detail/:code', component: McsStockReceiveDetailComponent },
+      
+      // { path: 'mcs-stock-receive-single-create', component: McsStockReceiveSingleCreateComponent },
+      // { path: 'mcs-stock-receive-single-detail/:code', component: McsStockReceiveDetailComponent },
+
+      // { path: 'mcs-save-invoice-list', component: McsSaveInvoiceListComponent },
+      // { path: 'mcs-save-invoice-create', component: McsSaveInvoiceCreateComponent },
+      // { path: 'mcs-save-invoice-detail/:code', component: McsSaveInvoiceDetailComponent },
+
+      // { path: 'mcs-save-receipt', component: McsSaveReceiptListComponent },
+      // { path: 'mcs-save-receipt-create', component: McsSaveReceiptCreateComponent },
+      // { path: 'mcs-save-receipt-detail/:code', component: McsSaveReceiptDetailComponent },
+
+      // { path: 'mcs-report-receive', component: McsReportReceiveComponent },
+      // { path: 'mcs-report-tax-po', component: McsReportTaxPoComponent },
+    ], canActivate: [GuardGuard]
+  },
+  {
+    path: 'pss', component: BasicLayoutComponent,
+    children: [
+      
+      // { path: 'pss-save-po-list', component: PssSavePoListComponent },
+      // { path: 'pss-save-po-create', component: PssSavePoCreateComponent },
+      // { path: 'pss-save-po-detail/:code', component: PssSavePoDetailComponent },
+      // { path: 'pss-save-po-edit/:code', component: PssSavePoEditComponent },
+
+      // { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
+      // { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
+      // { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
+
+      // { path: 'pss-return-product-list', component: PssReturnProductListComponent },
+      // { path: 'pss-return-product-create', component: PssReturnProductCreateComponent },
+      // { path: 'pss-return-product-detail/:code', component: PssReturnProductDetailComponent },
+      // { path: 'pss-return-product-edit/:code', component: PssReturnProductEditComponent },
+      
     ], canActivate: [GuardGuard]
   },
 

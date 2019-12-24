@@ -1,0 +1,380 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>บันทึกรับสินค้า</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>จัดซื้อ</li>
+      <li class="active">
+        <strong>บันทึกรับสินค้า</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <form class="form-horizontal" style="margin-bottom: 15em;" autocomplete="off" [formGroup]="formGroup">
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+
+        <div class="row">
+
+          <div class="col-md-4">
+            <label for="receive_no" class="col-md-4 control-label">เลขที่ใบรับ</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" formControlName="receive_no">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label">ผู้รับสินค้า</label>
+            <div class="col-md-8">
+              <ng-select [items]="AC_User" bindLabel="text" bindValue="value" placeholder="ผู้รับสินค้า"
+                formControlName="receive_id">
+              </ng-select>
+
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label is-required">วันที่รับ</label>
+            <div class="col-md-8">
+              <my-date-picker-th [options]="myDatePickerOptions" formControlName="receive_date" name="receive_date">
+              </my-date-picker-th>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label">เลขที่ใบส่งของ</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" formControlName="delivery_code">
+            </div>
+          </div>
+
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label is-required">ผู้จำหน่าย</label>
+            <div class="col-md-8">
+              <ng-select [items]="AC_Dealer" bindLabel="text" bindValue="value" placeholder="ผู้จำหน่าย"
+                formControlName="dealer_code">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label is-required">วันที่ส่งของ</label>
+            <div class="col-md-8">
+              <my-date-picker-th [options]="myDatePickerOptions" formControlName="delivery_date" name="delivery_date">
+              </my-date-picker-th>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label">สถานะ</label>
+            <div class="col-md-8">
+              <ng-select [items]="AC_Type" bindLabel="txt" bindValue="id" placeholder="สถานะ"
+                formControlName="receive_type">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="col-md-4 control-label">หมายเหตุ</label>
+            <div class="col-md-8">
+              <textarea class="form-control" formControlName="remark"></textarea>
+            </div>
+          </div>
+
+          <div class="col-md-4" style="text-align: right;vertical-align: middle;">
+            <div class="upload-btn-wrapper">
+              <button class="btn btn-primary"> <i class="fa fa-paperclip"></i> Upload a file</button>
+              <input type="file" #file (change)="readExcel($event.target.files)" />
+            </div>
+
+            <!-- <input id="myForm" type="file" name="file" (change)="readExcel($event.target.files)"> -->
+          </div>
+
+
+        </div>
+        <div class="row">
+          <button class="btn btn-primary" data-toggle="modal" data-target="#TransferLog" (click)="searchTransferlog()">
+            <i class="fa fa-search"></i> ดึงรายการค้างรับทั้งหมด</button>
+          <button class="btn btn-success" disabled> <i class="fa fa-search"></i> ดึงรายการจากใบบันทึกสินค้า</button>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <table id="Item" class="table table-stripped table-hover nowrap detail-dataTable" [formGroup]="formGroup">
+          <thead>
+            <tr>
+              <th *ngFor="let header of headers" class="align-middle">{{header}}</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="detail">
+
+            <tr *ngIf="DetailList.length == 0; else else_tr_detail;">
+              <td colspan="14" class="text-center">
+                <div [ngSwitch]="loading">
+                  <div *ngSwitchCase="LoadingEnt.noRecord">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>ไม่มีข้อมูล</p>
+                  </div>
+                  <div *ngSwitchCase="LoadingEnt.error">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>มีบางอย่างผิดพลาด</p>
+                  </div>
+                  <div *ngSwitchDefault>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <br>
+                    <p>รอสักครู่...</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <ng-template #else_tr_detail>
+              <tr *ngFor="let detailitem of DetailList.controls; let idetail=index;" [formGroupName]="idetail">
+                <td class="text-center">{{idetail+1}}</td>
+
+                <td [attr.data-order]="idetail">
+                  <a class="btn btn-danger btn-outline btn-xs" (click)="detaildelete(idetail)">
+                    <i class="fa fa-trash-o"></i>
+                    ลบ
+                  </a>
+                </td>
+                <!-- <td>{{detailitem.get('cat_code').value}}</td> -->
+                <td>{{detailitem.get('brand_code').value}}</td>
+                <td>{{detailitem.get('model_code').value}}</td>
+                <td>{{detailitem.get('model_code').value}}</td>
+                <td>{{detailitem.get('color_code').value}}</td>
+
+                <td>{{detailitem.get('engine_no').value}}</td>
+                <td>{{detailitem.get('frame_no').value}}</td>
+                <td>{{detailitem.get('tax_invoice_no').value}}</td>
+
+                <td style="vertical-align: middle;" class="text-center">
+                  <input type="text" class="form-control" formControlName="cost_exc_vat" style="width: 100px;">
+                </td>
+                <td style="vertical-align: middle;" class="text-center">
+                  <input type="text" class="form-control" formControlName="cost_other_exc_vat" style="width: 100px;">
+                </td>
+                <td style="vertical-align: middle;" class="text-center">
+                  <input type="text" class="form-control" formControlName="cost_repair_exc_vat" style="width: 100px;">
+                </td>
+
+                <td style="vertical-align: middle;" class="text-center is-required"  [attr.data-order]="idetail">
+                  <ng-select [items]="AC_Branch" bindLabel="text" bindValue="value" placeholder="สถานที่เก็บ"
+                    formControlName="branch_id" (change)="load_wh_line(idetail)">
+                  </ng-select>
+                </td>
+
+                <td style="vertical-align: middle;" class="text-center is-required" [attr.data-order]="idetail">
+                  <ng-select [items]="list_wh[idetail]" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
+                    formControlName="whl_id">
+                  </ng-select>
+                </td>
+
+
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <table class="table invoice-total m-t-sm">
+      <tbody>
+        <tr>
+          <td><strong>รวมมูลค่าสินค้า :</strong></td>
+          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>ภาษีมูลค่าเพิ่ม {{formGroup.get('vat_rate').value}} % :</strong></td>
+          <td>{{formGroup.get('cost_vat').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>รวมมูลค่าอื่นๆ :</strong></td>
+          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2'}}</td>
+        </tr>
+        <tr>
+          <td><strong>รวมเงิน :</strong></td>
+          <td>{{formGroup.get('cost_total').value | number:'1.2-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="text-right m-t-md form-group">
+      <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
+        (click)="onSubmit()">บันทึกรับสินค้า</button>
+
+      <button class="btn btn-danger" type="button" (click)="debug()">Debug</button>
+    </div>
+
+  </form>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="TransferLog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog _dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">ดึงรายการค้างรับทั้งหมด</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+
+          <div class="col-md-6 text-center">
+            <div class="row">
+              <div class="col-md-12">
+                <label class="col-md-4 control-label">หมายเลขเครื่อง</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="engine_no">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label class="col-md-4 control-label">หมายเลขตัวถัง</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="frame_no">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label class="col-md-4 control-label">เลขที่ใบแจ้งหนี้</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="tax_no">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <button class="btn btn-info" type="button" (click)="searchTransferlog()">ค้นหา</button>
+            <button class="btn btn-danger" type="button" (click)="clearsearch()">เคลียร์</button>
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <table id="searchItem" class="table table-stripped table-hover nowrap search-dataTable"
+              [formGroup]="searchformGroup">
+              <thead>
+                <tr>
+                  <th>ลำดับ</th>
+                  <th>
+                    <div class="checkbox checkbox-primary">
+                      <input type="checkbox" id="select" (change)="checkAll($event)" [checked]="checkedAll">
+                      <label for="select"></label>
+                    </div>
+                  </th>
+                  <th>หมายเลขเครื่อง</th>
+                  <th>หมายเลขตัวถึง</th>
+                  <th>เลขที่ใบแจ้งหนี้</th>
+                  <th>รุ่น</th>
+                  <th>แบบ</th>
+                  <th>สี</th>
+                  <th>ราคา(ไม่รวม Vat)</th>
+                  <th>Vat</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="search">
+
+                <tr *ngIf="SearchList.length == 0; else else_tr_search;">
+                  <td colspan="10" class="text-center">
+                    <div [ngSwitch]="searchloading">
+                      <div *ngSwitchCase="searchLoadingEnt.noRecord">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>ไม่มีข้อมูล</p>
+                      </div>
+                      <div *ngSwitchCase="searchLoadingEnt.error">
+                        <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>มีบางอย่างผิดพลาด</p>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <p>รอสักครู่...</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <ng-template #else_tr_search>
+                  <tr *ngFor="let searchitem of SearchList.controls; let isearch=index;" [formGroupName]="isearch">
+                    <td class="text-center">{{isearch+1}}</td>
+
+                    <td [attr.data-order]="isearch">
+                      <div class="checkbox checkbox-primary">
+                        <input type="checkbox" id="select{{isearch}}" formControlName="IS_CHECKED">
+                        <label for="select{{isearch}}"></label>
+                      </div>
+                    </td>
+
+                    <td>{{searchitem.get('engine_no').value}}</td>
+                    <td>{{searchitem.get('frame_no').value}}</td>
+                    <td>{{searchitem.get('tax_no').value}}</td>
+                    <td>{{searchitem.get('model_code').value}}</td>
+                    <td>{{searchitem.get('model_type').value}}</td>
+                    <td>{{searchitem.get('color_code').value}}</td>
+                    <td>{{searchitem.get('cost_exc_vat').value}}</td>
+                    <td>{{searchitem.get('vat_amt').value}}</td>
+
+
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-md-4">
+            <ng-select [items]="AC_Branch" bindLabel="text" bindValue="value" placeholder="สถานที่เก็บ"
+            [(ngModel)]="search_branch_id" (change)="load_wh()">
+            </ng-select>
+          </div>
+          <div class="col-md-4">
+            <ng-select [items]="AC_Warehouse" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
+            [(ngModel)]="search_whl_id">
+            </ng-select>
+          </div>
+          <div class="col-md-4">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
+              (click)="confirmTransferLog()">ตกลง</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

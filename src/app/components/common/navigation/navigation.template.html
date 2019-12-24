@@ -368,6 +368,73 @@
                 </ul>
             </li>
 
+            <li [ngClass]="{active: activeRoute('mcs')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-tags"></i>
+                    <span class="nav-label">MCS</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{'active': activeRoute('mcs-save-po-list')}">
+                        <a [routerLink]="['/mcs/mcs-save-po-list']">
+                            <span class="nav-label">บันทึกใบสั่งซื้อ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-stock-receive-list')}">
+                        <a [routerLink]="['/mcs/mcs-stock-receive-list']">
+                            <span class="nav-label">บันทึกรับสินค้า</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-save-invoice-list')}">
+                        <a [routerLink]="['/mcs/mcs-save-invoice-list']">
+                            <span class="nav-label">บันทึกรับใบกำกับภาษี</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-save-receipt-list')}">
+                        <a [routerLink]="['/mcs/mcs-save-receipt-list']">
+                            <span class="nav-label">บันทึกรับใบเสร็จ</span>
+                        </a>
+                    </li>
+                    <hr class="menu-divider">
+                    <li [ngClass]="{'active': activeRoute('mcs-report-receive')}">
+                        <a [routerLink]="['/mcs/mcs-report-receive']">
+                            <span class="nav-label">รายงานการรับเข้า (จากการซื้อ)</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-report-tax-po')}">
+                        <a [routerLink]="['/mcs/mcs-report-tax-po']">
+                            <span class="nav-label">รายงานภาษีซื้อ</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </li>
+
+            <li [ngClass]="{active: activeRoute('pss')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-tags"></i>
+                    <span class="nav-label">PSS</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{'active': activeRoute('pss-save-po-list')}">
+                        <a [routerLink]="['/pss/pss-save-po-list']">
+                            <span class="nav-label">บันทึกใบสั่งซื้อ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('pss-stock-receive-list')}">
+                        <a [routerLink]="['/pss/pss-stock-receive-list']">
+                            <span class="nav-label">บันทึกรับสินค้า</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('pss-return-prodict-list')}">
+                        <a [routerLink]="['/pss/pss-return-prodict-list']">
+                            <span class="nav-label">บันทึกส่งคืนสินค้า</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-users"></i>

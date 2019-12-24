@@ -140,25 +140,25 @@
     </app-list-item>
 
     <table class="table invoice-total m-t-sm">
-      <tbody>
-        <tr>
-          <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
-          <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
-        </tr>
-        <tr>
-          <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
-          <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
-        </tr>
-        <tr>
-          <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
-          <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
-        </tr>
-        <tr>
-          <td><strong>ยอดรวมทั้งหมด :</strong></td>
-          <td>{{formGroup.get('totalPrice').value | number:'1.2-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr>
+            <td><strong>ยอดรวมเงินรับฝาก :</strong></td>
+            <td>{{formGroup.get('netPrice1').value | number:'1.2-2'}}</td>
+          </tr>
+          <tr>
+            <td><strong>ยอดรวมค่าใช้จ่าย :</strong></td>
+            <td>{{formGroup.get('price2').value | number:'1.2-2'}}</td>
+          </tr>
+          <tr>
+            <td><strong>ค่าใช่จ่าย(เบิกเพิ่ม) :</strong></td>
+            <td>{{formGroup.get('price3').value | number:'1.2-2'}}</td>
+          </tr>
+          <tr>
+            <td><strong>ยอดรวมทั้งหมด :</strong></td>
+            <td>{{formGroup.get('totalPrice').value | number:'1.2-2'}}</td>
+          </tr>
+        </tbody>
+      </table>
 
     <div class="text-right m-t-md form-group">
       <button class="btn btn-success" type="submit" [disabled]="formGroup.invalid || TagListItem$.value.length == 0">
