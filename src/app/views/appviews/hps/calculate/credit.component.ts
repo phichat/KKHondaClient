@@ -89,7 +89,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
     this.engineTypeahead.pipe(
       tap(() => {
         this.searchEngineLoading = true;
-        this.searchEngineLoadingTxt = 'รอสักครู่...'
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(100),
@@ -116,7 +116,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
     this.contractOwnerTypeahead.pipe(
       tap(() => {
         this.contractOwnerLoading = true;
-        this.contractOwnerLoadingTxt = message.loading;
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(300),
@@ -135,7 +135,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
     this.contractHireTypeahead.pipe(
       tap(() => {
         this.contractHireLoading = true;
-        this.contractHireLoadingTxt = message.loading;
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(300),

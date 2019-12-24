@@ -30,7 +30,7 @@
                   <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" (change)="selectItemEnging($event)"
                     formControlName="logReceiveId" dropdownPosition="auto" bindLabel="text" bindValue="value"
                     labelForId="model" [virtualScroll]="true" placeholder="ค้นหาเลขเครื่อง, เลขโครง"
-                    [loading]="searchEngineLoading" [loadingText]="searchEngineLoadingTxt">
+                    [loading]="searchEngineLoading" [loadingText]="dropdownLoadingTxt">
                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
                       <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
                       <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
@@ -56,7 +56,7 @@
                 <div class="col-md-8">
                   <ng-select required [items]="contractHireDropdown" bindValue="value" bindLabel="text"
                     [typeahead]="contractHireTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractHire"
-                    [loading]="contractHireLoading" [loadingText]="contractHireLoadingTxt">
+                    [loading]="searchcontractHire" [loadingText]="dropdownLoadingTxt">
                   </ng-select>
                 </div>
               </div>
@@ -65,7 +65,7 @@
                 <div class="col-md-8">
                   <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
                     [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
-                    [loading]="contractOwnerLoading" [loadingText]="contractOwnerLoadingTxt">
+                    [loading]="searchcontractOwner" [loadingText]="dropdownLoadingTxt">
                   </ng-select>
                 </div>
               </div>

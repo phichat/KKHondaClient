@@ -32,7 +32,7 @@
                   <ng-select [items]="engineDropdown" [typeahead]="engineTypeahead" formControlName="logReceiveId"
                     (change)="selectItemEnging($event)" dropdownPosition="auto" bindLabel="text" bindValue="value"
                     labelForId="model" [virtualScroll]="true" placeholder="ค้นหาเลขเครื่อง, เลขโครง"
-                    [loading]="searchEngineLoading" [loadingText]="searchEngineLoadingTxt">
+                    [loading]="searchEngineLoading" [loadingText]="dropdownLoadingTxt">
                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
                       <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
                       <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>

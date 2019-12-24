@@ -13,6 +13,8 @@ import { CustomerService } from 'app/services/customers';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { ILeasing, ILeasingInterest } from 'app/interfaces/credit/lesing-linterface';
 import { combineLatest } from 'rxjs';
+import { ProvinceService, AmpherService } from 'app/services/masters';
+import { IMAmpher } from 'app/interfaces/masters';
 
 declare var toastr: any;
 
@@ -30,6 +32,8 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     private router: Router,
     private s_loader: LoaderService,
     private chRef: ChangeDetectorRef,
+    private s_province: ProvinceService,
+    private s_ampher: AmpherService,
     private s_customer: CustomerService
   ) {
     super();
@@ -39,6 +43,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     };
 
     this.userModel = this.s_user.cookies;
+    this.provinceDropdown = this.s_province.DropDown();
   }
 
   @ViewChild(ContractItemComponent) contractItem;
@@ -84,14 +89,14 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   selectItemLeasing = (e: ILeasing) => {
     if (!e) return;
     this.interestList = e.leasingIntList;
-    this.formCalculate.patchValue({ fiCode: e.leasingCode })
-    this.formCalculate.get('interest').reset();
+    this.formCalculate.patchValue({ fiCode: e.leasingCode });
+    // this.formCalculate.get('interest').reset();
     this.instalmentCalculate();
   };
   selectItemInterest = (e: ILeasingInterest) => {
+    this.instalmentCalculate();
     if (!e) return;
     this.formCalculate.patchValue({ fiintId: e.fiintId });
-    this.instalmentCalculate();
   }
 
   selectItemEnging(e: any) {
@@ -102,11 +107,19 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     });
   }
 
+  selectItemProvince(e: DropDownModel) {
+    this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(e.value);
+  }
+
+  selectItemAmpher(e: IMAmpher) {
+    this.formCalculate.patchValue({ ownerZipCode: e.zipcode });
+  }
+
   searchEngine() {
     this.engineTypeahead.pipe(
       tap(() => {
         this.searchEngineLoading = true;
-        this.searchEngineLoadingTxt = 'รอสักครู่...'
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(100),
@@ -133,7 +146,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     this.contractHireTypeahead.pipe(
       tap(() => {
         this.contractHireLoading = true;
-        this.contractHireLoadingTxt = message.loading;
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(300),
@@ -166,11 +179,33 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
         this.bookingNo = p.bookingNo;
         this.bookDepositState = p.deposit;
 
+        const province = this.findProvince(p.address);
+        const ampher = this.findAmpher(p.address);
+        const address = this.findAddress(p.address);
+        this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }]
+        this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }]
+
+        this.provinceDropdown.subscribe(p => {
+          const pCode = p.find(o => o.text == province).value;
+          this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(pCode);
+          this.ampherDropdown.subscribe(a => {
+            const amp = a.find(o => o.amphorName == ampher);
+            this.formCalculate.patchValue({
+              ownerAddress: address,
+              ownerAmpherCode: amp.amphorCode,
+              ownerProvinceCode: pCode,
+              ownerZipCode: amp.zipcode
+            })
+          })
+        });
+
         this.formCalculate.patchValue({
           outStandingPrice: p.outStandingPrice,
           bookingPaymentType: p.bookingPaymentType,
           bookDeposit: p.deposit,
-          nowVat: p.vat
+          nowVat: p.vat,
+          contractHire: p.custCode,
+          contractOwner: p.custCode
         })
 
         if (this.formCalculate.get('returnDeposit').value == '0') {
@@ -264,21 +299,27 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   instalmentCalculate() {
-
-    let fg = this.formCalculate.value;
-
+    const fg = this.formCalculate.value;
+    debugger
     const __instalmentEnd = fg.instalmentEnd || 0;
     const __interest = fg.interest || 0;
 
     // จำนวนดอกเบี้ยที่ต้องชำระ
-    fg.interestPrice = this.calInteratePriceByMonth(fg.netPrice, __interest, __instalmentEnd);
+    if (fg.typePayment == '0') {
+      // รูปแบบการชำระ รายงวด
+      fg.interestPrice = this.calInteratePriceByMonth(fg.netPrice, __interest, __instalmentEnd);
+
+    } else if (fg.typePayment == '1') {
+      // รูปแบบการชำระ รายปี
+      fg.interestPrice = this.calInteratePriceByYear(fg.netPrice, __interest, __instalmentEnd);
+    }
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
     fg.remain = this.calRemain(fg.netPrice, fg.interestPrice);
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
     const interestP = this.calInstalmentPrice(fg.remain, __instalmentEnd);
-    fg.instalmentPrice = interestP //this.ceil10(interestP);
+    fg.instalmentPrice = this.ceil10(interestP);
 
     // จำนวนค่าภาษีมูลค่าเพิ่ม
     fg.vatPrice = this.calVatPrice(fg.instalmentPrice, fg.nowVat);
@@ -292,11 +333,8 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     // คำนวนอัตราดอกเบี้ยที่แท้จริงต่อปี
     fg.mrr = this.calMrr(fg.irr, __instalmentEnd);
 
-    fg = this.calCommission(fg);
-
-    this.formCalculate.patchValue({ ...fg });
+    this.formCalculate.patchValue({ ...fg })
     this.s_calculate.changeData(fg);
-    this.chRef.detectChanges();
   }
 
   calCommission(fg: any) {

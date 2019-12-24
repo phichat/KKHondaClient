@@ -71,7 +71,8 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       price2: new FormControl(null),
       price3: new FormControl(null),
       totalPrice: new FormControl(null),
-
+      
+      paymentType: new FormControl('1', Validators.required),
       paymentPrice: new FormControl(null),
       discountPrice: new FormControl(null),
       totalPaymentPrice: new FormControl(null),
@@ -89,8 +90,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       typeName: new FormControl(null),
       brandName: new FormControl(null),
       modelName: new FormControl(null),
-      colorName: new FormControl(null),
-      paymentType: new FormControl('1', Validators.required)
+      colorName: new FormControl(null)
     });
 
     this.TagListItem$.subscribe(x => {

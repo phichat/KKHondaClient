@@ -4,13 +4,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
 import { SaleService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
-import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
+import { tap, distinctUntilChanged, debounceTime, switchMap, finalize, map, mergeMap, mapTo } from 'rxjs/operators';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import { setLocalDate, setZeroHours } from 'app/app.config';
 import { message } from 'app/app.message';
 import { CustomerService } from 'app/services/customers';
 import { LoaderService } from 'app/core/loader/loader.service';
+import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { ProvinceService, AmpherService } from 'app/services/masters';
+import { IMAmpher } from 'app/interfaces/masters';
 
 declare var toastr: any;
 
@@ -21,14 +26,16 @@ declare var toastr: any;
 
 export class CashComponent extends CalculateConfig implements OnInit {
   constructor(
+    private router: Router,
+    private chRef: ChangeDetectorRef,
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
     private s_calculate: SaleService,
     private s_user: UserService,
     private s_customer: CustomerService,
-    private router: Router,
     private s_loader: LoaderService,
-    private chRef: ChangeDetectorRef
+    private s_province: ProvinceService,
+    private s_ampher: AmpherService
   ) {
     super();
     toastr.options = {
@@ -37,10 +44,26 @@ export class CashComponent extends CalculateConfig implements OnInit {
     };
 
     this.userModel = this.s_user.cookies;
+
+    this.provinceDropdown = this.s_province.DropDown();
+
   }
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    accBankId: null,
+    paymentDate: new Date(),
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
+  PaymentData = new BehaviorSubject(null);
+  formPayment: IPayment;
 
   @ViewChild(ContractItemComponent) contractItem;
-  @ViewChild('tempDueDate') tempDueDate: ElementRef;
+  PaymentTypeList = PaymentTypeList;
+  PaymentType = PaymentType;
   outStandingPriceState = 0;
   bookDepositState = 0;
 
@@ -71,10 +94,15 @@ export class CashComponent extends CalculateConfig implements OnInit {
           saleBy: this.userModel.id
         });
       }
+
       this.searchEngine();
       this.searchcontractHire();
       this.searchcontractOwner();
+
+      this.formPayment = this.paymentData;
+      this.PaymentData.next(this.paymentData);
     });
+
   }
 
   selectItemEnging(e: any) {
@@ -84,11 +112,19 @@ export class CashComponent extends CalculateConfig implements OnInit {
     });
   }
 
+  selectItemProvince(e: DropDownModel) {
+    this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(e.value);
+  }
+
+  selectItemAmpher(e: IMAmpher) {
+    this.formCalculate.patchValue({ ownerZipCode: e.zipcode });
+  }
+
   searchEngine() {
     this.engineTypeahead.pipe(
       tap(() => {
         this.searchEngineLoading = true;
-        this.searchEngineLoadingTxt = 'รอสักครู่...'
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(100),
@@ -115,7 +151,7 @@ export class CashComponent extends CalculateConfig implements OnInit {
     this.contractOwnerTypeahead.pipe(
       tap(() => {
         this.contractOwnerLoading = true;
-        this.contractOwnerLoadingTxt = message.loading;
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(300),
@@ -134,7 +170,7 @@ export class CashComponent extends CalculateConfig implements OnInit {
     this.contractHireTypeahead.pipe(
       tap(() => {
         this.contractHireLoading = true;
-        this.contractHireLoadingTxt = message.loading;
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(300),
@@ -156,11 +192,33 @@ export class CashComponent extends CalculateConfig implements OnInit {
       this.bookingNo = p.bookingNo;
       this.bookDepositState = p.deposit;
 
+      const province = this.findProvince(p.address);
+      const ampher = this.findAmpher(p.address);
+      const address = this.findAddress(p.address);
+      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }]
+      this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }]
+
+      this.provinceDropdown.subscribe(p => {
+        const pCode = p.find(o => o.text == province).value;
+        this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(pCode);
+        this.ampherDropdown.subscribe(a => {
+          const amp = a.find(o => o.amphorName == ampher);
+          this.formCalculate.patchValue({
+            ownerAddress: address,
+            ownerAmpherCode: amp.amphorCode,
+            ownerProvinceCode: pCode,
+            ownerZipCode: amp.zipcode
+          })
+        })
+      });
+
       this.formCalculate.patchValue({
         outStandingPrice: p.outStandingPrice,
         bookingPaymentType: p.bookingPaymentType,
         bookDeposit: p.deposit,
-        nowVat: p.vat
+        nowVat: p.vat,
+        contractHire: p.custCode,
+        contractOwner: p.custCode
       })
 
       if (this.formCalculate.get('returnDeposit').value == '0') {
@@ -178,11 +236,11 @@ export class CashComponent extends CalculateConfig implements OnInit {
       this.instalmentCalculate();
       this.s_booking.changeData(p);
       this.s_loader.hideLoader();
-    }, 
-    () => {
-      this.s_loader.hideLoader();
-      toastr.error(message.error);
-    });
+    },
+      () => {
+        this.s_loader.hideLoader();
+        toastr.error(message.error);
+      });
   }
 
   onLoadCaculateData(calculateId: number) {
@@ -259,12 +317,6 @@ export class CashComponent extends CalculateConfig implements OnInit {
     const __instalmentEnd = parseInt((fg.instalmentEnd || 0 as any).toString());
     const __interest = fg.interest || 0;
 
-    if (fg.instalmentEnd != undefined) {
-      let firstPay = new Date(fg.firstPayment);
-      firstPay.setDate(firstPay.getDate() + __instalmentEnd);
-      this.tempDueDate.nativeElement.value = setLocalDate(firstPay.toISOString());
-    }
-
     // จำนวนดอกเบี้ยที่ต้องชำระ
     fg.interestPrice = this.calInteratePriceByMonth(fg.netPrice, __interest, __instalmentEnd);
 
@@ -273,13 +325,13 @@ export class CashComponent extends CalculateConfig implements OnInit {
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
     const interestP = this.calInstalmentPrice(fg.remain, __instalmentEnd);
-    fg.instalmentPrice = this.ceil10(interestP);
+    fg.instalmentPrice = this.ceil10(interestP) || 0;
 
     // จำนวนค่าภาษีมูลค่าเพิ่ม
     fg.vatPrice = this.calVatPrice(fg.instalmentPrice, fg.nowVat);
 
     // ค่าเช่าซื้อต่องวดก่อนรวมภาษี
-    fg.instalmentPriceExtVat = this.instalmentPriceExtVat(fg.instalmentPrice, fg.vatPrice);
+    fg.instalmentPriceExtVat = this.instalmentPriceExtVat(fg.instalmentPrice, fg.vatPrice) || 0;
 
     // คำนวณ RATE
     fg.irr = this.calRate(__instalmentEnd, fg.instalmentPrice, fg.netPrice);
@@ -289,16 +341,31 @@ export class CashComponent extends CalculateConfig implements OnInit {
 
     this.formCalculate.patchValue({ ...fg })
     this.s_calculate.changeData(fg);
+
+    this.paymentData = { ...this.paymentData, paymentPrice: fg.netPrice };
+    this.PaymentData.next(this.paymentData);
+  }
+
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    this.formCalculate.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId || null,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
+    });
   }
 
   onSubmit() {
     const fg = this.formCalculate.getRawValue();
     const form = {
       calculate: fg,
-      contract: { 
-        ...this.contractModel, 
-        contractOwner: fg.contractOwner, 
-        contractHire: fg.contractHire 
+      contract: {
+        ...this.contractModel,
+        contractOwner: fg.contractOwner,
+        contractHire: fg.contractHire
       },
       contractItem: this.contractItem.contractItemModel
     };

@@ -1,28 +1,31 @@
 import { EventEmitter } from '@angular/core';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ContractModel } from 'app/models/credit';
 import { IUserResCookie } from 'app/interfaces/users';
+import { IMAmpher } from 'app/interfaces/masters';
+import { Observable } from 'rxjs';
+import { message } from 'app/app.message';
 
 export class CalculateConfig {
 
   mode: string;
   userModel: IUserResCookie;
 
+  dropdownLoadingTxt: string;
+  // dropdownLoading: boolean;
+
   engineTypeahead = new EventEmitter<string>();
   engineDropdown: Array<DropdownTemplate>;
-  searchEngineLoading = false;
-  searchEngineLoadingTxt = '';
+  searchEngineLoading: boolean;
 
   contractHireTypeahead = new EventEmitter<string>();
   contractHireDropdown: Array<DropDownModel>;
   contractHireLoading: boolean;
-  contractHireLoadingTxt: string;
 
   contractOwnerTypeahead = new EventEmitter<string>();
   contractOwnerDropdown: Array<DropDownModel>;
   contractOwnerLoading: boolean;
-  contractOwnerLoadingTxt: string;
 
   bookingNo: string;
 
@@ -34,6 +37,10 @@ export class CalculateConfig {
     { value: 25, text: '25 ของเดือน' },
   ]
 
+  provinceLoading: boolean;
+  provinceDropdown: Observable<DropDownModel[]>;
+
+  ampherDropdown: Observable<IMAmpher[]>;
   contractModel = new ContractModel();
   contractItemModel = new Array<ContractModel>();
   formCalculate: FormGroup = new FormGroup({
@@ -80,20 +87,32 @@ export class CalculateConfig {
     comPrice: new FormControl(0),
 
     contractHire: new FormControl(''),
-    contractOwner: new FormControl('')
+    contractOwner: new FormControl(''),
+    ownerAddress: new FormControl(''),
+    ownerProvinceCode: new FormControl(''),
+    ownerAmpherCode: new FormControl(''),
+    ownerZipCode: new FormControl(''),
+
+    paymentType: new FormControl('1'),
+    paymentPrice: new FormControl(0),
+    discountPrice: new FormControl(0),
+    totalPaymentPrice: new FormControl(0),
+    accBankId: new FormControl(null),
+    paymentDate: new FormControl(new Date()),
+    documentRef: new FormControl(null),
   });
 
   engineUnload() {
     this.searchEngineLoading = false;
-    this.searchEngineLoadingTxt = '';
+    this.dropdownLoadingTxt = '';
   }
   contractHireUnload() {
     this.contractHireLoading = false;
-    this.contractHireLoadingTxt = '';
+    this.dropdownLoadingTxt = '';
   }
   contractOwnerUnload() {
     this.contractOwnerLoading = false;
-    this.contractOwnerLoadingTxt = '';
+    this.dropdownLoadingTxt = '';
   }
 
   ceil10(int: number) {
@@ -113,6 +132,7 @@ export class CalculateConfig {
   }
 
   protected calInstalmentPrice(remain: number, instalmentEnd: number) {
+    if (instalmentEnd == 0) return remain;
     return parseFloat(remain.toString()) / parseFloat(instalmentEnd.toString());
   }
 
@@ -131,6 +151,27 @@ export class CalculateConfig {
 
   protected calMrr(irr: number, instalmentEnd: number) {
     return parseFloat(irr.toString()) * parseFloat(instalmentEnd.toString());
+  }
+
+  protected findAddress(address: string): string {
+    const regex = /[^(อำเภอ|อ.)]+/g;
+    let m: string[];
+    if ((m = regex.exec(address)) !== null)
+      return m === undefined ? "" : m[0].trim();
+  }
+
+  protected findProvince(address: string): string {
+    const regex = /(จังหวัด|จ.)(\S+)/;
+    let m: string[];
+    if ((m = regex.exec(address)) !== null)
+      return m === undefined ? "" : m[2].trim();
+  }
+
+  protected findAmpher(address: string): string {
+    const regex = /(อำเภอ|อ.)(\S+)/;
+    let m: string[];
+    if ((m = regex.exec(address)) !== null)
+      return m === undefined ? "" : m[2].trim();
   }
 
   private RATE(nper, pmt, pv, fv?, type?, guess?) {

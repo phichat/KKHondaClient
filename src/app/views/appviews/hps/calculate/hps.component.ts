@@ -37,7 +37,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
 
     this.userModel = this.s_user.cookies;
   }
-  
+
   @ViewChild(ContractItemComponent) contractItem;
   outStandingPriceState = 0;
   bookDepositState = 0;
@@ -80,13 +80,11 @@ export class HpsComponent extends CalculateConfig implements OnInit {
     });
   }
 
-  searchEngineLoading = false;
-  searchEngineLoadingTxt = '';
   searchEngine() {
     this.engineTypeahead.pipe(
       tap(() => {
         this.searchEngineLoading = true;
-        this.searchEngineLoadingTxt = 'รอสักครู่...'
+        this.dropdownLoadingTxt = message.loading;
       }),
       distinctUntilChanged(),
       debounceTime(100),
@@ -97,16 +95,14 @@ export class HpsComponent extends CalculateConfig implements OnInit {
       })
     ).subscribe(x => {
       this.chRef.markForCheck();
-      this.searchEngineLoading = false;
-      this.searchEngineLoadingTxt = '';
+      this.engineUnload();
       this.engineDropdown = x;
       this.engineDropdown.map(item => {
         item.text = `หมายเลขเครื่อง: ${item.engineNo}, หมายเลขตัวถัง: ${item.frameNo}`;
         item.value = item.logId.toString();
       })
     }, () => {
-      this.searchEngineLoading = false;
-      this.searchEngineLoadingTxt = '';
+      this.engineUnload();
       this.engineDropdown = new Array<DropdownTemplate>();
     });
   }
@@ -141,10 +137,10 @@ export class HpsComponent extends CalculateConfig implements OnInit {
       this.s_booking.changeData(p);
       this.s_loader.hideLoader();
     },
-    () => {
-      this.s_loader.hideLoader();
-      toastr.error(message.error);
-    });
+      () => {
+        this.s_loader.hideLoader();
+        toastr.error(message.error);
+      });
   }
 
   // onChangeDueDate(event:) {
@@ -260,8 +256,8 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
-    let form = { 
-      calculate: this.formCalculate.getRawValue() ,
+    let form = {
+      calculate: this.formCalculate.getRawValue(),
       contract: this.contractModel,
       contractItem: this.contractItem.contractItemModel
     };
@@ -280,7 +276,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
 
   onCreate(obj: any) {
     console.log(obj);
-    
+
     // this.s_calculate
     //   .Create(obj.calculate, obj.contract, obj.contractItem)
     //   .subscribe(
