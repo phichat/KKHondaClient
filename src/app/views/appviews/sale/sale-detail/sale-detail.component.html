@@ -69,6 +69,47 @@
               </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-11">
+              <hr class="m-xs">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12 ">
+              <label for="" class="col-md-3 control-label">ชื่อผู้ซื้อ</label>
+              <div class="col-md-9" *ngIf="(Hire | async) as hire">
+                {{hire.customerPrename}}{{hire.customerName}} {{hire.customerSurname}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="" class="col-md-3 control-label">
+                ที่อยู่
+              </label>
+              <div class="col-md-9" *ngIf="(Hire | async) as hire">
+                {{contractModel.hireAddress}}
+                <span *ngIf="(HireAmphor | async) as amphor">
+                  อำเภอ{{amphor.amphorName}}
+                </span>
+                <span *ngIf="(HireProvince | async) as province">
+                  จังหวัด{{province.provinceNameTh}}
+                </span>
+                {{contractModel.ownerZipCode}}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-11">
+              <hr class="m-xs">
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-xs-12 ">
               <label for="" class="col-md-3 control-label">ชื่อจดทะเบียน</label>
@@ -85,7 +126,13 @@
               </div>
             </div>
             <div class="col-xs-12">
-              <label for="" class="col-md-3 control-label">สถานประกอบการ</label>
+              <label for="" class="col-md-3 control-label">
+                <div [ngSwitch]="bookingModel.bookingPaymentType">
+                  <span
+                    *ngSwitchCase="BookingPaymentType.HierPurchase || BookingPaymentType.Leasing">สถานประกอบการ</span>
+                  <span *ngSwitchDefault>ที่อยู่</span>
+                </div>
+              </label>
               <div class="col-md-9" *ngIf="(Owner | async) as owner">
                 {{contractModel.ownerAddress}}
                 <span *ngIf="(OwnerAmphor | async) as amphor">
@@ -108,82 +155,134 @@
           </div>
 
           <br>
-          <h4>รายละเอียดไฟแนนท์</h4>
+          <h4>รายละเอียด
+            <ng-container [ngSwitch]="bookingModel.bookingPaymentType">
+              <span *ngSwitchCase="BookingPaymentType.Cash">การชำระ</span>
+              <span *ngSwitchCase="BookingPaymentType.Credit">การชำระ</span>
+              <span *ngSwitchCase="BookingPaymentType.HierPurchase">เช่าซื้อ</span>
+              <span *ngSwitchCase="BookingPaymentType.Leasing">ไฟแนนท์</span>
+            </ng-container>
+          </h4>
           <hr class="m-t-xs">
-          <div class="row">
-            <div class="col-xs-12">
-              <label for="" class="col-md-3 control-label">บริษัทไฟแนนซ์</label>
-              <div class="col-md-9" *ngIf="(Owner | async) as owner">
-                {{owner.customerPrename}} {{owner.customerName}}
+          <ng-container [ngSwitch]="true">
+            <ng-container *ngSwitchCase="bookingModel.bookingPaymentType == BookingPaymentType.HierPurchase || bookingModel.bookingPaymentType ==BookingPaymentType.Leasing">
+              <div class="row">
+                <div class="col-xs-12">
+                  <label for="" class="col-md-3 control-label">การชำระเงินดาวน์</label>
+                  <div class="col-md-9">เงินสด
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12">
-              <label for="" class="col-md-3 control-label">การชำระเงินดาวน์</label>
-              <div class="col-md-9">เงินสด
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">เงินดาวน์</label>
+                  <div class="col-md-6">
+                    {{saleModel.depositPrice | number:'1.2-2':'en-US'}}
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">ระยะเวลาผ่อนชำระ</label>
+                  <div class="col-md-6">
+                    {{saleModel.instalmentEnd}} งวด
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">เงินดาวน์</label>
-              <div class="col-md-6">
-                {{saleModel.depositPrice}}
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">วันที่ชำระงวดแรก</label>
+                  <div class="col-md-6">
+                    {{setLocalDate(saleModel.firstPayment)}}
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">งวดชำระทุกวันที่</label>
+                  <div class="col-md-6">
+                    {{saleModel.dueDate}} ของเดือน
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">ระยะเวลาผ่อนชำระ</label>
-              <div class="col-md-6">
-                {{saleModel.instalmentEnd}} งวด
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">อัตราดอกเบี้ยต่อเดือน</label>
+                  <div class="col-md-6">{{saleModel.interest | number:'1.2-2':'en-US'}}
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">ค่างวด (รวม VAT)</label>
+                  <div class="col-md-6">{{saleModel.instalmentPrice | number:'1.2-2':'en-US'}}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">วันที่ชำระงวดแรก</label>
-              <div class="col-md-6">
-                {{saleModel.firstPayment}}
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">ค่าส่งเสริมการขาย</label>
+                  <div class="col-md-6 text-navy">
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">งวดชำระทุกวันที่</label>
-              <div class="col-md-6">
-                {{saleModel.dueDate}} ของเดือน
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">การคืนเงินมัดจำ</label>
+                  <div class="col-md-6">
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">จำนวนเงินมัดจำ</label>
+                  <div class="col-md-6 text-navy">{{bookingModel.bookDeposit | number:'1.2-2':'en-US'}}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">อัตราดอกเบี้ยต่อเดือน</label>
-              <div class="col-md-6">{{saleModel.interest}}
+            </ng-container>
+            <ng-container *ngSwitchCase="bookingModel.bookingPaymentType == BookingPaymentType.Cash">
+              <div class="row">
+                <div class="col-xs-12">
+                  <label for="" class="col-md-3 control-label">ยอดชำระสินค้า</label>
+                  <div class="col-md-9">
+                    {{saleModel.netPrice}}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">ค่างวด (รวม VAT)</label>
-              <div class="col-md-6">{{saleModel.instalmentPrice}}
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">การคืนเงินมัดจำ</label>
+                  <div class="col-md-6">
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">จำนวนเงินมัดจำ</label>
+                  <div class="col-md-6 text-navy">{{bookingModel.bookDeposit | number:'1.2-2':'en-US'}}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">ค่าส่งเสริมการขาย</label>
-              <div class="col-md-6 text-navy">
+            </ng-container>
+            <ng-container *ngSwitchCase="bookingModel.bookingPaymentType == BookingPaymentType.Credit">
+              <div class="row">
+                <div class="col-xs-12">
+                  <label for="" class="col-md-3 control-label">ชำระงวดแรก</label>
+                  <div class="col-md-9">
+                    
+                  </div> 
+                  <label for="" class="col-md-3 control-label">เคดิต</label>
+                  <div class="col-md-9">
+                    {{saleModel.instalmentEnd}} วัน
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">การคืนเงินมัดจำ</label>
-              <div class="col-md-6">
+              <div class="row">
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">การคืนเงินมัดจำ</label>
+                  <div class="col-md-6">
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="" class="col-md-6 control-label">จำนวนเงินมัดจำ</label>
+                  <div class="col-md-6 text-navy">{{bookingModel.bookDeposit | number:'1.2-2':'en-US'}}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-              <label for="" class="col-md-6 control-label">จำนวนเงินมัดจำ</label>
-              <div class="col-md-6 text-navy">{{bookingModel.bookDeposit}}
-              </div>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
+
         </div>
       </div>
     </div>
@@ -216,7 +315,7 @@
                   {{item.slipName}}
                 </td>
                 <td>
-                  <button *ngIf="item.status" class="btn btn-xs btn-outline btn-primary">
+                  <button *ngIf="item.status" class="btn btn-xs btn-outline btn-primary" (click)="printSlip(item.printUrl)">
                     <i class="fa fa-print" aria-hidden="true"></i>
                     พิมพ์
                   </button>
@@ -246,6 +345,11 @@
 
 <app-form-inv-tax-rec class="modal inmodal" [id]="invTaxRecSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
   style="display: none;" [title]="invTaxRecSlip.title" [slipNo]="saleModel.invTaxRecNo"
+  [reasonDropdown]="reasonDropdown">
+</app-form-inv-tax-rec>
+
+<app-form-inv-tax-rec class="modal inmodal" [id]="invTaxSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
+  style="display: none;" [title]="invTaxSlip.title" [slipNo]="saleModel.invTaxRecNo"
   [reasonDropdown]="reasonDropdown">
 </app-form-inv-tax-rec>
 

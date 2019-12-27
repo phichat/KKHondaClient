@@ -76,8 +76,7 @@ export class ContractComponent implements OnInit, OnDestroy {
       this._activatedRoute.queryParams.subscribe(async p => {
          this.mode = p.mode;
          if (p.contractId) {
-            this._contractService.getById(p.contractId).subscribe(res => {
-               const o = res.json();
+            this._contractService.getById(p.contractId).subscribe(o => {
 
                this._customerService.getCustomerByCode(o.creditContract.contractHire).subscribe(x => {
                   this.contractHireDropdown = [

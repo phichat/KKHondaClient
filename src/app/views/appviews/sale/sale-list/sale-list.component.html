@@ -132,8 +132,16 @@
             <td>
               <a class="btn btn-info btn-xs" (click)="gotoDetail(item.contractId, item.bookingId, item.saleId)">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
-                รายละเอียด
+                รายละเอียดการขาย
               </a>
+              <ng-container *ngIf="item.bookingPaymentType == BookingPaymentType.HierPurchase">
+                &nbsp;|&nbsp;
+                <a class="btn btn-primary btn-outline btn-xs" (click)="gotoContractDetail(item.contractId)">
+                  <i class="fa fa-info-circle" aria-hidden="true"></i>
+                  รายละเอียดเช่าซื้อ
+                </a>
+              </ng-container>
+
             </td>
             <td [ngSwitch]="true">
               <a *ngSwitchCase="item.contractStatus == 29 || item.contractStatus == 30"

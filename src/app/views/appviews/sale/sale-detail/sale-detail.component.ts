@@ -8,6 +8,7 @@ import { message } from 'app/app.message';
 import { CustomerService } from 'app/services/customers';
 import { AmpherService, ProvinceService, ReasonService } from 'app/services/masters';
 import { SaleDetailConfig } from './sale-detail.config';
+import { appConfig } from 'app/app.config';
 
 declare var toastr: any;
 @Component({
@@ -55,13 +56,17 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
         this.Owner = this.s_customer.getCustomerByCode(x.creditContract.contractOwner);
         this.OwnerAmphor = this.s_amphor.GetAmpherByCode(x.creditContract.ownerAmpherCode, x.creditContract.ownerProvinceCode);
         this.OwnerProvince = this.s_province.GetProvinceByCode(x.creditContract.ownerProvinceCode);
+        this.Hire = this.s_customer.getCustomerByCode(x.creditContract.contractHire);
+        this.HireAmphor = this.s_amphor.GetAmpherByCode(x.creditContract.hireAmpherCode, x.creditContract.hireProvinceCode);
+        this.HireProvince = this.s_province.GetProvinceByCode(x.creditContract.hireProvinceCode);
         this.reasonDropdown = this.s_reason.DropDown();
         if (x.sale.sellNo) {
           this.listSlip.push({
             slipNo: x.sale.sellNo,
             slipName: this.sellSlip.title,
             modalId: this.sellSlip.modalId,
-            status: x.sale.sellStatus
+            status: x.sale.sellStatus,
+            printUrl: `${appConfig.apikkWeb}/php/print_sell.php?booking_id=${x.booking.bookingId}`
           })
         }
 
@@ -70,7 +75,8 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
             slipNo: x.sale.returnDepositNo,
             slipName: this.reserveReturnSlip.title,
             modalId: this.reserveReturnSlip.modalId,
-            status: x.sale.returnDepositStatus
+            status: x.sale.returnDepositStatus,
+            printUrl: `${appConfig.apikkWeb}/php/print_return_dep.php?booking_id=${x.booking.bookingId}`
           })
         }
 
@@ -79,16 +85,23 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
             slipNo: x.sale.receiptNo,
             slipName: this.receiptSlip.title,
             modalId: this.receiptSlip.modalId,
-            status: x.sale.receiptStatus
+            status: x.sale.receiptStatus,
+            printUrl: `${appConfig.apikkWeb}/php/print_receive.php?booking_id=${x.booking.bookingId}`
           })
         }
 
+
+
         if (x.sale.invTaxRecNo) {
+          const hirePurchase = x.booking.bookingPaymentType == this.BookingPaymentType.HierPurchase;
           this.listSlip.push({
             slipNo: x.sale.invTaxRecNo,
-            slipName: this.invTaxRecSlip.title,
-            modalId: this.invTaxRecSlip.modalId,
-            status: x.sale.invTaxRecStatus
+            slipName: hirePurchase ? this.invTaxSlip.title : this.invTaxRecSlip.title,
+            modalId: hirePurchase ? this.invTaxSlip.modalId : this.invTaxRecSlip.modalId,
+            status: x.sale.invTaxRecStatus,
+            printUrl: hirePurchase
+              ? `${appConfig.apikkWeb}/php/print_tax.php?booking_id=${x.booking.bookingId}`
+              : `${appConfig.apikkWeb}/php/print_tax_2.php?booking_id=${x.booking.bookingId}`
           })
         }
 
@@ -97,7 +110,8 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
             slipNo: x.sale.comNo,
             slipName: this.comSlip.title,
             modalId: this.comSlip.modalId,
-            status: x.sale.comStatus
+            status: x.sale.comStatus,
+            printUrl: `${appConfig.apikkWeb}/php/print_promotion.php?booking_id=${x.booking.bookingId}`
           })
         }
 
@@ -108,5 +122,33 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
         this.s_loader.hideLoader();
       })
     })
+  }
+
+  printSlip(url: string) {
+    window.open(url)
+  }
+
+  // printSell(url: string) {
+  //   window.open(url)
+  // }
+
+  // printReserveReturn(url: string) {
+  //   window.open(url)
+  // }
+
+  // printReceive(url: string) {
+  //   window.open(url)
+  // }
+
+  // printTax(url: string) {
+  //   // window.open(`${appConfig.apikkWeb}php/print_tax.php?booking_id=${bookingId}`)
+  // }
+
+  // printInvTaxRec(url: string) {
+  //   window.open(url)
+  // }
+
+  printCom(url: string) {
+    window.open()
   }
 }

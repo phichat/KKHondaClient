@@ -22,6 +22,9 @@ export class SaleDetailConfig {
   Owner: Observable<CustomerModel>;
   OwnerAmphor: Observable<IMAmpher>;
   OwnerProvince: Observable<IMProvince>;
+  Hire: Observable<CustomerModel>;
+  HireAmphor: Observable<IMAmpher>;
+  HireProvince: Observable<IMProvince>;
   reasonDropdown: Observable<DropDownModel[]>;
 
   listSlip: any[] = [];
@@ -30,5 +33,6 @@ export class SaleDetailConfig {
   reserveReturnSlip = { modalId: 'cancelReserveReturn', title: 'ใบคืนเงินมัดจำ' };
   receiptSlip = { modalId: 'cancelReceipt', title: 'ใบเสร็จรับเงิน' };
   invTaxRecSlip = { modalId: 'cancelinvTaxRec', title: 'ใบส่งของ/ใบกำกับภาษี/ใบเสร็จรับเงิน' };
+  invTaxSlip = { modalId: 'cancelinvTax', title: 'ใบส่งของ/ใบกำกับภาษี' };
   comSlip = { modalId: 'cancelCom', title: 'ใบส่งเสริมการขาย' };
 }

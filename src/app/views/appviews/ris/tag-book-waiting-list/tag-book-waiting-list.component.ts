@@ -23,12 +23,12 @@ export class TagBookWaitingListComponent extends TagBookWaitingListListConfig im
     super();
     this.formSearch = this.fb.group({
       bookingPaymentType: this.fb.array([]),
-      sellNo: new FormControl(null),
-      regisName: new FormControl(null),
-      bookName: new FormControl(null),
-      bookIdCard: new FormControl(null),
-      eNo: new FormControl(null),
-      fNo: new FormControl(null)
+      sellNo: new FormControl(''),
+      regisName: new FormControl(''),
+      bookName: new FormControl(''),
+      bookIdCard: new FormControl(''),
+      eNo: new FormControl(''),
+      fNo: new FormControl('')
     });
     this.addCheckboxes();
   }

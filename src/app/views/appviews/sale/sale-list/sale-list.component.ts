@@ -111,13 +111,13 @@ export class SaleListComponent implements OnInit {
         }
     }
 
-    gotoEditCalculate(calculateId: number) {
-        this.router.navigate(['credit/calculate'], { queryParams: { mode: 'edit', calculateId: calculateId } })
-    }
+    // gotoEditCalculate(calculateId: number) {
+    //     this.router.navigate(['credit/calculate'], { queryParams: { mode: 'edit', calculateId: calculateId } })
+    // }
 
-    gotoReviceCalculate(calculateId: number) {
-        this.router.navigate(['credit/calculate'], { queryParams: { mode: 'revice', calculateId: calculateId } })
-    }
+    // gotoReviceCalculate(calculateId: number) {
+    //     this.router.navigate(['credit/calculate'], { queryParams: { mode: 'revice', calculateId: calculateId } })
+    // }
 
     gotoCreateContract(contractId: number) {
         this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: contractId } });
@@ -133,6 +133,10 @@ export class SaleListComponent implements OnInit {
 
     gotoCanceled(contractId: number) {
         this.router.navigate(['credit/contract-canceled'], { queryParams: { contractId: contractId } })
+    }
+
+    gotoContractDetail(contractId: number) {
+        this.router.navigate(['credit/detail'], { queryParams: { contractId: contractId } });
     }
 
     gotoDetail = (contractId: number, bookingId: number, saleId: number) =>
