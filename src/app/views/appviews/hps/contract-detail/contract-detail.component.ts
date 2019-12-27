@@ -34,9 +34,9 @@ export class ContractDetailComponent implements OnInit {
         private pageloader: PageloaderService
     ) { }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.pageloader.setShowPageloader(true);
-        await this._activatedRoute.queryParams.subscribe(o => {
+        this._activatedRoute.queryParams.subscribe(o => {
             if (o.contractId) {
                 this._credit.Detail(o.contractId).subscribe(p => {
                     p.creditContractDetail.contractDate = setLocalDate(p.creditContractDetail.contractDate);

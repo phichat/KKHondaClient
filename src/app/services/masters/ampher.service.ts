@@ -20,9 +20,9 @@ export class AmpherService {
     return this.httpClient.get<IMAmpher[]>(url, { params });
   }
 
-  GetAmpherByCode(ampherCode: string) {
+  GetAmpherByCode(ampherCode: string, provinceCode: string) {
     const url = `${this.apiUrl}/GetAmpherByCode`;
-    const params = { ampherCode };
+    const params = { ampherCode,  provinceCode};
     return this.httpClient.get<IMAmpher>(url, { params });
   }
 

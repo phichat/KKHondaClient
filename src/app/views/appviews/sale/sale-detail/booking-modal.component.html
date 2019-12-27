@@ -1,0 +1,53 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content animated fadeIn">
+    <div class="modal-header">
+      <h4 class="modal-title">ข้อมูลการจอง</h4>
+      <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span>
+        <span class="sr-only">Close</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>ข้อมูลผู้จอง</h5>
+        </div>
+        <div class="ibox-content">
+          <app-ex-detail-customer></app-ex-detail-customer>
+        </div>
+      </div>
+
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>ข้อมูลรถ</h5>
+        </div>
+        <div class="ibox-content">
+          <app-ex-detail-motobike></app-ex-detail-motobike>
+        </div>
+      </div>
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>ของแถม</h5>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <app-ex-detail-accessory></app-ex-detail-accessory>
+          </div>
+        </div>
+      </div>
+
+      <div class="ibox none-ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>รายการฟรี</h5>
+        </div>
+        <div class="ibox-content">
+          <app-ex-detail-free></app-ex-detail-free>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

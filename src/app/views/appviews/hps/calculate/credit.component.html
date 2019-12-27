@@ -1,13 +1,13 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>คำนวณค่าใช้จ่าย</h2>
+    <h2>ขายเชื่อ</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">หน้าแรก</a>
       </li>
-      <li>ขายเชื่อ</li>
+      <li>งานขาย</li>
       <li class="active">
-        <strong>คำนวณค่าใช้จ่าย</strong>
+        <strong>บันทึกการขาย</strong>
       </li>
     </ol>
   </div>
@@ -18,12 +18,21 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div style="margin-bottom: 15em;">
-    <div class="row form-group">
-      <div class="col-md-6">
-        <div class="ibox float-e-margins">
-          <div class="ibox-content">
 
-            <form autocomplete="off" class="form-horizontal" [formGroup]="formCalculate">
+    <div class="row form-group">
+      <div class="col-sm-6 pull-right text-right">
+        <h4 class="m-b-xs">เลขที่ใบจอง</h4>
+        <h2 class="no-margins text-navy" style="font-weight: normal">{{bookingNo}}</h2>
+      </div>
+    </div>
+    <div class="ibox">
+      <div class="ibox-content">
+
+        <form autocomplete="off" class="form-horizontal" [formGroup]="formCalculate">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>เลขเครื่องและเลขโครง</h5>
+              <hr class="">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ค้นหา</label>
                 <div class="col-md-8">
@@ -51,12 +60,15 @@
                   <input type="text" required formControlName="frameNo" class="form-control" readonly>
                 </div>
               </div>
+              <!-- <hr class="hr-dashed"> -->
+              <h5>ผู้ซื้อและจดทะเบียน</h5>
+              <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้ซื้อ</label>
                 <div class="col-md-8">
                   <ng-select required [items]="contractHireDropdown" bindValue="value" bindLabel="text"
                     [typeahead]="contractHireTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractHire"
-                    [loading]="searchcontractHire" [loadingText]="dropdownLoadingTxt">
+                    [loading]="contractHireLoading" [loadingText]="dropdownLoadingTxt">
                   </ng-select>
                 </div>
               </div>
@@ -64,12 +76,63 @@
                 <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
                 <div class="col-md-8">
                   <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
-                    [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
-                    [loading]="searchcontractOwner" [loadingText]="dropdownLoadingTxt">
+                    placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner">
                   </ng-select>
                 </div>
               </div>
-              <hr class="hr-dashed">
+
+              <h5>ที่อยู่จดทะเบียน</h5>
+              <hr class="m-t-xs">
+
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">ที่อยู่</label>
+                <div class="col-md-8">
+                  <input required type="text" class="form-control" formControlName="ownerAddress">
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">จังหวัด</label>
+                <div class="col-md-8">
+                  <ng-select required [items]="provinceDropdown | async" bindValue="value" bindLabel="text"
+                    formControlName="ownerProvinceCode">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">เขต/อำเภอ</label>
+                <div class="col-md-8">
+                  <ng-select required [items]="ampherDropdown | async" bindValue="amphorCode" bindLabel="amphorName"
+                    formControlName="ownerAmpherCode">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">รหัสไปร์ษณีย์</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" readonly formControlName="ownerZipCode">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 b-l">
+              <h5>มูลค่าสินค้า &nbsp;
+                <button type="button" class="btn btn-outline btn-xs btn-info m-b-none" data-toggle="modal"
+                  data-target="#bookingDetial">
+                  <i class="fa fa-info-circle" aria-hidden="true"></i> ข้อมูลการจอง
+                </button>
+              </h5>
+
+              <hr class="m-t-xs">
+
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา</label>
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <input type="text" formControlName="nowVat" class="form-control number" readonly>
+                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
+                  </div>
+                </div>
+              </div>
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ราคาสินค้า (รวม VAT)</label>
@@ -139,7 +202,6 @@
                 </div>
               </div>
 
-
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">
                   เครดิต
@@ -159,7 +221,8 @@
                 </label>
                 <div class="col-md-8">
                   <thai-mat-datepicker id="dp1" (change)="instalmentCalculate();" formControlName="firstPayment"
-                    required></thai-mat-datepicker>
+                    required>
+                  </thai-mat-datepicker>
                 </div>
               </div>
 
@@ -171,92 +234,87 @@
               </div>
 
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา</label>
-                <div class="col-md-8">
-                  <div class="input-group">
-                    <input type="text" formControlName="nowVat" class="form-control number" readonly>
-                    <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ยอดจัด (รวม VAT)</label>
                 <div class="col-md-8">
                   <span
                     class="form-control disabled">{{formCalculate.get('remain').value | number:'1.0-0':'en-US'}}</span>
                 </div>
               </div>
-
-              <hr class="hr-dashed">
-
-              <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-8">
-                  <button type="button" (click)="onSubmit()" [disabled]="formCalculate.invalid"
-                    class="btn btn-primary pull-right">
-                    <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก
-                  </button>
-                </div>
-              </div>
-
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-sm-6 pull-right text-right">
-            <h4 class="m-b-xs">เลขที่ใบจอง</h4>
-            <h2 class="no-margins text-navy" style="font-weight: normal">{{bookingNo}}</h2>
-          </div>
-        </div>
-
-        <div class="ibox none-ibox float-e-margins">
-          <div class="ibox-title">
-            <h5>ข้อมูลผู้จอง</h5>
-            <iboxtools></iboxtools>
-          </div>
-          <div class="ibox-content">
-            <app-ex-detail-customer></app-ex-detail-customer>
-          </div>
-        </div>
-
-
-        <div class="ibox none-ibox float-e-margins">
-          <div class="ibox-title">
-            <h5>ข้อมูลรถ</h5>
-            <iboxtools></iboxtools>
-          </div>
-          <div class="ibox-content">
-            <app-ex-detail-motobike></app-ex-detail-motobike>
-          </div>
-        </div>
-
-        <div class="ibox none-ibox float-e-margins">
-          <div class="ibox-title">
-            <h5>ของแถม</h5>
-            <iboxtools></iboxtools>
-          </div>
-          <div class="ibox-content">
-            <div class="table-responsive">
-              <app-ex-detail-accessory></app-ex-detail-accessory>
             </div>
           </div>
-        </div>
 
-        <div class="ibox none-ibox float-e-margins">
-          <div class="ibox-title">
-            <h5>รายการฟรี</h5>
-            <iboxtools></iboxtools>
+          <hr class="hr-dashed">
+
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" (click)="onSubmit()" [disabled]="formCalculate.invalid"
+                class="btn btn-primary pull-right">
+                <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก
+              </button>
+            </div>
           </div>
-          <div class="ibox-content">
-            <app-ex-detail-free></app-ex-detail-free>
+        </form>
+      </div>
+    </div>    <div class="modal inmodal" id="bookingDetial" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title">ข้อมูลการจอง</h4>
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
           </div>
+          <div class="modal-body">
+
+            <div class="ibox none-ibox float-e-margins">
+              <div class="ibox-title">
+                <h5>ข้อมูลผู้จอง</h5>
+                <iboxtools></iboxtools>
+              </div>
+              <div class="ibox-content">
+                <app-ex-detail-customer></app-ex-detail-customer>
+              </div>
+            </div>
+
+
+            <div class="ibox none-ibox float-e-margins">
+              <div class="ibox-title">
+                <h5>ข้อมูลรถ</h5>
+                <iboxtools></iboxtools>
+              </div>
+              <div class="ibox-content">
+                <app-ex-detail-motobike></app-ex-detail-motobike>
+              </div>
+            </div>
+
+            <div class="ibox none-ibox float-e-margins">
+              <div class="ibox-title">
+                <h5>ของแถม</h5>
+                <iboxtools></iboxtools>
+              </div>
+              <div class="ibox-content">
+                <div class="table-responsive">
+                  <app-ex-detail-accessory></app-ex-detail-accessory>
+                </div>
+              </div>
+            </div>
+
+            <div class="ibox none-ibox float-e-margins">
+              <div class="ibox-title">
+                <h5>รายการฟรี</h5>
+                <iboxtools></iboxtools>
+              </div>
+              <div class="ibox-content">
+                <app-ex-detail-free></app-ex-detail-free>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
     <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
   </div>
 </div>

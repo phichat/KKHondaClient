@@ -4,14 +4,17 @@ import { IUserResCookie } from 'app/interfaces/users';
 import { PaymentTypeList, PaymentType } from 'app/entities/general.entities';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ContractItemModel } from 'app/models/credit/contract-item-model';
-import { IContractTransactionReceipt } from 'app/models/credit';
 import { setLocalDate, currencyToFloat } from 'app/app.config';
 import { ContractItem, Contract, Booking, IsPay, IsOutstanding, PaymentFG } from 'app/models/credit/payment';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { IPayment } from 'app/interfaces/payment.interface';
 import * as $ from 'jquery';
 import { Observable } from 'rxjs';
 import { GroupPage } from 'app/entities/group-page.entities';
+import { ITax } from './tax.interface';
+import { IReceipt } from './receipt.interface';
+import { BookingPaymentType } from 'app/entities/mcs.entities';
+import { SaleModel } from 'app/models/credit';
 
 export class PaymentConfig {
   user: IUserResCookie;
@@ -19,34 +22,63 @@ export class PaymentConfig {
   notPayment = 13; // ยังไม่ชำระ
 
   GroupPage = GroupPage
+  BookingPaymentType = BookingPaymentType;
 
   CurrencyToFloat = currencyToFloat;
   PaymentType = PaymentType;
   PaymentTypeList = PaymentTypeList;
   setLocalDate = setLocalDate
-  // checkSelectPaymentItem: boolean = true;
   contractModel: Contract = new Contract();
+  saleModel: SaleModel = new SaleModel();
   bookingModel: Booking = new Booking();
   isPayModel: IsPay = new IsPay();
   isOutstandingModel: IsOutstanding = new IsOutstanding();
   contractItemModel: ContractItem[] = [];
-  receiptList: IContractTransactionReceipt[] = [];
+  receiptList: IReceipt[] = [];
+  taxInvList: ITax[] = [];
   debitTable = new BehaviorSubject<ContractItemModel[]>([]);
   reasonDropdown: Observable<DropDownModel[]>;
   bankingsDropdown = new Array<DropDownModel>();
   statusDropdown = new Array<DropDownModel>();
   dataTable: any;
 
-  formGroup: FormGroup;
-  instalmentGroup: FormGroup;
-  cancelFormGroup: FormGroup;
-  validCancelFormGroup: FormGroup;
-
   PaymentData = new BehaviorSubject(null);
   formPayment: IPayment;
 
   contractItemId: number;
   promptMsg: string;
+
+  formGroup: FormGroup;
+  instalmentGroup: FormGroup;
+
+  // cancelReceiptFormGroup = new FormGroup({
+  //   contractId: new FormControl(null, Validators.required),
+  //   slipNo: new FormControl(null, Validators.required),
+  //   reason: new FormControl(null, Validators.required),
+  //   approveBy: new FormControl(null),
+  //   confirm: new FormControl(false)
+  // });
+
+  // validCancelReceiptFormGroup = new FormGroup({
+  //   gid: new FormControl(null, Validators.required),
+  //   userName: new FormControl(null, Validators.required),
+  //   password: new FormControl(null, Validators.required)
+  // });
+
+  // cancelTaxInvFormGroup = new FormGroup({
+  //   contractId: new FormControl(null, Validators.required),
+  //   slipNo: new FormControl(null, Validators.required),
+  //   reason: new FormControl(null, Validators.required),
+  //   approveBy: new FormControl(null),
+  //   confirm: new FormControl(false)
+  // });
+
+  // validCancelTaxInvFormGroup = new FormGroup({
+  //   gid: new FormControl(null, Validators.required),
+  //   userName: new FormControl(null, Validators.required),
+  //   password: new FormControl(null, Validators.required)
+  // });
+  
 
   get IsCutBalance(): boolean {
     const fg = this.formGroup.value as PaymentFG;
@@ -63,7 +95,7 @@ export class PaymentConfig {
   get IsNotDownPayment(): boolean {
     const contractItem = (this.InstalmentList.value as ContractItem[])
       .sort((a, b) => a.instalmentNo - b.instalmentNo)[0];
-      
+
     if (!contractItem) return true;
 
     return contractItem.status != 11 ? true : false;

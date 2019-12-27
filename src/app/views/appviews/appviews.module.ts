@@ -40,11 +40,15 @@ import { TaxPurchaseModule } from './tax-purchase/tax-purchase.module';
 import { TaxSaleModule } from './tax-sale/tax-sale.module';
 import { TaxSaleSpareModule } from './tax-sale-spare/tax-sale-spare.module';
 
+import { MCSModule } from './mcs/mcs.module';
+import { PSSModule } from './pss/pss.module';
+import { SaleModule } from './sale/sale.module';
+
 @NgModule({
   declarations: [
     StarterViewComponent,
     LoginComponent,
-    StarterComponent
+    StarterComponent,    
   ],
   imports: [
     BrowserModule,
@@ -77,6 +81,11 @@ import { TaxSaleSpareModule } from './tax-sale-spare/tax-sale-spare.module';
     TaxPurchaseModule,
     TaxSaleModule,
     TaxSaleSpareModule,
+    SaleModule,
+
+    MCSModule,
+    PSSModule,
+    
   ],
   exports: [
     // IcheckDirective

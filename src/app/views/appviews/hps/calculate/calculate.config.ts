@@ -1,17 +1,17 @@
 import { EventEmitter } from '@angular/core';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { ContractModel } from 'app/models/credit';
 import { IUserResCookie } from 'app/interfaces/users';
 import { IMAmpher } from 'app/interfaces/masters';
 import { Observable } from 'rxjs';
-import { message } from 'app/app.message';
 
 export class CalculateConfig {
 
+  protected 
   mode: string;
   userModel: IUserResCookie;
-
+  
   dropdownLoadingTxt: string;
   // dropdownLoading: boolean;
 
@@ -82,6 +82,7 @@ export class CalculateConfig {
     frameNo: new FormControl(''),
 
     fiCode: new FormControl(null),
+    fiId: new FormControl(null),
     fiintId: new FormControl(null),
     fiComId: new FormControl(null),
     comPrice: new FormControl(0),
@@ -154,21 +155,25 @@ export class CalculateConfig {
   }
 
   protected findAddress(address: string): string {
-    const regex = /[^(อำเภอ|อ.)]+/g;
+    const regex = /(เขต|อำเภอ|อ\.)/;
     let m: string[];
-    if ((m = regex.exec(address)) !== null)
-      return m === undefined ? "" : m[0].trim();
+    if ((m = regex.exec(address)) !== null){
+      if (m === undefined) return '';
+      const string = address.replace(/\s+/g, ' ');
+      const a = string.split(m[0]);
+      return a[0].trim();
+    }
   }
 
   protected findProvince(address: string): string {
-    const regex = /(จังหวัด|จ.)(\S+)/;
+    const regex = /(แขวง|จังหวัด|จ\.)(\S+)/;
     let m: string[];
     if ((m = regex.exec(address)) !== null)
       return m === undefined ? "" : m[2].trim();
   }
 
   protected findAmpher(address: string): string {
-    const regex = /(อำเภอ|อ.)(\S+)/;
+    const regex = /(เขต|อำเภอ|อ\.)(\S+)/;
     let m: string[];
     if ((m = regex.exec(address)) !== null)
       return m === undefined ? "" : m[2].trim();

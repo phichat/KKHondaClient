@@ -3,10 +3,7 @@ import { ContractItemModel } from '../../../../models/credit';
 import { SaleService } from '../../../../services/credit';
 import { UserService } from '../../../../services/users';
 import { setLocalDate } from '../../../../app.config';
-import { Subject, combineLatest } from 'rxjs';
-
-declare var $: any;
-declare var footable: any;
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-contract-item',
@@ -23,11 +20,8 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
     interestTotal: number;
     balanchVatTotal: number;
 
-    private subDest: any;
-
     @Input() contractItemModel: ContractItemModel[];
     @Input() debitTable?: Subject<ContractItemModel[]>;
-
 
     constructor(
         private chRef: ChangeDetectorRef,
@@ -68,9 +62,6 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                 // ค่าสินค้า(ราคายืน) ถอด vat
                 const itemPrice = (p.netPrice / vatUp);
 
-                // ยอดจัดถอด vat
-                const remainExcVat = (p.remain / vatUp);
-
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
 
@@ -96,7 +87,6 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                             const __instalmentEnd = parseInt((p.instalmentEnd as any).toString());
                             d.setDate(d.getDate() + __instalmentEnd);
                         }
-
                         dueDate = d;
                         j++;
                     }
@@ -129,8 +119,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     // เงินต้นคงเหลือ
                     const principalRemain = (i == 0) ? p.netPrice : initialPrice - principal;
 
-                    this._userService.currentData.subscribe(user => item.contractBranchId = user.branch);
-
+                    item.contractBranchId = this._userService.cookies.branchId;
                     item.instalmentNo = i;
                     item.dueDate = dueDate;
                     item.vatRate = p.nowVat;

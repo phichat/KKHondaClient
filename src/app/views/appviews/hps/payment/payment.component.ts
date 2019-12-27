@@ -51,20 +51,6 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       'progressBar': true,
     }
     this.user = this._userService.cookies;
-
-    this.cancelFormGroup = this.fb.group({
-      contractId: new FormControl(null, Validators.required),
-      receiptNo: new FormControl(null, Validators.required),
-      reason: new FormControl(null, Validators.required),
-      approveBy: new FormControl(null),
-      confirm: new FormControl(false)
-    });
-
-    this.validCancelFormGroup = this.fb.group({
-      gid: new FormControl(null, Validators.required),
-      userName: new FormControl(null, Validators.required),
-      password: new FormControl(null, Validators.required)
-    });
   }
 
   ngOnInit() {
@@ -123,8 +109,13 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
             this.chRef.markForCheck();
             this.loadCreditPayment(x.payment);
             this.debitTable.next(x.contractItem);
-            this.receiptList = x.receipt;
-            this.s_loader.hideLoader()
+            this.receiptList = x.receipt.map(o => {
+              return { receiptNo: o.receiptNo, disabled: o.receiptStatus == true ? false : true };
+            });
+            this.taxInvList = x.receipt.map(o => {
+              return { taxInvNo: o.taxInvNo, disabled: o.taxInvStatus == true ? false : true };
+            });
+            this.s_loader.hideLoader();
           },
           complete: () => this.s_loader.hideLoader(),
           error: () => this.s_loader.hideLoader()
@@ -147,23 +138,26 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
 
   loadCreditPayment(item: Payment) {
     this.contractModel = item.contract;
+
     this.contractModel.contractDate = setLocalDate(item.contract.contractDate);
     this.bookingModel = item.booking;
+    this.saleModel = item.sale;
     this.isPayModel = item.isPay ? item.isPay : new IsPay();
     this.isOutstandingModel = item.isOutstanding ? item.isOutstanding : new IsOutstanding();
 
     this.instalmentCount = 0;
     this.chRef.markForCheck();
-    const contractItem = item.contractItem.map(res => {
-      return {
-        ...res,
-        isSelect: false,
-        fineSum: res.fineSum | 0,
-        fineSumRemain: res.fineSumRemain | 0,
-        fineSumOther: res.fineSumOther | 0,
-        payeer: this.user.id.toString()
-      }
-    });
+    const contractItem = item.contractItem
+      .map(res => {
+        return {
+          ...res,
+          isSelect: false,
+          fineSum: res.fineSum | 0,
+          fineSumRemain: res.fineSumRemain | 0,
+          fineSumOther: res.fineSumOther | 0,
+          payeer: this.user.id.toString()
+        }
+      });
 
     this.setItemFormArray(contractItem, this.instalmentGroup, 'instalment');
     this.reInitDatatable();
@@ -178,9 +172,6 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       updateBy: this.user.id.toString(),
       branchId: this.user.branch,
       outstanding: outstandingPrice
-    });
-    this.cancelFormGroup.patchValue({
-      contractId: item.contract.contractId
     });
     this.chRef.detectChanges();
   }
@@ -269,72 +260,9 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     }
   }
 
-  onCanclePayment() {
-    this.router.navigate(['credit/contract-list/active'])
-  }
-
-  onCancel() {
-    const valid = this.validCancelFormGroup.value;
-    const api1 = this._userService.LeaderValidate(valid.gid, valid.userName, valid.password);
-    api1.subscribe(x => {
-      const param = { ...this.cancelFormGroup.getRawValue(), approveBy: x }
-      const api2 = this._paymentService.CancelContractTerm(param);
-      api2.subscribe(o => {
-        toastr.success(message.canceled);
-        setTimeout(() => location.reload(), 400);
-      }, () => {
-        toastr.error(message.cancelFail)
-      });
-
-    }, (x: HttpErrorResponse) => {
-      if (x.status == 403) {
-        toastr.error('ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง');
-      } else {
-        toastr.error(x.statusText);
-      }
-    });
-  }
-
-  onConfirmCancel(value: boolean) {
-    let receiptNo = this.cancelFormGroup.get('receiptNo');
-    let reason = this.cancelFormGroup.get('reason');
-    if (value) {
-      receiptNo.disable();
-      reason.disable();
-    } else {
-      receiptNo.enable();
-      reason.enable();
-    }
-    if (!value) {
-      this.validCancelFormGroup.reset();
-      this.validCancelFormGroup.patchValue({
-        branchId: this.user.branchId
-      });
-    }
-    this.cancelFormGroup.patchValue({
-      confirm: value
-    });
-    // this.chRef.detectChanges();
-    // const params = {
-    //   contractItemId: frm.contractItemId,
-    //   reason: frm.reason,
-    //   updateBy: this.user.id.toString()
-    // }
-    // this._paymentService.CancelContractTerm(params).subscribe(() => {
-    //   toastr.success(message.canceled);
-    //   setTimeout(() => location.reload(), 400);
-    // }, (err) => {
-    //   toastr.error(err);
-    // })
-  }
-
-  onPrintTax(value: any) {
-    window.open(`${appConfig.apikkWeb}/php/print_tax_3.php?booking_id=${value.bookingId}&tax_inv_no=${value.taxInvNo}`);
-  }
-
-  onPrintReceipt(value: any) {
-    window.open(`${appConfig.apikkWeb}/php/print_receive_3.php?booking_id=${value.bookingId}&receipt_no=${value.receiptNo}`);
-  }
+  // onCanclePayment() {
+  //   this.router.navigate(['credit/contract-list/active'])
+  // }
 
   onCalculate() {
     let x = this.formGroup.value;
@@ -361,6 +289,25 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       paymentDate: event.paymentDate,
       documentRef: event.documentRef
     });
+  }
+
+  leasingClosing() {
+    this.setFormPayment();
+    const instalmentList = this.InstalmentList.value as ContractItem[];
+    const cutBalance = instalmentList.reduce((a, c) => a += c.remainNetPrice, 0);
+    this.formGroup.patchValue({
+      cutBalance,
+      payNetPrice: cutBalance
+    });
+
+    for (let i = 0; i < instalmentList.length; i++) {
+      if (instalmentList[i].status != 11) {
+        this.InstalmentList.at(i).patchValue({
+          isSelect: true
+        })
+      }
+    }
+    this.onCalculate();
   }
 
   contractClosing() {

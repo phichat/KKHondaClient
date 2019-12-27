@@ -11,6 +11,8 @@ import { setZeroHours } from 'app/app.config';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import { message } from 'app/app.message';
 import { LoaderService } from 'app/core/loader/loader.service';
+import { CustomerService } from 'app/services/customers';
+import { ProvinceService, AmpherService } from 'app/services/masters';
 
 declare var toastr: any;
 
@@ -22,12 +24,15 @@ declare var toastr: any;
 export class HpsComponent extends CalculateConfig implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private router: Router,
+    private chRef: ChangeDetectorRef,
+    private s_loader: LoaderService,
+    private s_customer: CustomerService,
     private s_booking: BookingService,
     private s_calculate: SaleService,
     private s_user: UserService,
-    private router: Router,
-    private s_loader: LoaderService,
-    private chRef: ChangeDetectorRef
+    private s_province: ProvinceService,
+    private s_ampher: AmpherService
   ) {
     super();
     toastr.options = {
@@ -36,6 +41,12 @@ export class HpsComponent extends CalculateConfig implements OnInit {
     };
 
     this.userModel = this.s_user.cookies;
+    this.provinceDropdown = this.s_province.DropDown();
+    this.formCalculate.get('contractOwner').disable();
+    this.formCalculate.get('ownerAddress').disable();
+    this.formCalculate.get('ownerProvinceCode').disable();
+    this.formCalculate.get('ownerAmpherCode').disable();
+    this.formCalculate.get('ownerZipCode').disable();
   }
 
   @ViewChild(ContractItemComponent) contractItem;
@@ -113,12 +124,28 @@ export class HpsComponent extends CalculateConfig implements OnInit {
       this.outStandingPriceState = p.outStandingPrice;
       this.bookingNo = p.bookingNo;
       this.bookDepositState = p.deposit;
+      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }];
+
+      this.s_customer.getCustomerByCode('CRM-01-0000746').subscribe(cus => {
+        this.contractOwnerDropdown = [{ value: cus.customerCode, text: `${cus.customerPrename}${cus.customerName}` }];
+        const add = cus.mCustomerAddress[0];
+        this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(add.provinceCode);
+        this.formCalculate.patchValue({
+          contractOwner: cus.customerCode,
+          ownerAddress: add.address,
+          ownerProvinceCode: add.provinceCode,
+          ownerAmpherCode: add.amphorCode,
+          ownerZipCode: add.zipcode,
+        });
+
+      });
 
       this.formCalculate.patchValue({
         outStandingPrice: p.outStandingPrice,
         bookingPaymentType: p.bookingPaymentType,
         bookDeposit: p.deposit,
-        nowVat: p.vat
+        nowVat: p.vat,
+        contractHire: p.custCode
       })
 
       if (this.formCalculate.get('returnDeposit').value == '0') {
@@ -190,7 +217,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   }
 
   onReturnDeposit() {
-    const fg = this.formCalculate.value;
+    const fg = this.formCalculate.getRawValue();
     const depositPrice = fg.depositPrice;
     // คืนเงินมัดจำ
     switch (fg.returnDeposit) {
@@ -217,7 +244,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
 
   instalmentCalculate() {
 
-    const fg = this.formCalculate.value;
+    const fg = this.formCalculate.getRawValue();
 
     const __instalmentEnd = fg.instalmentEnd || 0;
     const __interest = fg.interest || 0;
@@ -256,12 +283,22 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
+    let calculate = { ...this.formCalculate.getRawValue() };
+    calculate.firstPayment = setZeroHours(calculate.firstPayment);
+    const contract = {
+      ...this.contractModel,
+      contractHire: calculate.contractHire,
+      contractOwner: calculate.contractOwner,
+      ownerAddress: calculate.ownerAddress,
+      ownerProvinceCode: calculate.ownerProvinceCode,
+      ownerAmpherCode: calculate.ownerAmpherCode,
+      ownerZipCode: calculate.ownerZipCode
+    }
     let form = {
-      calculate: this.formCalculate.getRawValue(),
-      contract: this.contractModel,
+      calculate,
+      contract,
       contractItem: this.contractItem.contractItemModel
     };
-    form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
 
     if (this.mode === 'create') {
       this.onCreate(form);
@@ -275,19 +312,18 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   }
 
   onCreate(obj: any) {
-    console.log(obj);
-
-    // this.s_calculate
-    //   .Create(obj.calculate, obj.contract, obj.contractItem)
-    //   .subscribe(
-    //     res => {
-    //       const x = res.json();
-    //       this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
-    //     },
-    //     () => {
-    //       toastr.error(message.error);
-    //     }
-    //   );
+    this.s_calculate
+      .Create(obj.calculate, obj.contract, obj.contractItem)
+      .subscribe(
+        res => {
+          const x = res.json();
+          toastr.success(message.created);
+          this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
+        },
+        () => {
+          toastr.error(message.error);
+        }
+      );
   }
 
   onEdit(obj: any) {

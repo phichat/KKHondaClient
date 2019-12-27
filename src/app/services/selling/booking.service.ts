@@ -26,6 +26,10 @@ export class BookingService {
         this.dataSource.next(data)
     }
 
+    destroy() {
+        this.dataSource.complete();
+    }
+
     get(): Observable<BookingListModel[]> {
         return this.httpService.get(this.api);
     }

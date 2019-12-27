@@ -1,0 +1,93 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายการบันทึกใบสั่งซื้อ</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li>จัดซื้อ</li>
+      <li class="active">
+        <strong>รายการบันทึกใบสั่งซื้อ</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+    <a [routerLink]="['/mcs/mcs-save-po-create']" class="btn btn-primary">
+      <i class="fa fa-paper-plane-o"></i> บันทึกใบสั่งซื้อ
+    </a>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <form class="form-horizontal" style="margin-bottom: 15em;">
+        <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
+          <thead>
+            <tr>
+              <th class="text-center">ลำดับ</th>
+              <th></th>
+              <th>เลขที่ใบสั่งซื้อ</th>
+              <th>สถานะ</th>
+              <th>วันที่สั่งซื้อ</th>
+              <th>วันที่กำหนดส่งสินค้า</th>
+              <th>สั่งซื้อจาก</th>
+              <th>หมายเหตุ</th>
+              <th>ผู้ทำรายการ</th>
+              <th>วันที่ทำรายการ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="list.length == 0; else else_tr;">
+              <td colspan="11" class="text-center">
+                <div [ngSwitch]="loading">
+                  <div *ngSwitchCase="1">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>ไม่มีข้อมูล</p>
+                  </div>
+                  <div *ngSwitchCase="2">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <br>
+                    <p>มีบางอย่างผิดพลาด</p>
+                  </div>
+                  <div *ngSwitchDefault>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <br>
+                    <p>รอสักครู่...</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <ng-template #else_tr>
+              <tr *ngFor="let item of list; let i = index">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">
+                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/mcs/mcs-save-po-detail', item.po_no]">
+                    <i class="fa fa-info-circle"></i>
+                    รายละเอียด
+                  </a>
+                </td>
+                <td>{{item.po_no}}</td>
+                <td>{{item.status_desc}}</td>
+                <td>{{displayLocalDate(item.po_date)}}</td>
+                <td>{{displayLocalDate(item.due_date)}}</td>
+                <td>{{item.supplier_name}}</td>
+                <td>{{item.remark}}</td>
+                <td>{{item.create_name}}</td>
+                <td>{{displayLocalDate(item.create_date)}}</td>
+
+              </tr>
+            </ng-template>
+
+          </tbody>
+        </table>
+
+      </form>
+    </div>
+  </div>
+
+</div>

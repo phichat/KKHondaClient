@@ -1,8 +1,10 @@
 import { DropDownModel } from '../drop-down-model';
+import { SaleModel } from './sale-model';
 
 export class Payment {
     contract: Contract;
     booking: Booking;
+    sale: SaleModel;
     isPay: IsPay;
     isOutstanding: IsOutstanding;
     contractItem: ContractItem[];

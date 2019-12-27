@@ -1,0 +1,33 @@
+<div class="modal-dialog modal-md">
+  <div class="modal-content animated fadeIn">
+    <form class="form-horizontal" action="" #fmReceipt="ngForm">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">พิมพ์</h4>
+        <p>ใบเสร็จรับเงิน</p>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" name="bookingId" [(ngModel)]="bookingId">
+        <div class="row">
+          <label for="" class="col-lg-4 control-label">เลขที่ใบเสร็จรับเงิน</label>
+          <div class="col-lg-8">
+            <ng-select required [items]="receiptList" bindValue="receiptNo" bindLabel="receiptNo" name="receiptNo"
+              ngModel>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                {{item.receiptNo}}<span *ngIf="item.disabled">&nbsp;(ยกเลิก)</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="onPrintReceipt(fmReceipt.value)" class="btn btn-primary"
+          [disabled]="fmReceipt.invalid">ตกลง</button>
+      </div>
+    </form>
+  </div>
+</div>

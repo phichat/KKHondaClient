@@ -29,9 +29,31 @@ export class CustomerModel {
 }
 
 export class MCustomerAddress {
-
+  customerCode: string;
+  addressType: string;
+  address: string;
+  amphorCode: string;
+  provinceCode: string;
+  zipcode: string;
+  phone: string;
+  fax: string;
+  remarks: string;
+  createBy: string;
+  createDate?: Date;
+  updateBy: string;
+  updateDate?: Date;
 }
 
 export class MCustomerCard {
-
+  customerCode: string;
+  cardType: string;
+  cardId: string;
+  cardIssueDate?: Date;
+  cardExpiryDate?: Date;
+  cardLocation: string;
+  cardPhoto: string;
+  createBy: string;
+  createDate?: Date;
+  updateBy: string;
+  updateDate?: Date;
 }

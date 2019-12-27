@@ -1,15 +1,15 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>งานขายไฟแนนซ์</h2>
+    <h2>ไฟแนนซ์</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">หน้าแรก</a>
       </li>
       <li>
-        <span>เช่าซื้อ</span>
+        <span>งานขาย</span>
       </li>
       <li class="active">
-        <strong>คำนวณค่างวด</strong>
+        <strong>บันทึกการขาย</strong>
       </li>
     </ol>
   </div>
@@ -76,8 +76,7 @@
                 <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
                 <div class="col-md-8">
                   <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
-                    [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
-                    [loading]="contractOwnerLoading" [loadingText]="dropdownLoadingTxt">
+                    placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner">
                   </ng-select>
                 </div>
               </div>
@@ -94,15 +93,15 @@
                 <label for="" class="col-md-4 control-label is-required">จังหวัด</label>
                 <div class="col-md-8">
                   <ng-select required [items]="provinceDropdown | async" bindValue="value" bindLabel="text"
-                    formControlName="ownerProvinceCode" (change)="selectItemProvince($event)">
+                    formControlName="ownerProvinceCode">
                   </ng-select>
                 </div>
               </div>
               <div class="row form-group">
-                <label for="" class="col-md-4 control-label is-required">อำเภอ</label>
+                <label for="" class="col-md-4 control-label is-required">เขต/อำเภอ</label>
                 <div class="col-md-8">
                   <ng-select required [items]="ampherDropdown | async" bindValue="amphorCode" bindLabel="amphorName"
-                    formControlName="ownerAmpherCode" (change)="selectItemAmpher($event)">
+                    formControlName="ownerAmpherCode">
                   </ng-select>
                 </div>
               </div>
@@ -207,8 +206,7 @@
                 </label>
                 <div class="col-md-8">
                   <ng-select [items]="leasingList" bindValue="leasingCode" bindLabel="leasingName" required
-                    placeholder="เลือกบริษัทไฟแนนซ์" formControlName="contractOwner"
-                    (change)="selectItemLeasing($event)">
+                    placeholder="เลือกบริษัทไฟแนนซ์" formControlName="fiCode" (change)="selectItemLeasing($event)">
                   </ng-select>
                 </div>
               </div>

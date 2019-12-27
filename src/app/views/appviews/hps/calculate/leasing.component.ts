@@ -44,6 +44,12 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
     this.userModel = this.s_user.cookies;
     this.provinceDropdown = this.s_province.DropDown();
+
+    this.formCalculate.get('contractOwner').disable();
+    this.formCalculate.get('ownerAddress').disable();
+    this.formCalculate.get('ownerProvinceCode').disable();
+    this.formCalculate.get('ownerAmpherCode').disable();
+    this.formCalculate.get('ownerZipCode').disable();
   }
 
   @ViewChild(ContractItemComponent) contractItem;
@@ -89,14 +95,28 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   selectItemLeasing = (e: ILeasing) => {
     if (!e) return;
     this.interestList = e.leasingIntList;
-    this.formCalculate.patchValue({ fiCode: e.leasingCode });
-    // this.formCalculate.get('interest').reset();
+    this.contractOwnerDropdown = [{ value: e.leasingCode, text: e.leasingName }];
+    this.s_customer.getCustomerByCode(e.leasingCode).subscribe(x => {
+      const add = x.mCustomerAddress[0];
+      this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(add.provinceCode);
+      this.formCalculate.patchValue({
+        contractOwner: e.leasingCode,
+        ownerAddress: add.address,
+        ownerProvinceCode: add.provinceCode,
+        ownerAmpherCode: add.amphorCode,
+        ownerZipCode: add.zipcode,
+      })
+    });
+    this.formCalculate.get('interest').reset();
     this.instalmentCalculate();
   };
   selectItemInterest = (e: ILeasingInterest) => {
     this.instalmentCalculate();
     if (!e) return;
-    this.formCalculate.patchValue({ fiintId: e.fiintId });
+    this.formCalculate.patchValue({
+      fiId: e.fiId,
+      fiintId: e.fiintId
+    });
   }
 
   selectItemEnging(e: any) {
@@ -105,14 +125,6 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
       engineNo: e ? e.engineNo : null,
       frameNo: e ? e.frameNo : null
     });
-  }
-
-  selectItemProvince(e: DropDownModel) {
-    this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(e.value);
-  }
-
-  selectItemAmpher(e: IMAmpher) {
-    this.formCalculate.patchValue({ ownerZipCode: e.zipcode });
   }
 
   searchEngine() {
@@ -178,35 +190,15 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
         this.outStandingPriceState = p.outStandingPrice;
         this.bookingNo = p.bookingNo;
         this.bookDepositState = p.deposit;
-
-        const province = this.findProvince(p.address);
-        const ampher = this.findAmpher(p.address);
-        const address = this.findAddress(p.address);
-        this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }]
-        this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }]
-
-        this.provinceDropdown.subscribe(p => {
-          const pCode = p.find(o => o.text == province).value;
-          this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(pCode);
-          this.ampherDropdown.subscribe(a => {
-            const amp = a.find(o => o.amphorName == ampher);
-            this.formCalculate.patchValue({
-              ownerAddress: address,
-              ownerAmpherCode: amp.amphorCode,
-              ownerProvinceCode: pCode,
-              ownerZipCode: amp.zipcode
-            })
-          })
-        });
-
+        this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }];
         this.formCalculate.patchValue({
           outStandingPrice: p.outStandingPrice,
           bookingPaymentType: p.bookingPaymentType,
           bookDeposit: p.deposit,
           nowVat: p.vat,
-          contractHire: p.custCode,
-          contractOwner: p.custCode
-        })
+          contractHire: p.custCode
+        });
+
 
         if (this.formCalculate.get('returnDeposit').value == '0') {
           this.formCalculate.patchValue({
@@ -241,7 +233,6 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
       this.formCalculate.patchValue({
         firstPayment: new Date(p.creditCalculate.firstPayment)
       });
-      // this.model = p.creditCalculate;
 
       this.s_booking.changeData(p.booking);
       this.s_calculate.changeData(this.formCalculate.getRawValue());
@@ -273,7 +264,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   onReturnDeposit() {
-    const fg = this.formCalculate.value;
+    const fg = this.formCalculate.getRawValue();
     const depositPrice = fg.depositPrice;
     // คืนเงินมัดจำ
     switch (fg.returnDeposit) {
@@ -299,8 +290,8 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   instalmentCalculate() {
-    const fg = this.formCalculate.value;
-    debugger
+    let fg = { ...this.formCalculate.getRawValue() };
+
     const __instalmentEnd = fg.instalmentEnd || 0;
     const __interest = fg.interest || 0;
 
@@ -333,6 +324,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     // คำนวนอัตราดอกเบี้ยที่แท้จริงต่อปี
     fg.mrr = this.calMrr(fg.irr, __instalmentEnd);
 
+    fg = this.calCommission(fg);
     this.formCalculate.patchValue({ ...fg })
     this.s_calculate.changeData(fg);
   }
@@ -362,12 +354,22 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
+    let calculate = { ...this.formCalculate.getRawValue() };
+    calculate.firstPayment = setZeroHours(calculate.firstPayment);
+    const contract = {
+      ...this.contractModel,
+      contractHire: calculate.contractHire,
+      contractOwner: calculate.contractOwner,
+      ownerAddress: calculate.ownerAddress,
+      ownerProvinceCode: calculate.ownerProvinceCode,
+      ownerAmpherCode: calculate.ownerAmpherCode,
+      ownerZipCode: calculate.ownerZipCode
+    }
     let form = {
-      calculate: this.formCalculate.getRawValue(),
-      contract: this.contractModel,
+      calculate,
+      contract,
       contractItem: this.contractItem.contractItemModel
     };
-    form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
 
     if (this.mode === 'create') {
       this.onCreate(form);
@@ -381,19 +383,18 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   onCreate(obj: any) {
-    console.log(obj);
-
-    // this.s_calculate
-    //   .Create(obj.calculate, obj.contract, obj.contractItem)
-    //   .subscribe(
-    //     res => {
-    //       const x = res.json();
-    //       this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
-    //     },
-    //     () => {
-    //       toastr.error(message.error);
-    //     }
-    //   );
+    this.s_calculate
+      .Create(obj.calculate, obj.contract, obj.contractItem)
+      .subscribe(
+        res => {
+          const x = res.json();
+          toastr.success(message.created);
+          this.router.navigate(['credit/payment', x.contractId]);
+        },
+        () => {
+          toastr.error(message.error);
+        }
+      );
   }
 
   onEdit(obj: any) {

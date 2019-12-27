@@ -161,13 +161,13 @@
                 </ul>
             </li>
 
-            <li [ngClass]="{active: activeRoute('credit')}">
+            <li [ngClass]="{active: activeRoute('sale') || activeRoute('credit')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="nav-label">งานขาย</span>
                     <span class="fa arrow"></span>
                 </a>
-                <ul class="nav nav-second-level collapse">
+                <ul class="nav nav-second-level collapse" >
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_booking">
                             <span class="nav-label">จองรถ</span>
@@ -183,31 +183,11 @@
                             <span class="nav-label">รายการยกเลิกใบจอง</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{kkHondaWeb}}/home.php?show=_sell_list">
-                            <span class="nav-label">รายการขายรถ</span>
+                    <li [ngClass]="{active: activeRoute('sale-list') || activeRoute('sale-detail')}">
+                        <a [routerLink]="['/sale/sale-list']">
+                            <span class="nav-label">รายการขาย</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('active')}">
-                        <a [routerLink]="['/credit/contract-list/active']">
-                            <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
-                        </a>
-                    </li>
-                    <!-- <li [ngClass]="{active: activeRoute('close-contract')}">
-                        <a [routerLink]="['/credit/contract-list/close-contract']">
-                            <span class="nav-label">รายการปิดสัญญา</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('canceled')}">
-                        <a [routerLink]="['/credit/contract-list/canceled']">
-                            <span class="nav-label">รายการยกเลิกสัญญา</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('other-contract')}">
-                        <a [routerLink]="['/credit/contract-list/other-contract']">
-                            <span class="nav-label">รายการสัญญา อื่นๆ</span>
-                        </a>
-                    </li> -->
                 </ul>
             </li>
 
@@ -368,6 +348,73 @@
                 </ul>
             </li>
 
+            <li [ngClass]="{active: activeRoute('mcs')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-tags"></i>
+                    <span class="nav-label">MCS</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{'active': activeRoute('mcs-save-po-list')}">
+                        <a [routerLink]="['/mcs/mcs-save-po-list']">
+                            <span class="nav-label">บันทึกใบสั่งซื้อ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-stock-receive-list')}">
+                        <a [routerLink]="['/mcs/mcs-stock-receive-list']">
+                            <span class="nav-label">บันทึกรับสินค้า</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-save-invoice-list')}">
+                        <a [routerLink]="['/mcs/mcs-save-invoice-list']">
+                            <span class="nav-label">บันทึกรับใบกำกับภาษี</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-save-receipt-list')}">
+                        <a [routerLink]="['/mcs/mcs-save-receipt-list']">
+                            <span class="nav-label">บันทึกรับใบเสร็จ</span>
+                        </a>
+                    </li>
+                    <hr class="menu-divider">
+                    <li [ngClass]="{'active': activeRoute('mcs-report-receive')}">
+                        <a [routerLink]="['/mcs/mcs-report-receive']">
+                            <span class="nav-label">รายงานการรับเข้า (จากการซื้อ)</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('mcs-report-tax-po')}">
+                        <a [routerLink]="['/mcs/mcs-report-tax-po']">
+                            <span class="nav-label">รายงานภาษีซื้อ</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li [ngClass]="{active: activeRoute('pss')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-tags"></i>
+                    <span class="nav-label">PSS</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{'active': activeRoute('pss-save-po-list')}">
+                        <a [routerLink]="['/pss/pss-save-po-list']">
+                            <span class="nav-label">บันทึกใบสั่งซื้อ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('pss-stock-receive-list')}">
+                        <a [routerLink]="['/pss/pss-stock-receive-list']">
+                            <span class="nav-label">บันทึกรับสินค้า</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': activeRoute('pss-return-prodict-list')}">
+                        <a [routerLink]="['/pss/pss-return-prodict-list']">
+                            <span class="nav-label">บันทึกส่งคืนสินค้า</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="javaScript:void(0);">
                     <i class="fa fa-users"></i>
@@ -400,7 +447,7 @@
                             <span class="nav-label">การจองรถ</span>
                         </a>
                     </li>
-                   
+
                     <li [ngClass]="{active: activeRoute('refund-report')}">
                         <a [routerLink]="['/report/refund-report']">
                             <span class="nav-label">คืนการจอง</span>
