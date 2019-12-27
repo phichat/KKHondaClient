@@ -283,7 +283,8 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
-    const calculate = { ...this.formCalculate.getRawValue() };
+    let calculate = { ...this.formCalculate.getRawValue() };
+    calculate.firstPayment = setZeroHours(calculate.firstPayment);
     const contract = {
       ...this.contractModel,
       contractHire: calculate.contractHire,
@@ -298,7 +299,6 @@ export class HpsComponent extends CalculateConfig implements OnInit {
       contract,
       contractItem: this.contractItem.contractItemModel
     };
-    form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
 
     if (this.mode === 'create') {
       this.onCreate(form);
@@ -317,6 +317,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
       .subscribe(
         res => {
           const x = res.json();
+          toastr.success(message.created);
           this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
         },
         () => {

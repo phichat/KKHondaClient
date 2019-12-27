@@ -113,9 +113,9 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   selectItemInterest = (e: ILeasingInterest) => {
     this.instalmentCalculate();
     if (!e) return;
-    this.formCalculate.patchValue({ 
+    this.formCalculate.patchValue({
       fiId: e.fiId,
-      fiintId: e.fiintId 
+      fiintId: e.fiintId
     });
   }
 
@@ -290,7 +290,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   instalmentCalculate() {
-    const fg = { ...this.formCalculate.getRawValue() };
+    let fg = { ...this.formCalculate.getRawValue() };
 
     const __instalmentEnd = fg.instalmentEnd || 0;
     const __interest = fg.interest || 0;
@@ -324,6 +324,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     // คำนวนอัตราดอกเบี้ยที่แท้จริงต่อปี
     fg.mrr = this.calMrr(fg.irr, __instalmentEnd);
 
+    fg = this.calCommission(fg);
     this.formCalculate.patchValue({ ...fg })
     this.s_calculate.changeData(fg);
   }
@@ -353,12 +354,22 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
+    let calculate = { ...this.formCalculate.getRawValue() };
+    calculate.firstPayment = setZeroHours(calculate.firstPayment);
+    const contract = {
+      ...this.contractModel,
+      contractHire: calculate.contractHire,
+      contractOwner: calculate.contractOwner,
+      ownerAddress: calculate.ownerAddress,
+      ownerProvinceCode: calculate.ownerProvinceCode,
+      ownerAmpherCode: calculate.ownerAmpherCode,
+      ownerZipCode: calculate.ownerZipCode
+    }
     let form = {
-      calculate: this.formCalculate.getRawValue(),
-      contract: this.contractModel,
+      calculate,
+      contract,
       contractItem: this.contractItem.contractItemModel
     };
-    form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
 
     if (this.mode === 'create') {
       this.onCreate(form);
@@ -372,19 +383,18 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
   }
 
   onCreate(obj: any) {
-    console.log(obj);
-
-    // this.s_calculate
-    //   .Create(obj.calculate, obj.contract, obj.contractItem)
-    //   .subscribe(
-    //     res => {
-    //       const x = res.json();
-    //       this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
-    //     },
-    //     () => {
-    //       toastr.error(message.error);
-    //     }
-    //   );
+    this.s_calculate
+      .Create(obj.calculate, obj.contract, obj.contractItem)
+      .subscribe(
+        res => {
+          const x = res.json();
+          toastr.success(message.created);
+          this.router.navigate(['credit/payment', x.contractId]);
+        },
+        () => {
+          toastr.error(message.error);
+        }
+      );
   }
 
   onEdit(obj: any) {

@@ -7,5 +7,6 @@ export const message = {
     canceled: 'ยกเลิกรายการสำเร็จ!',
     cancelFail: 'ยกเลิกรายการไม่สำเร็จ!',
     loading: 'รอสักครู่...',
-    noRecord: 'ไม่พบข้อมูล'
+    noRecord: 'ไม่พบข้อมูล',
+    validateFail: 'ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง'
 }

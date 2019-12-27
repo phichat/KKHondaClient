@@ -155,21 +155,25 @@ export class CalculateConfig {
   }
 
   protected findAddress(address: string): string {
-    const regex = /[^(อำเภอ|อ.)]+/g;
+    const regex = /(เขต|อำเภอ|อ\.)/;
     let m: string[];
-    if ((m = regex.exec(address)) !== null)
-      return m === undefined ? "" : m[0].trim();
+    if ((m = regex.exec(address)) !== null){
+      if (m === undefined) return '';
+      const string = address.replace(/\s+/g, ' ');
+      const a = string.split(m[0]);
+      return a[0].trim();
+    }
   }
 
   protected findProvince(address: string): string {
-    const regex = /(จังหวัด|จ.)(\S+)/;
+    const regex = /(แขวง|จังหวัด|จ\.)(\S+)/;
     let m: string[];
     if ((m = regex.exec(address)) !== null)
       return m === undefined ? "" : m[2].trim();
   }
 
   protected findAmpher(address: string): string {
-    const regex = /(อำเภอ|อ.)(\S+)/;
+    const regex = /(เขต|อำเภอ|อ\.)(\S+)/;
     let m: string[];
     if ((m = regex.exec(address)) !== null)
       return m === undefined ? "" : m[2].trim();

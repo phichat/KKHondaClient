@@ -62,9 +62,6 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                 // ค่าสินค้า(ราคายืน) ถอด vat
                 const itemPrice = (p.netPrice / vatUp);
 
-                // ยอดจัดถอด vat
-                const remainExcVat = (p.remain / vatUp);
-
                 let j = 1;
                 for (let i = 0; i <= instalmentEnd; i++) {
 
@@ -90,7 +87,6 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                             const __instalmentEnd = parseInt((p.instalmentEnd as any).toString());
                             d.setDate(d.getDate() + __instalmentEnd);
                         }
-
                         dueDate = d;
                         j++;
                     }
@@ -123,8 +119,7 @@ export class ContractItemComponent implements OnInit, DoCheck, OnDestroy {
                     // เงินต้นคงเหลือ
                     const principalRemain = (i == 0) ? p.netPrice : initialPrice - principal;
 
-                    this._userService.currentData.subscribe(user => item.contractBranchId = user.branch);
-
+                    item.contractBranchId = this._userService.cookies.branchId;
                     item.instalmentNo = i;
                     item.dueDate = dueDate;
                     item.vatRate = p.nowVat;

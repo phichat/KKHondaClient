@@ -4,6 +4,7 @@ import { appConfig } from 'app/app.config';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
+import { IMProvince } from 'app/interfaces/masters';
 
 @Injectable({ providedIn: 'root' })
 export class ProvinceService {
@@ -17,6 +18,12 @@ export class ProvinceService {
       .pipe(
         catchError(this.onCatch)
       );
+  }
+
+  GetProvinceByCode(provinceCode: string): Observable<IMProvince> {
+    const url = `${this.apiUrl}/GetProvinceByCode`;
+    const params = { provinceCode };
+    return this.httpClient.get<IMProvince>(url, { params });
   }
 
   private onCatch(error: any, caught: Observable<any>): Observable<any> {

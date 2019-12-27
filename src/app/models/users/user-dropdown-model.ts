@@ -1,4 +1,4 @@
 export class UserDropdownModel {
-    public Id: number;
-    public FullName: string;
+    public id: number;
+    public fullName: string;
 }

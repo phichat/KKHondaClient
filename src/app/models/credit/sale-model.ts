@@ -1,7 +1,7 @@
 export class SaleModel {
     public creditId: number;
     public bookingId: number;
-    public typePayment: string;          
+    public typePayment: string;
     public outStandingPrice: number;     // ยอดหนี้คงเหลือ
     public netPrice: number;             // ราคาสินค้าหลังหักส่วนลด
     public sellTypeId: number;           // ประเภทงานขาย
@@ -28,6 +28,19 @@ export class SaleModel {
     public saleDate: Date;
     public updateBy: number;
     public updateDate: string;
+    public sellNo: string;
+
+    public remark: string;
+    public reason: string;
+    public returnDepositNo: string;
+    public invTaxRecNo: string;
+    public receiptNo: string;
+    public comNo: string;
+    public sellStatus: boolean;
+    public returnDepositStatus: boolean;
+    public invTaxRecStatus: boolean;
+    public receiptStatus: boolean;
+    public comStatus: boolean;
 
     public bookingPaymentType: number;  // ประเภทการซื้อ 1=สด, 2=สินเชื่อ, 3=เช่าซื้อ, 4=ขายเชื่อ
     public returnDeposit: string;

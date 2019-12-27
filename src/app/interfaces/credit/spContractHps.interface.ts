@@ -1,6 +1,6 @@
 export interface ISpContractHps {
     contractId: number;
-    calculateId: number;
+    saleId: number;
     branch: string;
     bookingPaymentType?: number;
     contractNo: string;

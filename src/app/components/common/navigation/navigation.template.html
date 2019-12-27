@@ -161,13 +161,13 @@
                 </ul>
             </li>
 
-            <li [ngClass]="{active: activeRoute('credit')}">
+            <li [ngClass]="{active: activeRoute('sale') || activeRoute('credit')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="nav-label">งานขาย</span>
                     <span class="fa arrow"></span>
                 </a>
-                <ul class="nav nav-second-level collapse">
+                <ul class="nav nav-second-level collapse" >
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_booking">
                             <span class="nav-label">จองรถ</span>
@@ -183,31 +183,11 @@
                             <span class="nav-label">รายการยกเลิกใบจอง</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{kkHondaWeb}}/home.php?show=_sell_list">
-                            <span class="nav-label">รายการขายรถ</span>
+                    <li [ngClass]="{active: activeRoute('sale-list') || activeRoute('sale-detail')}">
+                        <a [routerLink]="['/sale/sale-list']">
+                            <span class="nav-label">รายการขาย</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('active')}">
-                        <a [routerLink]="['/credit/contract-list/active']">
-                            <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
-                        </a>
-                    </li>
-                    <!-- <li [ngClass]="{active: activeRoute('close-contract')}">
-                        <a [routerLink]="['/credit/contract-list/close-contract']">
-                            <span class="nav-label">รายการปิดสัญญา</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('canceled')}">
-                        <a [routerLink]="['/credit/contract-list/canceled']">
-                            <span class="nav-label">รายการยกเลิกสัญญา</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('other-contract')}">
-                        <a [routerLink]="['/credit/contract-list/other-contract']">
-                            <span class="nav-label">รายการสัญญา อื่นๆ</span>
-                        </a>
-                    </li> -->
                 </ul>
             </li>
 
@@ -406,7 +386,7 @@
                             <span class="nav-label">รายงานภาษีซื้อ</span>
                         </a>
                     </li>
-                    
+
                 </ul>
             </li>
 
@@ -467,7 +447,7 @@
                             <span class="nav-label">การจองรถ</span>
                         </a>
                     </li>
-                   
+
                     <li [ngClass]="{active: activeRoute('refund-report')}">
                         <a [routerLink]="['/report/refund-report']">
                             <span class="nav-label">คืนการจอง</span>

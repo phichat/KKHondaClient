@@ -199,6 +199,12 @@ span.required {
   width: 200px;
 }
 
+.row-vertical-align {
+  table tbody td {
+    vertical-align: middle !important;
+  }
+}
+
 ._dialog {
   left: 0 !important;
   width: 80%;

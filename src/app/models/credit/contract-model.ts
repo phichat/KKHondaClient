@@ -11,7 +11,16 @@ export class ContractModel {
     public contractPoint: string;
     public contractGroup: string;
     public contractHire: string;
+    public hireAddress: string;
+    public hireProvinceCode: string;
+    public hireAmpherCode: string;
+    public hireZipCode: string;
     public contractOwner: string;
+    public ownerTaxNo: string;
+    public ownerAddress: string;
+    public ownerAmpherCode: string;
+    public ownerProvinceCode: string;
+    public ownerZipCode: string;
     public contractMate: string;
     public contractBooking: string;
     public contractGurantor1: string;

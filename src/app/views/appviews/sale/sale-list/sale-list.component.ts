@@ -1,48 +1,44 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ContractService } from '../../../../services/credit';
+import { Component, OnInit } from '@angular/core';
+import { ContractService, SaleService } from '../../../../services/credit';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
 import { setLocalDate } from '../../../../app.config';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MStatusService, ZoneService, ContractGroupService, ContractTypeService } from 'app/services/masters';
+import { MStatusService } from 'app/services/masters';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { UserService } from 'app/services/users';
 import { combineLatest } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
-import { ISpContractHps } from 'app/interfaces/credit';
+import { ISpSearchSale } from 'app/interfaces/credit';
 import { DropDownModel } from 'app/models/drop-down-model';
 import { message } from 'app/app.message';
+import { BookingPaymentTypeList, BookingPaymentType } from 'app/entities/mcs.entities';
 declare var toastr: any;
 
 @Component({
-    selector: 'app-contract-list-active',
-    templateUrl: './contract-list-active.component.html'
+    selector: 'app-sale-list',
+    templateUrl: './sale-list.component.html'
 })
-export class ContractListActiveComponent implements OnInit {
+export class SaleListComponent implements OnInit {
 
-    contractListModel: ISpContractHps[];
+    contractListModel: ISpSearchSale[];
     dataTable: any;
     formSearch: FormGroup;
     setLocalDate = setLocalDate;
+    BookingPaymentTypeList = BookingPaymentTypeList;
+    BookingPaymentType = BookingPaymentType;
 
     hpsDropdown: DropDownModel[];
-    zoneDropdown: DropDownModel[];
-    groupDropdown: DropDownModel[];
-    typeDropdown: DropDownModel[];
 
     constructor(
-        private s_contract: ContractService,
-        private chRef: ChangeDetectorRef,
+        private s_sale: SaleService,
         private s_loader: LoaderService,
         private s_user: UserService,
         private router: Router,
         private fb: FormBuilder,
         private s_mStatus: MStatusService,
-        private s_zone: ZoneService,
-        private s_contractGroup: ContractGroupService,
-        private s_contractType: ContractTypeService
 
     ) {
         toastr.options = {
@@ -52,36 +48,27 @@ export class ContractListActiveComponent implements OnInit {
         const user = this.s_user.cookies;
         this.formSearch = this.fb.group({
             branchId: new FormControl(user.branchId, Validators.required),
-            status: new FormControl(''),
-            contractNo: new FormControl(''),
-            contractDate: new FormControl(''),
+            sellNo: new FormControl(''),
+            sellDate: new FormControl(''),
             hireName: new FormControl(''),
             hireIdCard: new FormControl(''),
             eNo: new FormControl(''),
             fNo: new FormControl(''),
-            contractGroup: new FormControl(''),
-            contractType: new FormControl(''),
-            contractPoint: new FormControl('')
+            bookingPaymentType: new FormControl('')
         });
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.s_loader.showLoader();
-        const api1 = this.s_mStatus.HPSDropdown();
-        const api2 = this.s_zone.DropDown();
-        const api3 = this.s_contractGroup.DropDown();
-        const api4 = this.s_contractType.DropDown();
         let form = this.formSearch.getRawValue();
         form = { ...form, status: 31 }
-        const api5 = this.s_contract.SearchContract(form);
-        const observe = combineLatest(api1, api2, api3, api4, api5).pipe(
+        const api1 = this.s_mStatus.HPSDropdown();
+        const api2 = this.s_sale.SearchSale(form);
+        const observe = combineLatest(api1, api2).pipe(
             map(x => {
                 return {
                     hpsDropdown: x[0],
-                    zoneDropdown: x[1],
-                    groupDropdown: x[2],
-                    typeDropdown: x[3],
-                    contractList: x[4]
+                    contractList: x[1]
                 }
             })
         );
@@ -90,20 +77,19 @@ export class ContractListActiveComponent implements OnInit {
             finalize(() => this.s_loader.onEnd())
         ).subscribe((x) => {
             this.hpsDropdown = x.hpsDropdown;
-            this.zoneDropdown = x.zoneDropdown;
-            this.groupDropdown = x.groupDropdown;
-            this.typeDropdown = x.typeDropdown;
             this.contractListModel = x.contractList;
             this.reInitDatatable();
-        }, () => toastr.error(message.failed));
+        }, () => {
+            toastr.error(message.error)
+        });
     }
 
     onSearch() {
         const form = this.formSearch.getRawValue();
-        this.s_contract.SearchContract(form).subscribe(x => {
+        this.s_sale.SearchSale(form).subscribe(x => {
             this.contractListModel = x;
             this.reInitDatatable();
-        }, () => toastr.error(message.failed));
+        }, () => toastr.error(message.error));
     }
 
     public initDatatable(): void {
@@ -149,8 +135,10 @@ export class ContractListActiveComponent implements OnInit {
         this.router.navigate(['credit/contract-canceled'], { queryParams: { contractId: contractId } })
     }
 
-    gotoDetail(contractId: number) {
-        this.router.navigate(['credit/detail'], { queryParams: { contractId: contractId } })
-    }
+    gotoDetail = (contractId: number, bookingId: number, saleId: number) =>
+        this.router.navigate(['sale/sale-detail'], {
+            queryParams: { contractId, bookingId, saleId }
+        });
+
 }
 

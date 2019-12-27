@@ -15,6 +15,7 @@ export class BookingModel {
     public idCard: string;
     public bookingDate: any;
     public bookingDepositType: number;
+    public bookDeposit: number;
     public bookingId: number;
     public bookingNo: string;
     public bookingPaymentType: number;

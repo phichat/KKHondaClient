@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { catchError, tap, map, finalize } from 'rxjs/operators';
 import { HttpService } from 'app/core/http.service';
 import { LoaderService } from 'app/core/loader/loader.service';
+import { DropDownModel } from 'app/models/drop-down-model';
+import { UserDropdownModel } from 'app/models/users/user-dropdown-model';
 
 @Injectable()
 export class UserService {
@@ -66,19 +68,6 @@ export class UserService {
   }
 
   get cookies(): IUserResCookie {
-    // const _cookie: IUserResCookie = {
-    //   id: JSON.parse(getCookie('id')),
-    //   adminName: JSON.parse(getCookie('adminName')),
-    //   fullName: JSON.parse(getCookie('fullName')),
-    //   userType: JSON.parse(getCookie('userType')),
-    //   branchId: JSON.parse(getCookie('branchId')),
-    //   branch: JSON.parse(getCookie('branch')),
-    //   branchName: JSON.parse(getCookie('branchName')),
-    //   // department: JSON.parse(getCookie('department')),
-    //   // name: JSON.parse(getCookie('name')),
-    //   // gId: JSON.parse(getCookie('gId')),
-    //   // groupPagePermission: JSON.parse(getCookie('groupPagePermission')),
-    // };
     return JSON.parse(localStorage.getItem('user-logged'));
   }
 
@@ -118,6 +107,12 @@ export class UserService {
     const apiURL = `${this.url}/LeaderValidate`;
     const params = { gid, userName, password };
     return this.http.get<number>(apiURL, { headers: this.getHeaders(), params });
+  }
+
+  GetUserDropdownById(id: string) {
+    const apiURL = `${this.url}/GetUserDropdownById`;
+    const params = { id };
+    return this.http.get<UserDropdownModel>(apiURL, { headers: this.getHeaders(), params });
   }
 
   private onCatch(error: any, caught: Observable<any>): Observable<any> {

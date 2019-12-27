@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CalculateConfig } from './calculate.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
@@ -12,6 +12,7 @@ import { setLocalDate, setZeroHours } from 'app/app.config';
 import { message } from 'app/app.message';
 import { CustomerService } from 'app/services/customers';
 import { LoaderService } from 'app/core/loader/loader.service';
+import { AmpherService, ProvinceService } from 'app/services/masters';
 
 declare var toastr: any;
 
@@ -20,7 +21,10 @@ declare var toastr: any;
   templateUrl: 'credit.component.html'
 })
 
-export class CreditComponent extends CalculateConfig implements OnInit {
+export class CreditComponent extends CalculateConfig implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.s_booking.destroy();
+  }
   constructor(
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
@@ -29,7 +33,9 @@ export class CreditComponent extends CalculateConfig implements OnInit {
     private s_customer: CustomerService,
     private router: Router,
     private s_loader: LoaderService,
-    private chRef: ChangeDetectorRef
+    private chRef: ChangeDetectorRef,
+    private s_ampher: AmpherService,
+    private s_province: ProvinceService
   ) {
     super();
     toastr.options = {
@@ -38,6 +44,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
     };
 
     this.userModel = this.s_user.cookies;
+    this.provinceDropdown = this.s_province.DropDown();
   }
 
   @ViewChild(ContractItemComponent) contractItem;
@@ -157,11 +164,33 @@ export class CreditComponent extends CalculateConfig implements OnInit {
       this.bookingNo = p.bookingNo;
       this.bookDepositState = p.deposit;
 
+      const province = this.findProvince(p.address);
+      const ampher = this.findAmpher(p.address);
+      const address = this.findAddress(p.address);
+      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }]
+      this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }]
+
+      this.provinceDropdown.subscribe(p => {
+        const pCode = p.find(o => o.text == province).value;
+        this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(pCode);
+        this.ampherDropdown.subscribe(a => {
+          const amp = a.find(o => o.amphorName == ampher);
+          this.formCalculate.patchValue({
+            ownerAddress: address,
+            ownerAmpherCode: amp.amphorCode,
+            ownerProvinceCode: pCode,
+            ownerZipCode: amp.zipcode
+          })
+        })
+      });
+
       this.formCalculate.patchValue({
         outStandingPrice: p.outStandingPrice,
         bookingPaymentType: p.bookingPaymentType,
         bookDeposit: p.deposit,
-        nowVat: p.vat
+        nowVat: p.vat,
+        contractHire: p.custCode,
+        contractOwner: p.custCode
       })
 
       if (this.formCalculate.get('returnDeposit').value == '0') {
@@ -273,8 +302,7 @@ export class CreditComponent extends CalculateConfig implements OnInit {
     fg.remain = this.calRemain(fg.netPrice, fg.interestPrice);
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
-    const interestP = this.calInstalmentPrice(fg.remain, __instalmentEnd);
-    fg.instalmentPrice = this.ceil10(interestP);
+    fg.instalmentPrice = fg.remain;
 
     // จำนวนค่าภาษีมูลค่าเพิ่ม
     fg.vatPrice = this.calVatPrice(fg.instalmentPrice, fg.nowVat);
@@ -293,17 +321,22 @@ export class CreditComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
-    const fg = this.formCalculate.getRawValue();
-    const form = {
-      calculate: fg,
-      contract: { 
-        ...this.contractModel, 
-        contractOwner: fg.contractOwner, 
-        contractHire: fg.contractHire 
-      },
+    let calculate = { ...this.formCalculate.getRawValue() };
+    calculate.firstPayment = setZeroHours(calculate.firstPayment);
+    const contract = {
+      ...this.contractModel,
+      contractHire: calculate.contractHire,
+      contractOwner: calculate.contractOwner,
+      ownerAddress: calculate.ownerAddress,
+      ownerProvinceCode: calculate.ownerProvinceCode,
+      ownerAmpherCode: calculate.ownerAmpherCode,
+      ownerZipCode: calculate.ownerZipCode
+    }
+    let form = {
+      calculate,
+      contract,
       contractItem: this.contractItem.contractItemModel
     };
-    form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
 
     if (this.mode === 'create') {
       this.onCreate(form);
@@ -317,19 +350,18 @@ export class CreditComponent extends CalculateConfig implements OnInit {
   }
 
   onCreate(obj: any) {
-    console.log(obj);
-
-    // this.s_calculate
-    //   .Create(obj.calculate, obj.contract, obj.contractItem)
-    //   .subscribe(
-    //     res => {
-    //       const x = res.json();
-    //       this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
-    //     },
-    //     () => {
-    //       toastr.error(message.error);
-    //     }
-    //   );
+    this.s_calculate
+      .Create(obj.calculate, obj.contract, obj.contractItem)
+      .subscribe(
+        res => {
+          const x = res.json();
+          toastr.success(message.created);
+          this.router.navigate(['credit/payment', x.contractId]);
+        },
+        () => {
+          toastr.error(message.error);
+        }
+      );
   }
 
   onEdit(obj: any) {

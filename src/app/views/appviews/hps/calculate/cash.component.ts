@@ -16,6 +16,7 @@ import { IPayment } from 'app/interfaces/payment.interface';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { ProvinceService, AmpherService } from 'app/services/masters';
 import { IMAmpher } from 'app/interfaces/masters';
+import { ContractItemModel } from 'app/models/credit';
 
 declare var toastr: any;
 
@@ -44,7 +45,6 @@ export class CashComponent extends CalculateConfig implements OnInit {
     };
 
     this.userModel = this.s_user.cookies;
-
     this.provinceDropdown = this.s_province.DropDown();
 
   }
@@ -60,8 +60,6 @@ export class CashComponent extends CalculateConfig implements OnInit {
 
   PaymentData = new BehaviorSubject(null);
   formPayment: IPayment;
-
-  @ViewChild(ContractItemComponent) contractItem;
   PaymentTypeList = PaymentTypeList;
   PaymentType = PaymentType;
   outStandingPriceState = 0;
@@ -226,7 +224,6 @@ export class CashComponent extends CalculateConfig implements OnInit {
           returnDepositPrice: p.deposit,
           depositPrice: p.deposit
         })
-        this.onChangeDepositPrice();
       } else {
         this.formCalculate.patchValue({
           netPrice: (p.outStandingPrice + p.deposit).toFixed(2)
@@ -253,35 +250,9 @@ export class CashComponent extends CalculateConfig implements OnInit {
       this.formCalculate.patchValue({
         firstPayment: new Date(p.creditCalculate.firstPayment)
       });
-      // this.model = p.creditCalculate;
 
       this.s_booking.changeData(p.booking);
-      this.s_calculate.changeData(this.formCalculate.getRawValue());
     })
-  }
-
-  onChangeDeposit() {
-    // เงินดาวน์ (บาท)
-    // มูลค่าสินค้า * เงินดาวน์(%)
-    const fg = this.formCalculate.getRawValue();
-    const depositPrice = Math.ceil(fg.outStandingPrice * (fg.deposit / 100));
-    const netPrice = (this.outStandingPriceState + this.bookDepositState) - depositPrice;
-    this.formCalculate.patchValue({
-      depositPrice,
-      netPrice
-    });
-  }
-
-  onChangeDepositPrice() {
-    // เงินดาวน์ (%)
-    // เงินดาวน์ * 100 / มูลค่าสินค้า
-    const fg = this.formCalculate.getRawValue();
-    const deposit = ((fg.depositPrice * 100) / fg.outStandingPrice).toFixed(2);
-    const netPrice = (this.outStandingPriceState + this.bookDepositState) - fg.depositPrice;
-    this.formCalculate.patchValue({
-      deposit,
-      netPrice
-    });
   }
 
   onReturnDeposit() {
@@ -306,7 +277,6 @@ export class CashComponent extends CalculateConfig implements OnInit {
         break;
     }
     this.formCalculate.patchValue({ ...fg });
-    this.onChangeDepositPrice();
     this.instalmentCalculate();
   }
 
@@ -359,17 +329,47 @@ export class CashComponent extends CalculateConfig implements OnInit {
   }
 
   onSubmit() {
-    const fg = this.formCalculate.getRawValue();
-    const form = {
-      calculate: fg,
-      contract: {
-        ...this.contractModel,
-        contractOwner: fg.contractOwner,
-        contractHire: fg.contractHire
-      },
-      contractItem: this.contractItem.contractItemModel
+    let calculate = { ...this.formCalculate.getRawValue() };
+    calculate.firstPayment = setZeroHours(calculate.firstPayment);
+    const contract = {
+      ...this.contractModel,
+      contractHire: calculate.contractHire,
+      contractOwner: calculate.contractOwner,
+      ownerAddress: calculate.ownerAddress,
+      ownerProvinceCode: calculate.ownerProvinceCode,
+      ownerAmpherCode: calculate.ownerAmpherCode,
+      ownerZipCode: calculate.ownerZipCode
+    }
+
+    let item = new ContractItemModel();
+    const vatUp = 1 + (calculate.nowVat / 100);
+    // ค่างวดถอด vat
+    const instalmentExcVat = (calculate.instalmentPrice / vatUp);
+    const balance = instalmentExcVat;
+    const balanceVatPrice = calculate.instalmentPrice - balance;
+    const balanceNetPrice = calculate.instalmentPrice;
+    item.contractBranchId = this.userModel.branchId;
+    item.status = 11; // ชำระครบ
+    item.instalmentNo = 0;
+    item.dueDate = calculate.firstPayment;
+    item.vatRate = calculate.nowVat;
+    item.balance = (balance);
+    item.balanceVatPrice = balanceVatPrice;
+    item.balanceNetPrice = (balanceNetPrice);
+    item.remain = 0;
+    item.remainVatPrice = 0;
+    item.remainNetPrice = 0;
+    item.initialPrice = 0;
+    item.principal = 0;
+    item.interestInstalment = 0;
+    item.principalRemain = 0;
+    item.updateBy = this.userModel.id;
+
+    let form = {
+      calculate,
+      contract,
+      contractItem: [item]
     };
-    form.calculate.firstPayment = setZeroHours(form.calculate.firstPayment);
 
     if (this.mode === 'create') {
       this.onCreate(form);
@@ -383,19 +383,17 @@ export class CashComponent extends CalculateConfig implements OnInit {
   }
 
   onCreate(obj: any) {
-    console.log(obj);
-
-    // this.s_calculate
-    //   .Create(obj.calculate, obj.contract, obj.contractItem)
-    //   .subscribe(
-    //     res => {
-    //       const x = res.json();
-    //       this.router.navigate(['credit/contract'], { queryParams: { mode: 'create', contractId: x.contractId } });
-    //     },
-    //     () => {
-    //       toastr.error(message.error);
-    //     }
-    //   );
+    this.s_calculate
+      .Create(obj.calculate, obj.contract, obj.contractItem)
+      .subscribe(
+        () => {
+          toastr.success(message.created);
+          this.router.navigate(['credit/contract-list/active']);
+        },
+        () => {
+          toastr.error(message.error);
+        }
+      );
   }
 
   onEdit(obj: any) {
