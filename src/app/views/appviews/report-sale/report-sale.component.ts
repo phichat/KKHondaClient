@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReportBookingService } from '../report-booking/report-booking.service';
+import { ReportSaleService } from './report-sale.service';
 import { AutoCompleteModel } from 'app/models/auto-complete-model';
 import { ReportSale } from './report-sale';
 import {
@@ -20,7 +20,7 @@ export class ReportSaleComponent implements OnInit {
 
   myDatePickerOptions = MyDatePickerOptions
 
-  constructor(private s_ReportBooking: ReportBookingService) { }
+  constructor(private s_ReportSale: ReportSaleService) { }
 
   ACBranch: AutoCompleteModel[];
   ACProductType: AutoCompleteModel[];
@@ -38,22 +38,22 @@ export class ReportSaleComponent implements OnInit {
     this.formModel.isPaymentType = '1';
     this.formModel.isSellDate = '1';
 
-    this.s_ReportBooking.GetSellNameAutoComplete().subscribe(x => {
+    this.s_ReportSale.GetSellNameAutoComplete().subscribe(x => {
       this.ACSell = mapDropDownnToAutoComplete(x);
     });
-    this.s_ReportBooking.GetBranchAutoComplete().subscribe(x => {
+    this.s_ReportSale.GetBranchAutoComplete().subscribe(x => {
       this.ACBranch = mapDropDownnToAutoComplete(x);
     });
-    this.s_ReportBooking.GetColorAutoComplete().subscribe(x => {
+    this.s_ReportSale.GetColorAutoComplete().subscribe(x => {
       this.ACColor = mapDropDownnToAutoComplete(x);
     });
-    this.s_ReportBooking.GetDesignAutoComplete().subscribe(x => {
+    this.s_ReportSale.GetDesignAutoComplete().subscribe(x => {
       this.ACDesign = mapDropDownnToAutoComplete(x);
     });
-    this.s_ReportBooking.GetProductTypeAutoComplete().subscribe(x => {
+    this.s_ReportSale.GetProductTypeAutoComplete().subscribe(x => {
       this.ACProductType = mapDropDownnToAutoComplete(x);
     });
-    this.s_ReportBooking.GetVersionAutoComplete().subscribe(x => {
+    this.s_ReportSale.GetVersionAutoComplete().subscribe(x => {
       this.ACVersion = mapDropDownnToAutoComplete(x);
     });
   }
@@ -71,25 +71,26 @@ export class ReportSaleComponent implements OnInit {
     }
 
     //ยี่ห้อ รุ่น แบบ สี
-    const brandTypeId = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
-    const version = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.version));
-    const design = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.design));
-    const color = (fm.brandType == '1' ? 0 : mapAutoCompleteIdToString(fm.color));
+    const brandTypeId = (fm.brandType == '1' || !fm.brandTypeId ? 0 : mapAutoCompleteIdToString(fm.brandTypeId));
+    const version = (fm.brandType == '1' || !fm.version ? 0 : mapAutoCompleteIdToString(fm.version));
+    const design = (fm.brandType == '1' || !fm.design ? 0 : mapAutoCompleteIdToString(fm.design));
+    const color = (fm.brandType == '1' || !fm.color ? 0 : mapAutoCompleteIdToString(fm.color));
     strParameter += "&brandType=" + fm.brandType;
     strParameter += "&brandTypeId=" + (brandTypeId || 0);
     strParameter += "&version=" + (version || 0);
     strParameter += "&design=" + (design || 0);
     strParameter += "&color=" + (color || 0);
 
+
     //ชื่อขาย 
-    const sellId = (fm.isSellName == '1' ? "" : fm.SellId);
+    const sellId = (fm.isSellName == '1' || !fm.SellId ? 0 : mapAutoCompleteIdToString(fm.SellId));
     strParameter += "&isSellName=" + fm.isSellName;
-    strParameter += "&SellId=" + (sellId || "");
+    strParameter += "&SellId=" + (sellId || 0);
 
     //สถานะใบจอง
-    const paymentTypeId = (fm.isPaymentType == '1' ? 0 : fm.paymentTypeId);
+    const paymentTypeId = (fm.isPaymentType == '1' || !fm.paymentTypeId ? 0 : fm.paymentTypeId);
     strParameter += "&isPaymentType=" + fm.isPaymentType;
-    strParameter += "&paymentTypeId=" + paymentTypeId;
+    strParameter += "&paymentTypeId=" + (paymentTypeId || 0);
 
     //วันที่ขาย
     const sDate = (fm.isSellDate == '1' ? "" : fm.sDate);

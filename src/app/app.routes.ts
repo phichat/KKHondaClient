@@ -3,19 +3,9 @@ import { Routes } from '@angular/router';
 import { StarterViewComponent } from './views/appviews/starterview.component';
 import { LoginComponent } from './views/appviews/login.component';
 import { BasicLayoutComponent } from './components/common/layouts/basicLayout.component';
-import {
-  ContractComponent,
-  CalculateComponent,
-  ContractDetailComponent,
-  ContractCanceledComponent
-} from './views/appviews/credit';
-import { ContractListActiveComponent } from './views/appviews/credit/contract-list/contract-list-active.component';
-import { ContractListCanceledComponent } from './views/appviews/credit/contract-list/contract-list-canceled.component';
-import { RptSummaryCloseContractComponent } from './views/appviews/credit/rpt-summary-close-contract/rpt-summary-close-contract.component';
+import * as Hps from './views/appviews/hps';
+import * as Sale from './views/appviews/sale';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
-import { PaymentComponent } from './views/appviews/credit/payment/payment.component';
-import { ContractListCloseContractComponent } from './views/appviews/credit/contract-list/contract-list-close-contract.component';
-import { ContractListOtherContractComponent } from './views/appviews/credit/contract-list/contract-list-other-contract.component';
 import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
 import { ReportCreditNoteComponent } from './views/appviews/report-credit-note/report-credit-note.component';
@@ -37,8 +27,66 @@ import { TagConFormEditComponent } from './views/appviews/ris/tag-con-form/tag-c
 import { TagClearMoneyListComponent } from './views/appviews/ris/tag-clear-money-list/tag-clear-money-list.component';
 import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/clear-money-create.component';
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
-import { ReportBalanceStock1Component } from './views/appviews/report-balance-stock/report-balance-stock1.component';
-import { ReportBalanceStock2Component } from './views/appviews/report-balance-stock/report-balance-stock2.component';
+import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
+import { RegisTagSecondHandComponent } from './views/appviews/report-ris/regis-tag-second-hand/regis-tag-second-hand.component';
+import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
+import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
+import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
+
+import { SummarySaleReportByTypeComponent } from './views/appviews/summary-sale-report-by-type/summary-sale-report-by-type.component';
+import { SummaryStockBalanceComponent } from './views/appviews/summary-stock-balance/summary-stock-balance.component';
+import { ContractGradePaymentComponent } from './views/appviews/contract-grade-payment/contract-grade-payment.component';
+import { SummaryDepositByDateComponent } from './views/appviews/summary-deposit-by-date/summary-deposit-by-date.component';
+import { ProductSellingProfitReportComponent } from './views/appviews/product-selling-profit-report/product-selling-profit-report.component';
+import { SummaryDepositReportComponent } from './views/appviews/summary-deposit-report/summary-deposit-report.component';
+import { ServiceCheckReportComponent } from './views/appviews/service-check-report/service-check-report.component';
+import { CreditNoteDetailsReportComponent } from './views/appviews/credit-note-details-report/credit-note-details-report.component';
+import { StockBalanceMainReportComponent} from './views/appviews/stock-balance-main-report/stock-balance-main-report.component';
+import { ReportRefundBookingComponent} from './views/appviews/report-refund-booking/report-refund-booking.component';
+import { ReportTopProductComponent} from './views/appviews/report-top-product/report-top-product.component';
+import { ReportTopProductSpareComponent} from './views/appviews/report-top-product-spare/report-top-product-spare.component';
+import { CommissionSaleComponent} from './views/appviews/commission-sale/commission-sale.component';
+import { CommissionEventComponent} from './views/appviews/commission-event/commission-event.component';
+import { TaxPurchaseComponent} from './views/appviews/tax-purchase/tax-purchase.component';
+import { TaxSaleComponent} from './views/appviews/tax-sale/tax-sale.component';
+import { TaxSaleSpareComponent} from './views/appviews/tax-sale-spare/tax-sale-spare.component';
+import { CustomerContractComponent } from './views/appviews/hps/customer-contract/customer-contract.component';
+import { CustomerContractListComponent } from './views/appviews/hps/customer-contract/customer-contract-list.component';
+import { CollectionLetterComponent } from './views/appviews/report-hps/collection-letter/collection-letter.component';
+
+import { McsSaveInvoiceListComponent } from './views/appviews/mcs/mcs-save-invoice/mcs-save-invoice-list.component';
+import { McsSaveInvoiceCreateComponent } from './views/appviews/mcs/mcs-save-invoice/mcs-save-invoice-create.component';
+import { McsSaveInvoiceDetailComponent } from './views/appviews/mcs/mcs-save-invoice/mcs-save-invoice-detail.component';
+
+import { McsSaveReceiptListComponent } from './views/appviews/mcs/mcs-save-receipt/mcs-save-receipt-list.component';
+import { McsSaveReceiptCreateComponent } from './views/appviews/mcs/mcs-save-receipt/mcs-save-receipt-create.component';
+import { McsSaveReceiptDetailComponent } from './views/appviews/mcs/mcs-save-receipt/mcs-save-receipt-detail.component';
+
+import { McsReportReceiveComponent } from './views/appviews/mcs/mcs-report-receive/mcs-report-receive.component';
+import { McsReportTaxPoComponent } from './views/appviews/mcs/mcs-report-tax-po/mcs-report-tax-po.component';
+
+import { PssSavePoListComponent } from './views/appviews/pss/pss-save-po/pss-save-po-list.component';
+import { PssSavePoCreateComponent } from './views/appviews/pss/pss-save-po/pss-save-po-create.component';
+import { PssSavePoDetailComponent } from './views/appviews/pss/pss-save-po/pss-save-po-detail.component';
+import { PssSavePoEditComponent } from './views/appviews/pss/pss-save-po/pss-save-po-edit.component';
+
+import { PssStockReceiveListComponent } from './views/appviews/pss/pss-stock-receive/pss-stock-receive-list.component';
+import { PssStockReceiveCreateComponent } from './views/appviews/pss/pss-stock-receive/pss-stock-receive-create.component';
+import { PssStockReceiveDetailComponent } from './views/appviews/pss/pss-stock-receive/pss-stock-receive-detail.component';
+
+import { PssReturnProductListComponent } from './views/appviews/pss/pss-return-product/pss-return-product-list.component';
+import { PssReturnProductCreateComponent } from './views/appviews/pss/pss-return-product/pss-return-product-create.component';
+import { PssReturnProductDetailComponent } from './views/appviews/pss/pss-return-product/pss-return-product-detail.component';
+import { PssReturnProductEditComponent } from './views/appviews/pss/pss-return-product/pss-return-product-edit.component';
+
+import { McsStockReceiveListComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-list.component';
+import { McsStockReceiveDetailComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-detail.component';
+import { McsStockReceiveCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-create.component';
+import { McsStockReceiveSingleCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-create.component';
+import { McsSavePoListComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-list.component';
+import { McsSavePoCreateComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-create.component';
+import { McsSavePoDetailComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-detail.component';
+import { McsSavePoEditComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-edit.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -61,33 +109,53 @@ export const ROUTES: Routes = [
     ]
   },
   {
+    path: 'sale', component: BasicLayoutComponent,
+    children: [
+      { path: 'sale-list', component: Sale.SaleListComponent },
+      { path: 'sale-detail', component: Sale.SaleDetailComponent }
+    ]
+  },
+  {
     path: 'credit', component: BasicLayoutComponent,
     children: [
-      { path: 'contract', component: ContractComponent },
-      { path: 'contract-canceled', component: ContractCanceledComponent },
-      {
-        path: 'contract-list',
-        children: [
-          { path: 'active', component: ContractListActiveComponent },
-          { path: 'canceled', component: ContractListCanceledComponent },
-          { path: 'close-contract', component: ContractListCloseContractComponent },
-          { path: 'other-contract', component: ContractListOtherContractComponent }
-        ]
-      },
-      { path: 'detail', component: ContractDetailComponent },
-      { path: 'calculate', component: CalculateComponent },
-      { path: 'rpt-sum-close-contract', component: RptSummaryCloseContractComponent },
-      { path: 'payment/:id', component: PaymentComponent }
+      { path: 'contract', component: Hps.ContractComponent },
+      { path: 'contract-canceled', component: Hps.ContractCanceledComponent },
+      { path: 'detail', component: Hps.ContractDetailComponent },
+      { path: 'calculate-credit', component: Hps.CreditComponent },
+      { path: 'calculate-hps', component: Hps.HpsComponent },
+      { path: 'calculate-leasing', component: Hps.LeasingComponent },
+      { path: 'calculate-cash', component: Hps.CashComponent },
+      { path: 'rpt-sum-close-contract', component: Hps.RptSummaryCloseContractComponent },
+      { path: 'payment/:id', component: Hps.PaymentComponent }
     ], canActivate: [GuardGuard]
   },
   {
     path: 'report', component: BasicLayoutComponent,
     children: [
       { path: 'booking', component: ReportBookingComponent },
+      { path: 'refund-report', component: ReportRefundBookingComponent },
       { path: 'credit-note', component: ReportCreditNoteComponent },
       { path: 'sale-report', component: ReportSaleComponent },
-      { path: 'balance-stock1', component: ReportBalanceStock1Component },
-      { path: 'balance-stock2', component: ReportBalanceStock2Component }
+      { path: 'summary-report-by-type', component:SummarySaleReportByTypeComponent},
+      { path: 'summary-stock-balance', component:SummaryStockBalanceComponent},
+      { path: 'contract-grade-payment', component:ContractGradePaymentComponent},
+      { path: 'summary-deposit-by-date', component:SummaryDepositByDateComponent},
+      { path: 'product-selling-profit-report', component:ProductSellingProfitReportComponent},
+      { path: 'summary-deposit-report', component:SummaryDepositReportComponent},
+      { path: 'service-check-report', component:ServiceCheckReportComponent},
+      { path: 'report-top-product', component:ReportTopProductComponent},
+      { path: 'report-top-spare', component:ReportTopProductSpareComponent},
+      
+      { path: 'credit-note-details-report', component:CreditNoteDetailsReportComponent},
+      { path: 'stock-balance-main-report', component:StockBalanceMainReportComponent},
+      { path: 'commission-sale', component:CommissionSaleComponent},
+      { path: 'commission-event', component:CommissionEventComponent},
+      { path: 'tax-purchase', component:TaxPurchaseComponent},
+      { path: 'tax-sale', component:TaxSaleComponent},
+      { path: 'tax-sale-spare', component:TaxSaleSpareComponent},
+
+      { path: 'collection-letter', component:CollectionLetterComponent},
+      
     ], canActivate: [GuardGuard]
   },
   {
@@ -111,7 +179,62 @@ export const ROUTES: Routes = [
       { path: 'clear-money-list', component: TagClearMoneyListComponent },
       { path: 'clear-money/:mode', component: ClearMoneyCreateComponent },
       { path: 'clear-money/:mode/:code', component: ClearMoneyCreateComponent },
-      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent }
+      { path: 'clear-money-detail/:code', component: ClearMoneyDetailComponent },
+      { path: 'receive-deposit-list', component: ReceiveDepositListComponent },
+      { path: 'receive-deposit-create', component: ReceiveDepositCreateComponent },
+      { path: 'receive-deposit-detail/:id', component: ReceiveDepositDetailComponent },
+      { path: 'rpt-regis-tag', component: RegisTagComponent },
+      { path: 'rpt-regis-vehicle-tax', component: RegisVehicleTaxComponent },
+      { path: 'rpt-regis-tag-second-hand', component: RegisTagSecondHandComponent },
+
+
+    ], canActivate: [GuardGuard]
+  },
+  {
+    path: 'mcs', component: BasicLayoutComponent,
+    children: [
+      // { path: 'mcs-save-po-list', component: McsSavePoListComponent },
+      // { path: 'mcs-save-po-create', component: McsSavePoCreateComponent },
+      // { path: 'mcs-save-po-detail/:code', component: McsSavePoDetailComponent },
+      // { path: 'mcs-save-po-edit/:code', component: McsSavePoEditComponent },
+
+      { path: 'mcs-stock-receive-list', component: McsStockReceiveListComponent },
+      { path: 'mcs-stock-receive-create', component: McsStockReceiveCreateComponent },
+      { path: 'mcs-stock-receive-detail/:code', component: McsStockReceiveDetailComponent },
+
+      // { path: 'mcs-stock-receive-single-create', component: McsStockReceiveSingleCreateComponent },
+      // { path: 'mcs-stock-receive-single-detail/:code', component: McsStockReceiveDetailComponent },
+
+      // { path: 'mcs-save-invoice-list', component: McsSaveInvoiceListComponent },
+      // { path: 'mcs-save-invoice-create', component: McsSaveInvoiceCreateComponent },
+      // { path: 'mcs-save-invoice-detail/:code', component: McsSaveInvoiceDetailComponent },
+
+      // { path: 'mcs-save-receipt', component: McsSaveReceiptListComponent },
+      // { path: 'mcs-save-receipt-create', component: McsSaveReceiptCreateComponent },
+      // { path: 'mcs-save-receipt-detail/:code', component: McsSaveReceiptDetailComponent },
+
+      // { path: 'mcs-report-receive', component: McsReportReceiveComponent },
+      // { path: 'mcs-report-tax-po', component: McsReportTaxPoComponent },
+    ], canActivate: [GuardGuard]
+  },
+  {
+    path: 'pss', component: BasicLayoutComponent,
+    children: [
+
+      // { path: 'pss-save-po-list', component: PssSavePoListComponent },
+      // { path: 'pss-save-po-create', component: PssSavePoCreateComponent },
+      // { path: 'pss-save-po-detail/:code', component: PssSavePoDetailComponent },
+      // { path: 'pss-save-po-edit/:code', component: PssSavePoEditComponent },
+
+      // { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
+      // { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
+      // { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
+
+      // { path: 'pss-return-product-list', component: PssReturnProductListComponent },
+      // { path: 'pss-return-product-create', component: PssReturnProductCreateComponent },
+      // { path: 'pss-return-product-detail/:code', component: PssReturnProductDetailComponent },
+      // { path: 'pss-return-product-edit/:code', component: PssReturnProductEditComponent },
+
     ], canActivate: [GuardGuard]
   },
 

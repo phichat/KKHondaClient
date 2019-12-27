@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs';
 import { ActionMode } from 'app/entities/general.entities';
-import { ConStatus, RisLocalStoreage as LS } from 'app/entities/ris.entities';
+import { ConStatus1, RisLocalStoreage as LS, ConStatus2 } from 'app/entities/ris.entities';
 import { LoadingEntities } from 'app/entities/loading.entities';
 
 export class RisConfig {
@@ -15,11 +15,13 @@ export class RisConfig {
   public myDatePickerOptions = MyDatePickerOptions;
   public setDateMyDatepicker = setDateMyDatepicker;
   public risUrl = `${appConfig.apiUrl}/Ris`;
-  public ConStatus = ConStatus;
+  public ConStatus1 = ConStatus1;
+  public ConStatus2 = ConStatus2;
+  
 
 
   public initDatatable(): void {
-    let table: any = $('table');
+    let table: any = $('table.set-dataTable');
     this.dataTable = table.DataTable({
       "scrollX": true,
       // "columns": [

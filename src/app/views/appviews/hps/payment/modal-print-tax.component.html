@@ -1,0 +1,32 @@
+<div class="modal-dialog modal-md">
+  <div class="modal-content animated fadeIn">
+    <form class="form-horizontal" action="" #frmPrintTax="ngForm">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">พิมพ์</h4>
+        <p>ใบกำกับภาษี</p>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" name="bookingId" [(ngModel)]="bookingId">
+        <div class="row">
+          <label for="" class="col-lg-4 control-label">เลขที่ใบกำกับภาษี</label>
+          <div class="col-lg-8">
+            <ng-select required [items]="taxList" bindValue="taxInvNo" bindLabel="taxInvNo" name="taxInvNo" ngModel>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+               {{item.taxInvNo}}<span *ngIf="item.disabled">&nbsp;(ยกเลิก)</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="onPrintTax(frmPrintTax.value)" class="btn btn-primary"
+          [disabled]="frmPrintTax.invalid">ตกลง</button>
+      </div>
+    </form>
+  </div>
+</div>

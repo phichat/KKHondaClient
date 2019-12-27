@@ -6,11 +6,14 @@ export class ContractDetailModel {
     public areaPayment: string;
     public contractPoint: string;
     public contractGroup: string;
+    public contractHirNo: string;
     public contractHire: string;
     public contractMate: string;
     public contractBooking: string;
+    public contractGurantorNo1: string;
     public contractGurantor1: string;
     public gurantorRelation1: string;
+    public contractGurantorNo2: string;
     public contractGurantor2: string;
     public gurantorRelation2: string;
     public createdBy: string;

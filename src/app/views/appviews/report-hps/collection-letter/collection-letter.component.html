@@ -1,0 +1,37 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายงานติดต่อลูกค้า (ทวงหนี้)</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>รายงานติดต่อลูกค้า (ทวงหนี้)</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <form class="form-horizontal" action="" #fm="ngForm" (ngSubmit)="onPrint(fm)" style="margin-bottom: 15em;">
+
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">เลขที่หนังสือ</label>
+      <div class="col-sm-8">
+        <select [(ngModel)]="formModel.bookNo" name="bookNo" class="form-control">
+          <option *ngFor="let item of bookNoDropdown" [value]="item.value">{{item.text}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button id="btnReport" type="submit" class="btn btn-success">พิมพ์</button>
+      </div>
+    </div>
+  </form>
+</div>

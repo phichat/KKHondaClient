@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { appConfig } from 'app/app.config';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TagSedConfig } from './tag-sed.config';
@@ -9,6 +8,8 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { message } from 'app/app.message';
 import { UserService } from 'app/services/users';
 import { DropDownModel } from 'app/models/drop-down-model';
+import { ReasonService } from 'app/services/masters';
+import { CarRegisService, SedRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -23,18 +24,22 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private chRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private s_user: UserService,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_reason: ReasonService,
+    private s_carRegis: CarRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+
+    this.s_reason.DropDown().subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
   }
 
   ngOnInit() {
@@ -48,7 +53,9 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
       totalPrice: new FormControl(0),
       price1: new FormControl(0),
       vatPrice1: new FormControl(0),
+      netPrice1: new FormControl(0),
       price2: new FormControl(0),
+      price3: new FormControl(0),
       price2Remain: new FormControl(0),
       borrowMoney: new FormControl(null),
       status: new FormControl(0),
@@ -58,24 +65,20 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
       reason: new FormControl(null, Validators.required),
       remark: new FormControl(null)
     });
-
-    const url = `${appConfig.apiUrl}/Reason/DropDown`;
-    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
   }
 
   ngAfterViewInit(): void {
     this.activeRoute.params.subscribe(x => {
-      const sedGetByCon = `${appConfig.apiUrl}/Ris/Sed/GetBySedNo`;
-      const conGetByCon = `${appConfig.apiUrl}/Ris/GetByConNoList`;
-      const params = { sedNo: x['code'] };
-      this.http.get(sedGetByCon, { params })
+      this.s_sedRegis.GetBySedNo(x['code'])
         .pipe(
-          mergeMap((sed) => {
-            const getConNo = (p: any) => this.http.get(conGetByCon, { params: { conListNo: sed['conList'] } })
-              .pipe(
-                tap(list => p['conNoList'] = list),
-                mapTo(p)
-              );
+          mergeMap((sed: any) => {
+            const conListNo = sed.conList.split(",");
+            const getConNo = (p: any) =>
+              this.s_carRegis.GetByConNoListReceiveTag(conListNo)
+                .pipe(
+                  tap(list => p['conNoList'] = list),
+                  mapTo(p)
+                );
             return getConNo(sed);
           })
         ).subscribe((x: any) => {
@@ -87,7 +90,9 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
             totalPrice: x.totalPrice,
             price1: x.price1,
             vatPrice1: x.vatPrice1,
+            netPrice1: x.netPrice1,
             price2: x.price2,
+            price3: x.price3,
             price2Remain: x.price2Remain,
             borrowMoney: x.borrowMoney,
             status: x.status,
@@ -137,15 +142,13 @@ export class TagSedFormDetailComponent extends TagSedConfig implements OnInit, A
         sedNo: this.formGroup.get('sedNo').value,
         reason: this.formGroup.get('reason').value
       };
-      // f.conList = this.ConListIsSelect.reduce((a, c) => [...a, c.bookingNo], []).join(',');
-      const url = `${appConfig.apiUrl}/Ris/Sed/Cancel`;
       this.s_loader.showLoader();
-      this.http.post(url, f).pipe(
+      this.s_sedRegis.Cancel(f).pipe(
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {
         toastr.success(message.created);
         this.router.navigate(['ris/sed-list']);
-      }, () => toastr.error(message.failed));
+      }, () => toastr.error(message.failed)); 
     }
   }
 

@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyDatePickerTHModule } from 'mydatepicker-th';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { ReportSaleService} from './report-sale.service';
 @NgModule({
   declarations: [ReportSaleComponent],
   imports: [
@@ -17,6 +17,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     MyDatePickerTHModule,
     NgSelectModule
+  ],
+  providers: [
+    ReportSaleService
   ]
 })
 export class ReportSaleModule { }

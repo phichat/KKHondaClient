@@ -17,8 +17,7 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-  <form class="form-horizontal" style="margin-bottom: 15em;" #form="ngForm" autocomplete="off" [formGroup]="formGroup"
-    (ngSubmit)="onSubmit()">
+  <form class="form-horizontal" style="margin-bottom: 15em;" #form="ngForm" autocomplete="off" [formGroup]="formGroup">
 
     <div class="ibox float-e-margins">
       <div class="ibox-content">
@@ -134,7 +133,8 @@
 
         <div class="hr-line-dashed"></div>
         <!-- <h4>เอกสาร/สิ่งที่รับคืน</h4> -->
-        <app-list-con-item-detail-component [$Mode]="mode" [$ConNo]="$ConNo" (ConItemOutput$)="$ConItemOutput.next($event)">
+        <app-list-con-item-detail-component [$Mode]="mode" [$ConNo]="$ConNo"
+          (ConItemOutput$)="$ConItemOutput.next($event)">
         </app-list-con-item-detail-component>
 
         <div class="hr-line-dashed"></div>
@@ -171,7 +171,7 @@
             </div>
           </div>
           <div class="col-md-3">
-            <label class="col-md-6 control-label">หักเงินยืม</label>
+            <label class="col-md-6 control-label is-required">หักเงินยืม</label>
             <div class="col-md-6">
               <input type="number" class="form-control" formControlName="totalClReceivePrice">
             </div>
@@ -192,16 +192,27 @@
               <input type="number" class="form-control" formControlName="totalAccruedExpense" readonly>
             </div>
           </div>
-          <div class="col-md-3"></div>
+          <div class="col-md-3">
+          </div>
         </div>
 
       </div>
     </div>
 
     <div class="row">
+      <div class="col-md-9"></div>
+      <div class="col-md-3">
+        <div class="alert alert-danger " [ngClass]="{'hide': balanceNotEqueaReceive == false}" role="alert">
+          "ยอดค้างจ่าย" ต้องเท่ากับ "0"
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col-md-6"></div>
       <div class="col-md-6 text-right">
-        <button class="btn btn-success" type="submit">บันทึกรายการ</button>
+        <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || balanceNotEqueaReceive"
+          (click)="onSubmit()">บันทึกรายการ</button>
       </div>
     </div>
   </form>

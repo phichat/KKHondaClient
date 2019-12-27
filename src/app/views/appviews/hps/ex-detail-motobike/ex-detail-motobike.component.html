@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-sm-6 m-b-sm">
+        <strong>หมวดหมู่ : </strong>
+        {{modelMotobike.catName}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>กลุ่ม/ประเภท : </strong>
+        {{modelMotobike.typeName}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ยี่ห้อ : </strong>
+        {{modelMotobike.brandName}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>โมเดล : </strong>
+        {{modelMotobike.modelCode}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>สี :</strong>
+        {{modelMotobike.colorName}}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 m-b-sm">
+        <strong>ราคาขายก่อนภาษี :</strong>
+        {{selePriceExcVat | number:'1.2-2':'en-US'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ส่วนลด :</strong>
+        {{modelBooking.distcountB | number:'1.2-2':'en-US'}} ({{modelBooking.distcountP | number:'1.2-2':'en-US'}}%)
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ภาษี :</strong>
+        {{modelBooking.vatPrice | number:'1.2-2':'en-US'}} ({{modelBooking.vat | number:'1.0-0':'en-US'}}%)
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>เงินมัดจำ :</strong>
+        {{modelBooking.deposit | number:'1.2-2':'en-US'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>รวมราคาขาย :</strong>
+        {{modelBooking.netPrice | number:'1.2-2':'en-US'}}
+    </div>
+    <div class="col-sm-6 m-b-sm">
+        <strong>ยอดคงค้าง :</strong>
+        {{modelBooking.outStandingPrice | number:'1.2-2':'en-US'}}
+    </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายงานจดทะเบียน (รถเก่า)</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>รายงานจดทะเบียน (รถเก่า)</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <form class="form-horizontal" style="margin-bottom: 15em;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">ประเภทการขาย</label>
+      <div class="col-sm-4">
+        <div class="radio radio-info">
+          <input id="paymentType1" type="radio" formControlName="paymentType" value="0">
+          <label for="paymentType1">ทั้งหมด</label>
+        </div>
+        <div class="radio radio-info radio-inline">
+          <input id="paymentType2" type="radio" formControlName="paymentType" value="1">
+          <label for="paymentType2">สด</label>
+        </div>
+        <div class="radio radio-info radio-inline">
+          <input id="paymentType3" type="radio" formControlName="paymentType" value="2">
+          <label for="paymentType3">ไฟแนนซ์</label>
+        </div>
+        <div class="radio radio-info radio-inline">
+          <input id="paymentType4" type="radio" formControlName="paymentType" value="3">
+          <label for="paymentType4">เช่าซื้อ</label>
+        </div>
+        <div class="radio radio-info radio-inline">
+          <input id="paymentType5" type="radio" formControlName="paymentType" value="4">
+          <label for="paymentType5">สินเชื่อ</label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">บริษัทไฟแนนซ์</label>
+      <div class="col-sm-4">
+        <div class="radio radio-info">
+          <input id="finance1" type="radio" formControlName="financeChecked" value="0">
+          <label for="finance1">ทั้งหมด</label>
+        </div>
+        <div class="radio radio-info">
+          <input id="finance2" type="radio" formControlName="financeChecked" value="1">
+          <label for="finance2">บริษัทไฟแนนซ์</label>
+        </div>
+        <ng-select [hideSelected]="true" multiple="true" bindLabel="name" formControlName="financeId" placeholder="เลือกบริษัทไฟแนนซ์"
+        >
+        </ng-select>
+      </div>
+    </div> -->
+
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">วันที่ขาย</label>
+      <div class="col-sm-8">
+        <div class="radio radio-info">
+          <input id=bookingDate1 type="radio" formControlName="sellDateChecked" value="0">
+          <label for=bookingDate1>ทั้งหมด</label>
+        </div>
+        <div class="radio radio-info">
+          <input id=bookingDate2 type="radio" formControlName="sellDateChecked" value="1">
+          <label for=bookingDate2>ตั้งแต่</label>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <thai-mat-datepicker id="dp1" formControlName="sDate"></thai-mat-datepicker>
+          </div>
+          <label for="inputEmail3" class="col-md-1">ถึง</label>
+          <div class="col-md-4">
+            <thai-mat-datepicker id="dp2" formControlName="eDate"></thai-mat-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row"> -->
+      <div class="form-group">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-6">
+          <button type="submit" class="btn btn-success" [disabled]="formGroup.invalid">
+            <i class="fa fa-cloud-download"></i> ดาวน์โหลด
+          </button>
+        </div>
+      </div>
+    <!-- </div> -->
+  </form>
+
+
+</div>

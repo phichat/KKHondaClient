@@ -48,23 +48,26 @@
                 <div class="form-group">
                     <label for="txtProductType" class="col-md-1 control-label">ยี่ห้อ</label>
                     <div class="col-md-4">
-                        <ng-select [items]="ACProductType" [hideSelected]="true" multiple="true" bindLabel="name" name="brandTypeId"
-                            [(ngModel)]="formModel.brandTypeId" placeholder="เลือกยี่ห้อ" [disabled]="formModel.brandType == '1'">
+                        <ng-select [items]="ACProductType" [hideSelected]="true" multiple="true" bindLabel="name"
+                            name="brandTypeId" [(ngModel)]="formModel.brandTypeId" placeholder="เลือกยี่ห้อ"
+                            [disabled]="formModel.brandType == '1'">
                         </ng-select>
                     </div>
 
                     <label for="txtVersion" class="col-md-1 control-label">รุ่น</label>
                     <div class="col-md-4">
-                        <ng-select [items]="ACVersion" [hideSelected]="true" multiple="true" bindLabel="name" name="version"
-                            [(ngModel)]="formModel.version" placeholder="เลือกรุ่น" [disabled]="formModel.brandType == '1'">
+                        <ng-select [items]="ACVersion" [hideSelected]="true" multiple="true" bindLabel="name"
+                            name="version" [(ngModel)]="formModel.version" placeholder="เลือกรุ่น"
+                            [disabled]="formModel.brandType == '1'">
                         </ng-select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="txtDesign" class="col-md-1 control-label">แบบ</label>
                     <div class="col-md-4">
-                        <ng-select [items]="ACDesign" [hideSelected]="true" multiple="true" bindLabel="name" name="design"
-                            [(ngModel)]="formModel.design" placeholder="เลือกแบบ" [disabled]="formModel.brandType == '1'">
+                        <ng-select [items]="ACDesign" [hideSelected]="true" multiple="true" bindLabel="name"
+                            name="design" [(ngModel)]="formModel.design" placeholder="เลือกแบบ"
+                            [disabled]="formModel.brandType == '1'">
                         </ng-select>
                     </div>
 
@@ -90,7 +93,8 @@
                     <label for="sell2">ชื่อพนักงานขาย</label>
                 </div>
                 <ng-select [items]="ACSell" [hideSelected]="true" multiple="true" bindLabel="name" name="SellId"
-                    [(ngModel)]="formModel.SellId" placeholder="เลือกพนักงานขาย" [disabled]="formModel.isSellName == '1'">
+                    [(ngModel)]="formModel.SellId" placeholder="เลือกพนักงานขาย"
+                    [disabled]="formModel.isSellName == '1'">
                 </ng-select>
             </div>
         </div>
@@ -99,16 +103,19 @@
             <label for="04" class="col-sm-2 control-label">กิจกรรมการขาย</label>
             <div class="col-sm-4">
                 <div class="radio radio-info">
-                    <input id="isPayment1" type="radio" name="isPaymentType" value="1" [(ngModel)]="formModel.isPaymentType">
+                    <input id="isPayment1" type="radio" name="isPaymentType" value="1"
+                        [(ngModel)]="formModel.isPaymentType">
                     <label for="isPayment1">ทั้งหมด</label>
                 </div>
                 <div class="radio radio-info">
-                    <input id="isPayment2" type="radio" name="isPaymentType" value="2" [(ngModel)]="formModel.isPaymentType">
+                    <input id="isPayment2" type="radio" name="isPaymentType" value="2"
+                        [(ngModel)]="formModel.isPaymentType">
                     <label for="isPayment2">เฉพาะ</label>
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <select class="form-control" id="ddlPaymentType" [disabled]="formModel.isPaymentType == '1'">
+                        <select class="form-control" id="ddlPaymentType" name="paymentTypeId"
+                            [(ngModel)]="formModel.paymentTypeId" [disabled]="formModel.isPaymentType == '1'">
                             <option value="" disabled selected></option>
                             <option value="1">เงินสด</option>
                             <option value="2">โอน</option>
@@ -116,6 +123,8 @@
                             <option value="4">บัตรเครดิต</option>
                             <option value="5">เครดิตเทอม</option>
                         </select>
+
+
                     </div>
                 </div>
             </div>
@@ -125,7 +134,8 @@
             <label for="05" class="col-sm-2 control-label">วันที่ขาย</label>
             <div class="col-sm-8">
                 <div class="radio radio-info">
-                    <input id=bookingDate1 type="radio" name="isSellDate" value="1" checked [(ngModel)]="formModel.isSellDate">
+                    <input id=bookingDate1 type="radio" name="isSellDate" value="1" checked
+                        [(ngModel)]="formModel.isSellDate">
                     <label for=bookingDate1>ทั้งหมด</label>
                 </div>
                 <div class="radio radio-info">

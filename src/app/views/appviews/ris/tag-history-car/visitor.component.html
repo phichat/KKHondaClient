@@ -1,0 +1,185 @@
+<form action="" [formGroup]="formGroup">
+
+  <ng-container *ngIf="$Mode != ActionMode.Detail">
+    <div class="row form-group">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">ค้นหาข้อมูลลูกค้า</label>
+          <div class="col-md-8">
+            <ng-select [items]="CustDropDown" [typeahead]="searchTypeahead" (change)="selectItemCust($event)"
+              dropdownPosition="auto" [virtualScroll]="true" placeholder="ค้นหาข้อมูลลูกค้า"
+              [loading]="searchCustLoading" [loadingText]="searchCustLoadingTxt">
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                <p class="no-margins">{{item.text}}</p>
+                <small class="text-muted">{{item.value}}</small>
+                <hr class="hr-dashed m-t-xs m-b-xs">
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+  </ng-container>
+
+  <section *ngIf="formGroup.get('typeCorporate').value == true">
+    <!-- <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">ประเภทบุคคล</label>
+          <div class="col-md-8">
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorOS1" disabled checked>
+              <label for="visitorOS1">{{EntityType.Corperation}}</label>
+            </div>
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorOS2" disabled>
+              <label for="visitorOS2">{{EntityType.Layman}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label is-required">เลขประจำตัวผู้เสียภาษี</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="idCard" />
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label is-required">ชื่อสถานที่ประกอบการ</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="fullName" />
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">เบอร์ติดต่อ</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="phone" />
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group"><label class="col-md-4 control-label">อีเมล์</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="email" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group"><label class="col-md-4 control-label">ที่อยู่</label>
+          <div class="col-md-8">
+            <textarea class="form-control" row form-groups="5" formControlName="address"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="formGroup.get('typePersonal').value == true">
+    <!-- <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">ประเภทบุคคล</label>
+          <div class="col-md-8">
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorOS3" disabled>
+              <label for="visitorOS3">{{EntityType.Corperation}}</label>
+            </div>
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorOS4" disabled checked>
+              <label for="visitorOS4">{{EntityType.Layman}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">เพศ</label>
+          <div class="col-md-8">
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorSexM" value="ชาย" formControlName="sex">
+              <label for="visitorSexM">ชาย</label>
+            </div>
+            <div class="radio radio-info radio-inline">
+              <input type="radio" id="visitorSexF" value="หญิง" formControlName="sex">
+              <label for="visitorSexF">หญิง</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label is-required">ชื่อ-นามสกุล</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="fullName" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group"><label class="col-md-4 control-label">ชื่อเล่น</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="nickName" />
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label is-required">บัตรประชาชน</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="idCard" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group">
+          <label class="col-md-4 control-label">เบอร์ติดต่อ</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="phone" />
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group"><label class="col-md-4 control-label">อีเมล์</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="email" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group"><label class="col-md-4 control-label">วันเกิด</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="birthDay">
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-lg-6">
+        <div class="form-group"><label class="col-md-4 control-label">ที่อยู่</label>
+          <div class="col-md-8">
+            <textarea class="form-control" row form-groups="5" formControlName="address"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>

@@ -1,8 +1,10 @@
 import { DropDownModel } from '../drop-down-model';
+import { SaleModel } from './sale-model';
 
 export class Payment {
     contract: Contract;
     booking: Booking;
+    sale: SaleModel;
     isPay: IsPay;
     isOutstanding: IsOutstanding;
     contractItem: ContractItem[];
@@ -18,19 +20,27 @@ export class PaymentFG {
     payDate: any;
     revenueStamp: number;
     payNetPrice: number;
-    fineSume: number;
-    fineSumeOther: number;
+    fineSum: number;
+    fineSumOther: number;
     payeer: string;
     balanceNetPrice: number;
     remark: string;
     updateBy: string;
     branchId: number;
-    documentRef: string;
     disCountPrice: number;
     disCountRate: number;
     totalPrice: number;
     status: number;
-    bankCode: string;
+
+    cutBalance: number;
+    discountInterest: number;
+    
+    paymentPrice: number;
+    discountPrice: number;
+    totalPaymentPrice: number;
+    accBankId: number;
+    paymentDate: Date;
+    documentRef: string;
 }
 
 export class Contract {
@@ -40,6 +50,7 @@ export class Contract {
     refNo: string;
     contractNo: string;
     contractDate: any;
+    contractStatus: number;
     statusDesc: string;
     contractHire: string;
     saleName: string;
@@ -70,7 +81,7 @@ export class IsOutstanding {
 }
 
 export class ContractItem {
-    isSlect: boolean;
+    isSelect: boolean;
     contractItemId: number;
     contractId: number;
     taxInvoiceNo: string;
@@ -82,7 +93,7 @@ export class ContractItem {
     paymentType: number;
     fineSum: number;
     fineSumRemain: number;
-    fineSumeOther: number;
+    fineSumOther: number;
     remark: string;
     payeer: string;
     status: number;

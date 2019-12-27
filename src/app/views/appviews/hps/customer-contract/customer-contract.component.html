@@ -1,0 +1,282 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>ติดต่อลูกค้า (ทวงหนี้)</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">หน้าแรก</a>
+            </li>
+            <li>
+                <a>ติดต่อลูกค้า (ทวงหนี้)</a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2 text-right pull-right">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div action="" [formGroup]="formHead">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h3>ติดต่อลูกค้า (รายสัญญา)</h3>
+            </div>
+            <div class="ibox-content">
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-lg-2 control-label">การติดต่อ</label>
+                        <div class="col-lg-8">
+                            <div class="radio radio-info radio-inline">
+                                <input required type="radio" formControlName="communicateType" [id]=1
+                                    value="ติดต่อทางหนังสือ">
+                                <label [for]=1>ติดต่อทางหนังสือ</label>
+                            </div>
+                            <div class="radio radio-info radio-inline">
+                                <input required type="radio" formControlName="communicateType" [id]=2
+                                    value="ติดต่อทางวาจา">
+                                <label [for]=2>ติดต่อทางวาจา</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-lg-6">
+                        <label class="col-lg-2 control-label">ที่อยู่</label>
+                        <div class="col-lg-8">
+                            <div class="radio radio-info radio-inline">
+                                <input required type="radio" formControlName="addressType" [id]=3
+                                    value="ใช้ที่อยู่ที่ติดต่อได้สะดวก">
+                                <label [for]=3>ใช้ที่อยู่ที่ติดต่อได้สะดวก</label>
+                            </div>
+                            <div class="radio radio-info radio-inline">
+                                <input required type="radio" formControlName="addressType" [id]=4
+                                    value="ใช้ที่อยู่ที่ตามทะเบียนบ้าน">
+                                <label [for]=4>ใช้ที่อยู่ที่ตามทะเบียนบ้าน</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div action="" [formGroup]="formSearch">
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-2 control-label">เลขที่สัญญา</label>
+                            <div class="col-lg-6">
+                                <ng-select formControlName="contractId" [items]="contractNoDropdown" bindLabel="text"
+                                    bindValue="value" (change)="onSelectContractNo()"></ng-select>
+                            </div>
+                            <div class="col-lg-2">
+                                <button type="button" class="btn btn-info" (click)="onSearch()">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                    ค้นหา
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-lg-5">
+                            <label class="col-lg-3 control-label">วันที่ทำสัญญา</label>
+                            <div class="col-lg-8">
+                                <thai-mat-datepicker formControlName="contractDate" disabled></thai-mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-2 control-label">ผู้เช่าซื้อ</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" formControlName="hireName" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-2 control-label">สถานะสัญญา</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" formControlName="status" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-2 control-label">ผู้ค้ำประกัน 1</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" formControlName="guarantorName1" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-2 control-label">ผู้ค้ำประกัน 2</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" formControlName="guarantorName2" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ibox">
+        <div class="ibox-content">
+            <table class="table table-hover nowrap set-dataTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>วันที่ดำเนินการ</th>
+                        <th>เลขที่หนังสือ</th>
+                        <th>เลขที่อ้างอิง</th>
+                        <th>เรื่อง</th>
+                        <th>ค่าใช้จ่าย</th>
+                        <th>สถานะดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of detailModel; let i=index">
+                        <td>
+                            <a (click)="onSelectDetail(item.cldId)" class="btn btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                                แก้ไข
+                            </a>
+                        </td>
+                        <td>{{setLocalDate(item.cldDate)}}</td>
+                        <td>{{item.cldBookNo}}</td>
+                        <td>{{item.cldReferNo}}</td>
+                        <td>{{item.cldSubject}}</td>
+                        <td>{{item.cldExpenses}}</td>
+                        <td *ngIf="item.cldStatus == 'อยู่ระหว่างดำเนินการ'; else tdElse;">
+                            <font color="red">{{item.cldStatus}}</font>
+                        </td>
+                        <ng-template #tdElse>
+                            <td>
+                                <font color="green">{{item.cldStatus}}</font>
+                            </td>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+            <div action="" [formGroup]="formDetail">
+                <div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-6">
+                            <label class="col-lg-3 control-label">วันที่ดำเนินการ</label>
+                            <div class="col-lg-9">
+                                <thai-mat-datepicker formControlName="cldDate"></thai-mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-6">
+                            <label class="col-lg-3 control-label">เลขที่หนังสือ</label>
+                            <div class="col-lg-9">
+                                <input type="text" class="form-control" formControlName="cldBookNo"
+                                    placeholder="AutoRun" readonly>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-lg-6">
+                            <label class="col-lg-3 control-label">เลขที่อ้างอิง</label>
+                            <div class="col-lg-9">
+                                <input type="text" class="form-control" formControlName="cldReferNo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-6">
+                            <label class="col-lg-3 control-label">เรื่อง</label>
+                            <div class="col-lg-9">
+                                <select class="form-control" formControlName="cldSubject">
+                                    <option value="ติดตามหนี้ ครั้งที่ 1">ติดตามหนี้ ครั้งที่ 1</option>
+                                    <option value="ติดตามหนี้ ครั้งที่ 2">ติดตามหนี้ ครั้งที่ 2</option>
+                                    <option value="บอกเลิกสัญญา">บอกเลิกสัญญา</option>
+                                    <option value="ฟ้องดำเนินคี">ฟ้องดำเนินคี</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-lg-6">
+                            <label class="col-lg-3 control-label">ค่าใช้จ่าย</label>
+                            <div class="col-lg-9">
+                                <input type="number" min="0" step="0.01" formControlName="cldExpenses"
+                                    class="form-control text-right">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-7">
+                        <label class="col-lg-3 control-label">ติดต่อกลับภายใน</label>
+                        <div class="col-lg-2">
+                            <input type="number" class="form-control" formControlName="cldComeback">
+                        </div>
+                        <label class="col-lg-1">วัน</label>
+                        <label class="col-lg-2 control-label">
+                            <font color="red">นัดชำระวันที่</font>
+                        </label>
+                        <div class="col-lg-4">
+                            <thai-mat-datepicker formControlName="cldPaymentDate"></thai-mat-datepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-7">
+                        <label class="col-lg-3 control-label">ผู้ดำเนินการ</label>
+                        <div class="col-lg-6">
+                            <select formControlName="cldOperatorId" class="form-control" disabled>
+                                <option *ngFor="let item of operatorDropdown" [value]="item.value">{{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-7">
+                        <label class="col-lg-3 control-label">ผลดำเนินการ</label>
+                        <div class="col-lg-6">
+                            <textarea rows="3" class="form-control" formControlName="cldTurnover"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-7">
+                        <label class="col-lg-3 control-label">วันที่ดำเนินการเสร็จ</label>
+                        <div class="col-lg-6">
+                            <thai-mat-datepicker formControlName="cldCompletDate"></thai-mat-datepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-7">
+                        <label class="col-lg-3 control-label">สถานะดำเนินการ</label>
+                        <div class="col-lg-6">
+                            <div *ngIf="formDetail.value.cldStatus == 'อยู่ระหว่างดำเนินการ'; else divElse;">
+                                <input style="color:red" type="text" class="form-control" formControlName="cldStatus" readonly>
+                            </div>
+                            <ng-template #divElse>
+                                <div>
+                                    <input style="color:green" type="text" class="form-control" formControlName="cldStatus" readonly>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div class="col-lg-3" *ngIf="formDetail.value.cldId != '0'">
+                            <button type="button" class="btn btn-info" (click)="onComplet()">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                ดำเนินการเสร็จแล้ว
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    <button type="button" class="btn btn-primary" (click)="onSave()">
+                        <i class="fa fa-save" aria-hidden="true"></i>
+                        บันทึก
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

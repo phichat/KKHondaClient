@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagAlListConfig } from './tag-al-list.config';
-import { appConfig } from 'app/app.config';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { AlRegisService } from 'app/services/ris';
+import { setZeroHours } from 'app/app.config';
 
 @Component({
   selector: 'app-tag-al-list',
@@ -10,27 +10,38 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./tag-al-list.component.scss']
 })
 export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDestroy {
-  
+
   ngOnDestroy(): void {
     this.destroyDatatable();
   }
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
-    private chRef: ChangeDetectorRef
+    private chRef: ChangeDetectorRef,
+    private s_alRegis: AlRegisService
   ) {
     super();
+    this.formSearch = this.fb.group({
+      sedNo: new FormControl(''),
+      alNo: new FormControl(''),
+      borrowerName: new FormControl(''),
+      createName: new FormControl(''),
+      createDate: new FormControl(''),
+      status: new FormControl(''),
+    })
   }
 
   ngOnInit() {
     this.formGroup = this.fb.group({
       SedList: this.fb.array([])
     });
+  }
 
-    const sedList = `${appConfig.apiUrl}/Ris/Al/All`;
-
-    this.http.get(sedList).subscribe((x: any[]) => {
+  onSearch() {
+    let form = { ...this.formSearch.value };
+    form = { ...form, createDate: setZeroHours(form.createDate) };
+    this.loading = 0;
+    this.s_alRegis.SearchAlList(form).subscribe((x: any[]) => {
       if (!x.length) {
         this.loading = 1;
         return;
@@ -38,6 +49,7 @@ export class TagAlListComponent extends TagAlListConfig implements OnInit, OnDes
       const res = x.reduce((a, c) => [...a, { ...c, IS_CHECKED: false, conList: "" }], []);
       this.setItemFormArray(res, this.formGroup, 'SedList');
       this.chRef.markForCheck();
+      this.reInitDatatable();
     }, () => {
       this.loading = 2;
     });

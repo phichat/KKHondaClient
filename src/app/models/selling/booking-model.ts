@@ -15,6 +15,7 @@ export class BookingModel {
     public idCard: string;
     public bookingDate: any;
     public bookingDepositType: number;
+    public bookDeposit: number;
     public bookingId: number;
     public bookingNo: string;
     public bookingPaymentType: number;
@@ -34,6 +35,7 @@ export class BookingModel {
     public freeWarranty: boolean;
     public bookingItem: Array<BookingItemModel>;
 
+    public cusSellCode: string;
     public cusSellName: string;
     public cusTaxNo: string;
     public cusTaxBranch: string;

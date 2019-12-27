@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { appConfig } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { TagSedListConfig } from './tag-sed-list.config';
+import { SedRegisService } from 'app/services/ris';
+import { FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-tag-sed-list',
@@ -15,25 +16,38 @@ export class TagSedListComponent extends TagSedListConfig implements OnInit {
   }
 
   constructor(
-    private http: HttpClient
+    private s_sedRegis: SedRegisService,
+    private fb: FormBuilder
   ) {
     super();
+    this.formSearch = this.fb.group({
+      sedNo: new FormControl(''),
+      createDate: new FormControl(''),
+      createName: new FormControl(''),
+      status: new FormControl()
+    })
   }
 
   ngOnInit() {
 
-    const apiURL = `${appConfig.apiUrl}/Ris/Sed/All`;
-    this.http.get(apiURL).subscribe((x: any[]) => {
-      if (x.length == 0) {
-        this.loading = 1;
-        return;
-      }
-      this.SedList = x;
-      
-      this.reInitDatatable();
-    }, () => {
-      this.loading = 2;
-    });
+  }
+
+  onSearch() {
+    let form = { ...this.formSearch.value };
+    form = { ...form, createDate: setZeroHours(form.createDate) };
+    this.loading = 0
+    this.s_sedRegis.SearchSedList(form)
+      .subscribe((x: any[]) => {
+        if (x.length == 0) {
+          this.loading = 1;
+          return;
+        }
+        this.SedList = x;
+
+        this.reInitDatatable();
+      }, () => {
+        this.loading = 2;
+      });
 
   }
 

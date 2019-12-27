@@ -8,11 +8,11 @@
                         <h5>{{item.name}}</h5>
                     </div>
                     <div class="ibox-content">
-                        <h1 class="no-margins">{{item.totalPrice | number:'1.2-2'}}</h1>
+                        <h1 class="no-margins">{{item.totalPrice | number:'1.2-2':'en-US'}}</h1>
                         <strong>บาท</strong>
                     </div>
                     <div class="ibox-footer">
-                        <div class="stat-percent font-bold" [style.color]="item.color">{{item.itemAmount | number}} คัน
+                        <div class="stat-percent font-bold" [style.color]="item.color">{{item.itemAmount | number:'1.0-0':'en-US'}} คัน
                         </div>
                         จำนวน
                     </div>
@@ -33,10 +33,10 @@
                                 <strong>{{item.name}}</strong>
                             </td>
                             <td class="text-right">
-                                <strong>{{item.itemAmount | number}}</strong>
+                                <strong>{{item.itemAmount | number:'1.0-0':'en-US'}}</strong>
                             </td>
                             <td class="text-right">
-                                <strong>{{item.totalPrice | number:'1.2-2'}}</strong>
+                                <strong>{{item.totalPrice | number:'1.2-2':'en-US'}}</strong>
                             </td>
                         </tr>
                     </tbody>
@@ -48,7 +48,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="flot-chart m-b-md">
-                    <div *ngIf="isUpdateChart" flotChart class="flot-chart-content" [options]="flotOptions" [dataset]="flotDataset"></div>
+                    <div flotChart class="flot-chart-content" [options]="flotOptions" [dataset]="flotDataset"></div>
                 </div>
             </div>
         </div>
@@ -77,11 +77,11 @@
                             <tbody>
                                 <tr *ngFor="let item of bookingDetail; let i=index;">
                                     <td>{{i+1}}</td>
-                                    <td>{{item.bookingDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{setLocalDate(item.bookingDate)}}</td>
                                     <td>{{item.bookingNo}}</td>
                                     <td>{{item.bookingFullName}}</td>
                                     <td>{{item.branchName}}</td>
-                                    <td>{{item.bookSellPrice | number:'1.2-2'}}</td>
+                                    <td>{{item.bookSellPrice | number:'1.2-2':'en-US'}}</td>
                                     <td>{{item.bookingPaymentTypeDesc}}</td>
                                     <td>{{item.bookingStatus}}</td>
                                     <td>{{item.brandName}}</td>

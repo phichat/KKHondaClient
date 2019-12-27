@@ -17,9 +17,80 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox">
+    <div class="ibox-title">
+      <h3>ค้นหาข้อมูลรอจดทะเบียน</h3>
+    </div>
+    <div class="ibox-content">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ประเภทการซื้อ</label>
+            <div class="col-lg-8">
+              <div formArrayName="bookingPaymentType" *ngFor="let item of bookingPaymentType.controls; let i = index;"
+                class="checkbox checkbox-info checkbox-inline">
+                <input type="checkbox" [formControlName]="i" id="bt{{i}}" value="{{BookingPaymentTypeList[i].id}}">
+                <label for="bt{{i}}">{{BookingPaymentTypeList[i].name}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบขาย</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="sellNo">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้ถือกรรมสิทธิ</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="regisName">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้ครอบครอง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="bookName">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่บัตรประชาชน</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="bookIdCard">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขเครื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="eNo">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขโครง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="fNo">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   <div class="ibox float-e-margins">
     <div class="ibox-content">
-      <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+      <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
         <thead>
           <tr>
             <th class="text-center">ลำดับ</th>
@@ -27,8 +98,8 @@
             <th>เลขที่ใบขาย</th>
             <th>เลขที่ใบจอง</th>
             <th>รับเรื่องจดทะเบียน</th>
-            <th>ชื่อจดทะเบียน</th>
-            <th>ผู้จอง</th>
+            <th>ผู้ถือกรรมสิทธิ</th>
+            <th>ผู้ครอบครอง</th>
             <th>บัตรประชาชน</th>
             <th>เบอร์ติดต่อ</th>
             <th>หมายเลขเครื่อง</th>
@@ -52,7 +123,7 @@
                   <br>
                   <p>มีบางอย่างผิดพลาด</p>
                 </div>
-                <div *ngSwitchDefault>
+                <div *ngSwitchCase="0">
                   <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                   <br>
                   <p>รอสักครู่...</p>
@@ -80,13 +151,13 @@
                   <i class="fa fa-pencil"></i> บันทึกรับเรื่อง
                 </a>
               </td>
-              <td>{{item.regisName}}</td>
-              <td>{{item.bookTitleName}}{{item.bookFName}} {{item.bookSName}}</td>
+              <td>{{item.ownerFullName}}</td>
+              <td>{{item.hireFullName}}</td>
               <td>{{item.bookIdCard}}</td>
               <td>{{item.bookContractNo}}</td>
               <td>{{item.eNo}}</td>
               <td>{{item.fNo}}</td>
-              <td [attr.data-order]="item.bookNetPrice" class="text-right">{{item.bookNetPrice | number:'1.2-2'}}</td>
+              <td [attr.data-order]="item.bookNetPrice" class="text-right">{{item.bookNetPrice | number:'1.2-2':'en-US'}}</td>
               <td [attr.data-order]="i">
                 {{displayLocalDate(item.sellDate)}}
               </td>

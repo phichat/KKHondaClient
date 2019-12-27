@@ -1,15 +1,16 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { ModelUser } from 'app/models/users';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { DropDownModel } from 'app/models/drop-down-model';
 import { appConfig } from 'app/app.config';
 import { TagClConfig } from './tag-cl.config';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, mapTo } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { ReasonService } from 'app/services/masters';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { ClRegisService, AlRegisService } from 'app/services/ris';
 
 declare var toastr: any;
 @Component({
@@ -20,24 +21,24 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
+    private s_reason: ReasonService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private s_clRegis: ClRegisService,
+    private s_alRegis: AlRegisService
   ) {
     super();
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
+    this.mUser = this.s_user.cookies;
+    this.s_reason.DropDown().subscribe(x => this.reasonDropdown = x);
   }
-  checkedAll: boolean;
-  mUser: ModelUser;
-  bankingsDropdown = new Array<DropDownModel>();
-
-  @ViewChild("receivePrice") inputReceivePrice: ElementRef;
+  PaymentData = new BehaviorSubject(null);
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -47,45 +48,36 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
       refundId: new FormControl(null),
       refundName: new FormControl(null),
       balancePrice: new FormControl(null),
-      receivePrice: new FormControl(null),
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
       netPrice: new FormControl(null),
-      bankCode: new FormControl(null),
-      bankName: new FormControl(null),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(null),
       documentRef: new FormControl(null),
-      paymentType: new FormControl(null),
+      paymentType: new FormControl({ value: null, disabled: true }),
       branchId: new FormControl(null),
       createDate: new FormControl(null),
       createBy: new FormControl(null),
       createName: new FormControl(null),
+      updateDate: new FormControl(null),
+      updateBy: new FormControl(this.mUser.id, Validators.required),
       remark: new FormControl(null),
-      reason: new FormControl(null),
+      reason: new FormControl(null, Validators.required),
       status: new FormControl(null),
       statusDesc: new FormControl(null),
       AlList: this.fb.array([])
     });
 
-    const url = `${appConfig.apiUrl}/Reason/DropDown`;
-    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
-
     this.loadingAlList();
-
-    this.s_user.currentData.subscribe(x => {
-      if (!x) return;
-      this.chRef.markForCheck();
-      this.formGroup.patchValue({ updateBy: x.id });
-      this.chRef.detectChanges();
-    });
   }
 
   loadingAlList() {
     this.activeRoute.params.subscribe(x => {
-      const GetByClNo = `${appConfig.apiUrl}/Ris/Cl/GetByClNo`;
-      const GetByAlNo = `${appConfig.apiUrl}/Ris/Al/GetByAlNo`;
-      const params = { clNo: x['code'] }
-      this.http.get(GetByClNo, { params })
+      this.s_clRegis.GetByClNo(x['code'])
         .pipe(
           mergeMap((al) => {
-            const getConNo = (p: any) => this.http.get(GetByAlNo, { params: { alNo: al['alNo'] } })
+            const getConNo = (p: any) => this.s_alRegis.GetByAlNo(al['alNo'])
               .pipe(
                 tap(al => p['AlList'] = [al]),
                 mapTo(p)
@@ -93,14 +85,31 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
             return getConNo(al);
           })
         ).subscribe((o: any) => {
+          const paymentDate: IPayment = {
+            paymentPrice: o.paymentPrice,
+            discountPrice: o.discount,
+            totalPaymentPrice: o.totalPaymentPrice,
+            paymentDate: o.paymentDate,
+            accBankId: o.accBankId,
+            documentRef: o.documentRef,
+            options: {
+              invalid: false,
+              disabled: true
+            }
+          };
+          this.PaymentData.next(paymentDate);
+
           this.formGroup.patchValue({
             clNo: o.clNo,
             alNo: o.alNo,
             refundName: o.refundName,
             balancePrice: o.balancePrice,
-            receivePrice: o.receivePrice,
+            paymentPrice: o.paymentPrice,
+            discountPrice: o.discountPrice,
+            totalPaymentPrice: o.totalPaymentPrice,
+            paymentDate: o.paymentDate,
             netPrice: o.netPrice,
-            bankName: o.bankName,
+            accBankId: o.accBankId,
             documentRef: o.documentRef,
             paymentType: o.paymentType.toString(),
             remark: o.remark,
@@ -138,15 +147,19 @@ export class TagClFormDetailComponent extends TagClConfig implements OnInit {
       updateBy: f.updateBy,
       remark: f.remark
     }
-    
+
     this.s_loader.showLoader();
-    const url = `${appConfig.apiUrl}/Ris/Cl/Cancel`;
-    this.http.post(url, f).pipe(
+    this.s_clRegis.Cancel(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.created);
       this.router.navigate(['ris/cl-list']);
     }, () => toastr.error(message.failed));
 
+  }
+
+  printCl() {
+    const url = `${appConfig.reportUrl}/RIS/index.aspx?clNo=${this.formGroup.get('clNo').value}&userId=${this.formGroup.get('updateBy').value}&formCl=true`;
+    window.open(url, '_blank');
   }
 }

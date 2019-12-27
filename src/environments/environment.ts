@@ -4,5 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'http://localhost:53076/api',
+  reportUrl: 'http://localhost:58874',
+  apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice'
 };

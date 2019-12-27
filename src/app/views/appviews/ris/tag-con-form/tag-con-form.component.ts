@@ -1,15 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TagConFormConfig } from './tag-con-form.config';
-import { HttpClient } from '@angular/common/http';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { finalize, mergeMap, tap, map } from 'rxjs/operators';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
-import { combineLatest } from 'rxjs';
-import { DropDownModel } from 'app/models/drop-down-model';
-import { appConfig } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
+import { CarRegisService } from 'app/services/ris';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { empty } from 'rxjs';
 declare var toastr: any;
 
 @Component({
@@ -23,43 +23,74 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     this.TagListItem$.next(null);
   }
 
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    paymentDate: new Date(),
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private s_loader: LoaderService,
     private chRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
     private s_user: UserService,
-    private router: Router
+    private router: Router,
+    private s_carRegis: CarRegisService
   ) {
     super()
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
     }
-
-
+    this.mUser = this.s_user.cookies;
+    this.formPayment = this.paymentData;
+    this.PaymentData.next(this.paymentData);
   }
 
   ngOnInit() {
-    // this.s_loader.showLoader();
-
     this.formGroup = this.fb.group({
       bookingNo: new FormControl(null),
-      bookingStatus: new FormControl(1),
+      bookingDate: new FormControl(new Date(), Validators.required),
+      status1: new FormControl(1),
       createDate: new FormControl(new Date()),
-      createBy: new FormControl(null),
+      createBy: new FormControl(this.mUser.id, Validators.required),
       updateDate: new FormControl(null),
       updateBy: new FormControl(null),
-      branchId: new FormControl(null),
+      branchId: new FormControl(this.mUser.branchId, Validators.required),
       reasonCode: new FormControl(null),
       eNo: new FormControl(null, Validators.required),
       fNo: new FormControl(null, Validators.required),
       price1: new FormControl(null),
       cutBalance: new FormControl(null),
+      netPrice1: new FormControl(null),
       vatPrice1: new FormControl(null),
       price2: new FormControl(null),
-      totalPrice: new FormControl(null)
+      price3: new FormControl(null),
+      totalPrice: new FormControl(null),
+      
+      paymentType: new FormControl('1', Validators.required),
+      paymentPrice: new FormControl(null),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(null),
+      documentRef: new FormControl(null),
+
+      remark: new FormControl(null),
+      ownerCode: new FormControl(null, Validators.required),
+      ownerName: new FormControl(null, Validators.required),
+      visitorCode: new FormControl(null, Validators.required),
+      visitorName: new FormControl(null, Validators.required),
+      province: new FormControl(null),
+      tagNo: new FormControl(null),
+      typeName: new FormControl(null),
+      brandName: new FormControl(null),
+      modelName: new FormControl(null),
+      colorName: new FormControl(null)
     });
 
     this.TagListItem$.subscribe(x => {
@@ -67,78 +98,121 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
       if (!x) return;
       const price1 = x.reduce((a, c) => a += c.itemPrice1, 0);
       const price2 = x.reduce((a, c) => a += c.itemPrice2, 0);
+      const price3 = x.reduce((a, c) => a += c.itemPrice3, 0);
       const vatPrice1 = x.reduce((a, c) => a += c.itemVatPrice1, 0);
-      const totalPrice = price1 + vatPrice1 + price2;
+      const netPrice1 = x.reduce((a, c) => a += c.itemNetPrice1, 0);
+      const totalPrice = price1 + vatPrice1 + price2 + price3;
       this.formGroup.patchValue({
         price1: price1,
         cutBalance: price1 + vatPrice1,
         price2: price2,
+        price3: price3,
         vatPrice1: vatPrice1,
+        netPrice1: netPrice1,
         totalPrice: totalPrice
-      })
+      });
+
+      const discountPrice = this.formPayment ? this.formPayment.discountPrice : 0;
+      this.formPayment = {
+        ...this.formPayment,
+        paymentPrice: netPrice1,
+        discountPrice: discountPrice,
+        totalPaymentPrice: netPrice1 - discountPrice
+      }
+      this.PaymentData.next(this.formPayment);
       this.chRef.detectChanges();
     });
 
-    this.activeRoute.params
-      .pipe(
-        tap(() => this.s_loader.showLoader()),
-        mergeMap(x => {
-          const url = `${this.risUrl}/GetCarBySellNo`;
-          const params = { sellNo: x['code'] }
-          return combineLatest(
-            this.http.get(url, { params }),
-            this.s_user.currentData
-          ).pipe(
-            map(o => {
-              return {
-                car: o[0] as any,
-                currentUser: o[1]
-              }
-            })
-          )
-        })
-      ).subscribe(x => {
-        this.chRef.markForCheck();
-        this.$Car.next(x.car);
-        this.mUser = x.currentUser;
-        this.formGroup.patchValue({
-          ...x.car,
-          branchId: x.currentUser.branch,
-          createBy: x.currentUser.id
-        });
-        this.s_loader.onEnd()
-        this.chRef.detectChanges();
+    this.activeRoute.params.pipe(
+      map(x => !x['code'] ? empty() : x['code']),
+      mergeMap(x => {
+        if (!x) return  empty();
+        this.s_loader.showLoader();
+        return this.s_carRegis.GetCarBySellNo(x)
       })
+    ).subscribe({
+      next: x => {
+        this.chRef.markForCheck();
+        if (!x) return;
+        this.$Motobike.next(x);
+        this.formGroup.patchValue({
+          ...x,
+          eNo: x.engineNo,
+          fNo: x.frameNo
+        });
+        this.chRef.detectChanges();
+      },
+      complete: () => {
+        this.s_loader.onEnd();
+      }
+    });
+
+    this.TagHistory$.subscribe(x => {
+      if (!x) return;
+      this.formGroup.patchValue({
+        tagNo: x.tagNo,
+        province: x.province
+      })
+    })
+  }
+
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
+    });
   }
 
   onSubmit() {
     let f = { ...this.formGroup.value };
     let his = {
       ...this.TagHistory$.value,
-      carId: 0,
+      // carId: 0,
       branchId: f.branchId,
       eNo: f.eNo,
-      fNo: f.fNo
+      fNo: f.fNo,
+      ownerCode: f.ownerCode,
+      visitorCode: f.visitorCode,
+      typeName: f.typeName,
+      brandName: f.brandName,
+      modelName: f.modelName,
+      colorName: f.colorName,
     };
     let listItem = this.TagListItem$.value;
     listItem = listItem.reduce((a, c) => [...a, { ...c, runId: 0, bookingId: 0 }], []);
 
+    f = {
+      ...f,
+      bookingId: 0,
+      bookingDate: setZeroHours(f.bookingDate),
+      createDate: (f.createDate as Date).toISOString()
+    }
+
     const form = {
-      tagRegis: { ...f, bookingId: 0, createDate: (f.createDate as Date).toISOString() },
+      tagRegis: f,
       tagHistory: his,
       tagListItem: listItem
     };
 
-    // console.log(form);
-
     this.s_loader.showLoader();
-    const url = `${this.risUrl}`;
-    this.http.post(url, form)
+    this.s_carRegis.Post(form)
       .pipe(
         finalize(() => this.s_loader.onEnd())
       ).subscribe(() => {
         toastr.success(message.created);
-        this.router.navigate(['ris/con-form-create']);
-      }, () => toastr.error(message.failed));
+        this.router.navigate(['ris/con-list']);
+      }, (e) => {console.log(e); toastr.error(message.failed)});
   }
+
+  openHistory() {
+    // this.activeRoute.params.subscribe(x => this.$SellNo.next(x['code']));
+    // this.$FNo.next(this.formGroup.get('fNo').value);
+    // this.$ENo.next(this.formGroup.get('eNo').value);
+  }
+
 }

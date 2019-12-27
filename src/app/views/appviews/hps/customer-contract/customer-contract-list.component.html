@@ -1,0 +1,44 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox">
+        <div class="ibox-content">
+            <a class="btn btn-info" (click)="onCreate()">
+                <i class="fa fa-plus"></i>
+                เพิ่มรายการ</a><br><br>
+                <table class="table table-hover nowrap set-dataTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ลำดับ</th>
+                        <th>เลขที่สัญญา</th>
+                        <th>วันที่ทำสัญญา</th>
+                        <th>การติดต่อ</th>
+                        <th>ที่อยู่</th>
+                        <th>ผู้เช่าซื้อ</th>
+                        <th>ผู้ค้ำประกัน 1</th>
+                        <th>ผู้ค้ำประกัน 2</th>
+                        <th>สถานะสัญญา</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of datas; let i=index;">
+                        <td>
+                            <a (click)="onEdit(item.contractId)"
+                                class="btn btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                                แก้ไข
+                            </a>
+                        </td>
+                        <td>{{i+1}}</td>
+                        <td>{{item.contractNo}}</td>
+                        <td>{{item.contractDate}}</td>
+                        <td>{{item.communicateType}}</td>
+                        <td>{{item.addressType}}</td>
+                        <td>{{item.contractHire}}</td>
+                        <td>{{item.contractGurantor1}}</td>
+                        <td>{{item.contractGurantor2}}</td>
+                        <td>{{item.statusDesc}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>

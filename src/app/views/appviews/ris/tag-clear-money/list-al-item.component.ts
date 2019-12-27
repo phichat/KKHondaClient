@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { IAlRes } from 'app/interfaces/ris';
 import { ClearMoneyService } from './clear-money.service';
+import { AlRegisService } from 'app/services/ris';
 
 @Component({
     selector: 'app-list-al-item-component',
@@ -13,8 +14,7 @@ import { ClearMoneyService } from './clear-money.service';
 export class ListAlItemComponent extends ListAlItemConfig implements OnInit {
 
     constructor(
-        private http: HttpClient,
-        private s_clearMoney: ClearMoneyService
+        private s_alRegis: AlRegisService
     ) {
         super();
     }
@@ -27,8 +27,7 @@ export class ListAlItemComponent extends ListAlItemConfig implements OnInit {
             }),
             mergeMap(x => {
                 if (x == null) return of([]);
-                const params = { sedNo: x.sedNo };
-                return this.http.get<IAlRes[]>(`${this.risUrl}/Al/GetBySedNo`, { params });
+                return this.s_alRegis.GetBySedNo(x.sedNo);
             })
         ).subscribe((x: IAlRes[]) => {
             if (!x.length) {

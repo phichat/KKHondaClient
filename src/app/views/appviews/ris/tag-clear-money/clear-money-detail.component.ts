@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ElementRef } from '@angular/core';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { appConfig } from 'app/app.config';
@@ -10,7 +9,8 @@ import { ClearMoneyConfig } from './clear-money.config';
 import { IRevListRes, ISedRes, IRevWithSedItem } from 'app/interfaces/ris';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, combineLatest } from 'rxjs';
-import { DropDownModel } from 'app/models/drop-down-model';
+import { ReasonService } from 'app/services/masters';
+import { RevRegisService, SedRegisService } from 'app/services/ris';
 declare var toastr: any;
 
 @Component({
@@ -27,10 +27,12 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
     private fb: FormBuilder,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private http: HttpClient,
     private s_user: UserService,
     private chRef: ChangeDetectorRef,
-    private s_loader: LoaderService
+    private s_loader: LoaderService,
+    private s_reason: ReasonService,
+    private s_revRegis: RevRegisService,
+    private s_sedRegis: SedRegisService
   ) {
     super();
     toastr.options = {
@@ -68,9 +70,7 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
       reason: new FormControl(null, Validators.required)
     });
 
-
-    const url = `${appConfig.apiUrl}/Reason/DropDown`;
-    this.http.get(url).subscribe((x: DropDownModel[]) => this.reasonDropdown = x);
+    this.s_reason.DropDown().subscribe(x => this.reasonDropdown = x);
 
     this.activeRoute.params.pipe(
       mergeMap((x) => {
@@ -87,13 +87,10 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
       this.chRef.markForCheck();
       if (p.curretUser == null) return;
       this.code = p.params.code;
-      const params = { revNo: p.params.code };
-      this.http.get(`${this.risUrl}/Rev/GetByRevNo`, { params }).pipe(
+      this.s_revRegis.GetByRevNo(this.code).pipe(
         tap(() => this.s_loader.showLoader()),
         mergeMap((rev: IRevListRes) => {
-          const params = { sedNo: rev.sedNo };
-          const url = `${this.risUrl}/Sed/GetBySedNo`;
-          return this.http.get(url, { params }).pipe(
+          return this.s_sedRegis.GetBySedNo(rev.sedNo).pipe(
             map((sed: ISedRes) => {
               return {
                 revItem: rev,
@@ -118,10 +115,10 @@ export class ClearMoneyDetailComponent extends ClearMoneyConfig implements OnIni
   onSubmit() {
     if (!confirm('ยืนยันการยกเลิก "บันทึกรับคืนเรื่อง" หรือไม่?'))
       return;
-
-    const url = `${this.risUrl}/REV/Cancel`;
+      
+    this.s_loader.showLoader();
     const f = { ...this.formGroup.value };
-    this.http.post(url, f).pipe(
+    this.s_sedRegis.Cancel(f).pipe(
       finalize(() => this.s_loader.onEnd())
     ).subscribe(() => {
       toastr.success(message.canceled);

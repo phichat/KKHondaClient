@@ -1,13 +1,12 @@
 import { OnInit, Component, ChangeDetectorRef } from '@angular/core';
 import { ListConItemDetailConfig } from './list-con-item-detail.config';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { mergeMap, tap, delay } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 import { ICarRegisItemRes, IConItemRes } from 'app/interfaces/ris';
 import { of } from 'rxjs';
 import { UserService } from 'app/services/users/user.service';
 import { ClearMoneyService } from './clear-money.service';
-import { ActivatedRoute } from '@angular/router';
+import { CarRegisItemService } from 'app/services/ris';
 
 @Component({
   selector: 'app-list-con-item-detail-component',
@@ -17,11 +16,10 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
-    private activeRoute: ActivatedRoute,
     private chRef: ChangeDetectorRef,
     private s_user: UserService,
-    private s_clearMoney: ClearMoneyService
+    private s_clearMoney: ClearMoneyService,
+    private s_carRegisItem: CarRegisItemService
   ) {
     super();
   }
@@ -60,9 +58,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
               carRegisListItemDocRes: listConItemDoc
             });
         }
-        const params = { conNo: x };
-        const url = `${this.risUrl}/ConItem/GetByConNo`;
-        return this.http.get<ICarRegisItemRes>(url, { params })
+        return this.s_carRegisItem.GetByConNo(x)
       }),
       // delay(300)
     ).subscribe(x => {
@@ -114,7 +110,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     item.patchValue({
       receiveDate: checkbox.checked ? (new Date()) : null,
       receiveBy: checkbox.checked ? this.mUser.id : null,
-      receiveName: checkbox.checked ? this.mUser.name : null
+      receiveName: checkbox.checked ? this.mUser.fullName : null
     });
   }
 
@@ -124,7 +120,7 @@ export class ListConItemDetailComponent extends ListConItemDetailConfig implemen
     item.patchValue({
       sendDate: checkbox.checked ? (new Date()) : null,
       sendBy: checkbox.checked ? this.mUser.id : null,
-      sendName: checkbox.checked ? this.mUser.name : null
+      sendName: checkbox.checked ? this.mUser.fullName : null
     });
   }
 

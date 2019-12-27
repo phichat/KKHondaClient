@@ -4,3 +4,10 @@ export enum BookingPaymentType {
     HierPurchase = 3,
     Credit = 4
 }
+
+export const BookingPaymentTypeList: any[] = [
+    { id: BookingPaymentType.Cash, name: 'เงินสด' },
+    { id: BookingPaymentType.Leasing, name: 'ไฟแนนซ์' },
+    { id: BookingPaymentType.HierPurchase, name: 'เช่าซื้อ' },
+    { id: BookingPaymentType.Credit, name: 'ขายเชื่อ' }
+];

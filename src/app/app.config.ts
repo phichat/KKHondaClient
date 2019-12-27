@@ -1,13 +1,16 @@
 import { IMyOptions, IMyDateModel } from "mydatepicker-th";
 import { DropDownModel } from './models/drop-down-model';
 import { AutoCompleteModel } from './models/auto-complete-model';
+import { environment } from 'environments/environment';
 
 export const appConfig = {
-    apiUrl: 'http://203.154.126.61/kk-honda-api/api',
-    reportUrl: 'http://203.154.126.61/kk-honda-report',
-    apikkWeb: 'http://203.154.126.61/KK-Honda-Web/backoffice',
-    // apiUrl: 'http://localhost:53076/api'
+    reportUrl: environment.reportUrl,
+    apikkWeb: environment.apikkWeb,
+    apiUrl: environment.apiUrl
 }
+
+export const yy_th = (new Date().getFullYear() + 543).toString().substr(2, 2);
+export const mm = leftPad((new Date().getMonth() + 1).toString(), 2, '0');
 
 export const MyDatePickerOptions: IMyOptions = {
     dateFormat: 'dd / mm / yyyy',
@@ -16,6 +19,11 @@ export const MyDatePickerOptions: IMyOptions = {
     openSelectorOnInputClick: true,
     editableDateField: false
 };
+
+export function leftPad(str: string, len: number, char: string): string {
+    len = len - str.length + 1;
+    return len > 0 ? new Array(len).join(char) + str : str;
+}
 
 export function resetLocalDate(date: string): string {
     if (date === '' || date == null) {
@@ -46,7 +54,7 @@ export function setLocalDate(date: string): string {
     const mm = setZero(_date.getMonth() + 1);
     const yyyy = _date.getFullYear() + 543;
 
-    return `${dd} / ${mm} / ${yyyy}`;
+    return `${dd}/${mm}/${yyyy}`;
 }
 
 export function setZero(num: number) {

@@ -1,6 +1,7 @@
 /* Import main Inspinia style */
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import "~datatables.net-bs/css/dataTables.bootstrap.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 @import "assets/styles/style";
 
@@ -11,6 +12,26 @@ $fontColor: #676a6c;
   margin: auto;
   padding: 5px;
   color: #fff;
+}
+
+.form-check {
+  position: relative;
+  display: block;
+  padding-left: 1.25rem;
+}
+
+.form-check-inline {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-left: 0;
+  margin-right: .75rem;
+}
+
+.menu-divider {
+  margin: 10px !important;
+  border-top: 1px solid #a7b1c2 !important;
 }
 
 .cash {
@@ -129,12 +150,18 @@ span.required {
   .btnpicker {
     border-radius: unset !important;
   }
+
   .mydpicon {
     color: $fontColor !important;
   }
 
 }
 
+.ng-select.ng-select-disabled {
+  .ng-select-container {
+    background-color: #eee !important;
+  }
+}
 
 .ng-select {
   font-size: 14px !important;
@@ -172,7 +199,27 @@ span.required {
   width: 200px;
 }
 
+.row-vertical-align {
+  table tbody td {
+    vertical-align: middle !important;
+  }
+}
+
 ._dialog {
   left: 0 !important;
   width: 80%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-middle {
+  vertical-align: middle !important;
 }

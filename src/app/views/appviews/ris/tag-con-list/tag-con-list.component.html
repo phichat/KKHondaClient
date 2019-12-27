@@ -20,32 +20,103 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-
+  <div class="ibox">
+    <div class="ibox-title">
+      <h3>ค้นหาข้อมูลรอจดทะเบียน</h3>
+    </div>
+    <div class="ibox-content">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบรับเรื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="bookingNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่รับคืนเรื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="revNo">
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">สถานะการดำเนินการ</label>
+            <div class="col-lg-8">
+              <select formControlName="status1" class="form-control">
+                <option value=""></option>
+                <option [value]="item.id" *ngFor="let item of ConStatus1List">
+                  {{item.desc}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผลการดำเนินการ</label>
+            <div class="col-lg-8">
+              <select formControlName="status2" class="form-control">
+                <option value=""></option>
+                <option [value]="item.id" *ngFor="let item of ConStatus2List">
+                  {{item.desc}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขเครื่อง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="eNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขโครง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="fNo">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="ibox float-e-margins">
     <div class="ibox-content">
       <form class="form-horizontal" style="margin-bottom: 15em;">
-        <table class="table table-stripped table-hover display nowrap" style="width: 100%;">
+        <table class="table table-stripped table-hover display nowrap set-dataTable" style="width: 100%;">
           <thead>
             <tr>
               <th class="text-center">ลำดับ</th>
               <th></th>
-              <th>เลขที่ใบรับเรื่อง</th>
-              <th>สถานะ</th>
+              <th>เลขที่รับเรื่อง</th>
+              <th>เลขที่รับคืนเรื่อง</th>
+              <th>สถานะดำเนินการ</th>
+              <th>ผลดำเนินการ</th>
               <th>สาขา</th>
               <th>เลขทะเบียน</th>
               <th>จังหวัด</th>
               <th>หมายเลขตัวถัง</th>
               <th>หมายเลขเครื่อง</th>
-              <th class="text-right">เงินรับฝากรวมภาษี</th>
-              <th class="text-right">เงินที่ต้องยืม</th>
+              <th class="text-right">เงินรับฝาก</th>
+              <th class="text-right">ค่าใช้จ่าย</th>
+              <th class="text-right">ค่าใช่จ่าย(เบิกเพิ่ม)</th>
               <th class="text-right">ยอดรวม</th>
               <th>หมายเหตุ</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="conList.length == 0; else else_tr;">
-              <td colspan="13" class="text-center">
+              <td colspan="16" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="1">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -57,7 +128,7 @@
                     <br>
                     <p>มีบางอย่างผิดพลาด</p>
                   </div>
-                  <div *ngSwitchDefault>
+                  <div *ngSwitchCase="0">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <br>
                     <p>รอสักครู่...</p>
@@ -69,9 +140,9 @@
               <tr *ngFor="let item of conList; let i = index">
                 <td [attr.data-order]="i" class="text-center">{{i+1}}</td>
                 <td class="text-center">
-                  <button class="btn btn-xs" [ngClass]="{'btn-info': item.bookingStatus != ConStatus.Cancel}"
+                  <button class="btn btn-xs" [ngClass]="{'btn-info': item.status1 != ConStatus1.Cancel}"
                     [routerLink]="['/ris/con-form-edit', item.bookingNo]"
-                    [disabled]="item.bookingStatus == ConStatus.Cancel">
+                    [disabled]="item.status1 == ConStatus1.Cancel">
                     <i class="fa fa-pencil"></i>
                     แก้ไข
                   </button>&nbsp;
@@ -81,20 +152,26 @@
                   </a>
                 </td>
                 <td [attr.data-order]="item.bookingId">{{item.bookingNo}}</td>
+                <td>{{item.revNo}}</td>
                 <td [ngClass]="{
-                    'text-danger': item.bookingStatus == ConStatus.Cancel,
-                    'text-navy': item.bookingStatus == ConStatus.Received,
-                    'text-muted': item.bookingStatus != ConStatus.Cancel && item.bookingStatus != ConStatus.Received
-                  }">{{item.statusDesc}}</td>
+                    'text-danger': item.status1 == ConStatus1.Cancel,
+                    'text-navy': item.status1 == ConStatus1.Received || item.status1 == ConStatus1.Withdraw1,
+                    'text-muted': item.status1 == ConStatus1.Withdraw2
+                  }">{{item.status1Desc}}</td>
+                <td [ngClass]="{
+                    'text-navy': item.status2 == ConStatus2.Send1 || item.status2 == ConStatus2.Send2,
+                    'text-muted': item.status2 == ConStatus2.REV
+                  }">{{item.status2Desc}}</td>
                 <td>{{item.branchName}}</td>
                 <td>{{item.tagNo}}</td>
                 <td>{{item.branchProvince}}</td>
                 <td>{{item.eNo}}</td>
                 <td>{{item.fNo}}</td>
-                <td [attr.data-order]="item.price1" class="text-right">{{item.price1 + item.vatPrice1 | number:'1.2-2'}}
+                <td [attr.data-order]="item.price1" class="text-right">{{item.price1 + item.vatPrice1 | number:'1.2-2':'en-US'}}
                 </td>
-                <td [attr.data-order]="item.price2" class="text-right">{{item.price2 | number:'1.2-2'}}</td>
-                <td [attr.data-order]="item.totalPrice" class="text-right">{{item.totalPrice | number:'1.2-2'}}</td>
+                <td [attr.data-order]="item.price2" class="text-right">{{item.price2 | number:'1.2-2':'en-US'}}</td>
+                <td [attr.data-order]="item.price2" class="text-right">{{item.price3 | number:'1.2-2':'en-US'}}</td>
+                <td [attr.data-order]="item.totalPrice" class="text-right">{{item.totalPrice | number:'1.2-2':'en-US'}}</td>
                 <td>{{item.remark}}</td>
               </tr>
             </ng-template>

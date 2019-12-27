@@ -1,0 +1,78 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+   <div class="col-lg-10">
+      <h2>คำนวณค่างวด</h2>
+      <ol class="breadcrumb">
+         <li>
+            <a href="/">หน้าแรก</a>
+         </li>
+         <li>
+            <a>สินเชื่อ</a>
+         </li>
+         <li class="active">
+            <strong>คำนวณค่างวด</strong>
+         </li>
+      </ol>
+   </div>
+   <div class="col-lg-2 text-right pull-right">
+
+   </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+   <div class="ibox float-e-margins">
+      <div class="ibox-content">
+         <table class="table table-hover" cellspacing="0">
+            <thead>
+               <tr>
+                  <th></th>
+                  <th style="width: 150px">เลขที่ใบจอง</th>
+                  <th style="width: 150px">สถานะ</th>
+                  <th style="width: 150px">ประเภทการซื้อ</th>
+                  <th style="width: 150px">ประเภทการชำระมัดจำ</th>
+                  <th style="width: 150px">วันที่จอง</th>
+                  <th style="width: 150px">กำหนดรับสินค้า</th>
+                  <th style="width: 200px">ผู้จอง</th>
+                  <th style="width: 150px">บัตรประชาชน</th>
+                  <th style="width: 150px">เบอร์ติดต่อ</th>
+                  <th style="width: 150px">อีเมล์</th>
+                  <th style="width: 250px">ที่อยู่</th>
+                  <th style="width: 150px">โมเดล</th>
+                  <th style="width: 250px">รายละเอียดโมเดล</th>
+                  <th style="width: 150px">สี</th>
+                  <th style="width: 150px">มูลค่าสินค้า</th>
+                  <th style="width: 150px">จำนวนเงินมัดจำ</th>
+                  <th style="width: 150px">ยอดคงค้าง</th>
+                  <th style="width: 150px">วันที่ทำรายการ</th>
+                  <th style="width: 150px">ผู้ที่ทำรายการ</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let book of BookingList">
+                  <td>
+                     <a (click)="nextClculate(book.bookingId)" class="btn btn-info btn-sm">คำนวณค่างวด</a>
+                  </td>
+                  <td>{{book.bookingNo}}</td>
+                  <td class="text-warning">{{book.status}}</td>
+                  <td class="text-info">{{book.paymentType}}</td>
+                  <td class="text-info">{{book.depositType}}</td>
+                  <td>{{book.bookingDate}}</td>
+                  <td>{{book.receiveDate}}</td>
+                  <td>{{book.custFullName}}</td>
+                  <td>{{book.idCard}}</td>
+                  <td>{{book.contractNo}}</td>
+                  <td>{{book.email}}</td>
+                  <td>{{book.address}}</td>
+                  <td>{{book.modelCode}}</td>
+                  <td>{{book.modelName}}</td>
+                  <td>{{book.colorName}}</td>
+                  <td>{{book.netPrice | number:'1.2-2':'en-US'}}</td>
+                  <td>{{book.deposit | number:'1.2-2':'en-US'}}</td>
+                  <td>{{book.outStandingPrice | number:'1.2-2':'en-US'}}</td>
+                  <td>{{book.createDate | date:'dd-MM-yyyy'}}</td>
+                  <td>{{book.createBy}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

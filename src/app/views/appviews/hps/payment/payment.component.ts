@@ -1,0 +1,360 @@
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PaymentService } from 'app/services/credit/payment.service';
+import { Payment, IsPay, IsOutstanding, PaymentFG, ContractItem } from 'app/models/credit/payment';
+import { setLocalDate, setZeroHours, appConfig } from 'app/app.config';
+import { UserService } from '../../../../services/users';
+import { message } from 'app/app.message';
+import { IPayment } from 'app/interfaces/payment.interface';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { map, tap, finalize } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { ContractService } from 'app/services/credit/contract.service';
+import { PaymentConfig } from './payment.config';
+import { ReasonService } from 'app/services/masters/reason.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { LoaderService } from 'app/core/loader/loader.service';
+
+declare var toastr: any;
+
+@Component({
+  selector: 'app-payment',
+  templateUrl: './payment.component.html',
+  styleUrls: ['./payment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy {
+
+  private paymentData: IPayment = {
+    paymentPrice: null,
+    paymentDate: new Date(),
+    options: {
+      invalid: true,
+      disabled: false
+    }
+  };
+
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+    private _paymentService: PaymentService,
+    private chRef: ChangeDetectorRef,
+    private _userService: UserService,
+    private router: Router,
+    private fb: FormBuilder,
+    private s_contract: ContractService,
+    private s_reason: ReasonService,
+    private s_loader: LoaderService,
+  ) {
+    super();
+    toastr.options = {
+      'closeButton': true,
+      'progressBar': true,
+    }
+    this.user = this._userService.cookies;
+  }
+
+  ngOnInit() {
+    this.instalmentGroup = this.fb.group({
+      instalment: this.fb.array([])
+    });
+
+    this.formGroup = this.fb.group({
+      contractId: new FormControl(null, Validators.required),
+      outstanding: new FormControl(null),
+      dueDate: new FormControl(null),
+      payDate: new FormControl(null),
+      revenueStamp: new FormControl(null),
+      payNetPrice: new FormControl(null, Validators.required),
+      fineSum: new FormControl(null),
+      fineSumOther: new FormControl(null),
+      payeer: new FormControl(this.user.id, Validators.required),
+      balanceNetPrice: new FormControl(null, Validators.required),
+      remark: new FormControl(null),
+      updateBy: new FormControl(this.user.id, Validators.required),
+      branchId: new FormControl(this.user.branchId, Validators.required),
+      totalPrice: new FormControl(null, Validators.required),
+      status: new FormControl(null),
+
+      cutBalance: new FormControl(null),
+      discountInterest: new FormControl(null),
+
+      instalmentNo: new FormControl(null),
+      paymentName: new FormControl(null),
+      paymentType: new FormControl('1', Validators.required),
+      paymentPrice: new FormControl(null, Validators.required),
+      discountPrice: new FormControl(null),
+      totalPaymentPrice: new FormControl(null, Validators.required),
+      accBankId: new FormControl(null),
+      paymentDate: new FormControl(new Date(), Validators.required),
+      documentRef: new FormControl(null),
+
+    });
+
+    this._activatedRoute.params.pipe(
+      tap(() => this.s_loader.showLoader())
+    ).subscribe(param => {
+      if (param['id']) {
+        const api1 = this._paymentService.GetByContractId(param['id']);
+        const api2 = this._paymentService.GetReceiptByContractId(param['id']);
+        const api3 = this.s_contract.GetContractItem(param['id']);
+
+        const observe = combineLatest(api1, api2, api3).pipe(
+          map(x => {
+            return { payment: x[0], receipt: x[1], contractItem: x[2] }
+          })
+        );
+
+        observe.subscribe({
+          next: (x) => {
+            this.chRef.markForCheck();
+            this.loadCreditPayment(x.payment);
+            this.debitTable.next(x.contractItem);
+            this.receiptList = x.receipt.map(o => {
+              return { receiptNo: o.receiptNo, disabled: o.receiptStatus == true ? false : true };
+            });
+            this.taxInvList = x.receipt.map(o => {
+              return { taxInvNo: o.taxInvNo, disabled: o.taxInvStatus == true ? false : true };
+            });
+            this.s_loader.hideLoader();
+          },
+          complete: () => this.s_loader.hideLoader(),
+          error: () => this.s_loader.hideLoader()
+        });
+
+        this.reasonDropdown = this.s_reason.DropDown();
+      };
+    });
+
+    this.formGroup.get('paymentType').valueChanges.subscribe(x => {
+      this.setFormPaymentType(this.formGroup.get('totalPrice').value);
+    });
+
+    this.PaymentData.next(this.paymentData);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyDatatable();
+  }
+
+  loadCreditPayment(item: Payment) {
+    this.contractModel = item.contract;
+
+    this.contractModel.contractDate = setLocalDate(item.contract.contractDate);
+    this.bookingModel = item.booking;
+    this.saleModel = item.sale;
+    this.isPayModel = item.isPay ? item.isPay : new IsPay();
+    this.isOutstandingModel = item.isOutstanding ? item.isOutstanding : new IsOutstanding();
+
+    this.instalmentCount = 0;
+    this.chRef.markForCheck();
+    const contractItem = item.contractItem
+      .map(res => {
+        return {
+          ...res,
+          isSelect: false,
+          fineSum: res.fineSum | 0,
+          fineSumRemain: res.fineSumRemain | 0,
+          fineSumOther: res.fineSumOther | 0,
+          payeer: this.user.id.toString()
+        }
+      });
+
+    this.setItemFormArray(contractItem, this.instalmentGroup, 'instalment');
+    this.reInitDatatable();
+
+    const outstandingPrice = contractItem
+      .reduce((a, c) => a += (c.remainNetPrice + c.fineSumRemain + c.fineSumOther), 0)
+
+    this.formGroup.patchValue({
+      contractId: item.contract.contractId,
+      status: item.contract.contractStatus,
+      payeer: this.user.id.toString(),
+      updateBy: this.user.id.toString(),
+      branchId: this.user.branch,
+      outstanding: outstandingPrice
+    });
+    this.chRef.detectChanges();
+  }
+
+  private setItemFormArray(array: ContractItem[], fg: FormGroup, formControl: string) {
+    if (array !== undefined && array.length) {
+      const firstItem = array.sort((a, b) => a.instalmentNo - b.instalmentNo)[0];
+      // disable checkbox ถ้ายังไม่ชำระเงินดาวน์
+      const itemFGs = array.map(item => {
+        const disabledCheckbox = (firstItem.status != 11 && item.instalmentNo != 0)
+        return this.fb.group({
+          ...item,
+          isSelect: new FormControl({ value: item.isSelect, disabled: disabledCheckbox })
+        })
+      });
+      const itemFormArray = this.fb.array(itemFGs);
+      fg.setControl(formControl, itemFormArray);
+    }
+  }
+
+  instalmentCount: number = 0;
+  setFormPayment() {
+    const instalmentNo = this.InstalmentListIsSelect.map(x => x.instalmentNo);
+    let fineSumRemain = 0;
+    const balanceNetPrice = this.InstalmentListIsSelect
+      .reduce((accumulator, current) => {
+        fineSumRemain += current.fineSumRemain;
+        return accumulator + (current.remainNetPrice);
+      }, 0);
+
+    this.formGroup.patchValue({
+      fineSum: fineSumRemain,
+      balanceNetPrice: balanceNetPrice,
+      payNetPrice: balanceNetPrice,
+      totalPrice: balanceNetPrice + fineSumRemain,
+      cutBalance: null,
+      discountInterest: null,
+      instalmentNo
+    });
+
+    this.setFormPaymentType(this.formGroup.get('totalPrice').value);
+  }
+
+  setFormPaymentType(x: number) {
+    this.formPayment = {
+      ...this.formPayment,
+      paymentPrice: x
+    }
+    this.PaymentData.next(this.formPayment);
+  }
+
+  onSubmit() {
+    let f = { ...this.formGroup.getRawValue() } as PaymentFG;
+    if (f.outstanding == 0) return;
+
+    f.payDate = setZeroHours(f.payDate);
+    let creditContractItem = this.InstalmentListIsSelect.map(x => {
+      return {
+        instalmentNo: x.instalmentNo,
+        contractItemId: x.contractItemId,
+        contractId: x.contractId,
+        fineSum: x.fineSum,
+        fineSumRemain: x.fineSumRemain
+      }
+    });
+
+    const frm = {
+      ...f,
+      fineSum: f.fineSum || 0,
+      fineSumOther: f.fineSumOther || 0,
+      discountPrice: f.discountPrice || 0,
+      revenueStamp: f.revenueStamp || 0,
+      cutBalance: f.cutBalance || 0,
+      discountInterest: f.discountInterest || 0,
+      payDate: f.paymentDate,
+      creditContractItem
+    };
+
+    if (confirm('ยืนยันการรับชำระหรือไม่?')) {
+      this._paymentService.PaymentTerm(frm).subscribe((x) => {
+        toastr.success(message.created);
+        setTimeout(() => location.reload(), 400);
+      }, () => {
+        toastr.error(message.failed);
+      });
+    }
+  }
+
+  // onCanclePayment() {
+  //   this.router.navigate(['credit/contract-list/active'])
+  // }
+
+  onCalculate() {
+    let x = this.formGroup.value;
+    const payNetPrice = x.payNetPrice | 0;
+    const fineSum = x.fineSum | 0;
+    const fineSumOther = x.fineSumOther | 0;
+    const revenueStamp = x.revenueStamp | 0;
+    const totalPrice = (revenueStamp + payNetPrice + fineSum + fineSumOther);
+    this.formGroup.patchValue({ totalPrice });
+    this.setFormPaymentType(totalPrice);
+  }
+
+  getTime(d: Date): number {
+    return (new Date(d)).getTime();
+  }
+
+  formPaymentChange(event: IPayment) {
+    this.formPayment = event;
+    this.formGroup.patchValue({
+      paymentPrice: event.paymentPrice,
+      discountPrice: event.discountPrice,
+      totalPaymentPrice: event.paymentPrice,
+      accBankId: event.accBankId || null,
+      paymentDate: event.paymentDate,
+      documentRef: event.documentRef
+    });
+  }
+
+  leasingClosing() {
+    this.setFormPayment();
+    const instalmentList = this.InstalmentList.value as ContractItem[];
+    const cutBalance = instalmentList.reduce((a, c) => a += c.remainNetPrice, 0);
+    this.formGroup.patchValue({
+      cutBalance,
+      payNetPrice: cutBalance
+    });
+
+    for (let i = 0; i < instalmentList.length; i++) {
+      if (instalmentList[i].status != 11) {
+        this.InstalmentList.at(i).patchValue({
+          isSelect: true
+        })
+      }
+    }
+    this.onCalculate();
+  }
+
+  contractClosing() {
+    this.debitTable.subscribe(x => {
+      this.setFormPayment();
+
+      const instalmentList = this.InstalmentList.value as ContractItem[];
+      const item = instalmentList
+        .filter(o => o.status != 11)
+        .sort((a, b) => a.instalmentNo - b.instalmentNo)[0];
+
+      const discountInterest = x.find(o => o.instalmentNo == item.instalmentNo).discountInterest;
+      let cutBalance = instalmentList.reduce((a, c) => a += c.remainNetPrice, 0);
+      cutBalance -= discountInterest;
+
+      this.formGroup.patchValue({
+        cutBalance,
+        discountInterest,
+        payNetPrice: cutBalance
+      });
+
+      for (let i = 0; i < instalmentList.length; i++) {
+        if (instalmentList[i].status != 11) {
+          this.InstalmentList.at(i).patchValue({
+            isSelect: true
+          })
+        }
+      }
+      this.onCalculate();
+    })
+  }
+
+  undoContractClosing() {
+    this.formGroup.patchValue({
+      cutBalance: null,
+      discountInterest: null,
+      payNetPrice: null
+    });
+    const instalmentList = this.InstalmentList.value as ContractItem[];
+    for (let i = 0; i < instalmentList.length; i++) {
+      if (instalmentList[i].status != 11) {
+        this.InstalmentList.at(i).patchValue({
+          isSelect: false
+        })
+      }
+    }
+    this.onCalculate();
+  }
+
+}

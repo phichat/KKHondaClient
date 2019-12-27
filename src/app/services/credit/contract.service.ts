@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ContractModel } from '../../models/credit';
+import { ContractModel, ContractItemModel, ContractDetailModel } from '../../models/credit';
 import { BookingModel } from '../../models/selling';
 import { HttpService } from 'app/core/http.service';
 import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs';
+import { ISpContractHps, ISpSearchSale } from 'app/interfaces/credit';
+import { HttpClient } from '@angular/common/http';
+import { appConfig } from 'app/app.config';
+import { CustomerModel } from 'app/models/customers';
 
 @Injectable()
 export class ContractService {
@@ -10,8 +15,9 @@ export class ContractService {
     private url = `Credit/Contract`;
 
     constructor(
+        private httpClient: HttpClient,
         private httpService: HttpService
-        ) { }
+    ) { }
 
     GetActive() {
         const apiUrl = `${this.url}/Active`;
@@ -36,7 +42,13 @@ export class ContractService {
     getById(id: string) {
         const api = `${this.url}/GetById`;
         const params = { id };
-        return this.httpService.get(api, { params });
+        return this.httpService.get(api, { params }).pipe(map(x => x.json()));
+    }
+
+    GetContractItem(contractId: string): Observable<ContractItemModel[]> {
+        const api = `${appConfig.apiUrl}/${this.url}/GetContractItem`;
+        const params = { contractId };
+        return this.httpClient.get<ContractItemModel[]>(api, { params });
     }
 
     Detail(contractId: string) {
@@ -46,14 +58,14 @@ export class ContractService {
     }
 
     Edit(creditContract: ContractModel, booking: BookingModel) {
-        const params = {contract: creditContract, booking};
+        const params = { contract: creditContract, booking };
         const apiURL = `${this.url}/Edit`;
 
         return this.httpService.post(apiURL, params);
     }
 
     Create(creditContract: ContractModel, booking: BookingModel) {
-        const params = {contract: creditContract, booking};
+        const params = { contract: creditContract, booking };
         const apiURL = `${this.url}/Create`;
 
         return this.httpService.post(apiURL, params);
@@ -65,5 +77,4 @@ export class ContractService {
 
         return this.httpService.post(apiURL, params);
     }
-
 }
