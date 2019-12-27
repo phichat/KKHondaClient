@@ -34,9 +34,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label">ผู้รับสินค้า</label>
             <div class="col-md-8">
-              <ng-select [items]="AC_User" bindLabel="text" bindValue="value" placeholder="ผู้รับสินค้า"
+              <!-- <ng-select [items]="AC_User" bindLabel="text" bindValue="value" placeholder="ผู้รับสินค้า"
                 formControlName="receive_id">
-              </ng-select>
+              </ng-select> -->
 
             </div>
           </div>
@@ -64,9 +64,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label is-required">ผู้จำหน่าย</label>
             <div class="col-md-8">
-              <ng-select [items]="AC_Dealer" bindLabel="text" bindValue="value" placeholder="ผู้จำหน่าย"
+              <!-- <ng-select [items]="AC_Dealer" bindLabel="text" bindValue="value" placeholder="ผู้จำหน่าย"
                 formControlName="dealer_code">
-              </ng-select>
+              </ng-select> -->
             </div>
           </div>
 
@@ -85,9 +85,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label">สถานะ</label>
             <div class="col-md-8">
-              <ng-select [items]="AC_Type" bindLabel="txt" bindValue="id" placeholder="สถานะ"
+              <!-- <ng-select [items]="AC_Type" bindLabel="txt" bindValue="id" placeholder="สถานะ"
                 formControlName="receive_type">
-              </ng-select>
+              </ng-select> -->
             </div>
           </div>
 
@@ -101,7 +101,7 @@
           <div class="col-md-4" style="text-align: right;vertical-align: middle;">
             <div class="upload-btn-wrapper">
               <button class="btn btn-primary"> <i class="fa fa-paperclip"></i> Upload a file</button>
-              <input type="file" name="file" (change)="readExcel($event.target.files)" />
+              <!-- <input type="file" name="file" (change)="readExcel($event.target.files)" /> -->
             </div>
 
             <!-- <input id="myForm" type="file" name="file" (change)="readExcel($event.target.files)"> -->
@@ -249,8 +249,8 @@
     </table>
 
     <div class="text-right m-t-md form-group">
-      <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
-        (click)="onSubmit()">บันทึกรับสินค้า</button>
+      <!-- <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
+        (click)="onSubmit()">บันทึกรับสินค้า</button> -->
     </div>
 
   </form>
