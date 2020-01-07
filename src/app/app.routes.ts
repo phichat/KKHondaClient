@@ -89,6 +89,7 @@ import { McsStockReceiveListComponent } from './views/appviews/mcs/mcs-stock-rec
 import { McsStockReceiveDetailComponent} from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-detail.component';
 import { McsStockReceiveCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-create.component';
 import { McsStockReceiveSingleCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-create.component';
+import { McsStockReceiveSingleDetailComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-detail.component';
 import { McsSavePoListComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-list.component';
 import { McsSavePoCreateComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-create.component';
 import { McsSavePoDetailComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-detail.component';
@@ -204,7 +205,8 @@ export const ROUTES: Routes = [
       { path: 'mcs-stock-receive-create', component: McsStockReceiveCreateComponent },
       { path: 'mcs-stock-receive-detail/:code', component: McsStockReceiveDetailComponent },
       
-      // { path: 'mcs-stock-receive-single-create', component: McsStockReceiveSingleCreateComponent },
+      { path: 'mcs-stock-receive-single-create', component: McsStockReceiveSingleCreateComponent },
+      { path: 'mcs-stock-receive-single-detail/:code', component: McsStockReceiveSingleDetailComponent },
       // { path: 'mcs-stock-receive-single-detail/:code', component: McsStockReceiveDetailComponent },
 
       // { path: 'mcs-save-invoice-list', component: McsSaveInvoiceListComponent },
@@ -228,9 +230,9 @@ export const ROUTES: Routes = [
       // { path: 'pss-save-po-detail/:code', component: PssSavePoDetailComponent },
       // { path: 'pss-save-po-edit/:code', component: PssSavePoEditComponent },
 
-      // { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
-      // { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
-      // { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
+      { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
+      { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
+      { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
 
       // { path: 'pss-return-product-list', component: PssReturnProductListComponent },
       // { path: 'pss-return-product-create', component: PssReturnProductCreateComponent },

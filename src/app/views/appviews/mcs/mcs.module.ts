@@ -19,6 +19,7 @@ import { McsStockReceiveCreateComponent } from './mcs-stock-receive/mcs-stock-re
 import { McsStockReceiveDetailComponent } from './mcs-stock-receive/mcs-stock-receive-detail.component';
 
 import { McsStockReceiveSingleCreateComponent } from './mcs-stock-receive/mcs-stock-receive-single-create.component';
+import { McsStockReceiveSingleDetailComponent } from './mcs-stock-receive/mcs-stock-receive-single-detail.component';
 
 import { McsSaveInvoiceService} from './mcs-save-invoice/mcs-save-invoice.service';
 import { McsSaveInvoiceListComponent } from './mcs-save-invoice/mcs-save-invoice-list.component';
@@ -46,6 +47,7 @@ import { McsReportTaxPoComponent } from './mcs-report-tax-po/mcs-report-tax-po.c
     McsStockReceiveCreateComponent,
     McsStockReceiveDetailComponent,
     McsStockReceiveSingleCreateComponent,
+    McsStockReceiveSingleDetailComponent,
 
     McsSaveInvoiceListComponent,
     McsSaveInvoiceCreateComponent,
