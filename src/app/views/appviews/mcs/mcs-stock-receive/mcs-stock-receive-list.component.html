@@ -71,12 +71,12 @@
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">
 
-                  <a class="btn btn-info btn-outline btn-xs" *ngIf="item.receive_type == '1'"
+                  <a class="btn btn-info btn-outline btn-xs" *ngIf="item.receive_type == 1"
                     [routerLink]=" ['/mcs/mcs-stock-receive-detail', item.receive_no]">
                     <i class="fa fa-info-circle"></i>
                     รายละเอียด
                   </a>
-                  <a class="btn btn-info btn-outline btn-xs" *ngIf="item.receive_type == '2'"
+                  <a class="btn btn-info btn-outline btn-xs" *ngIf="item.receive_type == 2"
                     [routerLink]=" ['/mcs/mcs-stock-receive-single-detail', item.receive_no]">
                     <i class="fa fa-info-circle"></i>
                     รายละเอียด

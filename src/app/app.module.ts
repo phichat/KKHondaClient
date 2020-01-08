@@ -19,7 +19,7 @@ import { BookingModule } from './views/dashboards/booking/booking.module';
 import { GuardGuard } from './guards/guard.guard';
 import { CoreModule } from './core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CurrecyPipe } from './pipes/currency.pipe';
+// import { CurrecyPipe } from './pipes/currency.pipe';
 
 
 @NgModule({
@@ -45,7 +45,7 @@ import { CurrecyPipe } from './pipes/currency.pipe';
   ],
   providers: [
     GuardGuard,
-    CurrecyPipe,
+    // CurrecyPipe,
     { provide: LOCALE_ID, useValue: "th-TH" },
     { provide: APP_BASE_HREF, useValue: '/KK-Honda' },
     { provide: LocationStrategy, useClass: HashLocationStrategy }

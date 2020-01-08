@@ -22,7 +22,7 @@
     <div class="ibox float-e-margins">
       <div class="ibox-content">
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label for="receive_no" class="col-md-4 control-label">เลขที่ใบรับ</label>
@@ -52,7 +52,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label class="col-md-4 control-label">เลขที่ใบส่งของ</label>
@@ -82,7 +82,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label class="col-md-4 control-label">ประเภท</label>
@@ -168,7 +168,7 @@
                 <td>{{detailitem.get('part_name').value}}</td>
                 <td>{{detailitem.get('receive_qty').value}}</td>
 
-                <td>{{detailitem.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+                <td>{{detailitem.get('cost_exc_vat').value | number:'1.2-2':'en-US'}}</td>
                 <td>{{detailitem.get('branch_code').value}}</td>
                 <td>{{detailitem.get('whl_code').value}}</td>
 
@@ -184,15 +184,15 @@
       <tbody>
         <tr>
           <td><strong>รวมมูลค่าสินค้า :</strong></td>
-          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ภาษีมูลค่าเพิ่ม {{formGroup.get('vat_rate').value}} % :</strong></td>
-          <td>{{formGroup.get('cost_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ยอดรวมสุทธิ :</strong></td>
-          <td>{{formGroup.get('cost_total').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_total').value | number:'1.2-2':'en-US'}}</td>
         </tr>
       </tbody>
     </table>

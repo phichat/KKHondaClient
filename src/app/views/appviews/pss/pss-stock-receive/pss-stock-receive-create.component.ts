@@ -183,6 +183,7 @@ export class PssStockReceiveCreateComponent implements OnInit {
     let table: any = $('table.detail-dataTable');
     this.detaildataTable = table.DataTable({
       scrollY: '50vh',
+      scrollX: true,
       scrollCollapse: true,
       paging: false,
       searching: false,

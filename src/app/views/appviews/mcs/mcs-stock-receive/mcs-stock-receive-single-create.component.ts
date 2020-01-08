@@ -122,7 +122,7 @@ export class McsStockReceiveSingleCreateComponent implements OnInit {
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: false }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.s_user.cookies.id, disabled: false }, Validators.required),
+      receive_id: new FormControl({ value: this.mUser.branchId, disabled: false }, Validators.required),
       receive_date: new FormControl({ value: today, disabled: false }, Validators.required),
       receive_status: new FormControl({ value: 2, disabled: false }),
       receive_type: new FormControl({ value: 2, disabled: true }),

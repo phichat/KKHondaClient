@@ -111,7 +111,7 @@ export class McsStockReceiveDetailComponent implements OnInit {
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: true }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.s_user.cookies.id, disabled: true }),
+      receive_id: new FormControl({ value: this.mUser.branchId, disabled: true }),
       receive_date: new FormControl({ value: null, disabled: true }),
       receive_status: new FormControl({ value: 1, disabled: true }),
       receive_type: new FormControl({ value: 1, disabled: true }),
