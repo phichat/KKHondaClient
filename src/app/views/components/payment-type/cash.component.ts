@@ -57,9 +57,7 @@ export class CashComponent extends PaymentTypeConfig implements OnInit, AfterVie
       };
       this.Payment$.emit(value);
     });
-  }
 
-  ngAfterViewInit(): void {
     if (this.$Data != undefined) {
       this.$Data.subscribe(x => {
         this.chRef.markForCheck();
@@ -72,5 +70,9 @@ export class CashComponent extends PaymentTypeConfig implements OnInit, AfterVie
         }
       });
     }
+  }
+
+  ngAfterViewInit(): void {
+
   }
 }

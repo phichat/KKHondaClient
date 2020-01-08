@@ -43,6 +43,7 @@ import { TaxSaleSpareModule } from './tax-sale-spare/tax-sale-spare.module';
 import { MCSModule } from './mcs/mcs.module';
 import { PSSModule } from './pss/pss.module';
 import { SaleModule } from './sale/sale.module';
+import { WholeSaleModule } from './wholesale/wholesale.module';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,7 @@ import { SaleModule } from './sale/sale.module';
     TaxSaleModule,
     TaxSaleSpareModule,
     SaleModule,
-
+    WholeSaleModule,
     MCSModule,
     PSSModule,
     

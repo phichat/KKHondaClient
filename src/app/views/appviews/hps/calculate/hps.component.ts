@@ -13,6 +13,7 @@ import { message } from 'app/app.message';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { CustomerService } from 'app/services/customers';
 import { ProvinceService, AmpherService } from 'app/services/masters';
+import { BookingPaymentType } from 'app/entities/mcs.entities';
 
 declare var toastr: any;
 
@@ -75,7 +76,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
 
         this.formCalculate.patchValue({
           bookingId: p.bookingId,
-          sellTypeId: 4,
+          sellTypeId: BookingPaymentType.HierPurchase,
           sellAcitvityId: 25,
           saleBy: this.userModel.id
         });

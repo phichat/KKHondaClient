@@ -13,6 +13,7 @@ import { message } from 'app/app.message';
 import { CustomerService } from 'app/services/customers';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { AmpherService, ProvinceService } from 'app/services/masters';
+import { BookingPaymentType } from 'app/entities/mcs.entities';
 
 declare var toastr: any;
 
@@ -74,7 +75,7 @@ export class CreditComponent extends CalculateConfig implements OnInit, OnDestro
 
         this.formCalculate.patchValue({
           bookingId: p.bookingId,
-          sellTypeId: 2,
+          sellTypeId: BookingPaymentType.Credit,
           sellAcitvityId: 2,
           saleBy: this.userModel.id
         });

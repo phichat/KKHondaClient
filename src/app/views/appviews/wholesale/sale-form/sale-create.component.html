@@ -1,0 +1,278 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-md-10">
+    <h2>บันทึกการขาย</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>งานขายส่ง</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-md-2 text-right pull-right">
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+  <div class="ibox">
+    <div class="ibox-content">
+      <form [formGroup]="formGroup" class="form-horizontal">
+
+
+        <section class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label">เลขที่ใบจอง</label>
+              <div class="col-md-8">
+                <input type="text" formControlName="bookingNo" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label">ผู้จอง</label>
+              <div class="col-md-8">
+                <input type="text" formControlName="customerFullName" class="form-control">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">วันที่</label>
+              <div class="col-md-8">
+                <thai-mat-datepicker id="dp" formControlName="receiveDate"></thai-mat-datepicker>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">ผู้ซื้อ</label>
+              <div class="col-md-8">
+                <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text"
+                  [typeahead]="customerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractHire"
+                  [loading]="customerLoading" [loadingText]="dropdownLoadingTxt">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+          </div>
+        </section>
+
+        <section class="row form-group">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <h5>ที่อยู่ผู้ซื้อ</h5>
+                <hr class="m-t-xs">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">ที่อยู่</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">อำเภอ/เขต</label>
+              <div class="col-md-8">
+                <ng-select></ng-select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">จังหวัด</label>
+              <div class="col-md-8">
+                <ng-select></ng-select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">รหัสไปร์ษณีย์</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <h5>ที่อยู่ส่งสินค้า</h5>
+                <hr class="m-t-xs">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">ที่อยู่</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">อำเภอ/เขต</label>
+              <div class="col-md-8">
+                <ng-select></ng-select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">จังหวัด</label>
+              <div class="col-md-8">
+                <ng-select></ng-select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label">รหัสไปร์ษณีย์</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="row form-grup">
+          <div class="col-sm-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">สถานะสินค้า</label>
+              <div class="col-md-8">
+                <select name="" id="" class="form-control">
+                  <option value="">รถใหม่</option>
+                  <option value="">รถเก่า</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
+                <textarea rows="2" formControlName="remark" class="form-control"></textarea>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12 text-right">
+                <small>ผู้ทำรายการ {{user.fullName}} วันที่ {{setLocalDate(formGroup.get('createDate').value)}}</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="hr-line-dashed"></div>
+
+        <section class="row form-group">
+          <div class="col-sm-12">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-hover nowrap"
+                style="width: 115%; max-width: unset;">
+                <thead>
+                  <tr>
+                    <th style="width: 5%;" class="text-center">ลำดับ</th>
+                    <th style="width: 30%;">เลขเครื่อง, เลขโครง</th>
+                    <th style="width: 30%;">รายละเอียดรถ</th>
+                    <th style="width: 10%;">ราคาต่อหน่วย</th>
+                    <th style="width: 5%;">จำนวนสั่ง</th>
+                    <th style="width: 10%;">เป็นเงิน</th>
+                    <th style="width: 5%;" class="text-center">ฟรีทะเบียน</th>
+                    <th style="width: 5%;" class="text-center">ฟรีประกันภัย</th>
+                    <th style="width: 5%;" class="text-center">ฟรีพ.ร.บ.</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="productItem">
+                  <tr *ngFor="let item of ProductItem.controls; let i=index" [formGroupName]="i">
+                    <td class="text-center">{{i+1}}</td>
+                    <td>
+                      <ng-select></ng-select>
+                    </td>
+                    <td>{{item.get('itemName').value}}</td>
+                    <td>
+                      <input type="number" class="form-control" formControlName="sellNet">
+                    </td>
+                    <td>{{item.get('orders').value}}</td>
+                    <td>{{item.get('total').value | number:'1.2-2':'en-US'}}</td>
+                    <td class="text-center">
+                      <input type="checkbox" name="" id="">
+                    </td>
+                    <td class="text-center">
+                      <input type="checkbox" name="" id="">
+                    </td>
+                    <td class="text-center">
+                      <input type="checkbox" name="" id="">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="row">
+          <div class="col-xs-6 col-lg-6">
+            <table class="table table-bordered table-hover nowrap">
+              <thead>
+                <tr>
+                  <th>ลำดับ</th>
+                  <th>รายการเพิ่มเติมต่อคัน</th>
+                  <th>จำนวน</th>
+                  <th>ราคาต่อหน่วย</th>
+                  <th>จำนวนเงิน</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="4">รวม</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <table class="table invoice-total m-t-sm">
+              <tbody>
+                <tr>
+                  <td><strong>ยอดขายรถ :</strong></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><strong>ยอดรายการเพิ่มเติม :</strong></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><strong>ยอดรวมทั้งหมด :</strong></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><strong>จำนวนเงินที่ชำระ :</strong></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><strong>ค้างชำระ :</strong></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </section>
+
+        <div class="hr-line-dashed"></div>
+
+        <section class="row">
+          <div class="col-sm-12">
+            <button type="button" class="btn btn-primary pull-right">
+              <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก
+            </button>
+          </div>
+        </section>
+      </form>
+    </div>
+  </div>
+</div>

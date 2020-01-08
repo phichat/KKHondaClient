@@ -17,6 +17,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { ProvinceService, AmpherService } from 'app/services/masters';
 import { IMAmpher } from 'app/interfaces/masters';
 import { ContractItemModel } from 'app/models/credit';
+import { BookingPaymentType } from 'app/entities/mcs.entities';
 
 declare var toastr: any;
 
@@ -87,7 +88,7 @@ export class CashComponent extends CalculateConfig implements OnInit {
 
         this.formCalculate.patchValue({
           bookingId: p.bookingId,
-          sellTypeId: 2,
+          sellTypeId: BookingPaymentType.Cash,
           sellAcitvityId: 2,
           saleBy: this.userModel.id
         });

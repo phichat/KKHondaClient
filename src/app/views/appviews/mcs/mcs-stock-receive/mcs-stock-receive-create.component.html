@@ -205,19 +205,19 @@
       <tbody>
         <tr>
           <td><strong>รวมมูลค่าสินค้า :</strong></td>
-          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ภาษีมูลค่าเพิ่ม {{formGroup.get('vat_rate').value}} % :</strong></td>
-          <td>{{formGroup.get('cost_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>รวมมูลค่าอื่นๆ :</strong></td>
-          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>รวมเงิน :</strong></td>
-          <td>{{formGroup.get('cost_total').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_total').value | number:'1.2-2':'en-US'}}</td>
         </tr>
       </tbody>
     </table>
