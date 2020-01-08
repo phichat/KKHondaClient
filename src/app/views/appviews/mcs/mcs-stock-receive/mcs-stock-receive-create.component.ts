@@ -410,7 +410,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
           cost_repair_exc_vat: new FormControl({ value: item.cost_repair_exc_vat, disabled: false }, Validators.required),
           whl_id: new FormControl({ value: this.search_whl_id, disabled: false }, Validators.required),
           item_id: new FormControl({ value: item.item_id, disabled: false }, Validators.required),
-
+          province_code: new FormControl({ value: null, disabled: false }),
         });
 
         this.DetailList.push(fg);
@@ -443,7 +443,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
   load_wh_line(index: number) {
 
     this.DetailList.controls[index].patchValue({
-      whl_id: new FormControl({ value: this.search_whl_id, disabled: false }, Validators.required),
+      whl_id: null, //new FormControl({ value: null, disabled: false }, Validators.required),
     });
 
     //this.DetailList.controls[index] = null;
@@ -476,7 +476,9 @@ export class McsStockReceiveCreateComponent implements OnInit {
       .subscribe(() => {
         toastr.success(message.created);
         this.route.navigate(['mcs/mcs-stock-receive-list']);
-      }, () => toastr.error(message.failed));
+      }, (err) => {
+        toastr.error(err.error);
+      });
   }
 
 

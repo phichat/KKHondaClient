@@ -44,8 +44,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label is-required">วันที่รับ</label>
             <div class="col-md-8">
-              <my-date-picker-th [options]="myDatePickerOptions" formControlName="receive_date">
-              </my-date-picker-th>
+              <span class="form-control disabled">
+                {{displayLocalDate(formGroup.get('receive_date').value)}}
+              </span>
             </div>
           </div>
 
@@ -86,8 +87,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label is-required">วันที่ส่งของ</label>
             <div class="col-md-8">
-              <my-date-picker-th [options]="myDatePickerOptions" formControlName="delivery_date">
-              </my-date-picker-th>
+              <span class="form-control disabled">
+                {{displayLocalDate(formGroup.get('delivery_date').value)}}
+              </span>
             </div>
           </div>
 
@@ -226,7 +228,7 @@
               <label class="col-md-4 control-label is-required">สถานที่เก็บ</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_Branch" bindLabel="text" bindValue="value" placeholder="สถานที่เก็บ"
-                  formControlName="branch_id" (change)="load_wh_line(i)">
+                  formControlName="branch_id" >
                 </ng-select>
               </div>
             </div>
@@ -234,7 +236,7 @@
             <div class="col-md-6">
               <label class="col-md-4 control-label is-required">ตำแหน่งคลัง</label>
               <div class="col-md-8">
-                <ng-select [items]="list_wh[i]" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
+                <ng-select [items]="AC_Warehouse" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
                   formControlName="whl_id">
                 </ng-select>
               </div>
@@ -259,7 +261,7 @@
             <div class="col-md-6">
               <label class="col-md-6 control-label">ราคาทุนสินค้า</label>
               <div class="col-md-6">
-                <input type="number" class="form-control" formControlName="cost_exc_vat" (input)="calculateTotal(i)">
+                <input type="number" class="form-control" formControlName="cost_exc_vat">
               </div>
             </div>
           </div>
@@ -314,7 +316,10 @@
             <div class="col-md-6">
               <label class="col-md-6 control-label">รวมเป็นเงิน</label>
               <div class="col-md-6">
-                <input type="number" class="form-control" formControlName="cost_total" disabled>      
+
+                <input type="number" class="form-control" formControlName="cost_total" disabled>
+                
+
               </div>
             </div>
           </div>
@@ -324,9 +329,12 @@
     </div>
 
     <div class="text-right m-t-md form-group">
-      <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
+      <!-- <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
         (click)="onSubmit()">บันทึกรับสินค้า</button>
-      <!-- <button class="btn btn-success" type="button" (click)="debug()">Debug</button> -->
+      <button class="btn btn-success" type="button" (click)="debug()">Debug</button> -->
     </div>
   </form>
+
+
+
 </div>

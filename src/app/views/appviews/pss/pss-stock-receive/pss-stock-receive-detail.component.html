@@ -42,13 +42,11 @@
           </div>
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">วันที่รับ</label>
+            <label class="col-md-4 control-label is-required">วันที่รับ</label>
             <div class="col-md-8">
               <span class="form-control disabled">
                 {{displayLocalDate(formGroup.get('receive_date').value)}}
               </span>
-              <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="receive_date" [disabled]="true">
-              </my-date-picker-th> -->
             </div>
           </div>
 
@@ -65,7 +63,7 @@
 
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">ผู้จำหน่าย</label>
+            <label class="col-md-4 control-label is-required">ผู้จำหน่าย</label>
             <div class="col-md-8">
               <ng-select [items]="AC_Dealer" bindLabel="text" bindValue="value" placeholder="ผู้จำหน่าย"
                 formControlName="dealer_code">
@@ -74,13 +72,11 @@
           </div>
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">วันที่ส่งของ</label>
+            <label class="col-md-4 control-label is-required">วันที่ส่งของ</label>
             <div class="col-md-8">
               <span class="form-control disabled">
-                {{displayLocalDate(formGroup.get('create_date').value)}}
+                {{displayLocalDate(formGroup.get('delivery_date').value)}}
               </span>
-              <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="delivery_date" [disabled]="true">
-              </my-date-picker-th> -->
             </div>
           </div>
 
@@ -89,10 +85,19 @@
         <div class="row">
 
           <div class="col-md-4">
+            <label class="col-md-4 control-label">ประเภท</label>
+            <div class="col-md-8">
+              <ng-select [items]="AC_Type" bindLabel="txt" bindValue="id" placeholder="ประเภท"
+                formControlName="receive_type">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-4">
             <label class="col-md-4 control-label">สถานะ</label>
             <div class="col-md-8">
-              <ng-select [items]="AC_Type" bindLabel="txt" bindValue="id" placeholder="สถานะ"
-                formControlName="receive_type">
+              <ng-select [items]="AC_Status" bindLabel="txt" bindValue="id" placeholder="สถานะ"
+                formControlName="receive_status">
               </ng-select>
             </div>
           </div>
@@ -104,8 +109,6 @@
             </div>
           </div>
 
-
-
         </div>
 
       </div>
@@ -113,31 +116,28 @@
 
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-
-        <!-- <table id="Item" class="table table-bordered set-dataTable" [formGroup]="formGroup" > -->
-        <table id="Item" class="table table-stripped table-hover nowrap set-dataTable" [formGroup]="formGroup">
+        <table id="Item" class="table table-stripped table-hover nowrap detail-dataTable" [formGroup]="formGroup">
           <thead>
             <tr>
-              <th *ngFor="let header of headers" class="align-middle">{{header}}</th>
-              <!-- <th>ลำดับ</th>
-                      <th>ประเภทสินค้า</th>
-                      <th>ยี่ห้อ</th>
-                      <th>รุ่น</th>
-                      <th>แบบ</th>
-                      <th>สี</th>
-                      <th>หมายเลขเครื่อง</th>
-                      <th>หมายเลขตัวถึง</th>
-                      <th>เลขที่ใบแจ้งหนี้</th>
-                      <th>ราคา(ไม่รวม VAT)</th>
-                      <th>ค่าอื่นๆ</th>
-                      <th>ค่าซ่อม</th> -->
-              <!-- <th>สถานที่เก็บ</th> -->
+              <th>ลำดับ</th>
+              <th>เลขที่ใบสั่งซื้อ</th>
+              <th>เลขที่ใบกำกับภาษี</th>
+              <th>รุ่น</th>
+              <th>หมายเลขอะไหล่</th>
+              <th>ชื่ออะไหล่</th>
+
+              <th>จำนวนรับ</th>
+              <th>ราคา</th>
+
+              <th>สถานที่เก็บ</th>
+              <th>ตำแหน่งคลัง</th>
+
             </tr>
           </thead>
           <tbody formArrayName="detail">
 
-            <tr *ngIf="DetailList.length == 0; else else_tr;">
-              <td colspan="12" class="text-center">
+            <tr *ngIf="DetailList.length == 0; else else_tr_detail;">
+              <td colspan="10" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="LoadingEnt.noRecord">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -157,51 +157,20 @@
                 </div>
               </td>
             </tr>
-            <ng-template #else_tr>
-              <tr *ngFor="let item of DetailList.controls; let i=index;" [formGroupName]="i">
-                <td class="text-center">{{i+1}}</td>
+            <ng-template #else_tr_detail>
+              <tr *ngFor="let detailitem of DetailList.controls; let idetail=index;" [formGroupName]="idetail">
+                <td class="text-center">{{idetail+1}}</td>
 
+                <td>{{detailitem.get('invoice_no').value}}</td>
+                <td>{{detailitem.get('tax_invoice_no').value}}</td>
+                <td>{{detailitem.get('model_code').value}}</td>
+                <td>{{detailitem.get('part_code').value}}</td>
+                <td>{{detailitem.get('part_name').value}}</td>
+                <td>{{detailitem.get('receive_qty').value}}</td>
 
-                <!-- <td>
-                  <ng-select [items]="AC_PrdCategory" bindLabel="text" bindValue="value" placeholder="ประเภทสินค้า"
-                    formControlName="cat_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td>
-                <td>
-                  <ng-select [items]="AC_PrdBrand" bindLabel="text" bindValue="value" placeholder="ยี่ห้อ"
-                    formControlName="brand_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td>
-                <td>
-                  <ng-select [items]="AC_PrdModel" bindLabel="text" bindValue="value" placeholder="รุ่น"
-                    formControlName="model_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td>
-                <td>
-                  <ng-select [items]="AC_PrdType" bindLabel="text" bindValue="value" placeholder="แบบ"
-                    formControlName="type_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td>
-                <td>
-                  <ng-select [items]="AC_PrdColor" bindLabel="text" bindValue="value" placeholder="สี"
-                    formControlName="color_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td> -->
-
-                <td>{{item.get('cat_name').value}}</td>
-                <td>{{item.get('brand_name').value}}</td>
-                <td>{{item.get('model_name').value}}</td>
-                <td>{{item.get('type_name').value}}</td>
-                <td>{{item.get('color_name').value}}</td>
-
-                <td>{{item.get('engine_no').value}}</td>
-                <td>{{item.get('frame_no').value}}</td>
-                <td>{{item.get('invoice_no').value}}</td>
-                <td>{{item.get('cost_exc_vat').value | number:'1.2-2'}}</td>
-                <td>{{item.get('cost_other_exc_vat').value | number:'1.2-2'}}</td>
-                <td>{{item.get('cost_repair_exc_vat').value | number:'1.2-2'}}</td>
-
-                
+                <td>{{detailitem.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+                <td>{{detailitem.get('branch_code').value}}</td>
+                <td>{{detailitem.get('whl_code').value}}</td>
 
               </tr>
             </ng-template>
@@ -222,16 +191,12 @@
           <td>{{formGroup.get('cost_vat').value | number:'1.2-2'}}</td>
         </tr>
         <tr>
-          <td><strong>รวมมูลค่าอื่นๆ :</strong></td>
-          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2'}}</td>
-        </tr>
-        <tr>
-          <td><strong>รวมเงิน :</strong></td>
+          <td><strong>ยอดรวมสุทธิ :</strong></td>
           <td>{{formGroup.get('cost_total').value | number:'1.2-2'}}</td>
         </tr>
       </tbody>
     </table>
 
-
   </form>
+
 </div>

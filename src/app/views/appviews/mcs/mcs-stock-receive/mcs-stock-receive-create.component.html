@@ -112,7 +112,6 @@
         <div class="row">
           <button class="btn btn-primary" data-toggle="modal" data-target="#TransferLog" (click)="searchTransferlog()">
             <i class="fa fa-search"></i> ดึงรายการค้างรับทั้งหมด</button>
-          <button class="btn btn-success" disabled> <i class="fa fa-search"></i> ดึงรายการจากใบบันทึกสินค้า</button>
 
         </div>
 
@@ -226,7 +225,7 @@
       <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
         (click)="onSubmit()">บันทึกรับสินค้า</button>
 
-      <button class="btn btn-danger" type="button" (click)="debug()">Debug</button>
+      <!-- <button class="btn btn-danger" type="button" (click)="debug()">Debug</button> -->
     </div>
 
   </form>
