@@ -5,6 +5,6 @@ export * from './product-color';
 export * from './product-model';
 export * from './product-type';
 export * from './product-branch';
-
+export * from './product';
 export * from './accessory-model';
 export * from './motobike-model';

@@ -1,7 +1,7 @@
 export class ReceiveH {
   id: number;
   receive_no: string;
-  receive_id: number;  
+  receive_id: number;
   receive_name: string;
   receive_date: Date;
   receive_status: number;
@@ -23,7 +23,7 @@ export class ReceiveH {
 export class ReceiveDetail {
   id: number;
   receive_no: string;
-  receive_id: number;  
+  receive_id: number;
   receive_name: string;
   receive_date: Date;
   receive_status: number;
@@ -46,18 +46,18 @@ export class ReceiveDetail {
 export class ReceiveD {
   id: string;
   receive_no: string;
-  dealer_no: string;
+  dealer_code: string;
   cat_id: string;
-  cat_name: string;
+  cat_code: string;
   brand_id: string;
-  brand_name: string;
+  brand_code: string;
   model_id: string;
-  model_name: string;
+  model_code: string;
   type_id: string;
-  type_name: string;
+  type_code: string;
   color_id: string;
-  color_name: string;
-  
+  color_code: string;
+
   frame_no: string;
   engine_no: string;
   delivery_no: string;
@@ -74,7 +74,7 @@ export class ReceiveD {
 
   license_no: string;
   branch_id: string;
-  branch_name: string;
+  branch_code: string;
   line_remark: string;
   line_status: string;
   line_status_name: string;
@@ -85,15 +85,56 @@ export class ReceiveD {
   cost_exc_vat: number;
   cost_other_exc_vat: number;
   cost_repair_exc_vat: number;
+  whl_id: number;
+  item_id:number;
+  log_id:number;
+  whl_code:string;
+  province_code:string;
+  receive_qty:number;
+  part_code:string;
+  part_name:string;
+}
+
+export class searchlist {
+  log_id: number;
+  engine_no: string;
+  frame_no: string;
+  tax_no: string;
+  inv_amt: number;
+  vat_amt: number;
+  model_code: string;
+  model_type: string;
+  color_code: string;
+  cat_code: string;
+  brand_code: string;
+  item_id: number;
+  cat_id: number;
+  brand_id: number;
+  model_id: number;
+  type_id: number;
+  color_id: number;
+  dealer_code: string;
+  delivery_code: string;
+  delivery_date: Date;
+  invoice_no: string;
+  part_code:string;
+  part_name:string;
+  qty:number;
+  b_qty:number;
 }
 
 export enum LoadingEntities {
   loading = 0,
   noRecord = 1,
   error = 2
-} 
+}
 
 export class AutoCompleteModel {
   value: string;
   text: string;
+}
+
+export class line_select {
+  log_id: number;
+  ac: AutoCompleteModel[];
 }

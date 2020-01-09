@@ -109,6 +109,14 @@ export class McsStockReceiveService {
     return this.httpClient.post(url, form);
 
   }
+  ReceiveSingleCreate(form) {
+    const url = `${this.api}/create_receive_single`;
+    return this.httpClient.post(url, form);
+
+  }
+
+
+  
 
   UploadDos(files: FileList, id: number) {
     const url = `${this.api}/upload_dos`;

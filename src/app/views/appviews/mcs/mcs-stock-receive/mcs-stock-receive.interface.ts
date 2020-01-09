@@ -89,6 +89,8 @@ export class ReceiveD {
   item_id:number;
   log_id:number;
   whl_code:string;
+  province_code:string;
+  receive_qty:number;
 }
 
 export class searchlist {

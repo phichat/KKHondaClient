@@ -12,6 +12,8 @@ import { IUserResCookie } from 'app/interfaces/users';
 import { message } from 'app/app.message';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs';
 
 declare var toastr: any;
 
@@ -23,7 +25,22 @@ declare var toastr: any;
 export class McsStockReceiveCreateComponent implements OnInit {
 
 
-  public headers: Array<string> = new Array("ลำดับ", "", "ยี่ห้อ", "รุ่น", "แบบ", "สี", "หมายเลขเครื่อง", "หมายเลขตัวถัง", "เลขที่ใบแจ้งหนี้", "ราคา(ไม่รวม VAT)", "ค่าอื่นๆ", "ค่าซ่อม", "สถานที่เก็บ", "ตำแหน่งคลัง");
+  public headers: any[] = [
+    { title: "ลำดับ", width: '5px'},
+    { title: "", width: '5px'},
+    { title: "ยี่ห้อ", width: '100px'},
+    { title: "รุ่น", width: '200px'},
+    { title: "แบบ", width: '50px'},
+    { title: "สี", width: '50px'},
+    { title: "หมายเลขเครื่อง", width: '150px'},
+    { title: "หมายเลขตัวถัง", width: '150px'},
+    { title: "เลขที่ใบแจ้งหนี้", width: '150px'},
+    { title: "ราคา(ไม่รวม VAT)", width: '100px'},
+    { title: "ค่าอื่นๆ", width: '100px'},
+    { title: "ค่าซ่อม", width: '100px'},
+    { title: "สาขา", width: '250px'},
+    { title: "ตำแหน่งคลัง", width: '250px' }
+  ];
 
   public code: string;
   public checkedAll: boolean;
@@ -78,6 +95,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
       'progressBar': true,
     }
 
+    // this.detailreInitDatatable();
 
     this.s_service.GetBranchAutoComplete().subscribe(x => {
       this.AC_Branch = x;
@@ -128,7 +146,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: true }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.s_user.cookies.id, disabled: false }),
+      receive_id: new FormControl({ value: this.mUser.branchId, disabled: false }),
       receive_date: new FormControl({ value: today, disabled: false }, Validators.required),
       receive_status: new FormControl({ value: 2, disabled: true }),
       receive_type: new FormControl({ value: 1, disabled: true }),
@@ -184,6 +202,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
     let table: any = $('table.detail-dataTable');
     this.detaildataTable = table.DataTable({
       scrollY: '50vh',
+      scrollX: true,
       scrollCollapse: true,
       paging: false,
       searching: false,
@@ -211,7 +230,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
       scrollCollapse: true,
       paging: false,
       searching: false,
-      ordering: false,
+      // ordering: false,
       info: false
     });
   }
@@ -410,7 +429,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
           cost_repair_exc_vat: new FormControl({ value: item.cost_repair_exc_vat, disabled: false }, Validators.required),
           whl_id: new FormControl({ value: this.search_whl_id, disabled: false }, Validators.required),
           item_id: new FormControl({ value: item.item_id, disabled: false }, Validators.required),
-
+          province_code: new FormControl({ value: null, disabled: false }),
         });
 
         this.DetailList.push(fg);
@@ -421,8 +440,8 @@ export class McsStockReceiveCreateComponent implements OnInit {
       vat_flag: vat_flag,
       vat_rate: vat_rate,
     });
-    this.detailreInitDatatable();
     this.reload_wh();
+    this.detailreInitDatatable();
   }
 
 
@@ -443,7 +462,7 @@ export class McsStockReceiveCreateComponent implements OnInit {
   load_wh_line(index: number) {
 
     this.DetailList.controls[index].patchValue({
-      whl_id: new FormControl({ value: this.search_whl_id, disabled: false }, Validators.required),
+      whl_id: null, //new FormControl({ value: null, disabled: false }, Validators.required),
     });
 
     //this.DetailList.controls[index] = null;
@@ -476,7 +495,9 @@ export class McsStockReceiveCreateComponent implements OnInit {
       .subscribe(() => {
         toastr.success(message.created);
         this.route.navigate(['mcs/mcs-stock-receive-list']);
-      }, () => toastr.error(message.failed));
+      }, (err) => {
+        toastr.error(err.error);
+      });
   }
 
 

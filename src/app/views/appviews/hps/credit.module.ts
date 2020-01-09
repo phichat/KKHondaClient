@@ -34,9 +34,9 @@ import { PaymentTypeModule } from 'app/views/components/payment-type/payment-typ
 import { PaymentService } from 'app/services/credit/payment.service';
 import { CustomerContractComponent } from './customer-contract/customer-contract.component';
 import { CustomerContractListComponent } from './customer-contract/customer-contract-list.component';
+import { ContractCustomerService } from 'app/services/credit/contract-customer.service';
 import { components as CustomerContract } from './customer-contract';
 import { components as Calculate } from './calculate';
-import { ContractCustomerService } from 'app/services/credit/contract-customer.service';
 import { components as Payment } from './payment';
 
 @NgModule({

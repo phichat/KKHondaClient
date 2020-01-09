@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { appConfig } from '../../app.config';
-import { Observer } from 'rxjs/Observer';
-// import { ModelProduct } from '../../models/selling';
+import { ProductMc } from 'app/models/products';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ProductService {
 
   constructor(private http: HttpClient) { }
+
+  url = `${appConfig.apiUrl}/Products`;
 
   // FilterByKey(branchId: string, typeId: string, catId: string, brandId: string, modelId: string, colorId: string) {
   //   const apiURL = `${appConfig.apiUrl}/products/Products/FilterByKey`;
@@ -16,4 +16,12 @@ export class ProductService {
   //   return this.http.get<ModelProduct[]>(apiURL, { params });
   // }
 
+  GetMCByKeyword(term: string) {
+    const params = { term };
+    const url = `${this.url}/GetMCByKeyword`;
+    return this.http.get<ProductMc[]>(url, { params });
+  }
+
+
 }
+

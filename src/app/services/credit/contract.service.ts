@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContractModel, ContractItemModel, ContractDetailModel } from '../../models/credit';
+import { ContractModel, ContractItemModel } from '../../models/credit';
 import { BookingModel } from '../../models/selling';
 import { HttpService } from 'app/core/http.service';
 import { map } from 'rxjs/internal/operators/map';

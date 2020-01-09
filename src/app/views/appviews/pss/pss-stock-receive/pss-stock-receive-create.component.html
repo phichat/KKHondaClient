@@ -22,7 +22,7 @@
     <div class="ibox float-e-margins">
       <div class="ibox-content">
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label for="receive_no" class="col-md-4 control-label">เลขที่ใบรับ</label>
@@ -51,7 +51,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label class="col-md-4 control-label">เลขที่ใบส่งของ</label>
@@ -80,7 +80,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label class="col-md-4 control-label">สถานะ</label>
@@ -98,15 +98,26 @@
             </div>
           </div>
 
-          <div class="col-md-4" style="text-align: right;vertical-align: middle;">
-            <div class="upload-btn-wrapper">
-              <button class="btn btn-primary"> <i class="fa fa-paperclip"></i> Upload a file</button>
-              <input type="file" name="file" (change)="readExcel($event.target.files)" />
+          <div class="col-md-4">
+            <div class="col-md-4"></div>
+            <div class="col-md-8 upload-btn-wrapper">
+              <button class="btn btn-primary btn-block"> <i class="fa fa-paperclip"></i> Upload a file</button>
+              <input type="file" #file (change)="readExcel($event.target.files)" />
             </div>
-
             <!-- <input id="myForm" type="file" name="file" (change)="readExcel($event.target.files)"> -->
           </div>
 
+
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-4">
+            <div class="col-sm-12">
+              <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#TransferLog"
+                (click)="searchTransferlog()">
+                <i class="fa fa-search"></i> ดึงรายการค้างรับทั้งหมด</button>
+            </div>
+          </div>
 
         </div>
 
@@ -115,31 +126,28 @@
 
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-
-        <!-- <table id="Item" class="table table-bordered set-dataTable" [formGroup]="formGroup" > -->
-        <table id="Item" class="table table-stripped table-hover nowrap set-dataTable" [formGroup]="formGroup">
+        <table id="Item" class="table table-stripped table-hover nowrap detail-dataTable" [formGroup]="formGroup">
           <thead>
             <tr>
-              <th *ngFor="let header of headers" class="align-middle">{{header}}</th>
-              <!-- <th>ลำดับ</th>
-                      <th>ประเภทสินค้า</th>
-                      <th>ยี่ห้อ</th>
-                      <th>รุ่น</th>
-                      <th>แบบ</th>
-                      <th>สี</th>
-                      <th>หมายเลขเครื่อง</th>
-                      <th>หมายเลขตัวถึง</th>
-                      <th>เลขที่ใบแจ้งหนี้</th>
-                      <th>ราคา(ไม่รวม VAT)</th>
-                      <th>ค่าอื่นๆ</th>
-                      <th>ค่าซ่อม</th> -->
-              <!-- <th>สถานที่เก็บ</th> -->
+              <th style="width: 5px;">ลำดับ</th>
+              <th style="width: 5px;"></th>
+              <th style="width: 100px;">เลขที่ใบสั่งซื้อ</th>
+              <th style="width: 100px;">เลขที่ใบกำกับภาษี</th>
+              <th style="width: 100px;">รุ่น</th>
+              <th style="width: 150px;">หมายเลขอะไหล่</th>
+              <th style="width: 250px;">ชื่ออะไหล่</th>
+              <th style="width: 50px;">จำนวนสั่ง</th>
+              <th style="width: 50px;">ค้างรับ</th>
+              <th style="width: 50px;">จำนวนรับ</th>
+              <th style="width: 50px;">ราคา</th>
+              <th style="width: 250px;">สถานที่เก็บ</th>
+              <th style="width: 250px;">ตำแหน่งคลัง</th>
             </tr>
           </thead>
           <tbody formArrayName="detail">
 
-            <tr *ngIf="DetailList.length == 0; else else_tr;">
-              <td colspan="12" class="text-center">
+            <tr *ngIf="DetailList.length == 0; else else_tr_detail;">
+              <td colspan="13" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="LoadingEnt.noRecord">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -159,65 +167,43 @@
                 </div>
               </td>
             </tr>
-            <ng-template #else_tr>
-              <tr *ngFor="let item of DetailList.controls; let i=index;" [formGroupName]="i">
-                <td class="text-center">{{i+1}}</td>
+            <ng-template #else_tr_detail>
+              <tr *ngFor="let detailitem of DetailList.controls; let idetail=index;" [formGroupName]="idetail">
+                <td class="text-center">{{idetail+1}}</td>
 
+                <td [attr.data-order]="idetail">
+                  <a class="btn btn-danger btn-outline btn-xs" (click)="detaildelete(idetail)">
+                    <i class="fa fa-trash-o"></i>
+                    ลบ
+                  </a>
+                </td>
+                <td>{{detailitem.get('invoice_no').value}}</td>
+                <td>{{detailitem.get('tax_invoice_no').value}}</td>
+                <td>{{detailitem.get('model_code').value}}</td>
+                <td>{{detailitem.get('part_code').value}}</td>
+                <td>{{detailitem.get('part_name').value}}</td>
+                <td>{{detailitem.get('qty').value}}</td>
+                <td>{{detailitem.get('p_qty').value}}</td>
 
-                <!-- <td>
-                  <ng-select [items]="AC_PrdCategory" bindLabel="text" bindValue="value" placeholder="ประเภทสินค้า"
-                    formControlName="cat_id" [disabled]="true" [clearable]="false">
+                <td style="vertical-align: middle;" class="text-center">
+                  <input type="number" class="form-control" formControlName="r_qty" style="width: 100px;">
+                </td>
+                <td style="vertical-align: middle;" class="text-center">
+                  <input type="number" class="form-control" formControlName="cost_exc_vat" style="width: 100px;">
+                </td>
+
+                <td style="vertical-align: middle;" class="is-required" [attr.data-order]="idetail">
+                  <ng-select [items]="AC_Branch" bindLabel="text" bindValue="value" placeholder="สถานที่เก็บ"
+                    appendTo="body" formControlName="branch_id" (change)="load_wh_line(idetail)">
                   </ng-select>
                 </td>
-                <td>
-                  <ng-select [items]="AC_PrdBrand" bindLabel="text" bindValue="value" placeholder="ยี่ห้อ"
-                    formControlName="brand_id" [disabled]="true" [clearable]="false">
+
+                <td style="vertical-align: middle;" class="is-required" [attr.data-order]="idetail">
+                  <ng-select [items]="list_wh[idetail]" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
+                    appendTo="body" formControlName="whl_id">
                   </ng-select>
                 </td>
-                <td>
-                  <ng-select [items]="AC_PrdModel" bindLabel="text" bindValue="value" placeholder="รุ่น"
-                    formControlName="model_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td>
-                <td>
-                  <ng-select [items]="AC_PrdType" bindLabel="text" bindValue="value" placeholder="แบบ"
-                    formControlName="type_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td>
-                <td>
-                  <ng-select [items]="AC_PrdColor" bindLabel="text" bindValue="value" placeholder="สี"
-                    formControlName="color_id" [disabled]="true" [clearable]="false">
-                  </ng-select>
-                </td> -->
 
-                <td>{{item.get('cat_name').value}}</td>
-                <td>{{item.get('brand_name').value}}</td>
-                <td>{{item.get('model_name').value}}</td>
-                <td>{{item.get('type_name').value}}</td>
-                <td>{{item.get('color_name').value}}</td>
-
-                <td style="vertical-align: middle;" class="text-center">
-                  <input type="text" class="form-control" formControlName="engine_no">
-                </td>
-
-                <td style="vertical-align: middle;" class="text-center">
-                  <input type="text" class="form-control" formControlName="frame_no">
-                </td>
-
-                <td style="vertical-align: middle;" class="text-center">
-                  <input type="text" class="form-control" formControlName="invoice_no">
-                </td>
-                <td style="vertical-align: middle;" class="text-center">
-                  <input type="text" class="form-control" formControlName="cost_exc_vat" style="width: 100px;">
-                </td>
-                <td style="vertical-align: middle;" class="text-center">
-                  <input type="text" class="form-control" formControlName="cost_other_exc_vat" style="width: 100px;">
-                </td>
-                <td style="vertical-align: middle;" class="text-center">
-                  <input type="text" class="form-control" formControlName="cost_repair_exc_vat" style="width: 100px;">
-                </td>
-
-                <!-- <td>{{item.get('branch_name').value}}</td> -->
 
               </tr>
             </ng-template>
@@ -231,27 +217,174 @@
       <tbody>
         <tr>
           <td><strong>รวมมูลค่าสินค้า :</strong></td>
-          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ภาษีมูลค่าเพิ่ม {{formGroup.get('vat_rate').value}} % :</strong></td>
-          <td>{{formGroup.get('cost_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
-          <td><strong>รวมมูลค่าอื่นๆ :</strong></td>
-          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2'}}</td>
-        </tr>
-        <tr>
-          <td><strong>รวมเงิน :</strong></td>
-          <td>{{formGroup.get('cost_total').value | number:'1.2-2'}}</td>
+          <td><strong>ยอดรวมสุทธิ :</strong></td>
+          <td>{{formGroup.get('cost_total').value | number:'1.2-2':'en-US'}}</td>
         </tr>
       </tbody>
     </table>
 
-    <div class="text-right m-t-md form-group">
-      <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
-        (click)="onSubmit()">บันทึกรับสินค้า</button>
+    <div class="row m-t-md form-group">
+      <div class="col-sm-12 text-right">
+        <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
+          (click)="onSubmit()">บันทึกรับสินค้า</button>
+      </div>
+
+      <!-- <button class="btn btn-danger" type="button" (click)="debug()">Debug</button> -->
     </div>
 
   </form>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="TransferLog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog _dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">ดึงรายการค้างรับทั้งหมด</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+
+          <div class="col-md-6 text-center">
+            <div class="row form-group">
+              <div class="col-md-12">
+                <label class="col-md-4 control-label">เลขที่ใบสั่งซื้อ</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="log_ref">
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-md-12">
+                <label class="col-md-4 control-label">หมายเลขอะไหล่</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="part_code">
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-md-12">
+                <label class="col-md-4 control-label">เลขที่ใบกำกับภาษี</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="tax_no">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <button class="btn btn-info" type="button" (click)="searchTransferlog()">ค้นหา</button>&nbsp;
+            <button class="btn btn-danger" type="button" (click)="clearsearch()">เคลียร์</button>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <table id="searchItem" class="table table-stripped table-hover nowrap search-dataTable"
+              [formGroup]="searchformGroup">
+              <thead>
+                <tr>
+                  <th>ลำดับ</th>
+                  <th>
+                    <div class="checkbox checkbox-primary">
+                      <input type="checkbox" id="select" (change)="checkAll($event)" [checked]="checkedAll">
+                      <label for="select"></label>
+                    </div>
+                  </th>
+                  <th>เลขที่ใบสั่งซื้อ</th>
+                  <th>เลขที่ใบกำกับภาษี</th>
+                  <th>รุ่น</th>
+                  <th>หมายเลขอะไหล่</th>
+                  <th>ชื่ออะไหล่</th>
+
+                  <th>จำนวนสั่ง</th>
+                  <th>ค้างรับ</th>
+                  <th>จำนวนรับ</th>
+                  <th>ราคา</th>
+
+                </tr>
+              </thead>
+              <tbody formArrayName="search">
+
+                <tr *ngIf="SearchList.length == 0; else else_tr_search;">
+                  <td colspan="11" class="text-center">
+                    <div [ngSwitch]="searchloading">
+                      <div *ngSwitchCase="searchLoadingEnt.noRecord">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>ไม่มีข้อมูล</p>
+                      </div>
+                      <div *ngSwitchCase="searchLoadingEnt.error">
+                        <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        <br>
+                        <p>มีบางอย่างผิดพลาด</p>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <br>
+                        <p>รอสักครู่...</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <ng-template #else_tr_search>
+                  <tr *ngFor="let searchitem of SearchList.controls; let isearch=index;" [formGroupName]="isearch">
+                    <td class="text-center">{{isearch+1}}</td>
+
+                    <td [attr.data-order]="isearch">
+                      <div class="checkbox checkbox-primary">
+                        <input type="checkbox" id="select{{isearch}}" formControlName="IS_CHECKED">
+                        <label for="select{{isearch}}"></label>
+                      </div>
+                    </td>
+                    <td>{{searchitem.get('invoice_no').value}}</td>
+                    <td>{{searchitem.get('tax_no').value}}</td>
+                    <td>{{searchitem.get('model_code').value}}</td>
+                    <td>{{searchitem.get('part_code').value}}</td>
+                    <td>{{searchitem.get('part_name').value}}</td>
+                    <td>{{searchitem.get('qty').value}}</td>
+                    <td>{{searchitem.get('p_qty').value}}</td>
+                    <td>{{searchitem.get('r_qty').value}}</td>
+                    <td>{{searchitem.get('inv_amt').value}}</td>
+
+
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-md-4">
+            <ng-select [items]="AC_Branch" bindLabel="text" bindValue="value" placeholder="สถานที่เก็บ"
+              [(ngModel)]="search_branch_id" (change)="load_wh()">
+            </ng-select>
+          </div>
+          <div class="col-md-4">
+            <ng-select [items]="AC_Warehouse" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
+              [(ngModel)]="search_whl_id">
+            </ng-select>
+          </div>
+          <div class="col-md-4 text-right">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>&nbsp;
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
+              (click)="confirmTransferLog()">ตกลง</button>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer"></div> -->
+    </div>
+  </div>
 </div>

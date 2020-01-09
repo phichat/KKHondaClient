@@ -59,10 +59,8 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
         }
       };
       this.Payment$.emit(value);
-    })
-  }
+    });
 
-  ngAfterViewInit(): void {
     if (this.$Data != undefined) {
       const observe = this.$Data
         .pipe(
@@ -96,6 +94,10 @@ export class ChequeComponent extends PaymentTypeConfig implements OnInit, AfterV
     } else {
       this.loadBookBank();
     }
+  }
+
+  ngAfterViewInit(): void {
+    
   }
 
   private loadBookBank(): void {

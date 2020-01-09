@@ -44,6 +44,7 @@ import { ReportHpsModule } from './report-hps/report-hps.module';
 import { MCSModule } from './mcs/mcs.module';
 import { PSSModule } from './pss/pss.module';
 import { SaleModule } from './sale/sale.module';
+import { WholeSaleModule } from './wholesale/wholesale.module';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { SaleModule } from './sale/sale.module';
     TaxSaleSpareModule,
     ReportHpsModule,
     SaleModule,
+    WholeSaleModule,
     MCSModule,
     PSSModule,
     

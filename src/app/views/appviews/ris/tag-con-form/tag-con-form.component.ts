@@ -126,7 +126,7 @@ export class TagConFormComponent extends TagConFormConfig implements OnInit, OnD
     this.activeRoute.params.pipe(
       map(x => !x['code'] ? empty() : x['code']),
       mergeMap(x => {
-        if (!x) return  empty();
+        if (!x) return;
         this.s_loader.showLoader();
         return this.s_carRegis.GetCarBySellNo(x)
       })

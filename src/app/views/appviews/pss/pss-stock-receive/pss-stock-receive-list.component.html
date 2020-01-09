@@ -1,5 +1,5 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-8">
+  <div class="col-lg-4">
     <h2>รายการบันทึกรับสินค้า</h2>
     <ol class="breadcrumb">
       <li>
@@ -7,15 +7,16 @@
       </li>
       <li>จัดซื้อ</li>
       <li class="active">
-        <strong>รายการบันทึกรับสินค้า</strong>
+        <strong>รายการบันทึกรับสินค้า (อะไหล่)</strong>
       </li>
     </ol>
   </div>
-  <div class="col-lg-4 text-right pull-right">
+  <div class="col-lg-8 text-right pull-right">
     <h3>&nbsp;</h3>
-    <a [routerLink]="['/pss/pss-stock-receive-create']" class="btn btn-primary">
-      <i class="fa fa-paper-plane-o"></i> บันทึกรับสินค้า
-    </a> 
+    <a [routerLink]="['/pss/pss-stock-receive-create']" class="btn btn-success" style="width: 220px;">
+      <i class="fa fa-paper-plane-o"></i> บันทึกรับสินค้า (อะไหล่)
+    </a>
+    <h3>&nbsp;</h3>
   </div>
 </div>
 
@@ -65,7 +66,9 @@
               <tr *ngFor="let item of list; let i = index">
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">
-                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/mcs/mcs-stock-receive-detail', item.receive_no]">
+
+                  <a class="btn btn-info btn-outline btn-xs" *ngIf="item.receive_type == '3'"
+                    [routerLink]=" ['/pss/pss-stock-receive-detail', item.receive_no]">
                     <i class="fa fa-info-circle"></i>
                     รายละเอียด
                   </a>
