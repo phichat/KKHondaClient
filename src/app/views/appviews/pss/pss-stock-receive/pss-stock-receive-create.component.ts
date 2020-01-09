@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { setLocalDate, getDateMyDatepicker, MyDatePickerOptions } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -25,8 +25,8 @@ export class PssStockReceiveCreateComponent implements OnInit {
 
   public code: string;
   public checkedAll: boolean;
-  myDatePickerOptions = MyDatePickerOptions;
-  displayLocalDate = setLocalDate;
+  // myDatePickerOptions = MyDatePickerOptions;
+  // displayLocalDate = setLocalDate;
   formGroup: FormGroup;
   searchformGroup: FormGroup;
   mUser: IUserResCookie;
@@ -113,20 +113,20 @@ export class PssStockReceiveCreateComponent implements OnInit {
     this.loading = this.LoadingEnt.noRecord;
     this.mUser = this.s_user.cookies;
 
-    let date = new Date();
-    var today = {
-      date: {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate()
-      }
-    }
+    let today = new Date();
+    // var today = {
+    //   date: {
+    //     year: date.getFullYear(),
+    //     month: date.getMonth() + 1,
+    //     day: date.getDate()
+    //   }
+    // }
 
 
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: true }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.s_user.cookies.id, disabled: false }),
+      receive_id: new FormControl({ value: this.mUser.id, disabled: false }), // id ของผู้รับ(Branch ID จะหาจาก backend ครับ)
       receive_date: new FormControl({ value: today, disabled: false }, Validators.required),
       receive_status: new FormControl({ value: 2, disabled: true }),
       receive_type: new FormControl({ value: 3, disabled: true }),
@@ -134,7 +134,7 @@ export class PssStockReceiveCreateComponent implements OnInit {
       dealer_code: new FormControl({ value: null, disabled: false }, Validators.required),
       purchase_no: new FormControl({ value: null, disabled: false }),
       remark: new FormControl({ value: null, disabled: false }),
-      create_id: new FormControl({ value: this.s_user.cookies.id, disabled: false }),
+      create_id: new FormControl({ value: this.mUser.id, disabled: false }),
       create_date: new FormControl({ value: null, disabled: false }),
 
       update_id: new FormControl({ value: null, disabled: true }),
@@ -444,8 +444,8 @@ export class PssStockReceiveCreateComponent implements OnInit {
     let f = this.formGroup.getRawValue();
     f = {
       ...f,
-      receive_date: getDateMyDatepicker(f.receive_date),
-      delivery_date: getDateMyDatepicker(f.delivery_date)
+      receive_date: setZeroHours(f.receive_date),
+      delivery_date: setZeroHours(f.delivery_date)
     }
     this.s_service.ReceiveCreate(f)
       .pipe(finalize(() => this.s_loader.onEnd()))
@@ -462,8 +462,8 @@ export class PssStockReceiveCreateComponent implements OnInit {
     let f = this.formGroup.getRawValue();
     f = {
       ...f,
-      receive_date: getDateMyDatepicker(f.receive_date),
-      delivery_date: getDateMyDatepicker(f.delivery_date)
+      receive_date: setZeroHours(f.receive_date),
+      delivery_date: setZeroHours(f.delivery_date)
     }
     console.log(f);
   }

@@ -4,7 +4,6 @@ import { FormBuilder, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { MyDatePickerOptions } from 'app/app.config';
 import { McsStockReceiveService } from './mcs-stock-receive.service';
 import { ReceiveD, LoadingEntities, AutoCompleteModel, ReceiveDetail } from './mcs-stock-receive.interface';
 import { tap, finalize } from 'rxjs/operators';
@@ -28,7 +27,7 @@ export class McsStockReceiveDetailComponent implements OnInit {
   public headers: Array<string> = new Array("ลำดับ", "ยี่ห้อ", "รุ่น", "แบบ", "สี", "หมายเลขเครื่อง", "หมายเลขตัวถัง", "เลขที่ใบแจ้งหนี้", "ราคา(ไม่รวม VAT)", "ค่าอื่นๆ", "ค่าซ่อม", "สถานที่เก็บ", "ตำแหน่งคลัง");
 
   public code: string;
-  myDatePickerOptions = MyDatePickerOptions;
+  // myDatePickerOptions = MyDatePickerOptions;
   displayLocalDate = setLocalDate;
   formGroup: FormGroup;
   mUser: IUserResCookie;
@@ -111,7 +110,7 @@ export class McsStockReceiveDetailComponent implements OnInit {
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: true }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.mUser.branchId, disabled: true }),
+      receive_id: new FormControl({ value: null, disabled: true }),
       receive_date: new FormControl({ value: null, disabled: true }),
       receive_status: new FormControl({ value: 1, disabled: true }),
       receive_type: new FormControl({ value: 1, disabled: true }),
@@ -119,7 +118,7 @@ export class McsStockReceiveDetailComponent implements OnInit {
       dealer_code: new FormControl({ value: null, disabled: true }),
       purchase_no: new FormControl({ value: null, disabled: true }),
       remark: new FormControl({ value: null, disabled: true }),
-      create_id: new FormControl({ value: this.s_user.cookies.id, disabled: true }),
+      create_id: new FormControl({ value: null, disabled: true }),
       create_date: new FormControl({ value: null, disabled: true }),
 
       update_id: new FormControl({ value: null, disabled: true }),
