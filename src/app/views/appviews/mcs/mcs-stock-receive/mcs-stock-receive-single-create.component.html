@@ -22,7 +22,7 @@
     <div class="ibox float-e-margins">
       <div class="ibox-content">
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label for="receive_no" class="col-md-4 control-label">เลขที่ใบรับ</label>
@@ -32,7 +32,7 @@
           </div>
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">ผู้รับสินค้า</label>
+            <label class="col-md-4 control-label is-required">ผู้รับสินค้า</label>
             <div class="col-md-8">
               <ng-select [items]="AC_User" bindLabel="text" bindValue="value" placeholder="ผู้รับสินค้า"
                 formControlName="receive_id">
@@ -42,7 +42,7 @@
           </div>
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">วันที่รับ</label>
+            <label class="col-md-4 control-label is-required">วันที่รับ</label>
             <div class="col-md-8">
               <my-date-picker-th [options]="myDatePickerOptions" formControlName="receive_date">
               </my-date-picker-th>
@@ -51,7 +51,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label class="col-md-4 control-label">เลขที่ใบส่งของ</label>
@@ -62,7 +62,7 @@
 
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">ซื้อจาก</label>
+            <label class="col-md-4 control-label is-required">ซื้อจาก</label>
             <div class="col-md-8">
               <ng-select [items]="AC_Dealer" bindLabel="text" bindValue="value" placeholder="ซื้อจาก"
                 formControlName="dealer_code">
@@ -71,7 +71,7 @@
           </div>
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">ผู้โอน</label>
+            <label class="col-md-4 control-label is-required">ผู้โอน</label>
             <div class="col-md-8">
               <ng-select [items]="AC_Dealer" bindLabel="text" bindValue="value" placeholder="ผู้โอน"
                 formControlName="transfer_code">
@@ -81,10 +81,10 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
-            <label class="col-md-4 control-label">วันที่ส่งของ</label>
+            <label class="col-md-4 control-label is-required">วันที่ส่งของ</label>
             <div class="col-md-8">
               <my-date-picker-th [options]="myDatePickerOptions" formControlName="delivery_date">
               </my-date-picker-th>
@@ -116,12 +116,22 @@
     <div formArrayName="detail">
 
       <div class="ibox float-e-margins" *ngFor="let item of DetailList.controls; let i=index;" [formGroupName]="i">
-        <div class="ibox-content">
-
-          <div class="row">
+        <div class="ibox-content" [attr.data-order]="i">
+          <div class="row form-group">
 
             <div class="col-md-6">
-              <label for="receive_no" class="col-md-4 control-label">ประเภทสินค้า</label>
+              <label for="invoice_no" class="col-md-4 control-label">เลขที่ใบแจ้งหนี้</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="invoice_no">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row form-group">
+
+            <div class="col-md-6">
+              <label for="receive_no" class="col-md-4 control-label is-required">ประเภทสินค้า</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_PrdCategory" bindLabel="text" bindValue="value" placeholder="ประเภทสินค้า"
                   formControlName="cat_id">
@@ -130,10 +140,11 @@
             </div>
 
           </div>
-          <div class="row">
+
+          <div class="row form-group">
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">ยี่ห้อ</label>
+              <label class="col-md-4 control-label is-required">ยี่ห้อ</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_PrdBrand" bindLabel="text" bindValue="value" placeholder="ยี่ห้อ"
                   formControlName="brand_id">
@@ -143,7 +154,7 @@
 
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">รุ่น</label>
+              <label class="col-md-4 control-label is-required">รุ่น</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_PrdModel" bindLabel="text" bindValue="value" placeholder="รุ่น"
                   formControlName="model_id">
@@ -151,10 +162,11 @@
               </div>
             </div>
           </div>
-          <div class="row">
+
+          <div class="row form-group">
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">แบบ</label>
+              <label class="col-md-4 control-label is-required">แบบ</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_PrdType" bindLabel="text" bindValue="value" placeholder="แบบ"
                   formControlName="type_id" [disabled]="true" [clearable]="false">
@@ -163,7 +175,7 @@
             </div>
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">สี</label>
+              <label class="col-md-4 control-label is-required">สี</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_PrdColor" bindLabel="text" bindValue="value" placeholder="สี"
                   formControlName="color_id">
@@ -174,10 +186,10 @@
 
           </div>
 
-          <div class="row">
+          <div class="row form-group">
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">หมายเลขเครื่อง</label>
+              <label class="col-md-4 control-label is-required">หมายเลขเครื่อง</label>
               <div class="col-md-8">
                 <input type="text" class="form-control" formControlName="engine_no">
               </div>
@@ -191,10 +203,11 @@
             </div>
 
           </div>
-          <div class="row">
+
+          <div class="row form-group">
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">หมายเลขตัวถัง</label>
+              <label class="col-md-4 control-label is-required">หมายเลขตัวถัง</label>
               <div class="col-md-8">
                 <input type="text" class="form-control" formControlName="frame_no">
               </div>
@@ -204,88 +217,111 @@
               <label class="col-md-4 control-label">จังหวัดที่จดทะเบียน</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_Province" bindLabel="text" bindValue="value" placeholder="จังหวัดที่จดทะเบียน"
-                  formControlName="province_id">
+                  formControlName="province_code">
                 </ng-select>
               </div>
             </div>
 
           </div>
-          <div class="row">
+
+          <div class="row form-group">
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">สถานที่เก็บ</label>
+              <label class="col-md-4 control-label is-required">สถานที่เก็บ</label>
               <div class="col-md-8">
                 <ng-select [items]="AC_Branch" bindLabel="text" bindValue="value" placeholder="สถานที่เก็บ"
-                  formControlName="branch_id">
+                  formControlName="branch_id" (change)="load_wh_line(i)">
                 </ng-select>
               </div>
             </div>
 
             <div class="col-md-6">
-              <label class="col-md-4 control-label">หมายเหตุสต๊อก</label>
+              <label class="col-md-4 control-label is-required">ตำแหน่งคลัง</label>
               <div class="col-md-8">
-                <input type="text" class="form-control" formControlName="line_remark">
+                <ng-select [items]="list_wh[i]" bindLabel="text" bindValue="value" placeholder="ตำแหน่งคลัง"
+                  formControlName="whl_id">
+                </ng-select>
               </div>
             </div>
 
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-6"> </div>
+            <div class="col-md-6">
+              <label class="col-md-4 control-label">หมายเหตุสต๊อก</label>
+              <div class="col-md-8">
+                <!-- <input type="text" class="form-control" formControlName="line_remark"> -->
+                <textarea class="form-control" formControlName="line_remark"></textarea>
+              </div>
+            </div>
           </div>
 
           <hr>
 
-          <div class="row">
+          <div class="row form-group">
             <div class="col-md-6"></div>
             <div class="col-md-6">
-              <label class="col-md-5 control-label">ราคาทุนสินค้า</label>
-              <div class="col-md-7">
-                <input type="number" class="form-control" formControlName="cost_exc_vat">
+              <label class="col-md-6 control-label">ราคาทุนสินค้า</label>
+              <div class="col-md-6">
+                <input type="number" class="form-control" formControlName="cost_exc_vat" (input)="calculateTotal(i)">
               </div>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row form-group">
             <div class="col-md-6"></div>
             <div class="col-md-6">
 
-              <label class="col-md-5 control-label">
-                <div class="checkbox checkbox-primary ">
-                  <input type="checkbox" id="vat_flag" value="Y" formControlName="vat_flag">
-                  <label for="vat_flag"></label>
-                  ภาษีมูลค่าเพิ่ม
+
+              <label class="col-md-6 control-label">
+                <div class="checkbox checkbox-primary" style="display: inline">
+                  <input type="checkbox" id="chk_vat" formControlName="chk_vat" (change)="calculateTotal(i)">
+                  <label for="chk_vat"></label>
+                </div>
+
+                ภาษีมูลค่าเพิ่ม
+
+
+                <div style="display: inline">
+                  <input type="text" formControlName="vat_rate" readonly style="border:0;width: 10px;">%
                 </div>
 
               </label>
-              <div class="col-md-7">
-                <input type="number" class="form-control" formControlName="cost_vat">
+              <div class="col-md-6">
+                <input type="number" class="form-control" formControlName="cost_vat" disabled>
               </div>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row form-group">
             <div class="col-md-6"></div>
             <div class="col-md-6">
-              <label class="col-md-5 control-label">ค่าอื่นๆ ไม่รวม Vat</label>
-              <div class="col-md-7">
-                <input type="number" class="form-control" formControlName="cost_other_exc_vat">
+              <label class="col-md-6 control-label">ค่าอื่นๆ ไม่รวม Vat</label>
+              <div class="col-md-6">
+                <input type="number" class="form-control" formControlName="cost_other_exc_vat"
+                  (input)="calculateTotal(i)">
               </div>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row form-group">
             <div class="col-md-6"></div>
             <div class="col-md-6">
-              <label class="col-md-5 control-label">ราคาทุนซ่อม ไม่รวม Vat</label>
-              <div class="col-md-7">
-                <input type="number" class="form-control" formControlName="cost_repair_exc_vat">
+              <label class="col-md-6 control-label">ราคาทุนซ่อม ไม่รวม Vat</label>
+              <div class="col-md-6">
+                <input type="number" class="form-control" formControlName="cost_repair_exc_vat"
+                  (input)="calculateTotal(i)">
               </div>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row form-group">
             <div class="col-md-6"></div>
             <div class="col-md-6">
-              <label class="col-md-5 control-label">รวมเป็นเงิน</label>
-              <div class="col-md-7">
-              
+              <label class="col-md-6 control-label">รวมเป็นเงิน</label>
+              <div class="col-md-6">
+                <input type="number" class="form-control" formControlName="cost_total" disabled>
               </div>
             </div>
           </div>
@@ -294,16 +330,12 @@
       </div>
     </div>
 
-
-    <div class="text-right m-t-md form-group">
-
-
-      <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
-        (click)="onSubmit()">บันทึกรับสินค้า</button>
-
-      <button class="btn btn-success" type="button" (click)="debug()">Debug</button>
-
+    <div class="row m-t-md form-group">
+      <div class="col-sm-12 text-right">
+        <button class="btn btn-success" type="button" [disabled]="formGroup.invalid || DetailList.length == 0"
+          (click)="onSubmit()">บันทึกรับสินค้า</button>
+      </div>
+      <!-- <button class="btn btn-success" type="button" (click)="debug()">Debug</button> -->
     </div>
-
   </form>
 </div>

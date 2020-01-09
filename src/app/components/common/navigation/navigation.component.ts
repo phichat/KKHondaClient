@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import 'jquery-slimscroll';
 import { appConfig } from '../../../app.config';
 import { UserService } from '../../../services/users';
-import { ModelUser } from '../../../models/users';
+import { IUserResCookie } from 'app/interfaces/users';
 
 declare var jQuery: any;
 
@@ -15,10 +15,12 @@ declare var jQuery: any;
 export class NavigationComponent {
 
   public kkHondaWeb = appConfig.apikkWeb;
-  asyncUser: any;
+  user: IUserResCookie;
 
-  constructor(private router: Router, private userServiec: UserService) {
-    this.asyncUser = this.userServiec.currentData;
+  constructor(
+    private router: Router, 
+    private userServiec: UserService) {
+    this.user = this.userServiec.cookies;
   }
 
   ngAfterViewInit() {

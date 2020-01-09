@@ -15,6 +15,7 @@ import { ILeasing, ILeasingInterest } from 'app/interfaces/credit/lesing-linterf
 import { combineLatest } from 'rxjs';
 import { ProvinceService, AmpherService } from 'app/services/masters';
 import { IMAmpher } from 'app/interfaces/masters';
+import { BookingPaymentType } from 'app/entities/mcs.entities';
 
 declare var toastr: any;
 
@@ -80,7 +81,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
         this.formCalculate.patchValue({
           bookingId: p.bookingId,
-          sellTypeId: 4,
+          sellTypeId: BookingPaymentType.Leasing,
           sellAcitvityId: 25,
           saleBy: this.userModel.id
         });

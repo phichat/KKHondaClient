@@ -1,0 +1,130 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-md-10">
+    <h2>รายการจอง</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>งานขายส่ง</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-md-2 text-right pull-right">
+    <h3>&nbsp;</h3>
+    <a [routerLink]="['/wholesale/booking-create']" class="btn btn-primary">
+      <i class="fa fa-paper-plane-o"></i> บันทึกการจอง
+    </a>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+  <div class="ibox">
+    <div class="ibox-title">
+      ค้นหาข้อมูลการจองรถ
+    </div>
+    <div class="ibox-content">
+      <form action="" [formGroup]="formSearch">
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">เลขที่ใบจอง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="bookingNo">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">วันที่จอง</label>
+            <div class="col-lg-8">
+              <thai-mat-datepicker id="dp" formControlName="bookingDate"></thai-mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้จอง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="customer">
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">วันที่รับรถ</label>
+            <div class="col-lg-8">
+              <thai-mat-datepicker id="dp" formControlName="receiveDate"></thai-mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <label class="col-lg-4 control-label">ผู้รับจอง</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" formControlName="recipient">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-info" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              ค้นหา
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="ibox">
+    <div class="ibox-content">
+      <table class="table table-striped table-hover set-dataTable">
+        <thead>
+          <tr>
+            <th class="text-center">ลำดับ</th>
+            <th>เลขที่ใบจอง</th>
+            <th>รายละเอียด</th>
+            <th>บันทึกการขาย</th>
+            <th>ชื่อผู้จอง</th>
+            <th>วันที่จอง</th>
+            <th>วันที่รับรถ</th>
+            <th>เงินจอง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of bookingList; let i=index">
+            <td class="text-center">{{i+1}}</td>
+            <td class="text-center">
+              <span *ngFor="let bookingNo of item.bookingNo">
+                {{bookingNo}}
+                <br>
+              </span>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-xs btn-outline btn-primary"
+                [routerLink]="['/wholesale/booking-add-money']">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                เพิ่มเงินจอง</button>
+              &nbsp;|&nbsp;
+              <button type="button" class="btn btn-xs btn-outline btn-info"
+                [routerLink]="['/wholesale/booking-detail']">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                รายละเอียด</button>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-xs btn-outline btn-success"
+                [routerLink]="['/wholesale/sale-create']">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+                บันทึกการขาย</button>
+            </td>
+            <td>
+              <small class="text-muted">{{item['customerCode']}}</small><br>
+              {{item['customerFullName']}}
+            </td>
+            <td>{{setLocalDate(item['bookingDate'])}}</td>
+            <td>{{setLocalDate(item['receiveDate'])}}</td>
+            <td>{{item['totalBookingPrice'] | number:'1.2-2':'en-US'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

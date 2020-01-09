@@ -1,0 +1,119 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>รายละเอียดการจอง</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>งานขายส่ง</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox">
+    <div class="ibox-content">
+
+      <div class="row">
+        <div class="col-xs-8 col-lg-8 b-r">
+
+          <section class="row form-group">
+            <div class="col-sm-12">
+              <h5>ข้อมูลการจอง</h5>
+              <hr class="m-t-xs">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center">ลำดับ</th>
+                    <th>เลขที่ใบจอง</th>
+                    <th>ประเภทชำระเงิน</th>
+                    <th>วันที่ชำระเงิน</th>
+                    <th>ยอดชำระเงิน</th>
+                    <th>จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of bookingList; let i=index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td>{{item['bookingNo']}}</td>
+                    <td>{{item['paymentType']}}</td>
+                    <td>{{setLocalDate(item['paymentDate'])}}</td>
+                    <td>{{item['totalPaymentPrice'] | number:'1.2-2':'en-US'}}</td>
+                    <td>
+                      <button type="button" class="btn btn-xs btn-outline btn-danger" data-toggle="modal"
+                        [attr.data-target]="'#'+bookingSlip.modalId" (click)="bookingNo=item.bookingNo">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        ยกเลิกใบจอง</button> &nbsp;|&nbsp;
+                      <button type="button" class="btn btn-xs btn-outline btn-primary"
+                        [routerLink]="['/wholesale/booking-edit']">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        แก้ไขใบจอง</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="row form-group">
+            <div class="col-sm-12">
+              <h5>ข้อมูลรถ</h5>
+              <hr class="m-t-xs">
+              <table class="table table-bordered table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th style="width: 5%;" class="text-center">ลำดับ</th>
+                    <th style="width: 30%;">รายละเอียดรถ</th>
+                    <th style="width: 15%;">ราคาต่อหน่วย</th>
+                    <th style="width: 10%;">จำนวนสั่ง</th>
+                    <th style="width: 10%;">ค้างส่ง</th>
+                    <th style="width: 15%;">เป็นเงิน</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of productMcItem; let i=index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td>{{item['itemName']}}</td>
+                    <td>{{item['sellNet'] | number:'1.2-2':'en-US'}}</td>
+                    <td>{{item['orders']}}</td>
+                    <td>{{item['backlogs']}}</td>
+                    <td>{{item['total'] | number:'1.2-2':'en-US'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+        <div class="col-xs-4 col-lg-4">
+          <div class="row form-group">
+            <label class="col-md-4 control-label ">ผู้จอง</label>
+            <div class="col-md-8">นายพิเชษฐ ไข่ษรศักดิ์</div>
+          </div>
+          <div class="row form-group">
+            <label class="col-md-4 control-label ">วันที่จอง</label>
+            <div class="col-md-8">{{setLocalDate(bookingDate)}}</div>
+          </div>
+          <div class="row form-group">
+            <label class="col-md-4 control-label ">วันกำหนดรับรถ</label>
+            <div class="col-md-8">{{setLocalDate(receiveDate)}}</div>
+          </div>
+          <div class="row form-group">
+            <label class="col-md-4 control-label ">ผู้รับจอง</label>
+            <div class="col-md-8">นายพิเชษฐ ไข่ษรศักดิ์</div>
+          </div>
+        </div>
+      </div>
+
+      <app-form-cancel-booking class="modal inmodal" [id]="bookingSlip.modalId" tabindex="-1" role="dialog"
+        aria-hidden="true" style="display: none;" [title]="bookingSlip.title" [slipNo]="bookingNo"
+        [reasonDropdown]="reasonDropdown">
+      </app-form-cancel-booking>
+
+    </div>
+  </div>
+</div>

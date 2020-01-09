@@ -3,16 +3,16 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SaleService } from 'app/services/credit';
-import { FormCancelSlipConfig } from './form-cancel-slip.config';
+import { FormCancelSlipConfig, IFormCancelSlip } from '../../../components/cancel-slip';
 
 declare var toastr: any;
 
 @Component({
   selector: 'app-form-cancel-reserve-return',
-  templateUrl: 'form-cancel-slip.component.html'
+  templateUrl: '../../../components/cancel-slip/form-cancel-slip.component.html'
 })
 
-export class FormCancelReserveReturnComponent extends FormCancelSlipConfig implements OnInit {
+export class FormCancelReserveReturnComponent extends FormCancelSlipConfig implements IFormCancelSlip {
 
 
   constructor(
@@ -21,9 +21,6 @@ export class FormCancelReserveReturnComponent extends FormCancelSlipConfig imple
   ) {
     super();
     this.user = this.s_user.cookies;
-  }
-
-  ngOnInit() {
   }
 
   onCancel() {

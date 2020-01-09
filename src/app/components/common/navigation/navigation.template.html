@@ -6,7 +6,7 @@
                     </span>
                     <a class="dropdown-toggle" href="javaScript:void(0)">
                         <span class="clear">
-                            <span class="block m-t-xs" *ngIf="asyncUser | async; let user">
+                            <span class="block m-t-xs">
                                 <strong class="font-bold">{{user.adminName}}</strong><br>
                                 <span class="block m-t-xs">
                                     <strong class="font-bold">{{user.name}}</strong><br>
@@ -161,13 +161,40 @@
                 </ul>
             </li>
 
+            <li [ngClass]="{active: activeRoute('wholesale')}">
+                <a href="javaScript:void(0);">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="nav-label">งานขาย (ส่ง)</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li [ngClass]="{active: 
+                        activeRoute('booking-list') || 
+                        activeRoute('booking-create') || 
+                        activeRoute('booking-edit') || 
+                        activeRoute('booking-cancel')}">
+                        <a [routerLink]="['/wholesale/booking-list']">
+                            <span class="nav-label">รายการจอง</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: 
+                        activeRoute('sale-list') || 
+                        activeRoute('sale-create') || 
+                        activeRoute('sale-cancel')}">
+                        <a [routerLink]="['/wholesale/sale-list']">
+                            <span class="nav-label">รายการขาย</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li [ngClass]="{active: activeRoute('sale') || activeRoute('credit')}">
                 <a href="javaScript:void(0);">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="nav-label">งานขาย</span>
+                    <span class="nav-label">งานขาย (ปลีก)</span>
                     <span class="fa arrow"></span>
                 </a>
-                <ul class="nav nav-second-level collapse" >
+                <ul class="nav nav-second-level collapse">
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_booking">
                             <span class="nav-label">จองรถ</span>
@@ -355,11 +382,11 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li [ngClass]="{'active': activeRoute('mcs-save-po-list')}">
+                    <!-- <li [ngClass]="{'active': activeRoute('mcs-save-po-list')}">
                         <a [routerLink]="['/mcs/mcs-save-po-list']">
                             <span class="nav-label">บันทึกใบสั่งซื้อ</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li [ngClass]="{'active': activeRoute('mcs-stock-receive-list')}">
                         <a [routerLink]="['/mcs/mcs-stock-receive-list']">
                             <span class="nav-label">บันทึกรับสินค้า</span>

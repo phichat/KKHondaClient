@@ -1,0 +1,197 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>แก้ไขการจอง</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="/">หน้าแรก</a>
+      </li>
+      <li class="active">
+        <strong>งานขายส่ง</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2 text-right pull-right">
+
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+  <div class="ibox">
+    <div class="ibox-content">
+      <form [formGroup]="formGroup">
+
+        <section class="row">
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">ผู้จอง</label>
+              <div class="col-md-8">
+                <ng-select required [items]="customerDropdown" bindValue="value" bindLabel="text"
+                  [typeahead]="customerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="customerCode"
+                  [loading]="customerLoading" [loadingText]="dropdownLoadingTxt">
+                </ng-select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">วันกำหนดรับรถ</label>
+              <div class="col-md-8">
+                <thai-mat-datepicker id="dp" formControlName="receiveDate"></thai-mat-datepicker>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">วันที่จอง</label>
+              <div class="col-md-8">
+                <thai-mat-datepicker id="dp" formControlName="bookingDate"></thai-mat-datepicker>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12 text-right">
+                <small>ผู้ทำรายการ {{user.fullName}} วันที่ {{setLocalDate(formGroup.get('createDate').value)}}</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="hr-line-dashed"></div>
+
+        <section class="row form-group">
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label">เลขที่ใบจอง</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" formControlName="bookingNo">
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="row form-group">
+              <label class="col-md-4 control-label">หมายเหตุ</label>
+              <div class="col-md-8">
+                <textarea rows="2" formControlName="remark" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="row form-group">
+          <div class="col-sm-12">
+            <table class="table table-bordered table-striped table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 5%;" class="text-center">ลำดับ</th>
+                  <th style="width: 30%;">รายละเอียดรถ</th>
+                  <th style="width: 15%;">ราคาต่อหน่วย</th>
+                  <th style="width: 10%;">จำนวนสั่ง</th>
+                  <th style="width: 10%;">ค้างส่ง</th>
+                  <th style="width: 15%;">เป็นเงิน</th>
+                  <th style="width: 5%;" class="text-center">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="productItem">
+                <tr *ngFor="let item of ProductItem.controls; let i=index" [formGroupName]="i">
+                  <td class="text-center">{{i+1}}</td>
+                  <td>{{item.get('itemName').value}}</td>
+                  <td><input type="number" class="form-control" formControlName="sellNet" (keyup)="rowOrderChange(i)">
+                  </td>
+                  <td>
+                    <input type="number" class="form-control" formControlName="orders" (keyup)="rowOrderChange(i)">
+                  </td>
+                  <td class="text-center">
+                    {{item.get('backlogs').value}}
+                  </td>
+                  <td>
+                    {{item.get('total').value | number:'1.2-2':'en-US'}}
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-xs btn-outline btn-danger">
+                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      ลบ</button>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot [formGroup]="formGroupProduct">
+                <tr>
+                  <th></th>
+                  <th>
+                    <ng-select [items]="productMcDropdown" [typeahead]="productMcTypeahead" dropdownPosition="auto"
+                      bindLabel="text" bindValue="value" labelForId="model" [virtualScroll]="true" placeholder=""
+                      [loading]="searchProductMcLoading" [loadingText]="dropdownLoadingTxt" formControlName="itemId"
+                      (change)="selectProductMc($event)">
+                      <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                        <small class="text-muted">{{item.typeName}}</small><br>
+                        <span class="text-primary">{{item.brandName}} {{item.modelName}} {{item.colorName}}</span>
+                        <hr class="m-t-xs m-b-xs">
+                      </ng-template>
+                    </ng-select>
+                  </th>
+                  <th><input type="text" class="form-control" formControlName="sellNet" (keyup)="orderChange()">
+                  </th>
+                  <th><input type="number" class="form-control" formControlName="orders" (keyup)="orderChange()"></th>
+                  <th>{{formGroupProduct.get('backlogs').value}}</th>
+                  <th>{{formGroupProduct.get('total').value | number:'1.2-2':'en-US'}}</th>
+                  <th class="text-center">
+                    <button type="button" class="btn btn-xs btn-outline btn-success" (click)="addProductMc()">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                      เพิ่ม</button>
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
+        <section class="row">
+          <div class="col-xs-6 col-lg-6"></div>
+          <div class="col-xs-6 col-lg-6">
+            <div class="row">
+              <h5>เงินมัดจำ</h5>
+              <hr class="m-t-xs">
+            </div>
+            <div class="row form-group">
+              <label class="col-md-4 control-label is-required">ประเภทชำระ</label>
+              <div class="col-md-8">
+                <div *ngFor="let item of PaymentTypeList; let i=index;" class="radio radio-info radio-inline">
+                  <input type="radio" formControlName="paymentType" id="pt{{i}}" value={{item.id}} required>
+                  <label for="pt{{i}}">{{item.desc}}</label>
+                </div>
+              </div>
+            </div>
+
+            <div [ngSwitch]="formGroup.get('paymentType').value">
+              <ng-container *ngSwitchCase="PaymentType.Cash">
+                <app-payment-type-cash (Payment$)="formPaymentChange($event)" [$Data]="PaymentData">
+                </app-payment-type-cash>
+              </ng-container>
+              <ng-container *ngSwitchCase="PaymentType.Transfer">
+                <app-payment-type-transfer (Payment$)="formPaymentChange($event)" [$Data]="PaymentData">
+                </app-payment-type-transfer>
+              </ng-container>
+              <ng-container *ngSwitchCase="PaymentType.Cheque">
+                <app-payment-type-cheque (Payment$)="formPaymentChange($event)" [$Data]="PaymentData">
+                </app-payment-type-cheque>
+              </ng-container>
+              <ng-container *ngSwitchCase="PaymentType.CreditCard">
+                <app-payment-type-credit-card (Payment$)="formPaymentChange($event)" [$Data]="PaymentData">
+                </app-payment-type-credit-card>
+              </ng-container>
+            </div>
+          </div>
+        </section>
+
+        <div class="hr-line-dashed"></div>
+
+        <section class="row">
+          <div class="col-sm-12">
+            <button type="button" class="btn btn-primary pull-right">
+              <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก
+            </button>
+          </div>
+        </section>
+      </form>
+    </div>
+  </div>
+
+</div>

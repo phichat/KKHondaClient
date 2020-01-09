@@ -22,7 +22,7 @@
     <div class="ibox float-e-margins">
       <div class="ibox-content">
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label for="receive_no" class="col-md-4 control-label">เลขที่ใบรับ</label>
@@ -54,8 +54,7 @@
 
         </div>
 
-        <div class="row">
-
+        <div class="row form-group">
           <div class="col-md-4">
             <label class="col-md-4 control-label">เลขที่ใบส่งของ</label>
             <div class="col-md-8">
@@ -86,7 +85,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row form-group">
 
           <div class="col-md-4">
             <label class="col-md-4 control-label">ประเภท</label>
@@ -163,9 +162,9 @@
                 <td>{{item.get('engine_no').value}}</td>
                 <td>{{item.get('frame_no').value}}</td>
                 <td>{{item.get('invoice_no').value}}</td>
-                <td>{{item.get('cost_exc_vat').value | number:'1.2-2'}}</td>
-                <td>{{item.get('cost_other_exc_vat').value | number:'1.2-2'}}</td>
-                <td>{{item.get('cost_repair_exc_vat').value | number:'1.2-2'}}</td>
+                <td>{{item.get('cost_exc_vat').value | number:'1.2-2':'en-US'}}</td>
+                <td>{{item.get('cost_other_exc_vat').value | number:'1.2-2':'en-US'}}</td>
+                <td>{{item.get('cost_repair_exc_vat').value | number:'1.2-2':'en-US'}}</td>
                 <td>{{item.get('branch_code').value}}</td>
                 <td>{{item.get('whl_code').value}}</td>
 
@@ -181,19 +180,19 @@
       <tbody>
         <tr>
           <td><strong>รวมมูลค่าสินค้า :</strong></td>
-          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_exc_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>ภาษีมูลค่าเพิ่ม {{formGroup.get('vat_rate').value}} % :</strong></td>
-          <td>{{formGroup.get('cost_vat').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_vat').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>รวมมูลค่าอื่นๆ :</strong></td>
-          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_other_repair').value | number:'1.2-2':'en-US'}}</td>
         </tr>
         <tr>
           <td><strong>รวมเงิน :</strong></td>
-          <td>{{formGroup.get('cost_total').value | number:'1.2-2'}}</td>
+          <td>{{formGroup.get('cost_total').value | number:'1.2-2':'en-US'}}</td>
         </tr>
       </tbody>
     </table>

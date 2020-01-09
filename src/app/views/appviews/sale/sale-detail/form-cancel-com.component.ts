@@ -3,17 +3,16 @@ import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SaleService } from 'app/services/credit';
-import { FormCancelSlipConfig } from './form-cancel-slip.config';
+import { FormCancelSlipConfig, IFormCancelSlip } from '../../../components/cancel-slip';
 
 declare var toastr: any;
 
 @Component({
   selector: 'app-form-cancel-com',
-  templateUrl: 'form-cancel-slip.component.html'
+  templateUrl: '../../../components/cancel-slip/form-cancel-slip.component.html'
 })
 
-export class FormCancelComComponent extends FormCancelSlipConfig implements OnInit {
-
+export class FormCancelComComponent extends FormCancelSlipConfig implements IFormCancelSlip {
 
   constructor(
     private s_user: UserService,
@@ -23,10 +22,7 @@ export class FormCancelComComponent extends FormCancelSlipConfig implements OnIn
     this.user = this.s_user.cookies;
   }
 
-  ngOnInit() {
-  }
-
-  onCancel() {
+  onCancel(): void {
     const valid = this.validCancelFormGroup.value;
     const api1 = this.s_user.LeaderValidate(valid.gid, valid.userName, valid.password);
     api1.subscribe(x => {

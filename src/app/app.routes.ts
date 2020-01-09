@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
 import { StarterViewComponent } from './views/appviews/starterview.component';
-import { LoginComponent } from './views/appviews/login.component';
 import { BasicLayoutComponent } from './components/common/layouts/basicLayout.component';
 import * as Hps from './views/appviews/hps';
 import * as Sale from './views/appviews/sale';
+import * as Wholesale from './views/appviews/wholesale';
 import { BookingComponent } from './views/dashboards/booking/booking.component';
 import { GuardGuard } from 'app/guards/guard.guard';
 import { ReportBookingComponent } from './views/appviews/report-booking/report-booking.component';
@@ -29,7 +29,6 @@ import { ClearMoneyCreateComponent } from './views/appviews/ris/tag-clear-money/
 import { ClearMoneyDetailComponent } from './views/appviews/ris/tag-clear-money/clear-money-detail.component';
 import { RegisTagComponent } from './views/appviews/report-ris/regis-tag/regis-tag.component';
 import { RegisTagSecondHandComponent } from './views/appviews/report-ris/regis-tag-second-hand/regis-tag-second-hand.component';
-import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
 import { ReceiveDepositListComponent } from './views/appviews/ris/receive-deposit-list/receive-deposit-list.component';
 import { ReceiveDepositCreateComponent, ReceiveDepositDetailComponent } from './views/appviews/ris/receive-deposit-form';
 
@@ -80,6 +79,7 @@ import { McsStockReceiveListComponent } from './views/appviews/mcs/mcs-stock-rec
 import { McsStockReceiveDetailComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-detail.component';
 import { McsStockReceiveCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-create.component';
 import { McsStockReceiveSingleCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-create.component';
+import { McsStockReceiveSingleDetailComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-detail.component';
 import { McsSavePoListComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-list.component';
 import { McsSavePoCreateComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-create.component';
 import { McsSavePoDetailComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-detail.component';
@@ -111,6 +111,20 @@ export const ROUTES: Routes = [
       { path: 'sale-list', component: Sale.SaleListComponent },
       { path: 'sale-detail', component: Sale.SaleDetailComponent }
     ]
+  },
+  {
+    path: 'wholesale', component: BasicLayoutComponent,
+    children: [
+      { path: 'booking-list', component: Wholesale.BookingListComponent },
+      { path: 'booking-edit', component: Wholesale.BookingEditComponent },
+      { path: 'booking-add-money', component: Wholesale.BookingAddMoneyComponent },
+      { path: 'booking-detail', component: Wholesale.BookingDetailComponent },
+      { path: 'booking-create', component: Wholesale.BookingCreateComponent },
+      { path: 'sale-list', component: Wholesale.SaleListComponent },
+      { path: 'sale-create', component: Wholesale.SaleCreateComponent },
+      { path: 'sale-detail', component: Wholesale.SaleDetailComponent },
+    ],
+    canActivate: [GuardGuard]
   },
   {
     path: 'credit', component: BasicLayoutComponent,
@@ -195,9 +209,8 @@ export const ROUTES: Routes = [
       { path: 'mcs-stock-receive-list', component: McsStockReceiveListComponent },
       { path: 'mcs-stock-receive-create', component: McsStockReceiveCreateComponent },
       { path: 'mcs-stock-receive-detail/:code', component: McsStockReceiveDetailComponent },
-
-      // { path: 'mcs-stock-receive-single-create', component: McsStockReceiveSingleCreateComponent },
-      // { path: 'mcs-stock-receive-single-detail/:code', component: McsStockReceiveDetailComponent },
+      { path: 'mcs-stock-receive-single-create', component: McsStockReceiveSingleCreateComponent },
+      { path: 'mcs-stock-receive-single-detail/:code', component: McsStockReceiveSingleDetailComponent },
 
       // { path: 'mcs-save-invoice-list', component: McsSaveInvoiceListComponent },
       // { path: 'mcs-save-invoice-create', component: McsSaveInvoiceCreateComponent },
@@ -220,9 +233,9 @@ export const ROUTES: Routes = [
       // { path: 'pss-save-po-detail/:code', component: PssSavePoDetailComponent },
       // { path: 'pss-save-po-edit/:code', component: PssSavePoEditComponent },
 
-      // { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
-      // { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
-      // { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
+      { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
+      { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
+      { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
 
       // { path: 'pss-return-product-list', component: PssReturnProductListComponent },
       // { path: 'pss-return-product-create', component: PssReturnProductCreateComponent },

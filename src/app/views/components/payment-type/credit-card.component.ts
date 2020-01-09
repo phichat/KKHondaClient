@@ -61,10 +61,8 @@ export class CreditCardComponent extends PaymentTypeConfig implements OnInit {
         }
       };
       this.Payment$.emit(value);
-    })
-  }
+    });
 
-  ngAfterViewInit(): void {
     if (this.$Data != undefined) {
       const observe = this.$Data
         .pipe(
@@ -98,6 +96,9 @@ export class CreditCardComponent extends PaymentTypeConfig implements OnInit {
     } else {
       this.loadBookBank();
     }
+  }
+
+  ngAfterViewInit(): void {
   }
 
   private loadBookBank(): void {

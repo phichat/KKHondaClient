@@ -25,8 +25,6 @@
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/animate.css/animate.min.css",
-              "node_modules/icheck/skins/square/green.css",
-              "node_modules/footable/css/footable.core.min.css",
               "node_modules/selectize/dist/css/selectize.css",
               "node_modules/selectize/dist/css/selectize.bootstrap3.css",
               "node_modules/toastr/build/toastr.min.css",
@@ -38,8 +36,6 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/metismenu/dist/metisMenu.js",
               "node_modules/jquery-sparkline/jquery.sparkline.js",
-              "node_modules/icheck/icheck.js",
-              "node_modules/footable/dist/footable.all.min.js",
               "node_modules/selectize/dist/js/standalone/selectize.min.js",
               "node_modules/toastr/build/toastr.min.js",
               "vendor/pace/pace.min.js"
