@@ -220,11 +220,6 @@
                             <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('customer-contract')}">
-                        <a [routerLink]="['/credit/customer-contract-list']">
-                            <span class="nav-label">ติดต่อลูกค้า (ทวงหนี้)</span>
-                        </a>
-                    </li>
                     <!-- <li [ngClass]="{active: activeRoute('close-contract')}">
                         <a [routerLink]="['/credit/contract-list/close-contract']">
                             <span class="nav-label">รายการปิดสัญญา</span>
@@ -418,6 +413,11 @@
                     <li [ngClass]="{'active': activeRoute('mcs-save-receipt-list')}">
                         <a [routerLink]="['/mcs/mcs-save-receipt-list']">
                             <span class="nav-label">บันทึกรับใบเสร็จ</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('customer-contract-list')}">
+                        <a [routerLink]="['/credit/customer-contract-list']">
+                            <span class="nav-label">ติดต่อลูกค้า (ทวงหนี้)</span>
                         </a>
                     </li>
                     <hr class="menu-divider">

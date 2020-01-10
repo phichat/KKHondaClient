@@ -14,12 +14,14 @@ export class ContractCustomerDetailModel {
     public cldReferNo: string;
     public cldSubject: string;
     public cldExpenses: string;
-    public cldStatus: string;
+    public cldStatus: number;
     public cldComeback: string;
     public cldPaymentDate: Date;
     public cldOperatorId: number;
     public cldTurnover: string;
     public cldCompletDate: Date;
+    public cldStatusLock: number;
+    public cldRemarkLock: string;
 }
 
 export class ContractCustomerGroupModel {

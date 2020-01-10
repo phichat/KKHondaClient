@@ -32,10 +32,13 @@ export class CustomerContractComponent implements OnInit {
   setLocalDate = setLocalDate;
   mode: string;
   code: string;
+  statusColor: string;
+  statusLock: boolean = false;
 
   contractNoDropdown: DropDownModel[];
   operatorDropdown: DropDownModel[];
   statusDropdown: DropDownModel[];
+  statusLockDropdown: DropDownModel[];
 
   constructor(
     private s_contract: ContractCustomerService,
@@ -90,7 +93,9 @@ export class CustomerContractComponent implements OnInit {
       cldOperatorId: new FormControl(''),
       cldTurnover: new FormControl(''),
       cldCompletDate: new FormControl(''),
-      cldStatus: new FormControl('อยู่ระหว่างดำเนินการ'),
+      cldStatus: new FormControl(15),
+      cldStatusLock: new FormControl(0),
+      cldRemarkLock: new FormControl(''),
     });
 
     this.formDetailArray = this.fb.group({
@@ -139,8 +144,13 @@ export class CustomerContractComponent implements OnInit {
     })
 
     this.s_contract.StatusDropdown().subscribe(x => {
-      this.statusDropdown = x
+      var status = ['14', '15']
+      var statusLog = ['16', '19', '21']
+      this.statusDropdown = x.filter(x => status.includes(x.value))
+      this.statusLockDropdown = x.filter(x => statusLog.includes(x.value))
     })
+
+    this.statusColor = this.setStatusColor(this.formDetail.value.cldStatus)
   }
 
   onSelectContractNo() {
@@ -184,16 +194,45 @@ export class CustomerContractComponent implements OnInit {
         cldOperatorId: x.cldOperatorId,
         cldTurnover: x.cldTurnover,
         cldCompletDate: x.cldCompletDate,
+        cldStatusLock: x.cldStatusLock,
+        cldRemarkLock: x.cldRemarkLock,
       })
+      this.statusColor = this.setStatusColor(x.cldStatus)
+      if(x.cldStatusLock){
+        this.statusLock = true
+      }else{
+        this.statusLock = false
+      } 
     })
+  }
+
+  setStatusColor(status: number){
+    var color = ''
+    if(status == 15){
+      color = 'red'
+    }else{
+      color = 'green'
+    }
+    return color
   }
 
   onComplet() {
     if(window.confirm('ยืนยันสถานะดำเนินการ')){
       this.formDetail.patchValue({
-        cldStatus: "ดำเนินการเสร็จแล้ว",
+        cldStatus: 14,
       })
+      this.statusColor = this.setStatusColor(this.formDetail.value.cldStatus)
      }
+  }
+
+  onStatusLock() {
+    this.statusLock = !this.statusLock
+    if(!this.statusLock){
+      this.formDetail.patchValue({
+        cldStatusLock: 0,
+        cldRemarkLock: '',
+      })
+    }
   }
 
   onSave() {
@@ -209,7 +248,7 @@ export class CustomerContractComponent implements OnInit {
       this.formDetail.reset()
       this.formDetail.patchValue({
         cldId: 0,
-        cldStatus: "อยู่ระหว่างดำเนินการ",
+        cldStatus: 15,
         cldDate: new FormControl(null),
         cldPaymentDate: new FormControl(null),
         cldCompletDate: new FormControl(null),

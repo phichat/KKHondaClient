@@ -130,26 +130,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of detailModel; let i=index">
+                    <tr *ngFor="let list of detailModel; let i=index">
                         <td>
-                            <a (click)="onSelectDetail(item.cldId)" class="btn btn-success btn-xs">
+                            <a (click)="onSelectDetail(list.cldId)" class="btn btn-success btn-xs">
                                 <i class="fa fa-pencil"></i>
                                 แก้ไข
                             </a>
                         </td>
-                        <td>{{setLocalDate(item.cldDate)}}</td>
-                        <td>{{item.cldBookNo}}</td>
-                        <td>{{item.cldReferNo}}</td>
-                        <td>{{item.cldSubject}}</td>
-                        <td>{{item.cldExpenses}}</td>
-                        <td *ngIf="item.cldStatus == 'อยู่ระหว่างดำเนินการ'; else tdElse;">
-                            <font color="red">{{item.cldStatus}}</font>
+                        <td>{{setLocalDate(list.cldDate)}}</td>
+                        <td>{{list.cldBookNo}}</td>
+                        <td>{{list.cldReferNo}}</td>
+                        <td>{{list.cldSubject}}</td>
+                        <td>{{list.cldExpenses}}</td>
+                        <td>
+                            <select class="form-control" [ngStyle]="{ color: setStatusColor(list.cldStatus) }" disabled>
+                                <option *ngFor="let item of statusDropdown" [value]="item.value"
+                                    [selected]="item.value == list.cldStatus">{{item.text}}
+                                </option>
+                            </select>
                         </td>
-                        <ng-template #tdElse>
-                            <td>
-                                <font color="green">{{item.cldStatus}}</font>
-                            </td>
-                        </ng-template>
                     </tr>
                 </tbody>
             </table>
@@ -222,7 +221,8 @@
                     <div class="col-xs-6 col-lg-7">
                         <label class="col-lg-3 control-label">ผู้ดำเนินการ</label>
                         <div class="col-lg-6">
-                            <select formControlName="cldOperatorId" class="form-control" disabled>
+                            <select formControlName="cldOperatorId" class="form-control" style="color: statusColor"
+                                disabled>
                                 <option *ngFor="let item of operatorDropdown" [value]="item.value">{{item.text}}
                                 </option>
                             </select>
@@ -249,20 +249,52 @@
                     <div class="col-xs-6 col-lg-7">
                         <label class="col-lg-3 control-label">สถานะดำเนินการ</label>
                         <div class="col-lg-6">
-                            <div *ngIf="formDetail.value.cldStatus == 'อยู่ระหว่างดำเนินการ'; else divElse;">
-                                <input style="color:red" type="text" class="form-control" formControlName="cldStatus" readonly>
-                            </div>
-                            <ng-template #divElse>
-                                <div>
-                                    <input style="color:green" type="text" class="form-control" formControlName="cldStatus" readonly>
-                                </div>
-                            </ng-template>
+                            <select class="form-control" formControlName="cldStatus" [ngStyle]="{ color: statusColor }"
+                                disabled>
+                                <option *ngFor="let item of statusDropdown" [value]="item.value">{{item.text}}
+                                </option>
+                            </select>
                         </div>
                         <div class="col-lg-3" *ngIf="formDetail.value.cldId != '0'">
                             <button type="button" class="btn btn-info" (click)="onComplet()">
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                                 ดำเนินการเสร็จแล้ว
                             </button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row form-group">
+                    <div class="col-xs-6 col-lg-7">
+                        <label class="col-lg-3 control-label">ล็อคสัญญา</label>
+                        <div class="col-lg-6">
+                            <div class="checkbox checkbox-info checkbox-inline">
+                                <input required type="checkbox" [id]=5 value="ติดต่อทางหนังสือ" 
+                                [checked]="statusLock" (change)="onStatusLock()">
+                                <label [for]=5>ล็อคสัญญา ณ วันดำเนินการ</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="statusLock">
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-3 control-label">สถานะการล็อค</label>
+                            <div class="col-lg-6">
+                                <select class="form-control" formControlName="cldStatusLock">
+                                    <option value="0"></option>
+                                    <option *ngFor="let item of statusLockDropdown" [value]="item.value">{{item.text}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-xs-6 col-lg-7">
+                            <label class="col-lg-3 control-label">หมายเหตุ</label>
+                            <div class="col-lg-6">
+                                <textarea rows="2" class="form-control" formControlName="cldRemarkLock"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>

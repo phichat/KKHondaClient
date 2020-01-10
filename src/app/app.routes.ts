@@ -87,6 +87,7 @@ import { McsSavePoListComponent } from './views/appviews/mcs/mcs-save-po/mcs-sav
 import { McsSavePoCreateComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-create.component';
 import { McsSavePoDetailComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-detail.component';
 import { McsSavePoEditComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-edit.component';
+import { RegisVehicleTaxComponent } from './views/appviews/report-ris/regis-vehicle-tax/regis-vehicle-tax.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -140,7 +141,9 @@ export const ROUTES: Routes = [
       { path: 'calculate-leasing', component: Hps.LeasingComponent },
       { path: 'calculate-cash', component: Hps.CashComponent },
       { path: 'rpt-sum-close-contract', component: Hps.RptSummaryCloseContractComponent },
-      { path: 'payment/:id', component: Hps.PaymentComponent }
+      { path: 'payment/:id', component: Hps.PaymentComponent },
+      { path: 'customer-contract', component: Hps.CustomerContractComponent },
+      { path: 'customer-contract-list', component: Hps.CustomerContractListComponent },
     ], canActivate: [GuardGuard]
   },
   {
