@@ -1,6 +1,6 @@
 import { ContractComponent } from './contract/contract.component';
 import { ContractDetailComponent } from './contract-detail/contract-detail.component';
-import { CalculateComponent } from './calculate/calculate.component';
+// import { CalculateComponent } from './calculate/calculate';
 import { ContractCanceledComponent } from './contract-canceled/contract-canceled.component';
 import { RptSummaryCloseContractComponent } from './rpt-summary-close-contract/rpt-summary-close-contract.component';
 import { PaymentComponent } from './payment/payment.component';
@@ -10,7 +10,7 @@ import { components as Calculate } from './calculate';
 export const components: any[] = [
   ContractComponent,
   ContractDetailComponent,
-  CalculateComponent,
+  // CalculateComponent,
   ContractCanceledComponent,
   RptSummaryCloseContractComponent,
   PaymentComponent,
@@ -20,7 +20,7 @@ export const components: any[] = [
 
 export * from './contract/contract.component';
 export * from './contract-detail/contract-detail.component';
-export * from './calculate/calculate.component';
+export * from './calculate/calculate';
 export * from './contract-canceled/contract-canceled.component';
 export * from './rpt-summary-close-contract/rpt-summary-close-contract.component';
 export * from './payment/payment.component';

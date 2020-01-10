@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { BookingService } from 'app/services/selling';
 import { SaleService, ContractService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
@@ -9,6 +9,7 @@ import { CustomerService } from 'app/services/customers';
 import { AmpherService, ProvinceService, ReasonService } from 'app/services/masters';
 import { SaleDetailConfig } from './sale-detail.config';
 import { appConfig } from 'app/app.config';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var toastr: any;
 @Component({
@@ -22,6 +23,8 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
     this.s_booking.destroy();
   }
 
+  url = "http://203.154.126.61/KK-Honda-Web/backoffice/php/_edit_gift_model.php?booking_id="
+  
   constructor(
     private activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
@@ -48,6 +51,7 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
       const api2 = this.s_contract.getById(contractId);
 
       api2.subscribe(x => {
+        this.url = `${this.url}${x.booking.bookingId}`;
         this.saleModel = x.sale;
         this.contractModel = x.creditContract;
         this.bookingModel = x.booking;
@@ -152,3 +156,12 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
     window.open()
   }
 }
+
+
+@Pipe({ name: 'safe' })
+export class SafePipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) { }
+  transform(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+} 

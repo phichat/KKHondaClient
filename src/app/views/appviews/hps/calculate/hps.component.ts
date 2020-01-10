@@ -3,10 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
 import { SaleService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
-import { CalculateConfig } from './calculate.config';
-import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
-import { DropdownTemplate } from 'app/models/drop-down-model';
-import { BookingModel } from 'app/models/selling';
 import { setZeroHours } from 'app/app.config';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import { message } from 'app/app.message';
@@ -14,6 +10,7 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { CustomerService } from 'app/services/customers';
 import { ProvinceService, AmpherService } from 'app/services/masters';
 import { BookingPaymentType } from 'app/entities/mcs.entities';
+import { Calculate } from './calculate';
 
 declare var toastr: any;
 
@@ -22,20 +19,21 @@ declare var toastr: any;
   templateUrl: 'hps.component.html'
 })
 
-export class HpsComponent extends CalculateConfig implements OnInit {
+export class HpsComponent extends Calculate implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private router: Router,
-    private chRef: ChangeDetectorRef,
+    public chRef: ChangeDetectorRef,
     private s_loader: LoaderService,
-    private s_customer: CustomerService,
+    public s_customer: CustomerService,
     private s_booking: BookingService,
-    private s_calculate: SaleService,
+    public s_calculate: SaleService,
     private s_user: UserService,
     private s_province: ProvinceService,
-    private s_ampher: AmpherService
+    public s_ampher: AmpherService
   ) {
-    super();
+    
+    super(s_ampher, s_calculate, s_customer, chRef);
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -43,10 +41,10 @@ export class HpsComponent extends CalculateConfig implements OnInit {
 
     this.userModel = this.s_user.cookies;
     this.provinceDropdown = this.s_province.DropDown();
-    this.formCalculate.get('contractOwner').disable();
-    this.formCalculate.get('ownerAddress').disable();
-    this.formCalculate.get('ownerProvinceCode').disable();
-    this.formCalculate.get('ownerAmpherCode').disable();
+    // this.formCalculate.get('contractOwner').disable();
+    // this.formCalculate.get('ownerAddress').disable();
+    // this.formCalculate.get('ownerProvinceCode').disable();
+    // this.formCalculate.get('ownerAmpherCode').disable();
     this.formCalculate.get('ownerZipCode').disable();
   }
 
@@ -82,43 +80,10 @@ export class HpsComponent extends CalculateConfig implements OnInit {
         });
       }
       this.searchEngine();
+      this.searchcontractOwner();
     });
   }
-
-  selectItemEnging(e: any) {
-    this.formCalculate.patchValue({
-      engineNo: e ? e.engineNo : null,
-      frameNo: e ? e.frameNo : null
-    });
-  }
-
-  searchEngine() {
-    this.engineTypeahead.pipe(
-      tap(() => {
-        this.searchEngineLoading = true;
-        this.dropdownLoadingTxt = message.loading;
-      }),
-      distinctUntilChanged(),
-      debounceTime(100),
-      switchMap(term => {
-        const bookingId = this.formCalculate.get('bookingId').value;
-        const branch = this.userModel.branch.toString();
-        return this.s_calculate.GetEngineByKeyword(bookingId, branch, term);
-      })
-    ).subscribe(x => {
-      this.chRef.markForCheck();
-      this.engineUnload();
-      this.engineDropdown = x;
-      this.engineDropdown.map(item => {
-        item.text = `หมายเลขเครื่อง: ${item.engineNo}, หมายเลขตัวถัง: ${item.frameNo}`;
-        item.value = item.logId.toString();
-      })
-    }, () => {
-      this.engineUnload();
-      this.engineDropdown = new Array<DropdownTemplate>();
-    });
-  }
-
+  
   onLoadBooking(bookingId: number) {
     this.s_loader.showLoader();
     this.s_booking.getById(bookingId.toString()).subscribe(p => {
@@ -137,8 +102,10 @@ export class HpsComponent extends CalculateConfig implements OnInit {
           ownerProvinceCode: add.provinceCode,
           ownerAmpherCode: add.amphorCode,
           ownerZipCode: add.zipcode,
-        });
 
+          branchTax: cus.idCard,
+          branch: `${cus.customerPrename}${cus.customerName}`
+        });
       });
 
       this.formCalculate.patchValue({
@@ -170,11 +137,6 @@ export class HpsComponent extends CalculateConfig implements OnInit {
         toastr.error(message.error);
       });
   }
-
-  // onChangeDueDate(event:) {
-  //     this.model.firstPayment = event;
-  //     this.instalmentCalculate();
-  // }
 
   onLoadCaculateData(calculateId: number) {
     this.s_calculate.GetById(calculateId.toString()).subscribe(p => {
@@ -244,9 +206,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
   }
 
   instalmentCalculate() {
-
     const fg = this.formCalculate.getRawValue();
-
     const __instalmentEnd = fg.instalmentEnd || 0;
     const __interest = fg.interest || 0;
 
@@ -262,6 +222,7 @@ export class HpsComponent extends CalculateConfig implements OnInit {
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
     fg.remain = this.calRemain(fg.netPrice, fg.interestPrice);
+    fg.totalRemain = fg.remain;
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
     const interestP = this.calInstalmentPrice(fg.remain, __instalmentEnd);

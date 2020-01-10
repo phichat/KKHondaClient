@@ -86,7 +86,7 @@
       <label for="" class="col-md-2 control-label">สี </label>
       <strong class="col-md-2">{{bookingModel.color}}</strong>
     </div>
-    <div class="row form-group">
+    <!-- <div class="row form-group">
       <label for="price" class="col-sm-2 control-label">เงินดาวน์ </label>
       <strong id="price" class="col-md-2 col-sm-6 text-success">{{bookingModel.depositPrice | number:'1.2-2':'en-US'}}
         บาท</strong>
@@ -118,7 +118,7 @@
         ({{(isOutstandingModel.isOutstandingTerm
       || 0)}} งวด)
       </strong>
-    </div>
+    </div> -->
   </section>
 
   <hr class="hr-dashed">
@@ -138,6 +138,9 @@
                 <th class="" style="vertical-align:middle;">ยอดที่ต้องชำระ</th>
                 <th class="" style="vertical-align:middle;">ค่าปรับล่าช้า</th>
                 <th class="" style="vertical-align:middle;">ค่าปรับล่าช้า<br>คงค้าง</th>
+                <th *ngIf="bookingModel.bookingPaymentType == BookingPaymentType.Leasing"
+                  style="vertical-align:middle;">ค่าส่งเสริมการขาย
+                </th>
                 <th class="text-center" style="vertical-align:middle;">ยอดคงค้าง</th>
                 <th class="text-center" style="vertical-align:middle;">สถานะ</th>
               </tr>
@@ -157,10 +160,7 @@
                   </ng-container>
                 </td>
                 <td class="text-center" [attr.data-order]="item.get('instalmentNo').value">
-                  <span *ngIf="item.get('instalmentNo').value == 0">เงินดาวน์</span>
-                  <span *ngIf="item.get('instalmentNo').value > 0">
-                    {{item.get('instalmentNo').value}}
-                  </span>
+                  {{item.get('instalmentNoText').value}}
                 </td>
                 <td class="text-center" [attr.data-order]="item.get('instalmentNo').value">
                   {{setLocalDate(item.get('dueDate').value)}}</td>
@@ -173,9 +173,13 @@
                 <td class="text-right" [attr.data-order]="item.get('fineSumRemain').value">
                   {{item.get('fineSumRemain').value | number:'1.2-2':'en-US'}}
                 </td>
+                <td *ngIf="bookingModel.bookingPaymentType == BookingPaymentType.Leasing" class="text-right"
+                  [attr.data-order]="item.get('comPriceRemain').value">
+                  {{item.get('comPriceRemain').value | number:'1.2-2':'en-US'}}
+                </td>
                 <td class="text-right"
-                  [attr.data-order]="(item.get('remainNetPrice').value + item.get('fineSumRemain').value)">
-                  {{(item.get('remainNetPrice').value + item.get('fineSumRemain').value) | number:'1.2-2':'en-US'}}
+                  [attr.data-order]="(item.get('remainNetPrice').value + item.get('fineSumRemain').value + item.get('comPriceRemain').value)">
+                  {{(item.get('remainNetPrice').value + item.get('fineSumRemain').value + item.get('comPriceRemain').value) | number:'1.2-2':'en-US'}}
                 </td>
                 <td class="text-center">
                   <span [ngClass]="{
@@ -241,7 +245,7 @@
 
               <hr class="hr-dashed">
             </ng-container>
-            <ng-container *ngSwitchCase="BookingPaymentType.Leasing">
+            <!-- <ng-container *ngSwitchCase="BookingPaymentType.Leasing">
               <div class="row form-group">
                 <div for="" class="col-md-4">
                 </div>
@@ -260,7 +264,7 @@
                 </div>
               </div>
               <hr class="hr-dashed">
-            </ng-container>
+            </ng-container> -->
           </ng-container>
 
           <div class="row form-group">
@@ -276,12 +280,12 @@
             </div>
           </div>
 
-          <!-- <div class="row form-group">
-            <label for="" class="col-md-4 control-label">จำนวน</label>
+          <div *ngIf="bookingModel.bookingPaymentType == BookingPaymentType.Leasing" class="row form-group">
+            <label for="" class="col-md-4 control-label">ค่าส่งเสริมการขาย</label>
             <div class="col-md-8">
-              <span class="form-control disabled">{{instalmentCount}} งวด</span>
+              <span class="form-control disabled">{{formGroup.get('comPrice').value | number:'1.2-2':'en-US'}}</span>
             </div>
-          </div> -->
+          </div>
 
           <div class="row form-group">
             <label for="" class="col-md-4 control-label">ค่าปรับล่าช้า</label>

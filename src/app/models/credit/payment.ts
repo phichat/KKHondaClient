@@ -99,4 +99,5 @@ export class ContractItem {
     status: number;
     statusDesc: string;
     remainNetPrice: number;
+    comPriceRemain: number;
 }

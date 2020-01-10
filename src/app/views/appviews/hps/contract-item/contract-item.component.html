@@ -23,7 +23,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of contractItemModel; let i=index;">
-            <td class="text-center">{{ item.instalmentNo == 0 ? "เงินดาวน์" : item.instalmentNo}}</td>
+            <td class="text-center">{{item.instalmentNoText}}</td>
             <td class="text-right">{{setLocalDate(item.dueDate)}}</td>
             <td class="text-right">{{item.balanceNetPrice | number:'1.2-2':'en-US'}}</td>
             <td class="text-right">{{item.principal | number:'1.2-2':'en-US'}}</td>

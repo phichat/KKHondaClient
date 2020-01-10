@@ -25,7 +25,7 @@ export class SaleModel {
     public irr: number;                  // internal return rate
     public mrr: number;                  // ดอกเบี้ยต่อปี
     public saleBy: number;
-    public saleDate: Date;
+    public saleDate: any;
     public updateBy: number;
     public updateDate: string;
     public sellNo: string;
@@ -49,4 +49,6 @@ export class SaleModel {
     public logReceiveId: string;
     public engineNo?: string;
     public frameNo?: string;
+
+    public comPrice?: number;
 }
