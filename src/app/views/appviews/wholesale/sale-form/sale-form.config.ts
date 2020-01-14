@@ -5,14 +5,14 @@ import { EventEmitter } from '@angular/core';
 import { DropDownModel } from 'app/models/drop-down-model';
 
 export class SaleFormConfig {
-  protected setLocalDate = setLocalDate;
-  protected user: IUserResCookie;
-  protected dropdownLoadingTxt: string;
-  protected customerTypeahead = new EventEmitter<string>();
-  protected customerDropdown: Array<DropDownModel>;
-  protected customerLoading: boolean;
+   setLocalDate = setLocalDate;
+   user: IUserResCookie;
+   dropdownLoadingTxt: string;
+   customerTypeahead = new EventEmitter<string>();
+   customerDropdown: Array<DropDownModel>;
+   customerLoading: boolean;
   
-  protected formGroup = new FormGroup({
+   formGroup = new FormGroup({
     bookingDate: new FormControl(new Date(), Validators.required),
     bookingNo: new FormControl(''),
     receiveDate: new FormControl('', Validators.required),
@@ -33,7 +33,7 @@ export class SaleFormConfig {
     productItem: new FormArray([])
   });
 
-  protected get ProductItem(): FormArray {
+   get ProductItem(): FormArray {
     return this.formGroup.get('productItem') as FormArray;
   }
 }
