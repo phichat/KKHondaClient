@@ -65,6 +65,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
       payDate: new FormControl(null),
       revenueStamp: new FormControl(null),
       payNetPrice: new FormControl(null, Validators.required),
+      comPrice: new FormControl(null),
       fineSum: new FormControl(null),
       fineSumOther: new FormControl(null),
       payeer: new FormControl(this.user.id, Validators.required),
@@ -148,9 +149,25 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     this.instalmentCount = 0;
     this.chRef.markForCheck();
     const contractItem = item.contractItem
-      .map(res => {
+      .map((res, i) => {
+        let instalmentNoText = "";
+        switch (item.booking.bookingPaymentType) {
+          case this.BookingPaymentType.Cash:
+            instalmentNoText = "ชำระค่าสินค้า";
+            break;
+          case this.BookingPaymentType.Credit:
+            instalmentNoText = (i == 0) ? "ชำระส่วนแรก" : "ยอดคงค้าง";
+            break;
+          case this.BookingPaymentType.HierPurchase:
+            instalmentNoText = (i == 0) ? "เงินดาวน์" : `${i}`;
+            break;
+          case this.BookingPaymentType.Leasing:
+            instalmentNoText = (i == 0) ? "เงินดาวน์" : "ยอดคงค้าง";
+            break;
+        }
         return {
           ...res,
+          instalmentNoText,
           isSelect: false,
           fineSum: res.fineSum | 0,
           fineSumRemain: res.fineSumRemain | 0,
@@ -163,7 +180,7 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     this.reInitDatatable();
 
     const outstandingPrice = contractItem
-      .reduce((a, c) => a += (c.remainNetPrice + c.fineSumRemain + c.fineSumOther), 0)
+      .reduce((a, c) => a += (c.remainNetPrice + c.fineSumRemain + c.fineSumOther + c.comPriceRemain), 0)
 
     this.formGroup.patchValue({
       contractId: item.contract.contractId,
@@ -195,18 +212,19 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
   instalmentCount: number = 0;
   setFormPayment() {
     const instalmentNo = this.InstalmentListIsSelect.map(x => x.instalmentNo);
-    let fineSumRemain = 0;
+    const fineSumRemain = this.InstalmentListIsSelect.reduce((a, c) => a += c.fineSumRemain, 0);
+    const comPriceRemain = this.InstalmentListIsSelect.reduce((a, c) => a += c.comPriceRemain, 0);
     const balanceNetPrice = this.InstalmentListIsSelect
-      .reduce((accumulator, current) => {
-        fineSumRemain += current.fineSumRemain;
-        return accumulator + (current.remainNetPrice);
+      .reduce((a, c) => {
+        return a + (c.remainNetPrice);
       }, 0);
 
     this.formGroup.patchValue({
+      comPrice: comPriceRemain,
       fineSum: fineSumRemain,
       balanceNetPrice: balanceNetPrice,
       payNetPrice: balanceNetPrice,
-      totalPrice: balanceNetPrice + fineSumRemain,
+      totalPrice: balanceNetPrice + fineSumRemain + comPriceRemain,
       cutBalance: null,
       discountInterest: null,
       instalmentNo
@@ -251,6 +269,8 @@ export class PaymentComponent extends PaymentConfig implements OnInit, OnDestroy
     };
 
     if (confirm('ยืนยันการรับชำระหรือไม่?')) {
+      console.log(JSON.stringify(frm));
+      
       this._paymentService.PaymentTerm(frm).subscribe((x) => {
         toastr.success(message.created);
         setTimeout(() => location.reload(), 400);

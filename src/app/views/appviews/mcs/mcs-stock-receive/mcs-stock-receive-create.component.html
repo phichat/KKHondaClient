@@ -44,8 +44,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label is-required">วันที่รับ</label>
             <div class="col-md-8">
-              <my-date-picker-th [options]="myDatePickerOptions" formControlName="receive_date" name="receive_date">
-              </my-date-picker-th>
+              <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="receive_date" name="receive_date">
+              </my-date-picker-th> -->
+              <thai-mat-datepicker id="receive_date" name="receive_date" formControlName="receive_date"></thai-mat-datepicker>
             </div>
           </div>
 
@@ -73,8 +74,9 @@
           <div class="col-md-4">
             <label class="col-md-4 control-label is-required">วันที่ส่งของ</label>
             <div class="col-md-8">
-              <my-date-picker-th [options]="myDatePickerOptions" formControlName="delivery_date" name="delivery_date">
-              </my-date-picker-th>
+              <!-- <my-date-picker-th [options]="myDatePickerOptions" formControlName="delivery_date" name="delivery_date">
+              </my-date-picker-th> -->
+              <thai-mat-datepicker id="delivery_date" name="delivery_date" formControlName="delivery_date"></thai-mat-datepicker>
             </div>
           </div>
 

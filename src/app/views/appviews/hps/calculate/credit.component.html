@@ -30,7 +30,7 @@
 
         <form autocomplete="off" class="form-horizontal" [formGroup]="formCalculate">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 b-r">
               <h5>เลขเครื่องและเลขโครง</h5>
               <hr class="">
               <div class="row form-group">
@@ -61,7 +61,7 @@
                 </div>
               </div>
               <!-- <hr class="hr-dashed"> -->
-              <h5>ผู้ซื้อและจดทะเบียน</h5>
+              <h5>ผู้ซื้อ</h5>
               <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้ซื้อ</label>
@@ -72,18 +72,26 @@
                   </ng-select>
                 </div>
               </div>
+
+              <!-- <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">เลขประจำตัวผู้เสียภาษี</label>
+                <div class="col-md-8">
+                  <input type="text" formControlName="branchTax" class="form-control">
+                </div>
+              </div> -->
+
+              <h5>ผู้จดทะเบียนและที่อยู่</h5>
+              <hr class="m-t-xs">
+
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
                 <div class="col-md-8">
                   <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
-                    placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner">
+                    [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
+                    [loading]="contractOwnerLoading" [loadingText]="dropdownLoadingTxt">
                   </ng-select>
                 </div>
               </div>
-
-              <h5>ที่อยู่จดทะเบียน</h5>
-              <hr class="m-t-xs">
-
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ที่อยู่</label>
                 <div class="col-md-8">
@@ -102,7 +110,7 @@
                 <label for="" class="col-md-4 control-label is-required">เขต/อำเภอ</label>
                 <div class="col-md-8">
                   <ng-select required [items]="ampherDropdown | async" bindValue="amphorCode" bindLabel="amphorName"
-                    formControlName="ownerAmpherCode">
+                    formControlName="ownerAmpherCode" (change)="selectItemAmpher($event)">
                   </ng-select>
                 </div>
               </div>
@@ -112,9 +120,18 @@
                   <input type="text" class="form-control" readonly formControlName="ownerZipCode">
                 </div>
               </div>
+
+              <h5>หมายเหตุการขาย</h5>
+              <hr class="m-t-xs">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">หมายเหตุ</label>
+                <div class="col-md-8">
+                  <textarea rows="2" class="form-control" formControlName="remark"></textarea>
+                </div>
+              </div>
             </div>
 
-            <div class="col-md-6 b-l">
+            <div class="col-md-6">
               <h5>มูลค่าสินค้า &nbsp;
                 <button type="button" class="btn btn-outline btn-xs btn-info m-b-none" data-toggle="modal"
                   data-target="#bookingDetial">
@@ -144,7 +161,7 @@
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">
-                  เงินดาวน์
+                  ชำระส่วนแรก
                 </label>
                 <div class="col-md-8">
                   <div class="input-group">
@@ -154,7 +171,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row form-group">
+              <!-- <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">
                   เงินดาวน์
                 </label>
@@ -165,14 +182,19 @@
                     <span class="input-group-addon">&nbsp;&nbsp;%&nbsp;&nbsp;</span>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">
                   เงินมัดจำ
                 </label>
                 <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}</span>
+                  <span class="form-control disabled"
+                    *ngIf="formCalculate.get('returnDeposit').value == '1'; else deposit0">
+                    {{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}
+                  </span>
+                  <ng-template #deposit0>
+                    <span class="form-control disabled">0</span>
+                  </ng-template>
                 </div>
               </div>
 
@@ -189,7 +211,7 @@
                   <div class="radio radio-info radio-inline">
                     <input type="radio" id="returnDepostit1" value=0 required formControlName="returnDeposit"
                       (change)="onReturnDeposit()">
-                    <label for="returnDepostit1">ใช้เป็นเงินดาวน์</label>
+                    <label for="returnDepostit1">ใช้ชำระส่วนแรก</label>
                   </div>
                 </div>
               </div>
@@ -255,7 +277,8 @@
           </div>
         </form>
       </div>
-    </div>    <div class="modal inmodal" id="bookingDetial" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    </div>
+    <div class="modal inmodal" id="bookingDetial" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
       <div class="modal-dialog modal-lg">
         <div class="modal-content animated fadeIn">
           <div class="modal-header">

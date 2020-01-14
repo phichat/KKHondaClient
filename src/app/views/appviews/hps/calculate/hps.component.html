@@ -62,7 +62,7 @@
                 </div>
               </div>
               <!-- <hr class="hr-dashed"> -->
-              <h5>ผู้ซื้อและจดทะเบียน</h5>
+              <h5>ผู้ซื้อ</h5>
               <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้ซื้อ</label>
@@ -73,17 +73,19 @@
                   </ng-select>
                 </div>
               </div>
+
+              <h5>ผู้จดทะเบียนและที่อยู่</h5>
+              <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
                 <div class="col-md-8">
                   <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
-                    placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner">
+                    [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
+                    [loading]="contractOwnerLoading" [loadingText]="dropdownLoadingTxt"
+                    (change)="selectItemContractOwner($event)">
                   </ng-select>
                 </div>
               </div>
-
-              <h5>ที่อยู่จดทะเบียน</h5>
-              <hr class="m-t-xs">
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ที่อยู่</label>
@@ -103,7 +105,7 @@
                 <label for="" class="col-md-4 control-label is-required">เขต/อำเภอ</label>
                 <div class="col-md-8">
                   <ng-select required [items]="ampherDropdown | async" bindValue="amphorCode" bindLabel="amphorName"
-                    formControlName="ownerAmpherCode">
+                    formControlName="ownerAmpherCode" (change)="selectItemAmpher($event)">
                   </ng-select>
                 </div>
               </div>
@@ -113,7 +115,24 @@
                   <input type="text" class="form-control" readonly formControlName="ownerZipCode">
                 </div>
               </div>
+
+              <!-- <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">เลขประจำตัวผู้เสียภาษี</label>
+                <div class="col-md-8">
+                  <input type="text" formControlName="branchTax" class="form-control">
+                </div>
+              </div> -->
+
+              <h5>หมายเหตุการขาย</h5>
+              <hr class="m-t-xs">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">หมายเหตุ</label>
+                <div class="col-md-8">
+                  <textarea rows="2" class="form-control" formControlName="remark"></textarea>
+                </div>
+              </div>
             </div>
+
 
             <div class="col-md-6 b-l">
               <h5>มูลค่าสินค้า &nbsp;
@@ -168,8 +187,13 @@
                   เงินมัดจำ
                 </label>
                 <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}</span>
+                  <span class="form-control disabled"
+                    *ngIf="formCalculate.get('returnDeposit').value == '1'; else deposit0">
+                    {{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}
+                  </span>
+                  <ng-template #deposit0>
+                    <span class="form-control disabled">0</span>
+                  </ng-template>
                 </div>
               </div>
 

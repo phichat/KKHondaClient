@@ -7,7 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CreditModule } from '../hps/credit.module';
-import { components } from './';
+import { components, SafePipe } from './';
 
 @NgModule({
   imports: [
@@ -22,6 +22,7 @@ import { components } from './';
   ],
   exports: [],
   declarations: [
+    SafePipe,
     ...components
   ],
   providers: [],

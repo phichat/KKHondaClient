@@ -191,11 +191,18 @@ export class CashComponent extends CalculateConfig implements OnInit {
       this.bookingNo = p.bookingNo;
       this.bookDepositState = p.deposit;
 
+      this.s_customer.getCustomerByCode('CRM-01-0000746').subscribe(cus => {
+        this.formCalculate.patchValue({
+          branchTax: cus.idCard,
+          branch: `${cus.customerPrename}${cus.customerName}`
+        });
+      });
+
       const province = this.findProvince(p.address);
       const ampher = this.findAmpher(p.address);
       const address = this.findAddress(p.address);
-      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }]
-      this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }]
+      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }];
+      this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }];
 
       this.provinceDropdown.subscribe(p => {
         const pCode = p.find(o => o.text == province).value;
@@ -223,10 +230,11 @@ export class CashComponent extends CalculateConfig implements OnInit {
       if (this.formCalculate.get('returnDeposit').value == '0') {
         this.formCalculate.patchValue({
           returnDepositPrice: p.deposit,
-          depositPrice: p.deposit
+          depositPrice: p.deposit,
         })
       } else {
         this.formCalculate.patchValue({
+          returnDepositPrice: p.deposit,
           netPrice: (p.outStandingPrice + p.deposit).toFixed(2)
         });
       }
@@ -277,6 +285,7 @@ export class CashComponent extends CalculateConfig implements OnInit {
         fg.depositPrice = depositPrice + this.bookDepositState;
         break;
     }
+    fg.netPrice = (this.outStandingPriceState + this.bookDepositState) - fg.depositPrice;
     this.formCalculate.patchValue({ ...fg });
     this.instalmentCalculate();
   }
@@ -321,11 +330,12 @@ export class CashComponent extends CalculateConfig implements OnInit {
     this.formPayment = event;
     this.formCalculate.patchValue({
       paymentPrice: event.paymentPrice,
-      discountPrice: event.discountPrice,
-      totalPaymentPrice: event.paymentPrice,
+      discount: event.discountPrice,
+      totalPaymentPrice: event.totalPaymentPrice,
       accBankId: event.accBankId || null,
       paymentDate: event.paymentDate,
-      documentRef: event.documentRef
+      documentRef: event.documentRef,
+      totalRemain: event.totalPaymentPrice
     });
   }
 
@@ -384,12 +394,13 @@ export class CashComponent extends CalculateConfig implements OnInit {
   }
 
   onCreate(obj: any) {
+    
     this.s_calculate
       .Create(obj.calculate, obj.contract, obj.contractItem)
       .subscribe(
-        () => {
+        (res) => {
           toastr.success(message.created);
-          this.router.navigate(['credit/contract-list/active']);
+          this.router.navigate(['sale/sale-list']);
         },
         () => {
           toastr.error(message.error);

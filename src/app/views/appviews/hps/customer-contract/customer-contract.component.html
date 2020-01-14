@@ -64,10 +64,10 @@
                                     bindValue="value" (change)="onSelectContractNo()"></ng-select>
                             </div>
                             <div class="col-lg-2">
-                                <button type="button" class="btn btn-info" (click)="onSearch()">
+                                <!-- <button type="button" class="btn btn-info" (click)="onSearch()">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                     ค้นหา
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                         <div class="col-xs-6 col-lg-5">
@@ -145,7 +145,7 @@
                         <td>
                             <select class="form-control" [ngStyle]="{ color: setStatusColor(list.cldStatus) }" disabled>
                                 <option *ngFor="let item of statusDropdown" [value]="item.value"
-                                    [selected]="item.value == list.cldStatus">{{item.text}}
+                                    [selected]="item.value == list.cldStatus.toString()">{{item.text}}
                                 </option>
                             </select>
                         </td>

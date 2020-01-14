@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { setLocalDate, getDateMyDatepicker, MyDatePickerOptions } from 'app/app.config';
+import { setLocalDate } from 'app/app.config';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -25,7 +25,7 @@ export class PssStockReceiveDetailComponent implements OnInit {
 
   public code: string;
   public checkedAll: boolean;
-  myDatePickerOptions = MyDatePickerOptions;
+  // myDatePickerOptions = MyDatePickerOptions;
   displayLocalDate = setLocalDate;
   formGroup: FormGroup;
   searchformGroup: FormGroup;
@@ -126,7 +126,7 @@ export class PssStockReceiveDetailComponent implements OnInit {
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: true }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.s_user.cookies.id, disabled: true }),
+      receive_id: new FormControl({ value: null, disabled: true }),
       receive_date: new FormControl({ value: today, disabled: true }, Validators.required),
       receive_status: new FormControl({ value: 2, disabled: true }),
       receive_type: new FormControl({ value: 3, disabled: true }),
@@ -134,7 +134,7 @@ export class PssStockReceiveDetailComponent implements OnInit {
       dealer_code: new FormControl({ value: null, disabled: true }, Validators.required),
       purchase_no: new FormControl({ value: null, disabled: true }),
       remark: new FormControl({ value: null, disabled: true }),
-      create_id: new FormControl({ value: this.s_user.cookies.id, disabled: true }),
+      create_id: new FormControl({ value: null, disabled: true }),
       create_date: new FormControl({ value: null, disabled: true }),
 
       update_id: new FormControl({ value: null, disabled: true }),
@@ -277,17 +277,6 @@ export class PssStockReceiveDetailComponent implements OnInit {
     return this.formGroup.get('detail') as FormArray;
   }
 
-
-
-  debug() {
-    let f = this.formGroup.getRawValue();
-    f = {
-      ...f,
-      receive_date: getDateMyDatepicker(f.receive_date),
-      delivery_date: getDateMyDatepicker(f.delivery_date)
-    }
-    console.log(f);
-  }
 
 }
 
