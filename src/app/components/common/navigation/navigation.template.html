@@ -194,7 +194,7 @@
                     <span class="nav-label">งานขาย (ปลีก)</span>
                     <span class="fa arrow"></span>
                 </a>
-                <ul class="nav nav-second-level collapse" >
+                <ul class="nav nav-second-level collapse">
                     <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_booking">
                             <span class="nav-label">จองรถ</span>
@@ -210,22 +210,14 @@
                             <span class="nav-label">รายการยกเลิกใบจอง</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{kkHondaWeb}}/home.php?show=_sell_list">
-                            <span class="nav-label">รายการขายรถ</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('active')}">
-                        <a [routerLink]="['/credit/contract-list/active']">
-                            <span class="nav-label">รายการสัญญาเช่าซื้อ</span>
-                        </a>
-                    </li>
-                    <!-- <li [ngClass]="{active: activeRoute('close-contract')}">
-                        <a [routerLink]="['/credit/contract-list/close-contract']">
-                            <span class="nav-label">รายการปิดสัญญา</span>
                     <li [ngClass]="{active: activeRoute('sale-list') || activeRoute('sale-detail')}">
                         <a [routerLink]="['/sale/sale-list']">
                             <span class="nav-label">รายการขาย</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="{active: activeRoute('customer-contract-list')}">
+                        <a [routerLink]="['/credit/customer-contract-list']">
+                            <span class="nav-label">ติดต่อลูกค้า (ทวงหนี้)</span>
                         </a>
                     </li>
                 </ul>
@@ -415,11 +407,6 @@
                             <span class="nav-label">บันทึกรับใบเสร็จ</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('customer-contract-list')}">
-                        <a [routerLink]="['/credit/customer-contract-list']">
-                            <span class="nav-label">ติดต่อลูกค้า (ทวงหนี้)</span>
-                        </a>
-                    </li>
                     <hr class="menu-divider">
                     <li [ngClass]="{'active': activeRoute('mcs-report-receive')}">
                         <a [routerLink]="['/mcs/mcs-report-receive']">
@@ -605,16 +592,6 @@
                             <span class="nav-label">รายงานภาษีขาย (อะไหล่)</span>
                         </a>
                     </li>
-                    <li [ngClass]="{active: activeRoute('balance-stock1')}">
-                        <a [routerLink]="['/report/balance-stock1']">
-                            <span class="nav-label">รายงานสินค้าคงเหลือขาย (รถ)</span>
-                        </a>
-                    </li>
-                    <li [ngClass]="{active: activeRoute('balance-stock2')}">
-                        <a [routerLink]="['/report/balance-stock2']">
-                            <span class="nav-label">รายงานสินค้าคงเหลือขาย (อะไหล่)</span>
-                        </a>
-                    </li>
                     <!-- <li>
                         <a href="{{kkHondaWeb}}/home.php?show=_report_bike">
                             <span class="nav-label">สต๊อกสินค้า (รถ)</span>
@@ -660,11 +637,6 @@
                             <span class="nav-label">การขายรถ</span>
                         </a>
                     </li> -->
-                    <li [ngClass]="{active: activeRoute('collection-letter')}">
-                        <a [routerLink]="['/report/collection-letter']">
-                            <span class="nav-label">ติดต่อลูกค้า (ทวงหนี้)</span>
-                        </a>
-                    </li>
                 </ul>
             </li>
 
