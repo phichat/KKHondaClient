@@ -29,7 +29,7 @@
       <div class="ibox-content">
         <form autocomplete="off" class="form-horizontal" [formGroup]="formCalculate">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 b-r">
               <h5>เลขเครื่องและเลขโครง</h5>
               <hr class="">
               <div class="row form-group">
@@ -59,7 +59,7 @@
                   <input type="text" required formControlName="frameNo" class="form-control" readonly>
                 </div>
               </div>
-  
+
               <h5>ผู้ซื้อและจดทะเบียน</h5>
               <hr class="m-t-xs">
               <div class="row form-group">
@@ -71,6 +71,17 @@
                   </ng-select>
                 </div>
               </div>
+
+              <!-- <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">เลขประจำตัวผู้เสียภาษี</label>
+                <div class="col-md-8">
+                  <input type="text" formControlName="branchTax" class="form-control">
+                </div>
+              </div> -->
+
+              <h5>ผู้จดทะเบียนและที่อยู่</h5>
+              <hr class="m-t-xs">
+
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
                 <div class="col-md-8">
@@ -80,10 +91,6 @@
                   </ng-select>
                 </div>
               </div>
-
-              <h5>ที่อยู่จดทะเบียน</h5>
-              <hr class="m-t-xs">
-
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ที่อยู่</label>
                 <div class="col-md-8">
@@ -114,7 +121,7 @@
               </div>
             </div>
 
-            <div class="col-md-6 b-l">
+            <div class="col-md-6">
 
               <h5>มูลค่าสินค้า &nbsp;
                 <button type="button" class="btn btn-outline btn-xs btn-info" data-toggle="modal"
@@ -137,8 +144,13 @@
                   เงินมัดจำ
                 </label>
                 <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}</span>
+                  <span class="form-control disabled"
+                    *ngIf="formCalculate.get('returnDeposit').value == '1'; else deposit0">
+                    {{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}
+                  </span>
+                  <ng-template #deposit0>
+                    <span class="form-control disabled">0</span>
+                  </ng-template>
                 </div>
               </div>
 
@@ -178,9 +190,9 @@
                 </div>
               </div>
 
-              <h5>ชำระเงิน</h5>
+              <!-- <h5>ชำระเงิน</h5>
               <hr class="m-t-xs">
-              
+
               <div class="row form-group">
                 <div class="">
                   <label class="col-md-4 control-label is-required">ประเภทชำระ</label>
@@ -210,7 +222,7 @@
                   <app-payment-type-credit-card (Payment$)="formPaymentChange($event)" [$Data]="PaymentData">
                   </app-payment-type-credit-card>
                 </ng-container>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -218,8 +230,9 @@
 
           <div class="row">
             <div class="col-md-12 text-right">
+              <!-- || formPayment.options.invalid -->
               <button type="button" (click)="onSubmit()"
-                [disabled]="formCalculate.invalid || formPayment.options.invalid" class="btn btn-primary pull-right">
+                [disabled]="formCalculate.invalid" class="btn btn-primary pull-right">
                 <i class="fa fa-save"></i>&nbsp;&nbsp;บันทึก
               </button>
             </div>
@@ -288,6 +301,6 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 </div>

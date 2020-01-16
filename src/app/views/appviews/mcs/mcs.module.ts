@@ -33,7 +33,7 @@ import { McsSaveReceiptDetailComponent } from './mcs-save-receipt/mcs-save-recei
 
 import { McsReportReceiveComponent } from './mcs-report-receive/mcs-report-receive.component';
 import { McsReportTaxPoComponent } from './mcs-report-tax-po/mcs-report-tax-po.component';
-
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 
 
 @NgModule({
@@ -68,6 +68,7 @@ import { McsReportTaxPoComponent } from './mcs-report-tax-po/mcs-report-tax-po.c
     ReactiveFormsModule,
     NgSelectModule,
     MyDatePickerTHModule,
+    ThaiMatDatepickerModule,
   ],
   providers: [
     McsSavePoService,

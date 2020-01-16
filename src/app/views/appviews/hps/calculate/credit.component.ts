@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { CalculateConfig } from './calculate.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
 import { SaleService } from 'app/services/credit';
@@ -7,13 +6,13 @@ import { UserService } from 'app/services/users';
 import { tap, distinctUntilChanged, debounceTime, switchMap } from 'rxjs/operators';
 import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
-import { BookingModel } from 'app/models/selling';
 import { setLocalDate, setZeroHours } from 'app/app.config';
 import { message } from 'app/app.message';
 import { CustomerService } from 'app/services/customers';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { AmpherService, ProvinceService } from 'app/services/masters';
 import { BookingPaymentType } from 'app/entities/mcs.entities';
+import { Calculate } from './calculate';
 
 declare var toastr: any;
 
@@ -22,23 +21,23 @@ declare var toastr: any;
   templateUrl: 'credit.component.html'
 })
 
-export class CreditComponent extends CalculateConfig implements OnInit, OnDestroy {
+export class CreditComponent extends Calculate implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.s_booking.destroy();
   }
   constructor(
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
-    private s_calculate: SaleService,
+    public s_calculate: SaleService,
     private s_user: UserService,
-    private s_customer: CustomerService,
+    public s_customer: CustomerService,
     private router: Router,
     private s_loader: LoaderService,
-    private chRef: ChangeDetectorRef,
-    private s_ampher: AmpherService,
+    public chRef: ChangeDetectorRef,
+    public s_ampher: AmpherService,
     private s_province: ProvinceService
   ) {
-    super();
+    super(s_ampher, s_calculate, s_customer, chRef);
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -86,78 +85,6 @@ export class CreditComponent extends CalculateConfig implements OnInit, OnDestro
     });
   }
 
-  selectItemEnging(e: any) {
-    this.formCalculate.patchValue({
-      engineNo: e ? e.engineNo : null,
-      frameNo: e ? e.frameNo : null
-    });
-  }
-
-  searchEngine() {
-    this.engineTypeahead.pipe(
-      tap(() => {
-        this.searchEngineLoading = true;
-        this.dropdownLoadingTxt = message.loading;
-      }),
-      distinctUntilChanged(),
-      debounceTime(100),
-      switchMap(term => {
-        const bookingId = this.formCalculate.get('bookingId').value;
-        const branch = this.userModel.branch.toString();
-        return this.s_calculate.GetEngineByKeyword(bookingId, branch, term);
-      })
-    ).subscribe(x => {
-      this.chRef.markForCheck();
-      this.engineUnload();
-      this.engineDropdown = x;
-      this.engineDropdown.map(item => {
-        item.text = `หมายเลขเครื่อง: ${item.engineNo}, หมายเลขตัวถัง: ${item.frameNo}`;
-        item.value = item.logId.toString();
-      })
-    }, () => {
-      this.engineUnload();
-      this.engineDropdown = new Array<DropdownTemplate>();
-    });
-  }
-
-  searchcontractOwner() {
-    this.contractOwnerTypeahead.pipe(
-      tap(() => {
-        this.contractOwnerLoading = true;
-        this.dropdownLoadingTxt = message.loading;
-      }),
-      distinctUntilChanged(),
-      debounceTime(300),
-      switchMap(term => this.s_customer.getByKey(term))
-    ).subscribe(x => {
-      this.chRef.markForCheck();
-      this.contractOwnerDropdown = x;
-      this.contractOwnerUnload();
-    }, () => {
-      this.contractOwnerUnload();
-      this.contractOwnerDropdown = new Array<DropDownModel>();
-    });
-  }
-
-  searchcontractHire() {
-    this.contractHireTypeahead.pipe(
-      tap(() => {
-        this.contractHireLoading = true;
-        this.dropdownLoadingTxt = message.loading;
-      }),
-      distinctUntilChanged(),
-      debounceTime(300),
-      switchMap(term => this.s_customer.getByKey(term))
-    ).subscribe(x => {
-      this.chRef.markForCheck();
-      this.contractHireDropdown = x;
-      this.contractHireUnload();
-    }, () => {
-      this.contractHireUnload();
-      this.contractHireDropdown = new Array<DropDownModel>();
-    });
-  }
-
   onLoadBooking(bookingId: number) {
     this.s_loader.showLoader();
     this.s_booking.getById(bookingId.toString()).subscribe(p => {
@@ -168,22 +95,36 @@ export class CreditComponent extends CalculateConfig implements OnInit, OnDestro
       const province = this.findProvince(p.address);
       const ampher = this.findAmpher(p.address);
       const address = this.findAddress(p.address);
-      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }]
-      this.contractOwnerDropdown = [{ value: p.custCode, text: p.custFullName }]
+      this.contractHireDropdown = [{ value: p.custCode, text: p.custFullName }];     
+      this.s_customer.getCustomerByCode('CRM-01-0000746').subscribe(cus => {
+        this.contractOwnerDropdown = [{ value: cus.customerCode, text: `${cus.customerPrename}${cus.customerName}` }];
+        const add = cus.mCustomerAddress[0];
+        this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(add.provinceCode);
+        this.formCalculate.patchValue({
+          contractOwner: cus.customerCode,
+          ownerAddress: add.address,
+          ownerProvinceCode: add.provinceCode,
+          ownerAmpherCode: add.amphorCode,
+          ownerZipCode: add.zipcode,
 
-      this.provinceDropdown.subscribe(p => {
-        const pCode = p.find(o => o.text == province).value;
-        this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(pCode);
-        this.ampherDropdown.subscribe(a => {
-          const amp = a.find(o => o.amphorName == ampher);
-          this.formCalculate.patchValue({
-            ownerAddress: address,
-            ownerAmpherCode: amp.amphorCode,
-            ownerProvinceCode: pCode,
-            ownerZipCode: amp.zipcode
-          })
-        })
+          branchTax: cus.idCard,
+          branch: `${cus.customerPrename}${cus.customerName}`
+        });
       });
+
+      // this.provinceDropdown.subscribe(p => {
+      //   const pCode = p.find(o => o.text == province).value;
+      //   this.ampherDropdown = this.s_ampher.GetAmpherByProvinceCode(pCode);
+      //   this.ampherDropdown.subscribe(a => {
+      //     const amp = a.find(o => o.amphorName == ampher);
+      //     this.formCalculate.patchValue({
+      //       ownerAddress: address,
+      //       ownerAmpherCode: amp.amphorCode,
+      //       ownerProvinceCode: pCode,
+      //       ownerZipCode: amp.zipcode
+      //     })
+      //   })
+      // });
 
       this.formCalculate.patchValue({
         outStandingPrice: p.outStandingPrice,
@@ -301,6 +242,7 @@ export class CreditComponent extends CalculateConfig implements OnInit, OnDestro
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
     fg.remain = this.calRemain(fg.netPrice, fg.interestPrice);
+    fg.totalRemain = fg.remain;
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
     fg.instalmentPrice = fg.remain;

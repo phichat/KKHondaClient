@@ -62,6 +62,7 @@ export class CalculateConfig {
     interest: new FormControl(0),             // ดอกเบี้ย/เดือน
     interestPrice: new FormControl(0),        // ราคาดอกเบี้ย
     remain: new FormControl(0),               // ยอดจัด
+    totalRemain: new FormControl(0),          // ยอดจัดหลังหักส่วนลด
     firstPayment: new FormControl(new Date()),// ชำระงวดแรก
     dueDate: new FormControl(0),              // ชำระทุกวันที่
     promotionalPrice: new FormControl(0),     // ค่าส่งเสริมการขาย
@@ -94,13 +95,22 @@ export class CalculateConfig {
     ownerAmpherCode: new FormControl(''),
     ownerZipCode: new FormControl(''),
 
-    paymentType: new FormControl('1'),
-    paymentPrice: new FormControl(0),
-    discountPrice: new FormControl(0),
-    totalPaymentPrice: new FormControl(0),
-    accBankId: new FormControl(null),
-    paymentDate: new FormControl(new Date()),
-    documentRef: new FormControl(null),
+    // -- ข้อมูลผู้เสียภาษี --
+    branchTax: new FormControl(''),
+    branch: new FormControl(''),
+    // -- ข้อมูลผู้เสียภาษี --
+
+    financeCode: new FormControl(null),
+
+    remark: new FormControl(null),
+
+    // paymentType: new FormControl('1'),
+    // paymentPrice: new FormControl(0),
+    // discount: new FormControl(0),
+    // totalPaymentPrice: new FormControl(0),
+    // accBankId: new FormControl(null),
+    // paymentDate: new FormControl(new Date()),
+    // documentRef: new FormControl(null),
   });
 
   engineUnload() {

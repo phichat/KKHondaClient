@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { setLocalDate, getDateMyDatepicker } from 'app/app.config';
+import { setZeroHours } from 'app/app.config';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { MyDatePickerOptions } from 'app/app.config';
 import { McsStockReceiveService } from './mcs-stock-receive.service';
 import { ReceiveD, LoadingEntities, AutoCompleteModel } from './mcs-stock-receive.interface';
 import { tap, finalize } from 'rxjs/operators';
@@ -29,8 +28,8 @@ export class McsStockReceiveSingleCreateComponent implements OnInit {
 
   public code: string;
 
-  myDatePickerOptions = MyDatePickerOptions;
-  displayLocalDate = setLocalDate;
+  // myDatePickerOptions = MyDatePickerOptions;
+  // displayLocalDate = setLocalDate;
   formGroup: FormGroup;
   mUser: IUserResCookie;
   Data = new BehaviorSubject(null);
@@ -111,18 +110,18 @@ export class McsStockReceiveSingleCreateComponent implements OnInit {
     this.loading = 1;
     this.mUser = this.s_user.cookies;
 
-    let date = new Date();
-    var today = {
-      date: {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate()
-      }
-    }
+    let today = new Date();
+    // var today = {
+    //   date: {
+    //     year: date.getFullYear(),
+    //     month: date.getMonth() + 1,
+    //     day: date.getDate()
+    //   }
+    // }
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: false }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.mUser.branchId, disabled: false }, Validators.required),
+      receive_id: new FormControl({ value: this.mUser.id, disabled: false }, Validators.required),// id ของผู้รับ(Branch ID จะหาจาก backend ครับ)
       receive_date: new FormControl({ value: today, disabled: false }, Validators.required),
       receive_status: new FormControl({ value: 2, disabled: false }),
       receive_type: new FormControl({ value: 2, disabled: true }),
@@ -221,8 +220,8 @@ export class McsStockReceiveSingleCreateComponent implements OnInit {
     let f = this.formGroup.getRawValue();
     f = {
       ...f,
-      receive_date: getDateMyDatepicker(f.receive_date),
-      delivery_date: getDateMyDatepicker(f.delivery_date)
+      receive_date: setZeroHours(f.receive_date),
+      delivery_date: setZeroHours(f.delivery_date)
     }
     this.s_service.ReceiveSingleCreate(f)
       .pipe(finalize(() => this.s_loader.onEnd()))
@@ -283,8 +282,8 @@ export class McsStockReceiveSingleCreateComponent implements OnInit {
     let f = this.formGroup.getRawValue();
     f = {
       ...f,
-      receive_date: getDateMyDatepicker(f.receive_date),
-      delivery_date: getDateMyDatepicker(f.delivery_date)
+      receive_date: setZeroHours(f.receive_date),
+      delivery_date: setZeroHours(f.delivery_date)
     }
     console.log(f);
   }

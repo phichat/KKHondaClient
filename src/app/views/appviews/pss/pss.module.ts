@@ -23,7 +23,7 @@ import { PssStockReceiveCreateComponent } from './pss-stock-receive/pss-stock-re
 import { PssStockReceiveDetailComponent } from './pss-stock-receive/pss-stock-receive-detail.component';
 
 import { MyDatePickerTHModule } from 'mydatepicker-th';
-
+import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepicker/thai-mat-datepicker.module';
 @NgModule({
 
   declarations: [
@@ -47,6 +47,7 @@ import { MyDatePickerTHModule } from 'mydatepicker-th';
     ReactiveFormsModule,
     NgSelectModule,
     MyDatePickerTHModule,
+    ThaiMatDatepickerModule,
   ],
   providers: [
     PssSavePoService,

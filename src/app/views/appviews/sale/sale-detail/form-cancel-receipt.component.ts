@@ -1,23 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UserService } from 'app/services/users';
 import { message } from 'app/app.message';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SaleService } from 'app/services/credit';
-import { FormCancelSlipConfig, IFormCancelSlip } from '../../../components/cancel-slip';
+import { FormCancelSlipConfig, FormCancelSlip2Config, ICancelSlip } from '../../../components/cancel-slip';
+import { Observable } from 'rxjs/Observable';
+import { DropDownModel } from 'app/models/drop-down-model';
+import { PaymentService } from 'app/services/credit/payment.service';
 
 declare var toastr: any;
 
 @Component({
   selector: 'app-form-cancel-receipt',
-  templateUrl: '../../../components/cancel-slip/form-cancel-slip.component.html'
+  templateUrl: '../../../components/cancel-slip/form-cancel-slip-2.component.html'
 })
 
-export class FormCancelReceiptComponent extends FormCancelSlipConfig implements IFormCancelSlip {
-
+export class FormCancelReceiptComponent extends FormCancelSlipConfig implements FormCancelSlip2Config {
+  @Input() title: string;
+  @Input() slipList: Observable<ICancelSlip[]>;
+  @Input() reasonDropdown: Observable<DropDownModel[]>;
 
   constructor(
     private s_user: UserService,
-    private s_sale: SaleService,
+    private s_payment: PaymentService,
   ) {
     super();
     this.user = this.s_user.cookies;
@@ -28,7 +32,7 @@ export class FormCancelReceiptComponent extends FormCancelSlipConfig implements 
     const api1 = this.s_user.LeaderValidate(valid.gid, valid.userName, valid.password);
     api1.subscribe(x => {
       const data = { ...this.cancelFormGroup.getRawValue(), approveId: x }
-      const api2 = this.s_sale.CancelReceipt(data);
+      const api2 = this.s_payment.CancelReceiptNo(data);
       api2.subscribe(() => {
         toastr.success(message.canceled);
         setTimeout(() => location.reload(), 400);

@@ -27,13 +27,14 @@
       </div>
     </div>
 
-    <div class="ibox float-e-margins">
+    <div class="ibox">
       <div class="ibox-content">
 
         <form autocomplete="off" class="form-horizontal" [formGroup]="formCalculate">
           <div class="row">
             <div class="col-md-6">
               <h5>เลขเครื่องและเลขโครง</h5>
+              <hr class="">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">ค้นหา</label>
                 <div class="col-md-8">
@@ -61,8 +62,8 @@
                   <input type="text" required formControlName="frameNo" class="form-control" readonly>
                 </div>
               </div>
-              <hr class="hr-dashed">
-              <h5>ผู้ซื้อและจดทะเบียน</h5>
+              <h5>ผู้ซื้อ</h5>
+              <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้ซื้อ</label>
                 <div class="col-md-8">
@@ -72,17 +73,30 @@
                   </ng-select>
                 </div>
               </div>
+
+              <!-- <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">เลขประจำตัวผู้เสียภาษี</label>
+                <div class="col-md-8">
+                  <input type="text" formControlName="branchTax" class="form-control">
+                </div>
+              </div> -->
+
+              <h5>ผู้จดทะเบียนและที่อยู่</h5>
+              <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ผู้จดทะเบียน</label>
                 <div class="col-md-8">
                   <ng-select required [items]="contractOwnerDropdown" bindValue="value" bindLabel="text"
-                    placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner">
+                    [typeahead]="contractOwnerTypeahead" placeholder="ค้นหาข้อมูลลูกค้า" formControlName="contractOwner"
+                    [loading]="contractOwnerLoading" [loadingText]="dropdownLoadingTxt"
+                    (change)="selectItemContractOwner($event)">
+                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                      <small class="text-muted">{{item.value}}</small><br>
+                      <span class="text-primary">{{item.text}}</span>
+                    </ng-template>
                   </ng-select>
                 </div>
               </div>
-
-              <h5>ที่อยู่จดทะเบียน</h5>
-
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">ที่อยู่</label>
                 <div class="col-md-8">
@@ -101,7 +115,7 @@
                 <label for="" class="col-md-4 control-label is-required">เขต/อำเภอ</label>
                 <div class="col-md-8">
                   <ng-select required [items]="ampherDropdown | async" bindValue="amphorCode" bindLabel="amphorName"
-                    formControlName="ownerAmpherCode">
+                    formControlName="ownerAmpherCode" (change)="selectItemAmpher($event)">
                   </ng-select>
                 </div>
               </div>
@@ -111,15 +125,25 @@
                   <input type="text" class="form-control" readonly formControlName="ownerZipCode">
                 </div>
               </div>
+
+              <h5>หมายเหตุการขาย</h5>
+              <hr class="m-t-xs">
+              <div class="row form-group">
+                <label for="" class="col-md-4 control-label">หมายเหตุ</label>
+                <div class="col-md-8">
+                  <textarea rows="2" class="form-control" formControlName="remark"></textarea>
+                </div>
+              </div>
             </div>
 
             <div class="col-md-6 b-l">
               <h5>มูลค่าสินค้า &nbsp;
-                <button type="button" class="btn btn-outline btn-xs btn-info" data-toggle="modal"
+                <button type="button" class="btn btn-outline btn-xs btn-info m-b-none" data-toggle="modal"
                   data-target="#bookingDetial">
                   <i class="fa fa-info-circle" aria-hidden="true"></i> ข้อมูลการจอง
                 </button>
               </h5>
+              <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label">Vat ณ วันที่ทำสัญญา</label>
                 <div class="col-md-8">
@@ -166,8 +190,13 @@
                   เงินมัดจำ
                 </label>
                 <div class="col-md-8">
-                  <span
-                    class="form-control disabled">{{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}</span>
+                  <span class="form-control disabled"
+                    *ngIf="formCalculate.get('returnDeposit').value == '1'; else deposit0">
+                    {{formCalculate.get('bookDeposit').value | number:'1.0-0':'en-US'}}
+                  </span>
+                  <ng-template #deposit0>
+                    <span class="form-control disabled">0</span>
+                  </ng-template>
                 </div>
               </div>
 
@@ -197,19 +226,30 @@
                 </div>
               </div>
 
-              <hr class="hr-dashed">
 
               <h5>ข้อมูลไฟแนนซ์</h5>
+              <hr class="m-t-xs">
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">
-                  เลือกบริษัทไฟแนนซ์
+                  บริษัทไฟแนนซ์
                 </label>
                 <div class="col-md-8">
                   <ng-select [items]="leasingList" bindValue="leasingCode" bindLabel="leasingName" required
                     placeholder="เลือกบริษัทไฟแนนซ์" formControlName="fiCode" (change)="selectItemLeasing($event)">
+                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                      <small class="text-muted">{{item.leasingCode}}</small><br>
+                      <span class="text-primary">{{item.leasingName}}</span>
+                    </ng-template>
                   </ng-select>
                 </div>
               </div>
+
+              <!-- <div class="row form-group">
+                <label for="" class="col-md-4 control-label is-required">เลขประจำตัวผู้เสียภาษี</label>
+                <div class="col-md-8">
+                  <input type="text" formControlName="branchTax" class="form-control">
+                </div>
+              </div> -->
 
               <div class="row form-group">
                 <label for="" class="col-md-4 control-label is-required">

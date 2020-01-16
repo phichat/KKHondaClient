@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<!-- <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
     <h2>คำนวณค่างวด</h2>
     <ol class="breadcrumb">
@@ -35,10 +35,6 @@
                     bindValue="value" labelForId="model" [virtualScroll]="true" placeholder="ค้นหาเลขเครื่อง, เลขโครง"
                     [loading]="searchEngineLoading" [loadingText]="searchEngineLoadingTxt">
                     <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                      <!-- <p class="m-b-xs !important">
-                      <strong>โมเดล: </strong>
-                      <span [ngOptionHighlight]="search">{{item.model}}</span>
-                    </p> -->
                       <span><b>หมายเลขเครื่อง: </b>{{item.engineNo}}</span><br>
                       <span><b>หมายเลขตัวถัง: </b> {{item.frameNo}}</span>
                       <hr class="hr-dashed m-t-xs m-b-xs">
@@ -103,7 +99,6 @@
                 </div>
               </div>
 
-              <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
               <ng-container *ngIf="model.bookingPaymentType != 4">
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">
@@ -151,7 +146,6 @@
                 </div>
               </div>
 
-              <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
               <ng-container *ngIf="model.bookingPaymentType != 4">
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">
@@ -208,13 +202,9 @@
                 <div class="col-md-8">
                   <thai-mat-datepicker id="dp1" [(ngModel)]="model.firstPayment" (change)="instalmentCalculate();" name="firstPayment"
                     required></thai-mat-datepicker>
-                  <!-- <my-date-picker-th [(ngModel)]="model.firstPayment" name="firstPayment"
-                    [options]="myDatePickerOptions" (dateChanged)="onChangeDueDate($event)" required>
-                  </my-date-picker-th> -->
                 </div>
               </div>
 
-              <!-- แสดงเมื่อ ประเภทการซื้อ = ขายเชื่อ -->
               <ng-container *ngIf="model.bookingPaymentType == 4">
                 <div class="row form-group">
                   <label for="" class="col-md-4 control-label">กำหนดชำระ</label>
@@ -241,7 +231,6 @@
                 </div>
               </ng-container>
 
-              <!-- แสดงเมื่อ ประเภทการซื้อ != ขายเชื่อ -->
               <ng-container *ngIf="model.bookingPaymentType != 4">
                 <div class="row form-group ">
                   <label for="" class="col-md-4 control-label">
@@ -365,4 +354,4 @@
     </div>
     <app-contract-item [contractItemModel]="contractItemModel"></app-contract-item>
   </div>
-</div>
+</div> -->

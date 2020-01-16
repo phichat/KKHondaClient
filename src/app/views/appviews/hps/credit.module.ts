@@ -6,7 +6,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CalculateComponent } from './calculate/calculate.component';
+// import { CalculateComponent } from './calculate/calculate';
 import { ContractComponent } from './contract/contract.component';
 import { UserService } from '../../../services/users';
 import { SellActivityService } from '../../../services/sell-activity';
@@ -62,7 +62,7 @@ import { components as Payment } from './payment';
   ],
   declarations: [
     CreditComponent,
-    CalculateComponent,
+    // CalculateComponent,
     ContractComponent,
     CalculateListComponent,
     ContractItemComponent,

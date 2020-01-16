@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { BookingService } from 'app/services/selling';
 import { SaleService, ContractService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
@@ -9,6 +9,9 @@ import { CustomerService } from 'app/services/customers';
 import { AmpherService, ProvinceService, ReasonService } from 'app/services/masters';
 import { SaleDetailConfig } from './sale-detail.config';
 import { appConfig } from 'app/app.config';
+import { DomSanitizer } from '@angular/platform-browser';
+import { PaymentService } from 'app/services/credit/payment.service';
+import { map, mapTo } from 'rxjs/operators';
 
 declare var toastr: any;
 @Component({
@@ -22,10 +25,13 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
     this.s_booking.destroy();
   }
 
+  url = "http://203.154.126.61/KK-Honda-Web/backoffice/php/_edit_gift_model.php?booking_id="
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
     private s_sale: SaleService,
+    private s_payment: PaymentService,
     private s_contract: ContractService,
     private s_user: UserService,
     private s_loader: LoaderService,
@@ -46,8 +52,9 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
       // const saleId = param['saleId'];
 
       const api2 = this.s_contract.getById(contractId);
-
+      this.reasonList = this.s_reason.DropDown();
       api2.subscribe(x => {
+        this.url = `${this.url}${x.booking.bookingId}`;
         this.saleModel = x.sale;
         this.contractModel = x.creditContract;
         this.bookingModel = x.booking;
@@ -59,7 +66,8 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
         this.Hire = this.s_customer.getCustomerByCode(x.creditContract.contractHire);
         this.HireAmphor = this.s_amphor.GetAmpherByCode(x.creditContract.hireAmpherCode, x.creditContract.hireProvinceCode);
         this.HireProvince = this.s_province.GetProvinceByCode(x.creditContract.hireProvinceCode);
-        this.reasonDropdown = this.s_reason.DropDown();
+        
+
         if (x.sale.sellNo) {
           this.listSlip.push({
             slipNo: x.sale.sellNo,
@@ -79,18 +87,6 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
             printUrl: `${appConfig.apikkWeb}/php/print_return_dep.php?booking_id=${x.booking.bookingId}`
           })
         }
-
-        if (x.sale.receiptNo) {
-          this.listSlip.push({
-            slipNo: x.sale.receiptNo,
-            slipName: this.receiptSlip.title,
-            modalId: this.receiptSlip.modalId,
-            status: x.sale.receiptStatus,
-            printUrl: `${appConfig.apikkWeb}/php/print_receive.php?booking_id=${x.booking.bookingId}`
-          })
-        }
-
-
 
         if (x.sale.invTaxRecNo) {
           const hirePurchase = x.booking.bookingPaymentType == this.BookingPaymentType.HierPurchase;
@@ -115,6 +111,31 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
           })
         }
 
+        this.listReceiptAndTax.push({
+          slipName: this.receiptSlip.title,
+          modalId: this.receiptSlip.modalId
+        })
+        this.listReceiptAndTax.push({
+          slipName: this.taxSlip.title,
+          modalId: this.taxSlip.modalId
+        })
+
+        const receiptApi = this.s_payment.GetReceiptByContractId(x.creditContract.contractId)
+        this.receiptSlipList = receiptApi.pipe(
+          map(res => {
+            return res.map(o => {
+              return { slipNo: o.receiptNo, disabled: o.receiptStatus == true ? false : true };
+            })
+          })
+        );
+        this.taxInvSlipList = receiptApi.pipe(
+          map(res => {
+            return res.map(o => {
+              return { slipNo: o.taxInvNo, disabled: o.taxInvStatus == true ? false : true };
+            })
+          })
+        );
+
         this.s_loader.showLoader();
 
       }, () => {
@@ -127,28 +148,13 @@ export class SaleDetailComponent extends SaleDetailConfig implements OnInit, OnD
   printSlip(url: string) {
     window.open(url)
   }
-
-  // printSell(url: string) {
-  //   window.open(url)
-  // }
-
-  // printReserveReturn(url: string) {
-  //   window.open(url)
-  // }
-
-  // printReceive(url: string) {
-  //   window.open(url)
-  // }
-
-  // printTax(url: string) {
-  //   // window.open(`${appConfig.apikkWeb}php/print_tax.php?booking_id=${bookingId}`)
-  // }
-
-  // printInvTaxRec(url: string) {
-  //   window.open(url)
-  // }
-
-  printCom(url: string) {
-    window.open()
-  }
 }
+
+
+@Pipe({ name: 'safe' })
+export class SafePipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) { }
+  transform(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+} 

@@ -26,6 +26,8 @@ export class ContractItemModel {
     public goodsPrice: number;
     public goodsPriceRemain: number;
     public instalmentPrice: number;
+    public comPrice: number;
+    public comPriceRemain: number;
     public remain: number;
     public remainVatPrice: number;
     public remainNetPrice: number;

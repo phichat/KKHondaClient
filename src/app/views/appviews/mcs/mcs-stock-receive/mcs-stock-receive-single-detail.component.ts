@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { setLocalDate, getDateMyDatepicker } from 'app/app.config';
+import { setLocalDate } from 'app/app.config';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { LoaderService } from 'app/core/loader/loader.service';
-import { MyDatePickerOptions } from 'app/app.config';
 import { McsStockReceiveService } from './mcs-stock-receive.service';
 import { LoadingEntities, AutoCompleteModel, ReceiveDetail } from './mcs-stock-receive.interface';
 import { tap, finalize } from 'rxjs/operators';
@@ -29,7 +28,7 @@ export class McsStockReceiveSingleDetailComponent implements OnInit {
 
   public code: string;
 
-  myDatePickerOptions = MyDatePickerOptions;
+  // myDatePickerOptions = MyDatePickerOptions;
   displayLocalDate = setLocalDate;
   formGroup: FormGroup;
   mUser: IUserResCookie;
@@ -118,7 +117,7 @@ export class McsStockReceiveSingleDetailComponent implements OnInit {
     this.formGroup = this.fb.group({
       id: new FormControl({ value: null, disabled: true }),
       receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.mUser.branchId, disabled: true }, Validators.required),
+      receive_id: new FormControl({ value: null, disabled: true }, Validators.required),
       receive_date: new FormControl({ value: null, disabled: true }, Validators.required),
       receive_status: new FormControl({ value: null, disabled: true }),
       receive_type: new FormControl({ value: null, disabled: true }),

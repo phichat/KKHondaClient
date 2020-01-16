@@ -9,22 +9,22 @@ import { IUserResCookie } from 'app/interfaces/users';
 import { DropDownModel } from 'app/models/drop-down-model';
 
 export class BookingFormConfig {
-  protected PaymentTypeList = PaymentTypeList;
-  protected PaymentType = PaymentType;
-  protected setLocalDate = setLocalDate;
+  PaymentTypeList = PaymentTypeList;
+  PaymentType = PaymentType;
+  setLocalDate = setLocalDate;
 
-  protected user: IUserResCookie;
-  protected formPayment: IPayment;
-  protected productMcTypeahead = new EventEmitter<string>();
-  protected productMcDropdown = new Array<ProductMc>();
-  protected searchProductMcLoading: boolean;
-  protected dropdownLoadingTxt: string;
-  protected customerTypeahead = new EventEmitter<string>();
-  protected customerDropdown: Array<DropDownModel>;
-  protected customerLoading: boolean;
-  protected PaymentData = new BehaviorSubject(null);
+  user: IUserResCookie;
+  formPayment: IPayment;
+  productMcTypeahead = new EventEmitter<string>();
+  productMcDropdown = new Array<ProductMc>();
+  searchProductMcLoading: boolean;
+  dropdownLoadingTxt: string;
+  customerTypeahead = new EventEmitter<string>();
+  customerDropdown: Array<DropDownModel>;
+  customerLoading: boolean;
+  PaymentData = new BehaviorSubject(null);
 
-  protected formGroup = new FormGroup({
+  formGroup = new FormGroup({
     bookingDate: new FormControl(new Date(), Validators.required),
     bookingNo: new FormControl(''),
     receiveDate: new FormControl('', Validators.required),
@@ -46,7 +46,7 @@ export class BookingFormConfig {
     productItem: new FormArray([])
   });
 
-  protected formGroupProduct = new FormGroup({
+  formGroupProduct = new FormGroup({
     itemId: new FormControl(null),
     catName: new FormControl(null),
     typeName: new FormControl(null),
@@ -59,16 +59,16 @@ export class BookingFormConfig {
     total: new FormControl(null),
   })
 
-  protected get ProductItem(): FormArray {
+  get ProductItem(): FormArray {
     return this.formGroup.get('productItem') as FormArray;
   }
 
-  protected productMcUnload() {
+  productMcUnload() {
     this.searchProductMcLoading = false;
     this.dropdownLoadingTxt = '';
   }
 
-  protected customerUnload() {
+  customerUnload() {
     this.customerLoading = false;
     this.dropdownLoadingTxt = '';
   }

@@ -3,9 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'app/services/selling';
 import { SaleService } from 'app/services/credit';
 import { UserService } from 'app/services/users';
-import { CalculateConfig } from './calculate.config';
-import { tap, distinctUntilChanged, debounceTime, switchMap, map } from 'rxjs/operators';
-import { DropdownTemplate, DropDownModel } from 'app/models/drop-down-model';
+import { map } from 'rxjs/operators';
 import { setZeroHours } from 'app/app.config';
 import { ContractItemComponent } from '../contract-item/contract-item.component';
 import { message } from 'app/app.message';
@@ -14,8 +12,8 @@ import { LoaderService } from 'app/core/loader/loader.service';
 import { ILeasing, ILeasingInterest } from 'app/interfaces/credit/lesing-linterface';
 import { combineLatest } from 'rxjs';
 import { ProvinceService, AmpherService } from 'app/services/masters';
-import { IMAmpher } from 'app/interfaces/masters';
 import { BookingPaymentType } from 'app/entities/mcs.entities';
+import { Calculate } from './calculate';
 
 declare var toastr: any;
 
@@ -24,20 +22,20 @@ declare var toastr: any;
   templateUrl: 'leasing.component.html'
 })
 
-export class LeasingComponent extends CalculateConfig implements OnInit {
+export class LeasingComponent extends Calculate implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private s_booking: BookingService,
-    private s_calculate: SaleService,
+    public s_calculate: SaleService,
     private s_user: UserService,
     private router: Router,
     private s_loader: LoaderService,
-    private chRef: ChangeDetectorRef,
+    public chRef: ChangeDetectorRef,
     private s_province: ProvinceService,
-    private s_ampher: AmpherService,
-    private s_customer: CustomerService
+    public s_ampher: AmpherService,
+    public s_customer: CustomerService
   ) {
-    super();
+    super(s_ampher, s_calculate, s_customer, chRef);
     toastr.options = {
       'closeButton': true,
       'progressBar': true,
@@ -46,11 +44,12 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     this.userModel = this.s_user.cookies;
     this.provinceDropdown = this.s_province.DropDown();
 
-    this.formCalculate.get('contractOwner').disable();
-    this.formCalculate.get('ownerAddress').disable();
-    this.formCalculate.get('ownerProvinceCode').disable();
-    this.formCalculate.get('ownerAmpherCode').disable();
-    this.formCalculate.get('ownerZipCode').disable();
+    // this.formCalculate.get('contractOwner').disable();
+    // this.formCalculate.get('ownerAddress').disable();
+    // this.formCalculate.get('ownerProvinceCode').disable();
+    // this.formCalculate.get('ownerAmpherCode').disable();
+    // this.formCalculate.get('ownerZipCode').disable();
+    // this.formCalculate.get('branchTax').disable();
   }
 
   @ViewChild(ContractItemComponent) contractItem;
@@ -88,9 +87,8 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
       }
       this.searchEngine();
       this.searchcontractHire();
+      this.searchcontractOwner();
     });
-
-
   }
 
   selectItemLeasing = (e: ILeasing) => {
@@ -106,71 +104,21 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
         ownerProvinceCode: add.provinceCode,
         ownerAmpherCode: add.amphorCode,
         ownerZipCode: add.zipcode,
+        financeCode: e.leasingCode,
+        branchTax: x.idCard,
+        branch: `${x.customerPrename}${x.customerName}`
       })
     });
     this.formCalculate.get('interest').reset();
     this.instalmentCalculate();
-  };
+  }
+
   selectItemInterest = (e: ILeasingInterest) => {
     this.instalmentCalculate();
     if (!e) return;
     this.formCalculate.patchValue({
       fiId: e.fiId,
       fiintId: e.fiintId
-    });
-  }
-
-  selectItemEnging(e: any) {
-    if (!e) return;
-    this.formCalculate.patchValue({
-      engineNo: e ? e.engineNo : null,
-      frameNo: e ? e.frameNo : null
-    });
-  }
-
-  searchEngine() {
-    this.engineTypeahead.pipe(
-      tap(() => {
-        this.searchEngineLoading = true;
-        this.dropdownLoadingTxt = message.loading;
-      }),
-      distinctUntilChanged(),
-      debounceTime(100),
-      switchMap(term => {
-        const bookingId = this.formCalculate.get('bookingId').value;
-        const branch = this.userModel.branch.toString();
-        return this.s_calculate.GetEngineByKeyword(bookingId, branch, term);
-      })
-    ).subscribe(x => {
-      this.chRef.markForCheck();
-      this.engineUnload();
-      this.engineDropdown = x;
-      this.engineDropdown.map(item => {
-        item.text = `หมายเลขเครื่อง: ${item.engineNo}, หมายเลขตัวถัง: ${item.frameNo}`;
-        item.value = item.logId.toString();
-      })
-    }, () => {
-      this.engineUnload();
-      this.engineDropdown = new Array<DropdownTemplate>();
-    });
-  }
-
-  searchcontractHire() {
-    this.contractHireTypeahead.pipe(
-      tap(() => {
-        this.contractHireLoading = true;
-        this.dropdownLoadingTxt = message.loading;
-      }),
-      distinctUntilChanged(),
-      debounceTime(300),
-      switchMap(term => this.s_customer.getByKey(term))
-    ).subscribe(x => {
-      this.chRef.markForCheck();
-      this.contractHireDropdown = x;
-      this.contractHireUnload();
-    }, () => {
-      this.contractHireUnload();
-      this.contractHireDropdown = new Array<DropDownModel>();
     });
   }
 
@@ -199,7 +147,6 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
           nowVat: p.vat,
           contractHire: p.custCode
         });
-
 
         if (this.formCalculate.get('returnDeposit').value == '0') {
           this.formCalculate.patchValue({
@@ -236,7 +183,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
       });
 
       this.s_booking.changeData(p.booking);
-      this.s_calculate.changeData(this.formCalculate.getRawValue());
+      this.changeDataContractItem(this.formCalculate.getRawValue());
     })
   }
 
@@ -308,6 +255,7 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระทั้งสิ้น 
     fg.remain = this.calRemain(fg.netPrice, fg.interestPrice);
+    fg.totalRemain = fg.remain;
 
     // จำนวนค่าเช่าซื้อที่ต้องผ่อนชำระในแต่ละงวด
     const interestP = this.calInstalmentPrice(fg.remain, __instalmentEnd);
@@ -326,8 +274,13 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
     fg.mrr = this.calMrr(fg.irr, __instalmentEnd);
 
     fg = this.calCommission(fg);
-    this.formCalculate.patchValue({ ...fg })
-    this.s_calculate.changeData(fg);
+    this.formCalculate.patchValue({ ...fg });
+    this.changeDataContractItem(fg);
+  }
+
+  private changeDataContractItem(fg: any) {
+    let newFg = { ...fg, interest: 0, interestPrice: 0, irr: 0 }
+    this.s_calculate.changeData(newFg);
   }
 
   calCommission(fg: any) {
@@ -364,7 +317,8 @@ export class LeasingComponent extends CalculateConfig implements OnInit {
       ownerAddress: calculate.ownerAddress,
       ownerProvinceCode: calculate.ownerProvinceCode,
       ownerAmpherCode: calculate.ownerAmpherCode,
-      ownerZipCode: calculate.ownerZipCode
+      ownerZipCode: calculate.ownerZipCode,
+      financeCode: calculate.financeCode
     }
     let form = {
       calculate,
