@@ -1,18 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from 'app/services/users';
 import { HttpErrorResponse } from '@angular/common/http';
 import { message } from 'app/app.message';
 import { SaleService } from 'app/services/credit';
-import { FormCancelSlipConfig, IFormCancelSlip } from '../../../components/cancel-slip';
+import { FormCancelSlipConfig, FormCancelSlip1Config } from '../../../components/cancel-slip';
+import { Observable } from 'rxjs/Observable';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 declare var toastr: any;
 
 @Component({
-  selector: 'app-form-inv-tax-rec',
-  templateUrl: '../../../components/cancel-slip/form-cancel-slip.component.html'
+  selector: 'app-form-cancel-inv-tax-rec',
+  templateUrl: '../../../components/cancel-slip/form-cancel-slip-1.component.html'
 })
 
-export class FormCancelInvTaxRecComponent extends FormCancelSlipConfig implements IFormCancelSlip {
+export class FormCancelInvTaxRecComponent extends FormCancelSlipConfig implements FormCancelSlip1Config {
+  @Input() title: string;
+  @Input() slipNo: string;
+  @Input() reasonDropdown: Observable<DropDownModel[]>;
 
   constructor(
     private s_user: UserService,
@@ -20,6 +25,7 @@ export class FormCancelInvTaxRecComponent extends FormCancelSlipConfig implement
   ) {
     super();
     this.user = this.s_user.cookies;
+    this.cancelFormGroup.get('slipNo').disable();
   }
 
   onCancel(): void {

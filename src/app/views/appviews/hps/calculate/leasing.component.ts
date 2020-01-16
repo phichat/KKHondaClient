@@ -104,7 +104,7 @@ export class LeasingComponent extends Calculate implements OnInit {
         ownerProvinceCode: add.provinceCode,
         ownerAmpherCode: add.amphorCode,
         ownerZipCode: add.zipcode,
-
+        financeCode: e.leasingCode,
         branchTax: x.idCard,
         branch: `${x.customerPrename}${x.customerName}`
       })
@@ -121,7 +121,7 @@ export class LeasingComponent extends Calculate implements OnInit {
       fiintId: e.fiintId
     });
   }
-  
+
   onLoadBooking(bookingId: number) {
     this.s_loader.showLoader();
     const api1 = this.s_customer.GetLeasingByBranch(this.userModel.branchId.toString());
@@ -317,7 +317,8 @@ export class LeasingComponent extends Calculate implements OnInit {
       ownerAddress: calculate.ownerAddress,
       ownerProvinceCode: calculate.ownerProvinceCode,
       ownerAmpherCode: calculate.ownerAmpherCode,
-      ownerZipCode: calculate.ownerZipCode
+      ownerZipCode: calculate.ownerZipCode,
+      financeCode: calculate.financeCode
     }
     let form = {
       calculate,

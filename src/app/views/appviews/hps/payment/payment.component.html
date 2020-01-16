@@ -17,7 +17,7 @@
   </div>
   <div class="col-lg-6 text-right pull-right">
     <h3>&nbsp;</h3>
-    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#frmPrintTax">
+    <!-- <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#frmPrintTax">
       <i class="fa fa-print"></i>
       ใบกำกับภาษี
     </button>
@@ -25,13 +25,13 @@
     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#frmPrintReceipt">
       <i class="fa fa-print"></i>
       ใบเสร็จรับเงิน
-    </button>
+    </button> -->
   </div>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
-  <section class="row form-group text-right">
+  <!-- <section class="row form-group text-right">
     <div class="col-md-12">
       <button type="button" class="btn btn-outline btn-danger btn-sm" data-toggle="modal"
         data-target="#frmCancelTaxInv">
@@ -45,7 +45,7 @@
     </div>
   </section>
 
-  <hr class="hr-dashed">
+  <hr class="hr-dashed"> -->
 
   <section class="form-horizontal">
     <div class="row form-group-md">
@@ -61,9 +61,18 @@
         </div>
       </ng-container>
 
-      <label for="" class="col-sm-2 control-label">วันที่ทำสัญญา </label>
+      <label for="" class="col-sm-2 control-label">
+        <ng-container [ngSwitch]="bookingModel.bookingPaymentType">
+          <span *ngSwitchCase="BookingPaymentType.HierPurchase">
+            วันที่ทำสัญญา
+          </span>
+          <span *ngSwitchDefault>
+            วันที่ขาย
+          </span>
+        </ng-container>
+      </label>
       <strong class="col-md-2">{{contractModel.contractDate}}</strong>
-      <label for="" class="col-sm-2 control-label">สถานะสัญญา </label>
+      <label for="" class="col-sm-2 control-label">สถานะ</label>
       <strong class="col-md-2 text-danger">{{contractModel.statusDesc}}</strong>
     </div>
     <div class="row form-group-md">
@@ -133,11 +142,15 @@
             <thead>
               <tr>
                 <th class="text-center" style="vertical-align:middle;">เลือก</th>
-                <th class="text-center" style="vertical-align:middle;">งวดที่</th>
+                <th class="text-center" style="vertical-align:middle;">รายการ</th>
                 <th class="text-center" style="vertical-align:middle;">กำหนดชำระ</th>
-                <th class="" style="vertical-align:middle;">ยอดที่ต้องชำระ</th>
-                <th class="" style="vertical-align:middle;">ค่าปรับล่าช้า</th>
-                <th class="" style="vertical-align:middle;">ค่าปรับล่าช้า<br>คงค้าง</th>
+                <th style="vertical-align:middle;">ยอดที่ต้องชำระ</th>
+                <th *ngIf="bookingModel.bookingPaymentType != BookingPaymentType.Cash" style="vertical-align:middle;">
+                  ค่าปรับล่าช้า
+                </th>
+                <th *ngIf="bookingModel.bookingPaymentType != BookingPaymentType.Cash" style="vertical-align:middle;">
+                  ค่าปรับล่าช้าคงค้าง
+                </th>
                 <th *ngIf="bookingModel.bookingPaymentType == BookingPaymentType.Leasing"
                   style="vertical-align:middle;">ค่าส่งเสริมการขาย
                 </th>
@@ -167,10 +180,12 @@
                 <td class="text-right" [attr.data-order]="item.get('balanceNetPrice').value">
                   {{item.get('balanceNetPrice').value | number:'1.2-2':'en-US'}}
                 </td>
-                <td class="text-right" [attr.data-order]="item.get('fineSum').value">
+                <td *ngIf="bookingModel.bookingPaymentType != BookingPaymentType.Cash" class="text-right"
+                  [attr.data-order]="item.get('fineSum').value">
                   {{item.get('fineSum').value | number:'1.2-2':'en-US'}}
                 </td>
-                <td class="text-right" [attr.data-order]="item.get('fineSumRemain').value">
+                <td *ngIf="bookingModel.bookingPaymentType != BookingPaymentType.Cash" class="text-right"
+                  [attr.data-order]="item.get('fineSumRemain').value">
                   {{item.get('fineSumRemain').value | number:'1.2-2':'en-US'}}
                 </td>
                 <td *ngIf="bookingModel.bookingPaymentType == BookingPaymentType.Leasing" class="text-right"
@@ -394,7 +409,7 @@
   </div>
 </div>
 
-<app-modal-print-tax [bookingId]="contractModel.bookingId" [taxList]="taxInvList" id="frmPrintTax" class="modal inmodal"
+<!-- <app-modal-print-tax [bookingId]="contractModel.bookingId" [taxList]="taxInvList" id="frmPrintTax" class="modal inmodal"
   tabindex="-1" role="dialog" aria-hidden="true"></app-modal-print-tax>
 
 <app-modal-print-receipt [bookingId]="contractModel.bookingId" [receiptList]="receiptList" class="modal inmodal"
@@ -408,4 +423,4 @@
 
 <app-modal-cancel-tax [contractId]="contractModel.contractId" [taxList]="taxInvList" [reasonDropdown]="reasonDropdown"
   class="modal inmodal" id="frmCancelTaxInv" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-</app-modal-cancel-tax>
+</app-modal-cancel-tax> -->
