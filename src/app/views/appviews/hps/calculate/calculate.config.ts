@@ -100,15 +100,17 @@ export class CalculateConfig {
     branch: new FormControl(''),
     // -- ข้อมูลผู้เสียภาษี --
 
+    financeCode: new FormControl(null),
+
     remark: new FormControl(null),
 
-    paymentType: new FormControl('1'),
-    paymentPrice: new FormControl(0),
-    discount: new FormControl(0),
-    totalPaymentPrice: new FormControl(0),
-    accBankId: new FormControl(null),
-    paymentDate: new FormControl(new Date()),
-    documentRef: new FormControl(null),
+    // paymentType: new FormControl('1'),
+    // paymentPrice: new FormControl(0),
+    // discount: new FormControl(0),
+    // totalPaymentPrice: new FormControl(0),
+    // accBankId: new FormControl(null),
+    // paymentDate: new FormControl(new Date()),
+    // documentRef: new FormControl(null),
   });
 
   engineUnload() {

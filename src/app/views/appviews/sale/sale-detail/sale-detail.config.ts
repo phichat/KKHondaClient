@@ -8,6 +8,8 @@ import { CustomerModel } from 'app/models/customers';
 import { BookingPaymentTypeList, BookingPaymentType } from 'app/entities/mcs.entities';
 import { setLocalDate } from 'app/app.config';
 import { Observable } from 'rxjs';
+import { ICancelSlip } from 'app/views/components/cancel-slip';
+import { IPrintSlip } from 'app/views/components/print-slip';
 
 export class SaleDetailConfig {
   bookingModel = new BookingModel();
@@ -18,6 +20,10 @@ export class SaleDetailConfig {
   BookingPaymentTypeList = BookingPaymentTypeList;
   BookingPaymentType = BookingPaymentType;
 
+  receiptSlipList: Observable<ICancelSlip[]>;
+  taxInvSlipList: Observable<ICancelSlip[]>;
+  
+  reasonList: Observable<DropDownModel[]>;
   SaleBy: Observable<UserDropdownModel>;
   Owner: Observable<CustomerModel>;
   OwnerAmphor: Observable<IMAmpher>;
@@ -25,14 +31,15 @@ export class SaleDetailConfig {
   Hire: Observable<CustomerModel>;
   HireAmphor: Observable<IMAmpher>;
   HireProvince: Observable<IMProvince>;
-  reasonDropdown: Observable<DropDownModel[]>;
 
   listSlip: any[] = [];
+  listReceiptAndTax: any[] = [];
 
-  sellSlip = { modalId: 'cancelSell', title: 'ใบขาย' };
-  reserveReturnSlip = { modalId: 'cancelReserveReturn', title: 'ใบคืนเงินมัดจำ' };
-  receiptSlip = { modalId: 'cancelReceipt', title: 'ใบเสร็จรับเงิน' };
-  invTaxRecSlip = { modalId: 'cancelinvTaxRec', title: 'ใบส่งของ/ใบกำกับภาษี/ใบเสร็จรับเงิน' };
-  invTaxSlip = { modalId: 'cancelinvTax', title: 'ใบส่งของ/ใบกำกับภาษี' };
-  comSlip = { modalId: 'cancelCom', title: 'ใบส่งเสริมการขาย' };
+  sellSlip = { modalId: 'Sell', title: 'ใบขาย' };
+  reserveReturnSlip = { modalId: 'ReserveReturn', title: 'ใบคืนเงินมัดจำ' };
+  receiptSlip = { modalId: 'Receipt', title: 'ใบเสร็จรับเงิน' };
+  taxSlip = { modalId: 'Tax', title: 'ใบกำกับภาษี' };
+  invTaxRecSlip = { modalId: 'invTaxRec', title: 'ใบส่งของ/ใบกำกับภาษี/ใบเสร็จรับเงิน' };
+  invTaxSlip = { modalId: 'invTax', title: 'ใบส่งของ/ใบกำกับภาษี' };
+  comSlip = { modalId: 'Com', title: 'ใบส่งเสริมการขาย' };
 }

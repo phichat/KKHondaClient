@@ -329,11 +329,29 @@
                 </td>
                 <td>
                   <button *ngIf="item.status" class="btn btn-xs btn-outline btn-danger" data-toggle="modal"
-                    [attr.data-target]="'#'+item.modalId">
+                    [attr.data-target]="'#cancel'+item.modalId">
                     <i class="fa fa-ban" aria-hidden="true"></i>
                     ยกเลิก
                   </button>
                 </td>
+              </tr>
+
+              <tr *ngFor="let item of listReceiptAndTax">
+                  <td>{{item.slipName}}</td>
+                  <td>
+                    <button class="btn btn-xs btn-outline btn-primary" data-toggle="modal"
+                      [attr.data-target]="'#print'+item.modalId">
+                      <i class="fa fa-print" aria-hidden="true"></i>
+                      พิมพ์
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-xs btn-outline btn-danger" data-toggle="modal"
+                      [attr.data-target]="'#cancel'+item.modalId">
+                      <i class="fa fa-ban" aria-hidden="true"></i>
+                      ยกเลิก
+                    </button>
+                  </td>
               </tr>
             </tbody>
           </table>
@@ -346,30 +364,58 @@
 <app-booking-modal class="modal inmodal" id="bookingDetial" tabindex="-1" role="dialog" aria-hidden="true"
   style="display: none;"></app-booking-modal>
 
-<app-form-cancel-com class="modal inmodal" [id]="comSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
-  style="display: none;" [title]="comSlip.title" [slipNo]="saleModel.comNo" [reasonDropdown]="reasonDropdown">
+<!-- ใบส่งเสริมการขาย -->
+<app-form-cancel-com class="modal inmodal" [id]="'cancel'+comSlip.modalId" tabindex="-1" role="dialog"
+  aria-hidden="true" style="display: none;" [title]="comSlip.title" [slipNo]="saleModel.comNo"
+  [reasonDropdown]="reasonList">
 </app-form-cancel-com>
 
-<app-form-inv-tax-rec class="modal inmodal" [id]="invTaxRecSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
-  style="display: none;" [title]="invTaxRecSlip.title" [slipNo]="saleModel.invTaxRecNo"
-  [reasonDropdown]="reasonDropdown">
-</app-form-inv-tax-rec>
+<!-- ใบส่งของ/ใบกำกับภาษี/ใบเสร็จรับเงิน -->
+<app-form-cancel-inv-tax-rec class="modal inmodal" [id]="'cancel'+invTaxRecSlip.modalId" tabindex="-1" role="dialog"
+  aria-hidden="true" style="display: none;" [title]="invTaxRecSlip.title" [slipNo]="saleModel.invTaxRecNo"
+  [reasonDropdown]="reasonList">
+</app-form-cancel-inv-tax-rec>
 
-<app-form-inv-tax-rec class="modal inmodal" [id]="invTaxSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
-  style="display: none;" [title]="invTaxSlip.title" [slipNo]="saleModel.invTaxRecNo" [reasonDropdown]="reasonDropdown">
-</app-form-inv-tax-rec>
+<!-- ใบส่งของ/ใบกำกับภาษี -->
+<app-form-cancel-inv-tax-rec class="modal inmodal" [id]="'cancel'+invTaxSlip.modalId" tabindex="-1" role="dialog"
+  aria-hidden="true" style="display: none;" [title]="invTaxSlip.title" [slipNo]="saleModel.invTaxRecNo"
+  [reasonDropdown]="reasonList">
+</app-form-cancel-inv-tax-rec>
 
-<app-form-cancel-receipt class="modal inmodal" [id]="receiptSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
-  style="display: none;" [title]="receiptSlip.title" [slipNo]="saleModel.receiptNo" [reasonDropdown]="reasonDropdown">
+<!-- ใบเสร็จรับเงิน -->
+<app-form-cancel-receipt class="modal inmodal" [id]="'cancel'+receiptSlip.modalId" tabindex="-1" role="dialog"
+  aria-hidden="true" style="display: none;" [title]="receiptSlip.title" [slipList]="receiptSlipList"
+  [reasonDropdown]="reasonList">
 </app-form-cancel-receipt>
 
-<app-form-cancel-reserve-return class="modal inmodal" [id]="reserveReturnSlip.modalId" tabindex="-1" role="dialog"
-  aria-hidden="true" style="display: none;" [title]="reserveReturnSlip.title" [slipNo]="saleModel.returnDepositNo"
-  [reasonDropdown]="reasonDropdown"></app-form-cancel-reserve-return>
+<!-- ใบกำกับภาษี -->
+<app-form-cancel-tax class="modal inmodal" [id]="'cancel'+taxSlip.modalId" tabindex="-1" role="dialog"
+  aria-hidden="true" style="display: none;" [title]="taxSlip.title" [slipList]="taxInvSlipList"
+  [reasonDropdown]="reasonList">
+</app-form-cancel-tax>
 
-<app-form-cancel-sell class="modal inmodal" [id]="sellSlip.modalId" tabindex="-1" role="dialog" aria-hidden="true"
-  style="display: none;" [title]="sellSlip.title" [slipNo]="saleModel.sellNo" [reasonDropdown]="reasonDropdown">
+<!-- ใบคืนเงินจอง -->
+<app-form-cancel-reserve-return class="modal inmodal" [id]="'cancel'+reserveReturnSlip.modalId" tabindex="-1"
+  role="dialog" aria-hidden="true" style="display: none;" [title]="reserveReturnSlip.title"
+  [slipNo]="saleModel.returnDepositNo" [reasonDropdown]="reasonList">
+</app-form-cancel-reserve-return>
+
+<!-- ใบขาย -->
+<app-form-cancel-sell class="modal inmodal" [id]="'cancel'+sellSlip.modalId" tabindex="-1" role="dialog"
+  aria-hidden="true" style="display: none;" [title]="sellSlip.title" [slipNo]="saleModel.sellNo"
+  [reasonDropdown]="reasonList">
 </app-form-cancel-sell>
+
+<!-- พิมพ์ -->
+<!-- ใบเสร็จรับเงิน -->
+<app-form-print-receipt class="modal inmodal" [id]="'print'+receiptSlip.modalId" tabindex="-1" role="dialog"
+  [title]="receiptSlip.title" [bookingId]="bookingModel.bookingId" [slipList]="receiptSlipList">
+</app-form-print-receipt>
+
+<!-- ใบกำกับภาษี -->
+<app-form-print-tax class="modal inmodal" [id]="'print'+taxSlip.modalId" tabindex="-1" role="dialog"
+  [title]="taxSlip.title" [bookingId]="bookingModel.bookingId" [slipList]="taxInvSlipList">
+</app-form-print-tax>
 
 <div class="modal inmodal" id="editGift" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-lg">
@@ -382,9 +428,8 @@
         </button>
       </div>
       <div class="modal-body">
-        
-        <iframe [src]="url | safe"
-          frameborder="0" width="100%" height="400px"></iframe>
+
+        <iframe [src]="url | safe" frameborder="0" width="100%" height="400px"></iframe>
       </div>
     </div>
   </div>

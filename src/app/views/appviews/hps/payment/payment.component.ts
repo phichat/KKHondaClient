@@ -2,17 +2,16 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'app/services/credit/payment.service';
 import { Payment, IsPay, IsOutstanding, PaymentFG, ContractItem } from 'app/models/credit/payment';
-import { setLocalDate, setZeroHours, appConfig } from 'app/app.config';
+import { setLocalDate, setZeroHours } from 'app/app.config';
 import { UserService } from '../../../../services/users';
 import { message } from 'app/app.message';
 import { IPayment } from 'app/interfaces/payment.interface';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { map, tap, finalize } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { ContractService } from 'app/services/credit/contract.service';
 import { PaymentConfig } from './payment.config';
 import { ReasonService } from 'app/services/masters/reason.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { LoaderService } from 'app/core/loader/loader.service';
 
 declare var toastr: any;

@@ -49,20 +49,20 @@ export class CashComponent extends CalculateConfig implements OnInit {
     this.provinceDropdown = this.s_province.DropDown();
 
   }
-  private paymentData: IPayment = {
-    paymentPrice: null,
-    accBankId: null,
-    paymentDate: new Date(),
-    options: {
-      invalid: true,
-      disabled: false
-    }
-  };
+  // private paymentData: IPayment = {
+  //   paymentPrice: null,
+  //   accBankId: null,
+  //   paymentDate: new Date(),
+  //   options: {
+  //     invalid: true,
+  //     disabled: false
+  //   }
+  // };
 
-  PaymentData = new BehaviorSubject(null);
-  formPayment: IPayment;
-  PaymentTypeList = PaymentTypeList;
-  PaymentType = PaymentType;
+  // PaymentData = new BehaviorSubject(null);
+  // formPayment: IPayment;
+  // PaymentTypeList = PaymentTypeList;
+  // PaymentType = PaymentType;
   outStandingPriceState = 0;
   bookDepositState = 0;
 
@@ -98,8 +98,8 @@ export class CashComponent extends CalculateConfig implements OnInit {
       this.searchcontractHire();
       this.searchcontractOwner();
 
-      this.formPayment = this.paymentData;
-      this.PaymentData.next(this.paymentData);
+      // this.formPayment = this.paymentData;
+      // this.PaymentData.next(this.paymentData);
     });
 
   }
@@ -322,22 +322,22 @@ export class CashComponent extends CalculateConfig implements OnInit {
     this.formCalculate.patchValue({ ...fg })
     this.s_calculate.changeData(fg);
 
-    this.paymentData = { ...this.paymentData, paymentPrice: fg.netPrice };
-    this.PaymentData.next(this.paymentData);
+    // this.paymentData = { ...this.paymentData, paymentPrice: fg.netPrice };
+    // this.PaymentData.next(this.paymentData);
   }
 
-  formPaymentChange(event: IPayment) {
-    this.formPayment = event;
-    this.formCalculate.patchValue({
-      paymentPrice: event.paymentPrice,
-      discount: event.discountPrice,
-      totalPaymentPrice: event.totalPaymentPrice,
-      accBankId: event.accBankId || null,
-      paymentDate: event.paymentDate,
-      documentRef: event.documentRef,
-      totalRemain: event.totalPaymentPrice
-    });
-  }
+  // formPaymentChange(event: IPayment) {
+  //   this.formPayment = event;
+  //   this.formCalculate.patchValue({
+  //     paymentPrice: event.paymentPrice,
+  //     discount: event.discountPrice,
+  //     totalPaymentPrice: event.totalPaymentPrice,
+  //     accBankId: event.accBankId || null,
+  //     paymentDate: event.paymentDate,
+  //     documentRef: event.documentRef,
+  //     totalRemain: event.totalPaymentPrice
+  //   });
+  // }
 
   onSubmit() {
     let calculate = { ...this.formCalculate.getRawValue() };
@@ -360,16 +360,15 @@ export class CashComponent extends CalculateConfig implements OnInit {
     const balanceVatPrice = calculate.instalmentPrice - balance;
     const balanceNetPrice = calculate.instalmentPrice;
     item.contractBranchId = this.userModel.branchId;
-    item.status = 11; // ชำระครบ
     item.instalmentNo = 0;
     item.dueDate = calculate.firstPayment;
     item.vatRate = calculate.nowVat;
     item.balance = (balance);
     item.balanceVatPrice = balanceVatPrice;
     item.balanceNetPrice = (balanceNetPrice);
-    item.remain = 0;
-    item.remainVatPrice = 0;
-    item.remainNetPrice = 0;
+    item.remain = item.balance;
+    item.remainVatPrice = item.balanceVatPrice;
+    item.remainNetPrice = item.balanceNetPrice;
     item.initialPrice = 0;
     item.principal = 0;
     item.interestInstalment = 0;
@@ -385,22 +384,23 @@ export class CashComponent extends CalculateConfig implements OnInit {
     if (this.mode === 'create') {
       this.onCreate(form);
 
-    } else if (this.mode === 'edit') {
-      this.onEdit(form);
+      // } else if (this.mode === 'edit') {
+      //   this.onEdit(form);
 
-    } else if (this.mode === 'revice') {
-      this.onRevice(form);
+      // } else if (this.mode === 'revice') {
+      //   this.onRevice(form);
     }
   }
 
   onCreate(obj: any) {
-    
+
     this.s_calculate
       .Create(obj.calculate, obj.contract, obj.contractItem)
       .subscribe(
-        (res) => {
+        res => {
+          const x = res.json();
           toastr.success(message.created);
-          this.router.navigate(['sale/sale-list']);
+          this.router.navigate(['credit/payment', x.contractId]);
         },
         () => {
           toastr.error(message.error);
@@ -408,30 +408,30 @@ export class CashComponent extends CalculateConfig implements OnInit {
       );
   }
 
-  onEdit(obj: any) {
-    this.s_calculate
-      .Edit(obj.calculate, obj.contract, obj.contractItem)
-      .subscribe(
-        () => {
-          this.router.navigate(['credit/contract-list/active']);
-        },
-        () => {
-          toastr.error(message.error);
-        }
-      );
-  }
+  // onEdit(obj: any) {
+  //   this.s_calculate
+  //     .Edit(obj.calculate, obj.contract, obj.contractItem)
+  //     .subscribe(
+  //       () => {
+  //         this.router.navigate(['credit/contract-list/active']);
+  //       },
+  //       () => {
+  //         toastr.error(message.error);
+  //       }
+  //     );
+  // }
 
-  onRevice(obj: any) {
-    this.s_calculate
-      .Revice(obj.calculate, obj.contract, obj.contractItem)
-      .subscribe(
-        () => {
-          this.router.navigate(['credit/contract-list/active']);
-        },
-        () => {
-          toastr.error(message.error);
-        }
-      );
-  }
+  // onRevice(obj: any) {
+  //   this.s_calculate
+  //     .Revice(obj.calculate, obj.contract, obj.contractItem)
+  //     .subscribe(
+  //       () => {
+  //         this.router.navigate(['credit/contract-list/active']);
+  //       },
+  //       () => {
+  //         toastr.error(message.error);
+  //       }
+  //     );
+  // }
 
 }

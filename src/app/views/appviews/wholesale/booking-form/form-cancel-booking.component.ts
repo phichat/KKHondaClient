@@ -1,17 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { FormCancelSlipConfig, IFormCancelSlip } from '../../../components/cancel-slip';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormCancelSlipConfig, FormCancelSlip1Config } from '../../../components/cancel-slip';
 import { UserService } from 'app/services/users';
+import { Observable } from 'rxjs/Observable';
+import { DropDownModel } from 'app/models/drop-down-model';
 
 @Component({
   selector: 'app-form-cancel-booking',
-  templateUrl: '../../../components/cancel-slip/form-cancel-slip.component.html'
+  templateUrl: '../../../components/cancel-slip/form-cancel-slip-1.component.html'
 })
 
-export class FormCancelBookingComponent extends FormCancelSlipConfig implements IFormCancelSlip, OnInit {
+export class FormCancelBookingComponent extends FormCancelSlipConfig implements FormCancelSlip1Config, OnInit {
+  @Input() title: string;
+  @Input() slipNo: string;
+  @Input() reasonDropdown: Observable<DropDownModel[]>;
 
   constructor(
     private s_user: UserService
-    ) {
+  ) {
     super();
     this.user = this.s_user.cookies;
   }
