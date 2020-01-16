@@ -1,21 +1,22 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-  <div class="col-lg-8">
-    <h2>รายการใบสั่งซื้อ</h2>
+  <div class="col-lg-4">
+    <h2>รายการบันทึกคืนสินค้า</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">หน้าแรก</a>
       </li>
-      <li>จัดซื้อ</li>
+      <li>PSS</li>
       <li class="active">
-        <strong>รายการใบสั่งซื้อ</strong>
+        <strong>รายการบันทึกคืนสินค้า (อะไหล่)</strong>
       </li>
     </ol>
   </div>
-  <div class="col-lg-4 text-right pull-right">
+  <div class="col-lg-8 text-right pull-right">
     <h3>&nbsp;</h3>
-    <a [routerLink]="['/pss/pss-save-po-create']" class="btn btn-primary">
-      <i class="fa fa-paper-plane-o"></i> บันทึกใบสั่งซื้อ
-    </a> 
+    <a [routerLink]="['/pss/pss-return-product-create']" class="btn btn-success" style="width: 220px;">
+      <i class="fa fa-paper-plane-o"></i> บันทึกคืนสินค้า (อะไหล่)
+    </a>
+    <h3>&nbsp;</h3>
   </div>
 </div>
 
@@ -30,8 +31,8 @@
             <tr>
               <th class="text-center">ลำดับ</th>
               <th></th>
-              <th>เลขที่ใบรับสินค้า</th>
-              <th>วันที่รับ</th>
+              <th>เลขที่ใบคืน</th>
+              <th>วันที่คืน</th>
               <th>ประเภท</th>
               <th>สถานนะ</th>
               <th>หมายเหตุ</th>
@@ -41,7 +42,7 @@
           </thead>
           <tbody>
             <tr *ngIf="list.length == 0; else else_tr;">
-              <td colspan="11" class="text-center">
+              <td colspan="9" class="text-center">
                 <div [ngSwitch]="loading">
                   <div *ngSwitchCase="1">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
@@ -65,15 +66,17 @@
               <tr *ngFor="let item of list; let i = index">
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">
-                  <a class="btn btn-info btn-outline btn-xs" [routerLink]="['/mcs/mcs-stock-receive-detail', item.receive_no]">
+
+                  <a class="btn btn-info btn-outline btn-xs" *ngIf="item.return_type == '3'"
+                    [routerLink]=" ['/pss/pss-return-product-detail', item.return_no]">
                     <i class="fa fa-info-circle"></i>
                     รายละเอียด
                   </a>
                 </td>
-                <td>{{item.receive_no}}</td>
-                <td>{{displayLocalDate(item.receive_date)}}</td>
-                <td>{{item.receive_type_name}}</td>
-                <td>{{item.receive_status_name}}</td>
+                <td>{{item.return_no}}</td>
+                <td>{{displayLocalDate(item.return_date)}}</td>
+                <td>{{item.return_type_name}}</td>
+                <td>{{item.return_status_name}}</td>
                 <td>{{item.remark}}</td>
                 <td>{{item.create_name}}</td>
                 <td>{{displayLocalDate(item.create_date)}}</td>

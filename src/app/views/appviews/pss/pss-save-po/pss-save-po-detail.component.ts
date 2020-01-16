@@ -6,8 +6,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { LoaderService } from 'app/core/loader/loader.service';
 import { MyDatePickerOptions } from 'app/app.config';
 import { PssSavePoService } from './pss-save-po.service';
-import { ReceiveD, LoadingEntities, AutoCompleteModel, ReceiveDetail } from './pss-save-po.interface';
-import { tap, finalize } from 'rxjs/operators';
+import { LoadingEntities, AutoCompleteModel, PurchaseHead, PurchaseDetail } from './pss-save-po.interface';
+import { tap } from 'rxjs/operators';
 import { UserService } from 'app/services/users';
 import { IUserResCookie } from 'app/interfaces/users';
 import { message } from 'app/app.message';
@@ -24,9 +24,6 @@ declare var toastr: any;
 })
 export class PssSavePoDetailComponent implements OnInit {
 
-
-  public headers: Array<string> = new Array("ลำดับ", "ประเภทสินค้า", "ยี่ห้อ", "รุ่น", "แบบ", "สี", "หมายเลขเครื่อง", "หมายเลขตัวถัง", "เลขที่ใบแจ้งหนี้", "ราคา(ไม่รวม VAT)", "ค่าอื่นๆ", "ค่าซ่อม");
-
   public code: string;
   myDatePickerOptions = MyDatePickerOptions;
   displayLocalDate = setLocalDate;
@@ -37,18 +34,12 @@ export class PssSavePoDetailComponent implements OnInit {
   loading: number;
   dataTable: any;
 
+  AC_Branch: AutoCompleteModel[];
   AC_Dealer: AutoCompleteModel[];
   AC_User: AutoCompleteModel[];
   AC_Type: AutoCompleteModel[];
   AC_Status: AutoCompleteModel[];
 
-  AC_PrdCategory: AutoCompleteModel[];
-  AC_PrdBrand: AutoCompleteModel[];
-  AC_PrdModel: AutoCompleteModel[];
-  AC_PrdType: AutoCompleteModel[];
-  AC_PrdColor: AutoCompleteModel[];
-
-  list: ReceiveD[] = [];
   subscription: Subscription;
 
   constructor(
@@ -67,7 +58,9 @@ export class PssSavePoDetailComponent implements OnInit {
       'closeButton': true,
       'progressBar': true,
     }
-
+    this.s_service.GetBranchAutoComplete().subscribe(x => {
+      this.AC_Branch = x;
+    });
     this.s_service.get_dealer().subscribe(x => {
       this.AC_Dealer = x;
     });
@@ -77,24 +70,8 @@ export class PssSavePoDetailComponent implements OnInit {
     this.s_service.get_autocomplete('REC_TYPE').subscribe(x => {
       this.AC_Type = x;
     });
-    this.s_service.get_autocomplete('REC_STATUS').subscribe(x => {
+    this.s_service.get_autocomplete('PO_STATUS').subscribe(x => {
       this.AC_Status = x;
-    });
-
-    this.s_service.get_cat().subscribe(x => {
-      this.AC_PrdCategory = x;
-    });
-    this.s_service.GetBrandAutoComplete().subscribe(x => {
-      this.AC_PrdBrand = x;
-    });
-    this.s_service.GetModelAutoComplete().subscribe(x => {
-      this.AC_PrdModel = x;
-    });
-    this.s_service.GetTypeAutoComplete().subscribe(x => {
-      this.AC_PrdType = x;
-    });
-    this.s_service.GetColorAutoComplete().subscribe(x => {
-      this.AC_PrdColor = x;
     });
 
     this.loading = 1;
@@ -102,53 +79,48 @@ export class PssSavePoDetailComponent implements OnInit {
 
     var today = new Date();
     this.formGroup = this.fb.group({
-      id: new FormControl({ value: null, disabled: true }),
-      receive_no: new FormControl({ value: null, disabled: true }),
-      receive_id: new FormControl({ value: this.s_user.cookies.id, disabled: true }),
-      receive_date: new FormControl({ value: today, disabled: true }),
-      receive_status: new FormControl({ value: 1, disabled: true }),
-      receive_type: new FormControl({ value: 1, disabled: true }),
-
+      po_no: new FormControl({ value: null, disabled: true }),
+      branch_id: new FormControl({ value: null, disabled: true }),
       dealer_code: new FormControl({ value: null, disabled: true }),
-      purchase_no: new FormControl({ value: null, disabled: true }),
-      remark: new FormControl({ value: null, disabled: true }),
-      create_id: new FormControl({ value: this.s_user.cookies.id, disabled: true }),
-      create_date: new FormControl({ value: today, disabled: true }),
+      po_type: new FormControl({ value: null, disabled: true }),
+      po_status: new FormControl({ value: null, disabled: true }),
 
-      update_id: new FormControl({ value: null, disabled: true }),
-      update_date: new FormControl({ value: null, disabled: true }),
-
-      delivery_code: new FormControl({ value: null, disabled: true }),
+      po_date: new FormControl({ value: null, disabled: true }),
       delivery_date: new FormControl({ value: null, disabled: true }),
+      contact_name: new FormControl({ value: null, disabled: true }),
+      contact_phone: new FormControl({ value: null, disabled: true }),
+      contact_fax: new FormControl({ value: null, disabled: true }),
+      po_remark: new FormControl({ value: null, disabled: true }),
+      create_id: new FormControl({ value: this.mUser.id, disabled: true }),
 
-      cost_inc_vat: new FormControl({ value: 0, disabled: true }),
-      vat_flag: new FormControl({ value: '', disabled: true }),
-      vat_rate: new FormControl({ value: 0, disabled: true, }),
-      cost_vat: new FormControl({ value: 0, disabled: true }),
-      cost_exc_vat: new FormControl({ value: 0, disabled: true }),
-      cost_other_repair: new FormControl({ value: 0, disabled: true }),
-      cost_total: new FormControl({ value: 0, disabled: true }),
-      detail: this.fb.array([])
+      detail: this.fb.array([]),
+
+      chk_vat: new FormControl({ value: null, disabled: true }),
+      vat_rate: new FormControl({ value: null, disabled: true }),
+      vat_flag: new FormControl({ value: null, disabled: true }),
+      total_exc_vat: new FormControl({ value: null, disabled: true }),
+      total_discount: new FormControl({ value: null, disabled: true }),
+      total_exc_vat_discount: new FormControl({ value: null, disabled: true }),
+      total_vat: new FormControl({ value: null, disabled: true }),
+      total: new FormControl({ value: null, disabled: true }),
     });
 
     this.DetailList.valueChanges.subscribe(x => {
 
-      var cost_exc_vat = 0;
-      var total_vat = 0;
-      var cost_other_exc_vat = 0;
-      var cost_repair_exc_vat = 0;
+      let f = this.formGroup.getRawValue();
 
-      cost_exc_vat += x.reduce((a, c) => a += (!Number(c.cost_exc_vat) ? 0 : Number(c.cost_exc_vat)), 0);
-      cost_other_exc_vat += x.reduce((a, c) => a += (!Number(c.cost_other_exc_vat) ? 0 : Number(c.cost_other_exc_vat)), 0);
-      cost_repair_exc_vat += x.reduce((a, c) => a += (!Number(c.cost_repair_exc_vat) ? 0 : Number(c.cost_repair_exc_vat)), 0);
-      total_vat = x.reduce((a, c) => a += (!Number(c.cost_exc_vat) || !Number(c.vat_rate) ? 0 : (Number(c.cost_exc_vat) / 100) * Number(c.vat_rate)), 0);
-
+      var _total_exc_vat = x.reduce((a, c) => a += (!(Number(c.cost_exc_vat) * Number(c.po_qty)) ? 0 : (Number(c.cost_exc_vat) * Number(c.po_qty))), 0);
+      var _total_discount = x.reduce((a, c) => a += (!Number(c.cost_discount) ? 0 : Number(c.cost_discount)), 0);
+      var _total_exc_vat_discount = _total_exc_vat - _total_discount;
+      var _total_vat = (_total_exc_vat_discount / 100) * f.vat_rate;
+      var _total = _total_exc_vat_discount + _total_vat;
 
       this.formGroup.patchValue({
-        cost_other_repair: cost_other_exc_vat + cost_repair_exc_vat,
-        cost_vat: total_vat,
-        cost_total: cost_exc_vat + total_vat + (cost_other_exc_vat + cost_repair_exc_vat),
-        cost_exc_vat: cost_exc_vat,
+        total_exc_vat: _total_exc_vat,
+        total_discount: _total_discount,
+        total_exc_vat_discount: _total_exc_vat_discount,
+        total_vat: _total_vat,
+        total: _total,
       });
 
     });
@@ -156,9 +128,9 @@ export class PssSavePoDetailComponent implements OnInit {
     this.activeRoute.params.subscribe(o => {
       this.code = o['code'];
 
-      this.s_service.receive_detail(`${this.code}`)
+      this.s_service.purchase_detail(`${this.code}`)
         .pipe(tap(() => this.s_loader.show()))
-        .subscribe((x: ReceiveDetail) => {
+        .subscribe((x: PurchaseHead) => {
 
           this.formGroup.patchValue({ ...x });
 
@@ -170,61 +142,33 @@ export class PssSavePoDetailComponent implements OnInit {
             var vat_rate = 0;
 
             x.detail.forEach(item => {
-              var cat = (!this.AC_PrdCategory.find(x => x.value == item.cat_id) ? '' : this.AC_PrdCategory.find(x => x.value == item.cat_id).text);
-              var brand = (!this.AC_PrdBrand.find(x => x.value == item.brand_id) ? '' : this.AC_PrdBrand.find(x => x.value == item.brand_id).text);
-              var model = (!this.AC_PrdModel.find(x => x.value == item.model_id) ? '' : this.AC_PrdModel.find(x => x.value == item.model_id).text);
-              var type = (!this.AC_PrdType.find(x => x.value == item.type_id) ? '' : this.AC_PrdType.find(x => x.value == item.type_id).text);
-              var color = (!this.AC_PrdColor.find(x => x.value == item.color_id) ? '' : this.AC_PrdColor.find(x => x.value == item.color_id).text);
-
-              var id_model = (!this.AC_PrdModel.find(x => x.value == item.model_id) ? 0 : this.AC_PrdModel.find(x => x.value == item.model_id).value);
-              var id_type = (!this.AC_PrdType.find(x => x.value == item.type_id) ? 0 : this.AC_PrdType.find(x => x.value == item.type_id).value);
-              var id_color = (!this.AC_PrdColor.find(x => x.value == item.color_id) ? 0 : this.AC_PrdColor.find(x => x.value == item.color_id).value);
 
               vat_flag = item.vat_flag;
               vat_rate = (!Number(item.vat_rate) ? 0 : Number(item.vat_rate));
 
               const fg = this.fb.group({
-                cat_id: new FormControl({ value: item.cat_id, disabled: false }),
-                brand_id: new FormControl({ value: item.brand_id, disabled: false }),
-                model_id: new FormControl({ value: id_model, disabled: false }),
-                type_id: new FormControl({ value: id_type, disabled: false }),
-                color_id: new FormControl({ value: id_color, disabled: false }),
-                engine_no: new FormControl({ value: item.engine_no, disabled: false }),
-                frame_no: new FormControl({ value: item.frame_no, disabled: false }),
-                invoice_no: new FormControl({ value: item.invoice_no, disabled: false }),
-                cost_exc_vat: new FormControl({ value: item.cost_exc_vat, disabled: false }),
-                cost_other_exc_vat: new FormControl({ value: item.cost_other_exc_vat, disabled: false }),
-                cost_repair_exc_vat: new FormControl({ value: item.cost_repair_exc_vat, disabled: false }),
-
-                cat_name: new FormControl({ value: cat, disabled: false }),
-                brand_name: new FormControl({ value: brand, disabled: false }),
-                model_name: new FormControl({ value: model, disabled: false }),
-                type_name: new FormControl({ value: type, disabled: false }),
-                color_name: new FormControl({ value: color, disabled: false }),
-
-                id: new FormControl({ value: item.id, disabled: false }),
-                receive_no: new FormControl({ value: item.receive_no, disabled: false }),
-                dealer_no: new FormControl({ value: item.dealer_no, disabled: false }),
-                delivery_no: new FormControl({ value: item.delivery_no, disabled: false }),
-                delivery_date: new FormControl({ value: item.delivery_date, disabled: false }),
-                tax_invoice_no: new FormControl({ value: item.tax_invoice_no, disabled: false }),
-                license_no: new FormControl({ value: item.license_no, disabled: false }),
-                branch_id: new FormControl({ value: item.branch_id, disabled: false }),
-                branch_name: new FormControl({ value: item.branch_name, disabled: false }),
-                line_remark: new FormControl({ value: item.line_remark, disabled: false }),
-                line_status: new FormControl({ value: 1, disabled: false }),
-                cost_inc_vat: new FormControl({ value: item.cost_inc_vat, disabled: false }),
-                vat_flag: new FormControl({ value: item.vat_flag, disabled: false }),
-                vat_rate: new FormControl({ value: item.vat_rate, disabled: false }),
-                cost_vat: new FormControl({ value: (item.cost_exc_vat / 100) * item.vat_rate, disabled: false }),
+                item_id: new FormControl({ value: item.item_id, disabled: true }),
+                item_code: new FormControl({ value: item.item_code, disabled: true }),
+                item_name: new FormControl({ value: item.item_name, disabled: true }),
+                po_qty: new FormControl({ value: item.po_qty, disabled: true }),
+                cost_exc_vat: new FormControl({ value: item.cost_exc_vat, disabled: true }),
+                cost_discount: new FormControl({ value: item.cost_discount, disabled: true }),
+                total: new FormControl({ value: null, disabled: true }),
               });
               this.DetailList.push(fg);
             });
 
             this.formGroup.patchValue({
+              chk_vat: (vat_flag == "Y" ? true : false),
               vat_flag: vat_flag,
               vat_rate: vat_rate,
             });
+
+            for (let index = 0; index < this.DetailList.value.length; index++) {
+              this.DetailList.at(index).patchValue({
+                total: 0
+              });
+            }
 
             this.reInitDatatable();
           }

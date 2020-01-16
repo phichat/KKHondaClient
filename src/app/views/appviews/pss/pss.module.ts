@@ -9,13 +9,11 @@ import { PssSavePoService} from './pss-save-po/pss-save-po.service';
 import { PssSavePoListComponent } from './pss-save-po/pss-save-po-list.component';
 import { PssSavePoCreateComponent } from './pss-save-po/pss-save-po-create.component';
 import { PssSavePoDetailComponent } from './pss-save-po/pss-save-po-detail.component';
-import { PssSavePoEditComponent } from './pss-save-po/pss-save-po-edit.component';
 
 import { PssReturnProductService} from './pss-return-product/pss-return-product.service';
 import { PssReturnProductListComponent } from './pss-return-product/pss-return-product-list.component';
 import { PssReturnProductCreateComponent } from './pss-return-product/pss-return-product-create.component';
 import { PssReturnProductDetailComponent } from './pss-return-product/pss-return-product-detail.component';
-import { PssReturnProductEditComponent } from './pss-return-product/pss-return-product-edit.component';
 
 import { PssStockReceiveService} from './pss-stock-receive/pss-stock-receive.service';
 import { PssStockReceiveListComponent } from './pss-stock-receive/pss-stock-receive-list.component';
@@ -30,14 +28,12 @@ import { ThaiMatDatepickerModule } from 'app/components/common/thai-mat-datepick
     PssSavePoListComponent,
     PssSavePoCreateComponent,
     PssSavePoDetailComponent,
-    PssSavePoEditComponent,
     PssStockReceiveListComponent,
     PssStockReceiveCreateComponent,
     PssStockReceiveDetailComponent,
     PssReturnProductListComponent,
     PssReturnProductCreateComponent,
     PssReturnProductDetailComponent,
-    PssReturnProductEditComponent,
   ],
   imports: [
     CommonModule,

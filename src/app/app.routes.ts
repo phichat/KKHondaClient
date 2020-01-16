@@ -64,7 +64,6 @@ import { McsReportTaxPoComponent } from './views/appviews/mcs/mcs-report-tax-po/
 import { PssSavePoListComponent } from './views/appviews/pss/pss-save-po/pss-save-po-list.component';
 import { PssSavePoCreateComponent } from './views/appviews/pss/pss-save-po/pss-save-po-create.component';
 import { PssSavePoDetailComponent } from './views/appviews/pss/pss-save-po/pss-save-po-detail.component';
-import { PssSavePoEditComponent } from './views/appviews/pss/pss-save-po/pss-save-po-edit.component';
 
 import { PssStockReceiveListComponent } from './views/appviews/pss/pss-stock-receive/pss-stock-receive-list.component';
 import { PssStockReceiveCreateComponent } from './views/appviews/pss/pss-stock-receive/pss-stock-receive-create.component';
@@ -73,17 +72,12 @@ import { PssStockReceiveDetailComponent } from './views/appviews/pss/pss-stock-r
 import { PssReturnProductListComponent } from './views/appviews/pss/pss-return-product/pss-return-product-list.component';
 import { PssReturnProductCreateComponent } from './views/appviews/pss/pss-return-product/pss-return-product-create.component';
 import { PssReturnProductDetailComponent } from './views/appviews/pss/pss-return-product/pss-return-product-detail.component';
-import { PssReturnProductEditComponent } from './views/appviews/pss/pss-return-product/pss-return-product-edit.component';
 
 import { McsStockReceiveListComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-list.component';
 import { McsStockReceiveDetailComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-detail.component';
 import { McsStockReceiveCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-create.component';
 import { McsStockReceiveSingleCreateComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-create.component';
 import { McsStockReceiveSingleDetailComponent } from './views/appviews/mcs/mcs-stock-receive/mcs-stock-receive-single-detail.component';
-import { McsSavePoListComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-list.component';
-import { McsSavePoCreateComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-create.component';
-import { McsSavePoDetailComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-detail.component';
-import { McsSavePoEditComponent } from './views/appviews/mcs/mcs-save-po/mcs-save-po-edit.component';
 
 export const ROUTES: Routes = [
   // Main redirect
@@ -228,18 +222,17 @@ export const ROUTES: Routes = [
     path: 'pss', component: BasicLayoutComponent,
     children: [
 
-      // { path: 'pss-save-po-list', component: PssSavePoListComponent },
-      // { path: 'pss-save-po-create', component: PssSavePoCreateComponent },
-      // { path: 'pss-save-po-detail/:code', component: PssSavePoDetailComponent },
-      // { path: 'pss-save-po-edit/:code', component: PssSavePoEditComponent },
+      { path: 'pss-save-po-list', component: PssSavePoListComponent },
+      { path: 'pss-save-po-create', component: PssSavePoCreateComponent },
+      { path: 'pss-save-po-detail/:code', component: PssSavePoDetailComponent },
 
       { path: 'pss-stock-receive-list', component: PssStockReceiveListComponent },
       { path: 'pss-stock-receive-create', component: PssStockReceiveCreateComponent },
       { path: 'pss-stock-receive-detail/:code', component: PssStockReceiveDetailComponent },
 
-      // { path: 'pss-return-product-list', component: PssReturnProductListComponent },
-      // { path: 'pss-return-product-create', component: PssReturnProductCreateComponent },
-      // { path: 'pss-return-product-detail/:code', component: PssReturnProductDetailComponent },
+      { path: 'pss-return-product-list', component: PssReturnProductListComponent },
+      { path: 'pss-return-product-create', component: PssReturnProductCreateComponent },
+      { path: 'pss-return-product-detail/:code', component: PssReturnProductDetailComponent },
       // { path: 'pss-return-product-edit/:code', component: PssReturnProductEditComponent },
 
     ], canActivate: [GuardGuard]

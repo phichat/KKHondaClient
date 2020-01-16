@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReceiveH, ReceiveD, LoadingEntities } from './pss-save-po.interface';
+import { PurchaseList, LoadingEntities } from './pss-save-po.interface';
 import { PssSavePoService } from './pss-save-po.service';
 import { tap } from 'rxjs/operators';
 import * as $ from 'jquery';
@@ -20,10 +20,10 @@ export class PssSavePoListComponent implements OnInit {
   dataTable: any;
   LoadingEnt = LoadingEntities;
   loading: number;
-  list: ReceiveH[] = [];
+  list: PurchaseList[] = [];
 
   ngOnInit() {
-    this.s_service.receive_list()
+    this.s_service.purchase_list()
       .pipe(
         tap(() => {
           this.loading = this.LoadingEnt.loading

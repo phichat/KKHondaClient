@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReceiveH, ReceiveD, LoadingEntities } from './pss-return-product.interface';
+import { LoadingEntities, ReturnList } from './pss-return-product.interface';
 import { PssReturnProductService } from './pss-return-product.service';
 import { tap } from 'rxjs/operators';
 import * as $ from 'jquery';
@@ -20,10 +20,10 @@ export class PssReturnProductListComponent implements OnInit {
   dataTable: any;
   LoadingEnt = LoadingEntities;
   loading: number;
-  list: ReceiveH[] = [];
+  list: ReturnList[] = [];
 
   ngOnInit() {
-    this.s_service.receive_list()
+    this.s_service.return_list()
       .pipe(
         tap(() => {
           this.loading = this.LoadingEnt.loading
