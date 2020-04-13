@@ -637,6 +637,12 @@
                             <span class="nav-label">การขายรถ</span>
                         </a>
                     </li> -->
+                    
+                    <li [ngClass]="{active: activeRoute('collection-letter')}">
+                        <a [routerLink]="['/report/collection-letter']">
+                            <span class="nav-label">รายงานติดตามลูกค้า (ทวงหนี้)</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
